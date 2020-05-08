@@ -352,6 +352,10 @@ int main(int argc, char* argv[])
     char                            cmd[1024]          = {0};
     FILE                           *fd                 = NULL;
 
+    // Buffer characters till newline for stdout and stderr
+    setlinebuf(stdout);
+    setlinebuf(stderr);
+
 #ifdef   _DEBUG
     /*AnscSetTraceLevel(CCSP_TRACE_LEVEL_DEBUG);*/
 #endif

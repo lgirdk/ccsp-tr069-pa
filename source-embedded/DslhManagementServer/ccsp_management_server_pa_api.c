@@ -95,6 +95,10 @@
 #define NO_OF_RETRY 90                 /* No of times the management server will wait before giving up*/
 #endif
 
+#define MAX_URL_LEN 1024 
+#define HTTP_STR "http://"
+#define HTTPS_STR "https://"
+
 PFN_CCSPMS_VALUECHANGE  CcspManagementServer_ValueChangeCB;
 CCSP_HANDLE             CcspManagementServer_cbContext;
 CCSP_HANDLE             CcspManagementServer_cpeContext;
@@ -240,6 +244,8 @@ static void ReadTr69TlvData (int ethwan_enable)
 		AnscTraceInfo(("%s -#- , AcsOverRide: %d\n", __FUNCTION__, object2->AcsOverRide));
 		AnscTraceInfo(("%s -#- , EnableCWMP: %d\n", __FUNCTION__, object2->EnableCWMP));
 		AnscTraceInfo(("%s -#- , URLchanged: %d\n", __FUNCTION__, object2->URLchanged));
+		AnscTraceInfo(("%s -#- , Username: %s\n", __FUNCTION__, object2->Username));
+		AnscTraceInfo(("%s -#- , Password: %s\n", __FUNCTION__, object2->Password));
 		AnscTraceInfo(("%s -#- , URL: %s\n", __FUNCTION__, ( object2->URL[ 0 ] != '\0' ) ? object2->URL : "NULL"));
 		AnscTraceInfo(("**********************************************************\n"));
 
@@ -251,6 +257,17 @@ static void ReadTr69TlvData (int ethwan_enable)
         else {
             objectInfo[ManagementServerID].parameters[ManagementServerACSOverrideID].value=AnscCloneString("false");
         }
+
+		if(object2->Username && strlen(object2->Username) > 0)
+		{
+		  objectInfo[ManagementServerID].parameters[ManagementServerUsernameID].value = AnscCloneString(object2->Username);
+		  AnscTraceInfo(("%s -#- , objectInfo[ManagementServerID].parameters[ManagementServerUsernameID].value: %s\n", __FUNCTION__, objectInfo[ManagementServerID].parameters[ManagementServerUsernameID].value));
+		}		
+		if(object2->Password && strlen(object2->Password) > 0)
+		{
+		  objectInfo[ManagementServerID].parameters[ManagementServerPasswordID].value = AnscCloneString(object2->Password);
+		  AnscTraceInfo(("%s -#- , objectInfo[ManagementServerID].parameters[ManagementServerPasswordID].value: %s\n", __FUNCTION__, objectInfo[ManagementServerID].parameters[ManagementServerPasswordID].value));
+		}
 
 		// Check if it's a fresh bootup / boot after factory reset / TR69 was never enabled
 		// If TR69 was never enabled, then we will always take URL from boot config file.
@@ -494,7 +511,73 @@ static void ReadTr69TlvData (int ethwan_enable)
 	{
 		fclose(file);;
 	}
+	whiteListManagementServerURL();
+}
 
+/*
+ * Stores the ManagementServerURL in PSM to be used while setting firewall rules in case of firewall restart.
+ * Sets the iptables rule to allow incoming requests from defined ManagementServer URL.
+ * TODO
+ * move this function to a common util later to be also used by firewall_interface.c.
+ * whitelisting of new ManagementServerURL  has to be handled in "ACS URL changed" case .
+ */
+void whiteListManagementServerURL()
+{
+  int                             res;
+  char                            recordName[256];
+  
+  CCSP_STRING pStr = objectInfo[ManagementServerID].parameters[ManagementServerURLID].value;
+  fprintf(stderr,"\n  %s %d ManagementServerURL::%s::",__FUNCTION__,__LINE__,pStr);
+  if(pStr && AnscSizeOfString(pStr) > 0 )
+  {
+    memset( recordName, 0, sizeof( recordName ) );
+    _ansc_sprintf(recordName, "%s.%sURL.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);
+    res = PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, recordName, ccsp_string, pStr);
+    if(res != CCSP_SUCCESS)
+    {
+      fprintf(stderr,"\n%s:%d Failed to write object2->URL <%s> into PSM  ",__FUNCTION__,__LINE__, pStr);
+      AnscTraceWarning(("%s -#- Failed to write object2->URL <%s> into PSM!\n", __FUNCTION__, pStr));      
+    }
+    
+    char acsAddress[MAX_URL_LEN] = {0};
+    strcpy(acsAddress, pStr);	  
+    char *str1 = strstr(acsAddress, HTTPS_STR);
+    if(str1)
+    {
+      str1 += strlen(HTTPS_STR);      
+    }
+    else
+    {
+      str1 = strstr(acsAddress, HTTP_STR);
+      if(str1)
+      {
+	str1 += strlen(HTTP_STR);	
+      }      
+    }
+    if (str1 == NULL)
+    {             
+      fprintf(stderr,"\n  %s %d Could not parse URL ",__FUNCTION__,__LINE__);
+      return;      
+    }
+    char * str1end = strchr(str1, ':');
+    if (str1end == NULL)
+    {
+      fprintf(stderr,"\n  %s %d Could not parse URL ",__FUNCTION__,__LINE__);      
+      return;      
+    }      
+    *str1end = 0;	
+    fprintf(stderr,"\n  %s %d ACS Server IP Address:%s ",__FUNCTION__,__LINE__,str1); 
+          
+    char iptable_cmd[1024];
+    sprintf(iptable_cmd, "iptables -A tr69_filter -s %s -j ACCEPT\n", str1);
+    fprintf(stderr,"\n  %s %d iptable_cmd:%s ",__FUNCTION__,__LINE__,iptable_cmd);
+    system(iptable_cmd);
+    fprintf(stderr,"\n Setting ACS URL value for firewall rule setting ");	    
+  }
+  else
+  {
+    fprintf(stderr,"\n Could not set ACS URL value for firewall rule ");    
+  }
 }
 
 CCSP_VOID

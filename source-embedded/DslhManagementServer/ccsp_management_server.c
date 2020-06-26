@@ -214,6 +214,14 @@ char * pDTXml = "<?xml version=\"1.0\"  encoding=\"UTF-8\" ?>\
       <syntax>string</syntax>\
 </parameter>\
 </object>\
+  <object ref=\""DM_ROOTNAME"TR069Notify.\" access=\"readOnly\" minEntries=\"1\" maxEntries=\"1\">\
+    <parameter ref=\"X_RDKCENTRAL-COM_TR069_Notification\" access=\"readWrite\" activeNotify=\"normal\">\
+      <syntax>string</syntax>\
+    </parameter>\
+    <parameter ref=\"X_RDKCENTRAL-COM_Connected-Client\" access=\"readWrite\" activeNotify=\"normal\">\
+      <syntax>string</syntax>\
+</parameter>\
+</object>\
 </DT>";
 
 /* The program will crash if try to free the parameter values directly initialized here. */
@@ -292,6 +300,17 @@ msParameterInfo loggingParameters[] =
     { "LogLevel", NULL, ccsp_unsignedInt, CCSP_RW, ~((unsigned int)0), (unsigned int)0 }
 };
 
+msParameterInfo notifyParameters[] =
+{
+    { "X_RDKCENTRAL-COM_TR069_Notification", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0) },
+    { "X_RDKCENTRAL-COM_Connected-Client", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0) }
+};
+
+msParameterInfo deviceParameters[] =
+{
+    { "RootDataModelVersion", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0) }
+};
+
 extern CCSP_VOID
 CcspManagementServer_FillInObjectInfoCustom(msObjectInfo *objectInfo);
 
@@ -304,13 +323,14 @@ CcspManagementServer_FillInObjectInfo()
     /* First setup default object array. */
     objectInfo[DeviceID].name = AnscCloneString(_DeviceObjectName);
 
-    objectInfo[DeviceID].numberOfChildObjects = 2;
+    objectInfo[DeviceID].numberOfChildObjects = 3;
     objectInfo[DeviceID].childObjectIDs =
         AnscAllocateMemory(objectInfo[DeviceID].numberOfChildObjects * sizeof(unsigned int));
     objectInfo[DeviceID].childObjectIDs[0] = ManagementServerID;
     objectInfo[DeviceID].childObjectIDs[1] = DeviceInfoID;
-    objectInfo[DeviceID].numberOfParameters = 0;
-    objectInfo[DeviceID].parameters = NULL;
+    objectInfo[DeviceID].childObjectIDs[2] = NotifyID;
+    objectInfo[DeviceID].numberOfParameters = 1;
+    objectInfo[DeviceID].parameters = deviceParameters;
 
     objectInfo[ManagementServerID].name = AnscCloneString(_ManagementServerObjectName);
     objectInfo[ManagementServerID].numberOfChildObjects = 2;
@@ -396,6 +416,12 @@ CcspManagementServer_FillInObjectInfo()
     objectInfo[LoggingID].numberOfParameters = LoggingNumOfParameters;
     objectInfo[LoggingID].parameters = loggingParameters;
     objectInfo[LoggingID].parameters[LoggingEnableID].value = AnscCloneString("true");
+
+    objectInfo[NotifyID].name = AnscCloneString(_TR069NotifyObjectName);
+    objectInfo[NotifyID].numberOfChildObjects = 0;
+    objectInfo[NotifyID].numberOfParameters = TR069NotifyNumOfParameters;
+    objectInfo[NotifyID].parameters = notifyParameters;
+
     char str[100] = {0};
     //_ansc_itoa(g_iTraceLevel, str, 10);
     _ansc_sprintf(str, "%d", g_iTraceLevel);
@@ -1354,7 +1380,16 @@ int CcspManagementServer_GetObjectID(
     if(!p1 || p1 != p) {
         p1 = strstr(p, "DeviceInfo.");
         if(!p1 || p1 != p) {
-            return -1;
+			p1 = strstr(p, "TR069Notify.");
+            if(!p1 || p1 != p) return -1;
+
+			p1 += strlen("TR069Notify.");
+
+		    //if(*p1 == '\0')
+	        {
+	            *name = p1;
+	            return NotifyID;
+	        }
         }
         p1 += strlen("DeviceInfo.");
         if(*p1 == '\0') 
@@ -1630,6 +1665,19 @@ void CcspManagementServer_GetSingleParameterValue(
     {
       //Custom
       CcspManagementServer_GetSingleParameterValueCustom(objectID,parameterID,val);
+    }
+	else if(objectID == NotifyID)
+    {
+        switch (parameterID)
+        {
+        case TR069Notify_TR069_Notification_ID:
+            val->parameterValue = CcspManagementServer_GetTR069_NotificationStr(NULL);
+            break;
+        case TR069Notify_Connected_ClientID:
+            val->parameterValue = CcspManagementServer_GetConnected_ClientStr(NULL);
+            break;
+        default: break;
+        }
     }
     else
     {
@@ -2277,6 +2325,17 @@ int CcspManagementServer_ValidateParameterValues(
                 default: break;
                 }
             }
+			else if(objectID == NotifyID){
+                switch (parameterID)
+                {
+                case TR069Notify_TR069_Notification_ID:
+                case TR069Notify_Connected_ClientID:
+                    parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
+                    break;
+                default: break;
+                }
+            }
+
             if(objectID == LoggingID){
                 switch (parameterID)
                 {
@@ -2369,6 +2428,75 @@ int CcspManagementServer_GetPAObjectID
     }
     return -1;
 }
+//Custom
+extern int CcspManagementServer_CommitParameterValuesCustom(int parameterID);
+/* Commit the parameter setting stored in parameterSetting.
+ */
+ #ifdef USE_NOTIFY_COMPONENT
+ #include "ccsp_cwmp_cpeco_interface.h"
+ #include "ccsp_tr069pa_wrapper_api.h"
+extern  PCCSP_CWMP_CPE_CONTROLLER_OBJECT                 g_pCcspCwmpCpeController;
+void Send_TR069_Notification(int parameterID, char* pString)
+{
+
+	char* p_write_id;
+	char* p_new_val;
+	char* p_old_val;
+	char* p_notify_param_name;
+	char* st;
+	char* p_val_type;
+	UINT value_type,write_id;
+	char string[512] = {0};
+	parameterSigStruct_t param = {0};
+
+	strcpy(string,pString);
+
+	if( parameterID == TR069Notify_TR069_Notification_ID)
+	{
+		CcspTr069PaTraceInfo((" \n TR069 %s %d : Notification Received\n", __FUNCTION__, __LINE__));
+		p_notify_param_name = strtok_r(string, ",", &st);
+		p_write_id = strtok_r(NULL, ",", &st);
+		p_new_val = strtok_r(NULL, ",", &st);
+		p_old_val = strtok_r(NULL, ",", &st);
+		p_val_type = strtok_r(NULL, ",", &st);
+
+		value_type = atoi(p_val_type);
+		write_id = atoi(p_write_id);
+
+		CcspTr069PaTraceInfo((" Notification : Parameter Name = %s \n", p_notify_param_name));
+		CcspTr069PaTraceInfo((" Notification : New Value = %s \n", p_new_val));
+		CcspTr069PaTraceInfo((" Notification : Old Value = %s \n", p_old_val));
+		CcspTr069PaTraceInfo((" Notification : Value Type = %d \n", value_type));
+		CcspTr069PaTraceInfo((" Notification : Component ID = %d \n", write_id));
+
+		param.parameterName = p_notify_param_name;
+		param.oldValue = p_old_val;
+		param.newValue = p_new_val;
+		param.type = value_type;
+		param.writeID = write_id;
+
+		//ccspWebPaValueChangedCB(&param,0,NULL);
+		CcspCwmppoParamValueChangedCB(&param,1, g_pCcspCwmpCpeController->hCcspCwmpProcessor);
+
+	}
+	else if( parameterID == TR069Notify_Connected_ClientID )
+	{
+		CcspTr069PaTraceInfo((" TR069 %s %d : Connected-Client Received\n", __FUNCTION__, __LINE__));
+
+		p_notify_param_name = strtok_r(string, ",", &st);
+		p_write_id = strtok_r(NULL, ",", &st);
+		p_new_val = strtok_r(NULL, ",", &st);
+		p_old_val = strtok_r(NULL, ",", &st);
+
+		CcspTr069PaTraceInfo((" Notification : Parameter Name = %s \n", p_notify_param_name));
+		CcspTr069PaTraceInfo((" Notification : Interface = %s \n", p_write_id));
+		CcspTr069PaTraceInfo((" Notification : MAC = %s \n", p_new_val));
+		CcspTr069PaTraceInfo((" Notification : Status = %s \n", p_old_val));
+
+	}
+
+}
+#endif
 
 /* CcspManagementServer_IsEncryptedFileInDB() */
 int CcspManagementServer_IsEncryptedFileInDB( int parameterID, int *pIsEncryptFileAvailable )
@@ -2641,7 +2769,12 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
         {
             diagComplete = 1;
         }
-
+#ifdef USE_NOTIFY_COMPONENT
+	if( objectID == NotifyID)
+	{
+		Send_TR069_Notification(parameterID, parameterSetting.msParameterValSettings[i].parameterValue);
+	}
+#endif
         if(objectInfo[objectID].parameters[parameterID].access == CCSP_RO)
         {
             continue;

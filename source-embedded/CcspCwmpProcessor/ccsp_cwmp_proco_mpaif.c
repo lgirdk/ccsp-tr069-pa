@@ -789,6 +789,15 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                     AnscCopyString(pParameterValueArray[i].Name,"Device.X_CISCO_COM_DeviceControl.ReinitCmMac");
 	       }
 
+		if(!strcmp(pParameterValueArray[i].Name,"Device.TR069Notify.X_RDKCENTRAL-COM_TR069_Notification"))
+		{
+			continue;
+		}
+
+		if(!strcmp(pParameterValueArray[i].Name,"Device.TR069Notify.X_RDKCENTRAL-COM_Connected-Client"))
+		{
+			continue;
+		}
         /* identify which sub-system(s) the parameter resides */
         NumSubsystems = CCSP_SUBSYSTEM_MAX_COUNT;
         CcspTr069PA_GetNamespaceSubsystems
@@ -3062,6 +3071,7 @@ CcspCwmppoMpaGetParameterAttributes
     CCSP_INT                        nCcspError           = CCSP_SUCCESS;
     PCCSP_TR069PA_NSLIST            pNsList              = NULL;
     BOOL                            bParamNameArrayEmpty = FALSE;
+    char*                           pOrigName           = NULL;
 
     *phSoapFault = (ANSC_HANDLE)NULL;
 
@@ -3384,6 +3394,7 @@ CcspCwmppoMpaGetParameterAttributes
 
                 pCwmpPA = &pParamAttrArray[ulParamAttrArraySize++];
 
+                pOrigName = CcspTr069PaCloneString(pNsList->Args.paramAttrInfo.parameterName);
                 CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramAttrInfo.parameterName);
                 CcspTr069PaTraceDebug(("GPA %s\n", pNsList->Args.paramAttrInfo.parameterName));
 
@@ -3419,6 +3430,11 @@ CcspCwmppoMpaGetParameterAttributes
                             );
                     }
                 }
+                if ( pCwmpPA->Name )
+                {
+                    CcspTr069PaFreeMemory(pCwmpPA->Name);
+                }
+                pCwmpPA->Name = pOrigName;
 
                 pCwmpPA->AccessList = NULL;
                 if ( pNsList->Args.paramAttrInfo.accessControlBitmask == CCSP_NS_ACCESS_SUBSCRIBER )

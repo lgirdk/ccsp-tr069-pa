@@ -262,11 +262,27 @@ static void ReadTr69TlvData (int ethwan_enable)
 		{
 		  objectInfo[ManagementServerID].parameters[ManagementServerUsernameID].value = AnscCloneString(object2->Username);
 		  AnscTraceInfo(("%s -#- , objectInfo[ManagementServerID].parameters[ManagementServerUsernameID].value: %s\n", __FUNCTION__, objectInfo[ManagementServerID].parameters[ManagementServerUsernameID].value));
+		  
+                  _ansc_sprintf(recordName, "%s.%sUsername.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);
+                  AnscTraceInfo(("%s -#- , recordName: %s \n", __FUNCTION__,recordName));
+                  res = PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, recordName, ccsp_string, object2->Username);
+                  if(res != CCSP_SUCCESS)
+                  {
+                    AnscTraceWarning(("%s -#- Failed to write object2->Username <%s> into PSM!\n", __FUNCTION__, object2->Username));   
+                  }
 		}		
 		if(object2->Password && strlen(object2->Password) > 0)
 		{
 		  objectInfo[ManagementServerID].parameters[ManagementServerPasswordID].value = AnscCloneString(object2->Password);
 		  AnscTraceInfo(("%s -#- , objectInfo[ManagementServerID].parameters[ManagementServerPasswordID].value: %s\n", __FUNCTION__, objectInfo[ManagementServerID].parameters[ManagementServerPasswordID].value));
+
+                  _ansc_sprintf(recordName, "%s.%sPassword.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);
+                  AnscTraceInfo(("%s -#- , recordName: %s \n", __FUNCTION__,recordName));
+                  res = PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, recordName, ccsp_string, object2->Password);
+                  if(res != CCSP_SUCCESS)
+                  {
+                    AnscTraceWarning(("%s -#- Failed to write object2->Password <%s> into PSM!\n", __FUNCTION__, object2->Password));   
+                  }
 		}
 
 		// Check if it's a fresh bootup / boot after factory reset / TR69 was never enabled

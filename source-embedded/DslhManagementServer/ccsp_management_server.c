@@ -561,7 +561,8 @@ CcspManagementServer_FillInObjectInfo()
 
                 objectInfo[i].parameters[j].value = pValue;
 				pValue = NULL;
-
+				/*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
+				/*
 				// Needs to be encrypt on NVMEM files during migration case
 				if ( 	  ( ManagementServerID == i ) && \
 					  ( ( ManagementServerPasswordID == j ) || \
@@ -585,11 +586,15 @@ CcspManagementServer_FillInObjectInfo()
 
 					//Delete old existing entries from PSM DB
 					PSM_Del_Record( bus_handle, CcspManagementServer_SubsystemPrefix, pRecordName );
-				}
+				}*/
+				/*----END-----PASSWORD ENCRYPTION CODE COMMENTED----END-----*/
             }
+			/*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
+			/*
 			else
 			{
 				// Needs to be decrypt from NVMEM files
+			    /*
 				if ( 	  ( ManagementServerID == i ) && \
 					  ( ( ManagementServerPasswordID == j ) || \
 						( ManagementServerConnectionRequestPasswordID == j ) || \
@@ -604,7 +609,7 @@ CcspManagementServer_FillInObjectInfo()
 					{
 						if( '\0' != tmpPWDValue[ 0 ] )
 						{
-							/* free default value */
+							// free default value 
 							if ( objectInfo[i].parameters[j].value )
 							{
 								AnscFreeMemory(objectInfo[i].parameters[j].value);
@@ -616,7 +621,8 @@ CcspManagementServer_FillInObjectInfo()
 						}
 					}
 				}
-			}
+			}*/
+		      /*----END-----PASSWORD ENCRYPTION CODE COMMENTED----END-----*/
 
             rc = strncpy_s(&pRecordName[len1+len2+len3+1], sizeof(pRecordName)-len1-len2-len3, ".Notification", 13);
             ERR_CHK(rc);
@@ -2661,6 +2667,9 @@ void Send_TR069_Notification(int parameterID, char* pString)
 }
 #endif
 
+
+/*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
+#if 0
 /* CcspManagementServer_IsEncryptedFileInDB() */
 int CcspManagementServer_IsEncryptedFileInDB( int parameterID, int *pIsEncryptFileAvailable )
 {
@@ -2885,6 +2894,8 @@ int CcspManagementServer_StoreMGMTServerPasswordValuesintoDB( char *pString, int
 	return returnStatus;
 }
 
+#endif 
+/*----END-----PASSWORD ENCRYPTION CODE COMMENTED----END-----*/
 
 //Custom
 extern int CcspManagementServer_CommitParameterValuesCustom(int parameterID);
@@ -2962,7 +2973,9 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
         parameterSetting.msParameterValSettings[i].parameterValue = backup;
         parameterSetting.msParameterValSettings[i].backupStatus = BackupOldValue;
 
+	/*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
 		// Needs to be encrypt on NVMEM files
+	/*
         if ( ( ManagementServerID == objectID ) && \
 			  ( ( ManagementServerPasswordID == parameterID ) || \
 			    ( ManagementServerConnectionRequestPasswordID == parameterID ) || \
@@ -2974,7 +2987,8 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
 																  	  parameterID );
 		}
 		else
-		{
+		{*/
+	/*----END-----PASSWORD ENCRYPTION CODE COMMENTED----END-----*/
 			/* PSM write */
 			len2 = strlen(objectInfo[objectID].name);
                         rc = strncat_s(pRecordName, sizeof(pRecordName), objectInfo[objectID].name, len2);
@@ -2998,7 +3012,9 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
 				CcspManagementServer_RollBackParameterValues();
 				goto EXIT1;
 			}
-		}
+		/*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
+		//}
+		/*----END-----PASSWORD ENCRYPTION CODE COMMENTED----END-----*/
 
         if ( objectID == ManagementServerID && parameterID == ManagementServerURLID && g_ACSChangedURL == 1)
         {
@@ -3112,7 +3128,8 @@ int CcspManagementServer_RollBackParameterValues()
         if(objectInfo[objectID].parameters[parameterID].value) AnscFreeMemory(objectInfo[objectID].parameters[parameterID].value);
         objectInfo[objectID].parameters[parameterID].value = AnscCloneString(parameterSetting.msParameterValSettings[i].parameterValue);
         parameterSetting.msParameterValSettings[i].backupStatus = NoBackup;
-
+	/*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
+/*
 		// Needs to be encrypt on NVMEM files
         if ( ( ManagementServerID == objectID ) && \
 			  ( ( ManagementServerPasswordID == parameterID ) || \
@@ -3125,7 +3142,8 @@ int CcspManagementServer_RollBackParameterValues()
 																  	  parameterID );
 		}
 		else
-		{
+		{*/
+	/*----END-----PASSWORD ENCRYPTION CODE COMMENTED----END-----*/
 			/* PSM write */
 			len2 = strlen(objectInfo[objectID].name);
                         rc = strncat_s(pRecordName, sizeof(pRecordName), objectInfo[objectID].name, len2);
@@ -3148,7 +3166,9 @@ int CcspManagementServer_RollBackParameterValues()
 				 */
 				CcspTraceError2("ms", ( "CcspManagementServer_RollBackParameterValues PSM write failure %d!=%d: %s----%s.\n", res, CCSP_SUCCESS, pRecordName, slapVar.Variant.varString)); 
 			}
-		}
+	  /*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
+		//}
+	  /*----END-----PASSWORD ENCRYPTION CODE COMMENTED----END-----*/
    }
 
     return 0;

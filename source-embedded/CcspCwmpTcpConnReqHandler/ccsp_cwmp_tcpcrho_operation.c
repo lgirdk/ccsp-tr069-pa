@@ -317,6 +317,7 @@ CcspCwmpTcpcrhoCreateTcpServers
     }
     else if ( !pTcpServer && pProperty->HostPort != 0 )
     {
+#ifndef _ANSC_IPV6_COMPATIBLE_
         if ( bIsComcastImage() ) {
 
            // If HostAddress value is zero, then bind the outbound interface's ip address
@@ -349,6 +350,7 @@ CcspCwmpTcpcrhoCreateTcpServers
        
            CcspTr069PaTraceInfo(("%s, Call AnscCreateDaemonServerTcp\n",__FUNCTION__));
         }
+#endif
         pTcpServer =
             (PANSC_DAEMON_SERVER_TCP_OBJECT)AnscCreateDaemonServerTcp
                 (

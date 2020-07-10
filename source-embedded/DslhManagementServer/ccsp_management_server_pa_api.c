@@ -559,7 +559,18 @@ void whiteListManagementServerURL()
       fprintf(stderr,"\n  %s %d Could not parse URL ",__FUNCTION__,__LINE__);
       return;      
     }
-    char * str1end = strchr(str1, ':');
+    char * str1end;
+    int family = AF_INET;
+    if (str1[0] == '[')
+    {
+      str1++;
+      str1end = strchr(str1, ']');
+      family = AF_INET6;
+    }
+    else
+    {
+      str1end = strchr(str1, ':');
+    }
     if (str1end == NULL)
     {
       fprintf(stderr,"\n  %s %d Could not parse URL ",__FUNCTION__,__LINE__);      
@@ -569,7 +580,7 @@ void whiteListManagementServerURL()
     fprintf(stderr,"\n  %s %d ACS Server IP Address:%s ",__FUNCTION__,__LINE__,str1); 
           
     char iptable_cmd[1024];
-    sprintf(iptable_cmd, "iptables -A tr69_filter -s %s -j ACCEPT\n", str1);
+    sprintf(iptable_cmd, "%s -A tr69_filter -s %s -j ACCEPT\n", ((family == AF_INET) ? "iptables" : "ip6tables"), str1);
     fprintf(stderr,"\n  %s %d iptable_cmd:%s ",__FUNCTION__,__LINE__,iptable_cmd);
     system(iptable_cmd);
     fprintf(stderr,"\n Setting ACS URL value for firewall rule setting ");	    

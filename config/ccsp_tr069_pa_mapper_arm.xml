@@ -7277,6 +7277,83 @@
             <Name>Device.X_LGI-COM_WoL.Retries</Name>
         </Param>
 
+        <!--  CableModem Parameters under "Device.X_LGI-COM_CableModem." -->
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.CMStatus</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.ToDStatus</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.CmDoc30SwRegistrationState</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.T1Timeouts</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.SoftwareOperStatus</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.EnergyMgtOperStatus</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.OvertempProtModeState</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.PartServiceFallback20</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.DownstreamPrimaryChannelID</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.UpstreamNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Upstream.{i}.FlowSID</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Upstream.{i}.QosParamSetNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Upstream.{i}.QosParamSet.{i}.MaxTrafficRate</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Upstream.{i}.QosParamSet.{i}.MaxTrafficBurst</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Upstream.{i}.QosParamSet.{i}.MinReservedRate</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Upstream.{i}.QosParamSet.{i}.MaxConcatBurst</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Upstream.{i}.QosParamSet.{i}.SchedulingType</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.DownstreamNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Downstream.{i}.FlowSID</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Downstream.{i}.QosParamSetNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Downstream.{i}.QosParamSet.{i}.MaxTrafficRate</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Downstream.{i}.QosParamSet.{i}.MaxTrafficBurst</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Downstream.{i}.QosParamSet.{i}.MinReservedRate</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Downstream.{i}.QosParamSet.{i}.MaxConcatBurst</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Downstream.{i}.QosParamSet.{i}.SchedulingType</Name>
+        </Param>
+
     </ParamList>
 	<RpcMapper>
 		<Download>

@@ -7266,6 +7266,17 @@
             <Name>Device.DynamicDNS.Client.{i}.Hostname.{i}.LastUpdate</Name>
         </Param>
 
+        <!-- WoL configuration Parameters under "Device." -->
+        <Param>
+            <Name>Device.X_LGI-COM_WoL.MACAddress</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_WoL.Interval</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_WoL.Retries</Name>
+        </Param>
+
     </ParamList>
 	<RpcMapper>
 		<Download>

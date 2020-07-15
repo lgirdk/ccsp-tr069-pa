@@ -5218,6 +5218,17 @@
         <Param>
             <Name>Device.DSLite.InterfaceSetting.{i}.X_RDKCENTRAL-COM_IPv6FragEnable</Name>
         </Param>
+        
+    <!-- WoL configuration Parameters under "Device." -->
+        <Param>
+            <Name>Device.X_LGI-COM_WoL.MACAddress</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_WoL.Interval</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_WoL.Retries</Name>
+        </Param>
 
     </ParamList>
 	<RpcMapper>

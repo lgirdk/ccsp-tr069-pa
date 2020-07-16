@@ -527,9 +527,12 @@ static void ReadTr69TlvData (int ethwan_enable)
 	{
 		fclose(file);;
 	}
-	whiteListManagementServerURL();
+	//To be deleted after testing ConnectionRequest
+	//whiteListManagementServerURL();
 }
 
+//To be deleted after testing ConnectionRequest
+#if 0
 /*
  * Stores the ManagementServerURL in PSM to be used while setting firewall rules in case of firewall restart.
  * Sets the iptables rule to allow incoming requests from defined ManagementServer URL.
@@ -606,6 +609,7 @@ void whiteListManagementServerURL()
     fprintf(stderr,"\n Could not set ACS URL value for firewall rule ");    
   }
 }
+#endif 
 
 CCSP_VOID
 CcspManagementServer_Init

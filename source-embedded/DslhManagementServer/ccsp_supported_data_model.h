@@ -148,4 +148,11 @@ CcspManagementServer_GetSupportedDataModel_Features
         int                         ObjectID
     );
 
+CCSP_STRING
+CcspManagementServer_GetSupportedDataModel_Entries
+    (
+        CCSP_STRING                 ComponentName,
+        int                         ObjectID
+    );
+
 #endif

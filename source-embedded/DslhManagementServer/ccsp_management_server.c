@@ -313,6 +313,11 @@ msParameterInfo deviceParameters[] =
     { "RootDataModelVersion", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0) }
 };
 
+msParameterInfo supportedDMNumberOfEntriesParameters[] =
+{
+    { "SupportedDataModelNumberOfEntries", NULL, ccsp_unsignedInt, CCSP_RO, ~((unsigned int)0) }
+};
+
 // ARRIS ADD BEGIN
 static struct hostent *pACSIPv6Addr = NULL;
 static BOOL isResolveAcsActive = false;
@@ -384,8 +389,8 @@ CcspManagementServer_FillInObjectInfo()
     objectInfo[DeviceInfoID].childObjectIDs = 
         AnscAllocateMemory(objectInfo[DeviceInfoID].numberOfChildObjects * sizeof(unsigned int));
     objectInfo[DeviceInfoID].childObjectIDs[0] = SupportedDataModelID;
-    objectInfo[DeviceInfoID].numberOfParameters = 0;
-    objectInfo[DeviceInfoID].parameters = NULL;
+    objectInfo[DeviceInfoID].numberOfParameters = 1;
+    objectInfo[DeviceInfoID].parameters = supportedDMNumberOfEntriesParameters;
 
     objectInfo[AutonomousTransferCompletePolicyID].name = AnscCloneString(_AutonomousTransferCompletePolicyObjectName);
     objectInfo[AutonomousTransferCompletePolicyID].numberOfChildObjects = 0;
@@ -775,7 +780,7 @@ ANSC_STATUS CcspManagementServer_RegisterNameSpace()
         namespaceNumber += objectInfo[i].numberOfParameters;
     }
     /* For SupportedDataModel, the parameter number is fixed here. */
-    namespaceNumber += 3;
+    namespaceNumber += 4;
 
     CcspManagementServer_Namespace = (name_spaceType_t *)AnscAllocateMemory(namespaceNumber * sizeof(name_spaceType_t));
     for(i=0; i<SupportedDataModelID; i++)
@@ -794,6 +799,9 @@ ANSC_STATUS CcspManagementServer_RegisterNameSpace()
     CcspManagementServer_Namespace[index].name_space = CcspManagementServer_MergeString(_SupportedDataModelTableName, "URL");
     CcspManagementServer_Namespace[index+1].name_space = CcspManagementServer_MergeString(_SupportedDataModelTableName, "URN");
     CcspManagementServer_Namespace[index+2].name_space = CcspManagementServer_MergeString(_SupportedDataModelTableName, "Features");
+    
+    CcspManagementServer_Namespace[index+3].dataType = ccsp_unsignedInt;    
+    CcspManagementServer_Namespace[index+3].name_space = CcspManagementServer_MergeString(_SupportedDataModelTableName, "SupportedDataModelNumberOfEntries");
 
 #ifdef   _DEBUG
     CcspTraceDebug2("ms", ("registering following namespaces into CR with prefix=%s ...\n", CcspManagementServer_SubsystemPrefix));
@@ -1566,6 +1574,14 @@ int CcspManagementServer_GetObjectID(
             *name = p1;
             return DeviceInfoID;
         }
+        
+        p = strstr(p1, "SupportedDataModelNumberOfEntries");
+        if(p)
+        {
+           *name = p1;
+           return DeviceInfoID;
+        }
+        
         p = strstr(p1, "SupportedDataModel.");
         if(!p || p != p1) return -1;
         *name = p + strlen("SupportedDataModel.");
@@ -1847,6 +1863,15 @@ void CcspManagementServer_GetSingleParameterValue(
             break;
         default: break;
         }
+    }
+    else if (objectID == DeviceInfoID)
+    {
+        switch (parameterID)
+        {
+	    case SupportedDataModelNumberOfEntries:
+            val->parameterValue = CcspManagementServer_GetSupportedDataModel_Entries(NULL, objectID);
+            break;
+	}
     }
     else
     {

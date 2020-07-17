@@ -218,6 +218,9 @@ enum
 #define TR069Notify_Connected_ClientID 		    1
 #define TR069NotifyNumOfParameters 				2
 
+
+#define SupportedDataModelNumberOfEntries 0 
+
 #define FALSE 0
 #define TRUE  1
 

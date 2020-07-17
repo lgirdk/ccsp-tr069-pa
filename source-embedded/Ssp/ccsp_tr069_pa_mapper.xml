@@ -224,6 +224,9 @@
         <Param>
             <Name>Device.DeviceInfo.SupportedDataModel.{i}.Features</Name>
         </Param>
+        <Param>
+            <Name>Device.DeviceInfo.SupportedDataModelNumberOfEntries</Name>
+        </Param>
 
         <!-- namespaces managed by PaM -->
         <Param>

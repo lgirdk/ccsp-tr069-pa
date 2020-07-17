@@ -356,3 +356,19 @@ CcspManagementServer_GetSupportedDataModel_Features
     UNREFERENCED_PARAMETER(ComponentName);
     return AnscCloneString(objectInfo[ObjectID].parameters[SupportedDataModelFeaturesID].value);
 }
+
+/* CcspManagementServer_GetSupportedDataModel_Entries is called to get
+ * Device.DeviceInfo.SupportedDataModelNumberOfEntries
+ * Return value - the parameter value.
+ */
+CCSP_STRING
+CcspManagementServer_GetSupportedDataModel_Entries
+    (
+        CCSP_STRING                 ComponentName,
+        int                         ObjectID
+    )
+{
+    char str[32];
+    sprintf(str, "%d", objectInfo[SupportedDataModelID].numberOfChildObjects);
+    return AnscCloneString(str);  
+}

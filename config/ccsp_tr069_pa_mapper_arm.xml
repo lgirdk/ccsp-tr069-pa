@@ -3110,6 +3110,30 @@
         <Param>
             <Name>Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.Description</Name>
         </Param>
+         <Param>
+            <Name>Device.X_LGI-COM_CloudUI.HideCustomerDhcpLanChange</Name>
+        </Param>
+        <Param>
+            <Name>Device.DHCPv4.Server.Pool.{i}.X_LGI-COM_LanAllowedSubnetTableNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.DHCPv4.Server.Pool.{i}.X_LGI-COM_LanBlockedSubnetTableNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.DHCPv4.Server.Pool.{i}.X_LGI-COM_LanAllowedSubnetTable.{i}.LanAllowedSubnetIP</Name>
+        </Param>
+        <Param>
+            <Name>Device.DHCPv4.Server.Pool.{i}.X_LGI-COM_LanAllowedSubnetTable.{i}.LanAllowedSubnetMask</Name>
+        </Param>
+        <Param>
+            <Name>Device.DHCPv4.Server.Pool.{i}.X_LGI-COM_LanAllowedSubnetTable.{i}.Alias</Name>
+        </Param>
+        <Param>
+            <Name>Device.DHCPv4.Server.Pool.{i}.X_LGI-COM_LanBlockedSubnetTable.{i}.LanBlockedSubnetIP</Name>
+        </Param>
+        <Param>
+            <Name>Device.DHCPv4.Server.Pool.{i}.X_LGI-COM_LanBlockedSubnetTable.{i}.LanBlockedSubnetMask</Name>
+        </Param>
         <Param>
             <Name>Device.DHCPv4.ClientNumberOfEntries</Name>
         </Param>

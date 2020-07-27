@@ -4299,6 +4299,12 @@
 	<Param>
             <Name>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.LockStatus</Name>
 	</Param>
+	<Param>
+            <Name>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.T3Timeouts</Name>
+	</Param>
+	<Param>
+            <Name>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.T4Timeouts</Name>
+	</Param>
         <Param>
             <Name>Device.X_CISCO_COM_IGMP.IGMPEnable</Name>
         </Param>

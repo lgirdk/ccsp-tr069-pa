@@ -7321,6 +7321,9 @@
             <Name>Device.X_LGI-COM_CableModem.T1Timeouts</Name>
         </Param>
         <Param>
+            <Name>Device.X_LGI-COM_CableModem.T2Timeouts</Name>
+        </Param>
+        <Param>
             <Name>Device.X_LGI-COM_CableModem.SoftwareOperStatus</Name>
         </Param>
         <Param>

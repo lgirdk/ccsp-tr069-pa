@@ -168,7 +168,9 @@ CcspCwmppoGetAcsInfo
     BOOL                            bStopCWMP               = FALSE;
     BOOL                            bAcsUrlChanged          = FALSE;
     PANSC_UNIVERSAL_TIME            pCalendarTime;
-    char*                           pValue;
+    char*                           pValue                  = NULL;
+    char*                           pConnReqUrl             = NULL;
+    BOOL                            bWanIpAcquired          = FALSE;
     BOOL                            bCwmpStarted            = pCcspCwmpCpeController->bCWMPStarted;
     BOOL                            bCwmpEnabled            = FALSE;
     BOOL                            bPiChanged              = FALSE;
@@ -372,7 +374,16 @@ CcspCwmppoGetAcsInfo
         AnscFreeMemory(pValue);
     }
 
-    if ( !bCwmpStarted && bCwmpEnabled )
+    /* Get connection request URL to see if erouter got WAN IP */
+    pConnReqUrl = CcspManagementServer_GetConnectionRequestURL(pCcspCwmpCpeController->PANameWithPrefix);
+
+    if ( pConnReqUrl )
+    {
+        bWanIpAcquired = TRUE;
+        AnscFreeMemory(pConnReqUrl);
+    }
+
+    if ( !bCwmpStarted && bCwmpEnabled && bWanIpAcquired )
     {
         bStartCWMP = TRUE;
     }

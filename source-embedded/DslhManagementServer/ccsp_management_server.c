@@ -2286,6 +2286,7 @@ int CcspManagementServer_ValidateParameterValues(
                 switch (parameterID)
                 {
                 case ManagementServerEnableCWMPID:
+                     system("firewall restart");
                 //case ManagementServerPeriodicInformEnableID:
                 case ManagementServerACSOverrideID:
                 case ManagementServerUpgradesManagedID:

@@ -2936,6 +2936,7 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
     size_t len1, len2, len3;
     int diagComplete = 0;
     errno_t rc = -1;
+    int frestart = 0;
 
     len1 = strlen(CcspManagementServer_ComponentName);
     slapVar.Syntax = SLAP_VAR_SYNTAX_string;
@@ -2967,6 +2968,10 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
         if ( objectID == ManagementServerID && parameterID == ManagementServerX_CISCO_COM_DiagCompleteID )
         {
             diagComplete = 1;
+        }
+        if ( objectID == ManagementServerID && ( parameterID == ManagementServerEnableCWMPID || parameterID == ManagementServerX_CISCO_COM_ConnectionRequestURLPortID))
+        {
+                frestart = 1;
         }
 #ifdef USE_NOTIFY_COMPONENT
 	if( objectID == NotifyID)
@@ -3075,6 +3080,11 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
             if(parameterID == LoggingEnableID) CcspManagementServer_SetLogging_EnableStr(NULL, objectInfo[objectID].parameters[parameterID].value);
             else if(parameterID == LoggingLogLevelID) CcspManagementServer_SetLogging_LogLevelStr(NULL, objectInfo[objectID].parameters[parameterID].value);
         }
+    }
+
+    if( frestart == 1 )
+    {
+        system("firewall restart");
     }
 
     /* Inform PA about the data change. */

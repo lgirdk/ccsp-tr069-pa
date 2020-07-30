@@ -930,7 +930,7 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
         PCCSP_TR069PA_NSLIST        pNsList;
         int                         nResult         = CCSP_SUCCESS;
         char*                       pInvalidParam   = NULL;
-        char                        sysbuf[8]          = {"\0"};
+        char                        sysbuf[8]          = { 0 };
         BOOL                        flag_pInvalidParam = FALSE;
 
         CcspTr069PaTraceDebug(("SPV involves %d Functional Component(s), sessionID = %u.\n", nNumFCs, (unsigned int)ulSessionID));
@@ -1758,7 +1758,7 @@ CcspCwmppoMpaGetParameterValues
         PCCSP_TR069PA_NSLIST        pNsList;
         int                         nResult         = CCSP_SUCCESS;
         char*                       pPaSubsystem    = pCcspCwmpCpeController->SubsysName;
-        char                        sysbuf[8]          = {"\0"};
+        char                        sysbuf[8]          = { 0 };
 
         CcspTr069PaTraceDebug(("GPV involves %d Functional Component(s), sessionID = %u.\n", nNumFCs, (unsigned int)ulSessionID));
         

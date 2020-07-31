@@ -293,12 +293,23 @@ CcspCwmpSoappoProcessSoapHeader
             {
                 pCwmpHeader->bNoMoreRequests = FALSE;
             }
+
+            /*mustUnderstand may not exist in header,
+            if it doesn't exist, change return value to ANSC_STATUS_SUCCESS and set it to 0 */
+            if(returnStatus != ANSC_STATUS_SUCCESS)
+            {
+                uLongValue = 0;
+                returnStatus = ANSC_STATUS_SUCCESS;
+            }
         }
 
         /* check the next one */
         pChildNode = (PANSC_XML_DOM_NODE_OBJECT)
 			AnscXmlDomNodeGetNextChild(pXmlNode, pChildNode);
     }
+
+    if ( ANSC_STATUS_XML_ATTRIBUTE_NOT_EXIST == returnStatus )
+        returnStatus = ANSC_STATUS_SUCCESS;
 
     return returnStatus;
 }

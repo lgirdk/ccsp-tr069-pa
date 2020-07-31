@@ -140,8 +140,9 @@
                     pParam = pReturnStr;                                            \
                 }                                                                   \
             }
-#define MAX_NO_WIFI_PARAM 10
-#define MAX_WIFI_PARAMNAME_LEN 128
+
+#define MAX_NO_WIFI_PARAM 256
+
 #define WIFI_KEYPASSPHRASE_SET1 16
 #define WIFI_KEYPASSPHRASE_SET2 8
 
@@ -1187,14 +1188,22 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                 bRadioRestartEn = TRUE;
                 if(i<MAX_NO_WIFI_PARAM)
                 {
-                    char aMem[128];
-                    char *pParamN = aMem;
                     AnscCopyString(pParamN,pValueInfo->parameterName);
                     CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pParamN);
-                    AnscCopyString(ParamName[i],pParamN);
+                    ParamName[i] = CcspTr069PaCloneString(pParamN);
+                    //If pParamN is reallocated by CcspCwmppoMpaMapParamInstNumCwmpToDmInt, free it.
+                    if(pOrigParamN != pParamN)
+                    {
+                        //Free memory for function CcspCwmppoMpaMapParamInstNumCwmpToDmInt()
+                        CcspTr069PaFreeMemory(pParamN);
+                    }
                     noOfParam = i;
                 }
+            }
 
+            if(pOrigParamN != NULL)
+            {
+                CcspTr069PaFreeMemory(pOrigParamN);
             }
         }
     }

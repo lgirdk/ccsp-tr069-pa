@@ -139,8 +139,9 @@
                     pParam = pReturnStr;                                            \
                 }                                                                   \
             }
-#define MAX_NO_WIFI_PARAM 10
-#define MAX_WIFI_PARAMNAME_LEN 128
+
+#define MAX_NO_WIFI_PARAM 256
+
 #define WIFI_KEYPASSPHRASE_SET1 16
 #define WIFI_KEYPASSPHRASE_SET2 8
 
@@ -344,6 +345,52 @@ CcspCwmppoDiscoverFunctionalComponent
     return  nRet;
 }
 
+/**********************************************************************
+
+    caller:     owner of this object
+
+    prototype:
+
+        BOOL
+        CcspCwmppoMpaCheckInstance
+            (
+                char*                     pParamName
+            );
+
+    Description: This function is called to determine whether the pParamName is invalid or not.
+                 If pParamName is changed by function CcspCwmppoMpaMapInvalidParamInstNumDmIntToCwmp,
+                 it means this name is a Data Model internal instance.(You can find mapping in file "ccsp_tr069_pa_mapper.xml")
+                 If it is internal instance passed by SPV, we will return TRUE ,else we will return FALSE.
+        E.g.
+          Device.WiFi.Radio.1.
+          Device.WiFi.Radio.2.
+          Device.WiFi.SSID.1.
+          Device.WiFi.SSID.2.
+
+    argument:   char*                     pParamName
+
+    return:     TRUE or FALSE.
+
+**********************************************************************/
+BOOL
+CcspCwmppoMpaCheckInstance
+
+    (
+        char*                     pParamName
+    )
+{
+    BOOL                            bCheckInvalidInstance   = FALSE;
+
+    char *pOrigCheckParamN = CcspTr069PaCloneString(pParamName);
+    char *pCheckParamN = pOrigCheckParamN;
+    CcspCwmppoMpaMapInvalidParamInstNumDmIntToCwmp(pCheckParamN);
+    if(pOrigCheckParamN != pCheckParamN)
+    {
+        bCheckInvalidInstance = TRUE;
+    }
+    CcspTr069PaFreeMemory(pCheckParamN);
+    return  bCheckInvalidInstance;
+}
 
 #define  CCSP_TR069PA_DISCOVER_FC(pParamName, bNextLevel)                                               \
     do {                                                                                                \
@@ -672,7 +719,7 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
     BOOL                            bSucc                = TRUE;
     int                             nCcspError           = CCSP_SUCCESS;
     PCCSP_TR069PA_NSLIST            pNsList              = NULL;
-	char							ParamName[MAX_NO_WIFI_PARAM][MAX_WIFI_PARAMNAME_LEN];
+    char*                           ParamName[MAX_NO_WIFI_PARAM] = {0};
 	int								noOfParam;
 	char wifiFcName[64] = { 0 };
 	char wifiDbusPath[64] = { 0 };
@@ -723,7 +770,7 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
      */
     for ( i = 0; i < ulArraySize; i++ )
     {
-        if ( !pParameterValueArray[i].Name || CcspCwmpIsPartialName(pParameterValueArray[i].Name) )
+        if ( !pParameterValueArray[i].Name || CcspCwmpIsPartialName(pParameterValueArray[i].Name) || CcspCwmppoMpaCheckInstance(pParameterValueArray[i].Name) )
         {
             bFaultEncountered = TRUE;
 
@@ -886,6 +933,10 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
         else
         {
 				PCCSP_PARAM_VALUE_INFO  pValueInfo;
+				// pParamN may be reallocated by CcspCwmppoMpaMapParamInstNumCwmpToDmInt()
+				// Need to keep the original address to free the memory after used.
+				char *pOrigParamN = CcspTr069PaAllocateMemory(AnscSizeOfString(pParameterValueArray[i].Name)+1);
+				char *pParamN = pOrigParamN;
 				pNsList->NaType = CCSP_NORMALIZED_ACTION_TYPE_SPV;
 				pValueInfo      = &pNsList->Args.paramValueInfo;
 
@@ -903,15 +954,23 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
 					bRadioRestartEn = TRUE;
 					if(i<MAX_NO_WIFI_PARAM)
 					{
-                                		char aMem[128];
-		                                char *pParamN = aMem;
 						AnscCopyString(pParamN,pValueInfo->parameterName);
 						CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pParamN);
-						AnscCopyString(ParamName[i],pParamN);
+						ParamName[i] = CcspTr069PaCloneString(pParamN);
+						//If pParamN is reallocated by CcspCwmppoMpaMapParamInstNumCwmpToDmInt, free it.
+						if(pOrigParamN != pParamN)
+						{
+							//Free memory for function CcspCwmppoMpaMapParamInstNumCwmpToDmInt()
+							CcspTr069PaFreeMemory(pParamN);
+						}
 						noOfParam = i;
 					}
 					
 				}
+		if(pOrigParamN != NULL)
+		{
+			CcspTr069PaFreeMemory(pOrigParamN);
+		}
         }
     }
 
@@ -1305,6 +1364,11 @@ if ( flag_pInvalidParam == FALSE )// Remaining SSID passwords and for TR069PSWDC
 												{ "Device.WiFi.Radio.2.X_CISCO_COM_ApplySetting", "true", ccsp_boolean}};
 				for(x =0; x<= noOfParam; x++)
 				{
+				if (ParamName[x] == NULL)
+					{
+						// skip empty string.
+						continue;
+					}
 				if(!strncmp(ParamName[x],"Device.WiFi.Radio.1.",20))
 					{
 						bRestartRadio1 = TRUE; 
@@ -1486,6 +1550,14 @@ EXIT1:
                 (ANSC_HANDLE)pCcspCwmpCpeController,
                 ulSessionID
             );
+    }
+
+    for (i =0; i < ulArraySize; i++)
+    {
+        if (ParamName[i] != NULL)
+        {
+            CcspTr069PaFreeMemory(ParamName[i]);
+        }
     }
 
 
@@ -2286,6 +2358,7 @@ CcspCwmppoMpaGetParameterNames
     BOOL                            bNsInvisibleToCloudServer;
     int                             ParamInfoArraySize;
     PSINGLE_LINK_ENTRY              pSLinkEntry          = NULL;
+    char*                           pMappedParamPath     = NULL;
     BOOL                            bDuplicateNs         = FALSE,
 						GetParamSuccessStatus  = FALSE;
 
@@ -2347,6 +2420,12 @@ CcspCwmppoMpaGetParameterNames
      * response.
      */
 
+    /* Map Cwmp instance to DM instance for requested parameter path */
+    pMappedParamPath = CcspTr069PA_MapInstNumCwmpToDmInt(pParamPath);
+    if (pMappedParamPath)
+    {
+        pParamPath = pMappedParamPath;
+    }
 
     /* identify which sub-system(s) the parameter or partial name could reside */
     NumSubsystems = CCSP_SUBSYSTEM_MAX_COUNT;
@@ -2503,6 +2582,9 @@ CcspCwmppoMpaGetParameterNames
         pSLinkEntry = AnscQueueGetNextEntry(pSLinkEntry);
 
         pCwmpParamInfoArray[i].Name      = pNsList->Args.paramInfo.parameterName;
+        /* Map DM instance to CWMP instance for returned names */
+        CcspCwmppoMpaMapParamInstNumDmIntToCwmp(pCwmpParamInfoArray[i].Name);
+
         pCwmpParamInfoArray[i++].bWritable = pNsList->Args.paramInfo.writable;
 
         pNsList->Args.paramInfo.parameterName = NULL;
@@ -2581,6 +2663,10 @@ EXIT1:
         CcspTr069FreeStringArray(ppSubsysArray, ulFcArraySize, TRUE);
     }
 
+    if (pMappedParamPath)
+    {
+        CcspTr069PaFreeMemory(pMappedParamPath);
+    }
 
     return  returnStatus;
 }
@@ -3173,7 +3259,7 @@ CcspCwmppoMpaGetParameterAttributes
                 pNsList->NaType = CCSP_NORMALIZED_ACTION_TYPE_GPA;
                 pAttrInfo       = &pNsList->Args.paramAttrInfo;
 
-                pAttrInfo->parameterName = pParamName;
+                pAttrInfo->parameterName = CcspTr069PaCloneString(pParamName);
 
                 AnscQueuePushEntry(&pFcNsList->NsList, &pNsList->Linkage);
             }

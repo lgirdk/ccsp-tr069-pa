@@ -270,6 +270,8 @@ CcspCwmpsoAsyncProcessTask
     ULONG                           ulMessageSize      = 20480;
     ULONG                           ulAvailableSize    = 20480;
     PCCSP_CWMP_CFG_INTERFACE        pCcspCwmpCfgIf     = (PCCSP_CWMP_CFG_INTERFACE        )pCcspCwmpCpeController->hCcspCwmpCfgIf;
+    char                            *ptmp              = NULL;
+    char                            is_delay           = 0;
  
     CcspTr069PaTraceDebug(("CcspCwmpsoAsyncProcessTask -- This is the beginning.\n"));
     errno_t rc       = -1;
@@ -530,6 +532,13 @@ CcspCwmpsoAsyncProcessTask
 
             if ( (ulReqEnvelopeCount + ulRepEnvelopeCount) > 0 )
             {
+                ptmp = strstr(pSoapMessage, "delay_factory_reset");
+                if (ptmp)
+                {
+                    memset(ptmp, 0, strlen("delay_factory_reset"));
+                    is_delay = 1;
+                }
+
                 returnStatus =
                     pCcspCwmpAcsConnection->Request
                         (
@@ -539,6 +548,11 @@ CcspCwmpsoAsyncProcessTask
                             ulReqEnvelopeCount,
                             ulRepEnvelopeCount
                         );
+
+                if (is_delay == 1)
+                {
+                    system("echo 0 > /var/tmp/delay_to_reboot");
+                }
             }
             else
             {

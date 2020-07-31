@@ -613,9 +613,7 @@ CcspCwmppoScheduleTimerInvoke
     else
     {
         pCcspCwmpEvent->EventCode  = AnscCloneString("3 SCHEDULED");
-        pCcspCwmpEvent->CommandKey = pMyObject->SecheduledCommandKey;
-
-        pMyObject->SecheduledCommandKey = NULL;
+        pCcspCwmpEvent->CommandKey = NULL ;
     }
 
     returnStatus =
@@ -626,6 +624,27 @@ CcspCwmppoScheduleTimerInvoke
                 TRUE
             );
 
+     pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+
+     if ( !pCcspCwmpEvent )
+     {
+         returnStatus = ANSC_STATUS_RESOURCES;
+
+         goto  EXIT1;
+     }
+     else
+     {
+         pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_M_ScheduleInform);
+         pCcspCwmpEvent->CommandKey = pMyObject->SecheduledCommandKey;
+         pMyObject->SecheduledCommandKey = NULL;
+         returnStatus =
+             pCcspCwmpSession->AddCwmpEvent
+             (
+                 (ANSC_HANDLE)pCcspCwmpSession,
+                 (ANSC_HANDLE)pCcspCwmpEvent,
+                 TRUE
+             );
+     }
 
     /******************************************************************
                 GRACEFUL ROLLBACK PROCEDURES AND EXIT DOORS

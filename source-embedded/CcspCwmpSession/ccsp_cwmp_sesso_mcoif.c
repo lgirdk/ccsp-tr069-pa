@@ -101,6 +101,10 @@
 #include "secure_wrapper.h"
 #define  CWMP_MAXI_UPLOAD_DOWNLOAD_DELAY_SECONDS    3600 * 36       /* 36 hours */
 
+//PSM_RELOAD_CONFIG_PARAMETER_NAME need sync with NamespacePsm in ssp_dbus.c
+#define  PSM_RELOAD_CONFIG_PARAMETER_NAME "com.cisco.spvtg.ccsp.psm.ReloadConfig"
+#define  PSM_RELOAD_CONFIG_ENABLE "TRUE"
+
 /*
  * Define some const values that will be used in the object mapper object definition.
  */
@@ -985,11 +989,29 @@ CcspCwmpsoMcoSetParameterValues
     int                             iStatus            = 0;
     char*                           pRootObjName       = pCcspCwmpCpeController->GetRootObject((ANSC_HANDLE)pCcspCwmpCpeController);
     char                            paramName[128];
+    PCCSP_CWMP_PARAM_VALUE          ptmp               = NULL;
+    int                             set_delay_flag     = 0;
+    int                             i                  = 0;
+    int                             resp_length        = 0;
+    int                             new_resp_length    = 0;
+    char                            *new_soapenvelope  = NULL;
 
     /*
      *  Record the time receiving SPV request 
      */
     AnscGetLocalTime(&pCcspCwmpCpeController->cwmpStats.LastReceivedSPVTime); 
+
+    ptmp = (PCCSP_CWMP_PARAM_VALUE)hParamValueArray;
+    for (i = 0; i < ulArraySize; i++)
+    {
+        if (strstr(ptmp[i].Name, "FactoryReset") &&
+            (strstr(ptmp[i].Value->Variant.varString, "Docsis") ||
+             strstr(ptmp[i].Value->Variant.varString, "Router")))
+        {
+            set_delay_flag = 1;
+            break;
+        }
+    }
 
     returnStatus =
         pCcspCwmpMpaIf->SetParameterValues
@@ -1050,6 +1072,20 @@ CcspCwmpsoMcoSetParameterValues
         returnStatus = ANSC_STATUS_RESOURCES;
 
         goto  EXIT3;
+    }
+
+    if (set_delay_flag == 1)
+    {
+        resp_length = strlen(pWmpsoAsyncRep->SoapEnvelope);
+        new_resp_length = resp_length+strlen("delay_factory_reset");
+        new_soapenvelope = malloc(new_resp_length+1);
+        if (new_soapenvelope != NULL)
+        {
+            memset(new_soapenvelope, 0, new_resp_length+1);
+            sprintf(new_soapenvelope, "%s%s", pWmpsoAsyncRep->SoapEnvelope, "delay_factory_reset");
+            free(pWmpsoAsyncRep->SoapEnvelope);
+            pWmpsoAsyncRep->SoapEnvelope = new_soapenvelope;
+        }
     }
 
     CcspTr069PaTraceDebug(("CPE Response:\n%s\n", pWmpsoAsyncRep->SoapEnvelope));
@@ -2803,7 +2839,7 @@ CcspCwmpsoMcoReboot
             (
                 (ANSC_HANDLE)pCcspCwmpCpeController,
                 psmKeyPrefixed,
-                "M Reboot"
+                CCSP_CWMP_INFORM_EVENT_NAME_M_Reboot
             );
 
     CcspCwmpPrefixPsmKey(psmKeyPrefixed, pCcspCwmpCpeController->SubsysName, CCSP_TR069PA_PSM_KEY_TriggerCommandKey);
@@ -2818,6 +2854,15 @@ CcspCwmpsoMcoReboot
     CcspTr069PaTraceInfo(("Write TriggerCommand 'M Reboot' to PSM.\n"));
 
     pMyObject->SaveCwmpEvent(pMyObject);
+
+    /* Force Trigger PsmSysroSaveConfigToFlash for reboot sync */
+    returnStatus =
+        pCcspCwmpCpeController->SaveCfgToPsm
+            (
+                (ANSC_HANDLE)pCcspCwmpCpeController,
+                PSM_RELOAD_CONFIG_PARAMETER_NAME,
+                PSM_RELOAD_CONFIG_ENABLE
+            );
 
     if ( returnStatus != ANSC_STATUS_SUCCESS )
     {

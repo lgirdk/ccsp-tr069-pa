@@ -104,10 +104,10 @@
 /*
  * Define some const values that will be used in the object mapper object definition.
  */
-#define  CCSP_CWMPDO_MAX_PARAM_VALUES_IN_RESPONSE   3000
+#define  CCSP_CWMPDO_MAX_PARAM_VALUES_IN_RESPONSE   15000
 
+static ULONG g_uMaxParamInResponse = CCSP_CWMPDO_MAX_PARAM_VALUES_IN_RESPONSE;
 
-ULONG    g_uMaxParamInResponse   = CCSP_CWMPDO_MAX_PARAM_VALUES_IN_RESPONSE;
 #define TR069_QUIRKS
 
 #define  CCSP_CWMP_TRACE_MAX_RESP_LENGTH            1024        

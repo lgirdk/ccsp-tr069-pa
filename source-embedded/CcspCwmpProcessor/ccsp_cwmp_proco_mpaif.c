@@ -140,7 +140,9 @@
                     pParam = pReturnStr;                                            \
                 }                                                                   \
             }
-#define MAX_NO_WIFI_PARAM 10
+
+#define MAX_NO_WIFI_PARAM 256
+
 #define WIFI_KEYPASSPHRASE_SET1 16
 #define WIFI_KEYPASSPHRASE_SET2 8
 

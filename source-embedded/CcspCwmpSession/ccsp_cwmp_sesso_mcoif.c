@@ -301,7 +301,21 @@ CcspCwmpsoMcoProcessSoapResponse
         {
             pWmpsoAsyncReq = ACCESS_CCSP_CWMPSO_ASYNC_REQUEST(pSLinkEntry);
             pSLinkEntry    = AnscQueueGetNextEntry(pSLinkEntry);
-            rc = strcmp_s(pSoapResponse->Header.ID, strlen(pSoapResponse->Header.ID), pWmpsoAsyncReq->RequestID, &ind);
+
+            /*header ID in response may contain prefix "ID:", need to skip it*/
+            char *prefix = "ID:";
+            int prefixLen = AnscSizeOfString(prefix);
+            char *tmpHeaderID = NULL;
+            if ( _ansc_strncmp(pSoapResponse->Header.ID, prefix, prefixLen) == 0 )
+            {
+                tmpHeaderID = pSoapResponse->Header.ID + prefixLen;
+            }
+            else
+            {
+                tmpHeaderID = pSoapResponse->Header.ID;
+            }
+
+            rc = strcmp_s(tmpHeaderID, strlen(tmpHeaderID), pWmpsoAsyncReq->RequestID, &ind);
             ERR_CHK(rc);
              if((!ind) && (rc == EOK))
             {

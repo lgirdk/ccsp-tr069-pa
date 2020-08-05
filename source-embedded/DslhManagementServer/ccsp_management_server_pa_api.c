@@ -71,12 +71,15 @@
 //#include "ccsp_base_api.h"
 #include "string.h"
 #include "stdio.h"
+#include <assert.h>
+#include "ccsp_tr069pa_psm_keys.h"
 #include "ccsp_tr069pa_wrapper_api.h"
 #include "ccsp_management_server.h"
 #include "ccsp_management_server_pa_api.h"
 #include "ccsp_supported_data_model.h"
 #include "ccsp_psm_helper.h"
 #include "ccsp_cwmp_cpeco_interface.h"
+#include "ccsp_cwmp_helper_api.h"
 #include "ccsp_cwmp_ifo_sta.h"
 #include "Tr69_Tlv.h"
 #include "syscfg/syscfg.h"
@@ -89,6 +92,10 @@
 #define MAX_BUF_SIZE 256
 // TELEMETRY 2.0 //RDKB-25996
 #include <telemetry_busmessage_sender.h>
+
+#define DHCP_ACS_URL_FILE "/var/tmp/acs-url-from-dhcp-option.txt"
+#define DHCP_V6_ACS_URL_FILE "/var/tmp/acs-url-from-dhcp-option-v6.txt"
+#define TR69_ENABLE_CWMP_VALUE "eRT.com.cisco.spvtg.ccsp.tr069pa.Device.ManagementServer.EnableCWMP.Value"
 
 #if defined (INTEL_PUMA7)
 //Intel Proposed RDKB Generic Bug Fix from XB6 SDK
@@ -169,6 +176,106 @@ static void _get_shell_output (FILE *fp, char *out, size_t len)
 }
 #endif
 
+static void updateInitalContact (void)
+{
+    int nCcspError = 0;
+    char psmKeyPrefixed[CCSP_TR069PA_PSM_NODE_NAME_MAX_LEN] = {0};
+    char *lastContactUrl = NULL;
+    CCSP_BOOL bEnabled = FALSE;
+
+    CcspCwmpPrefixPsmKey(psmKeyPrefixed, CcspManagementServer_SubsystemPrefix, CCSP_TR069PA_PSM_KEY_InitialContact);
+    nCcspError = PSM_Set_Record_Value2
+             (
+                  bus_handle,
+                  CcspManagementServer_SubsystemPrefix,
+                  psmKeyPrefixed,
+                  ccsp_string,
+                  bEnabled ? "1" : "0"
+              );
+    if (nCcspError != CCSP_SUCCESS)
+    {
+        /* Rollback on error. */
+        CcspManagementServer_RollBackParameterValues();
+    }
+
+    return;
+}
+
+static CCSP_BOOL isACSChangedURL (void)
+{
+    CCSP_BOOL bACSChangedURL = FALSE;
+    char *pValue = NULL;
+    int res = 0;
+
+    res = PSM_Get_Record_Value2(
+                bus_handle,
+                CcspManagementServer_SubsystemPrefix,
+                "dmsb.ManagementServer.ACSChangedURL",
+                NULL,
+                &pValue);
+    if (res == CCSP_SUCCESS)
+    {
+        if (AnscEqualString(pValue, "0", FALSE) == TRUE)
+        {
+            bACSChangedURL = FALSE;
+        }
+        else
+        {
+            bACSChangedURL = TRUE;
+        }
+    }
+    if (pValue != NULL)
+    {
+        AnscFreeMemory(pValue);
+    }
+
+    return bACSChangedURL;
+}
+
+void GetConfigFrom_bbhm (int parameterID)
+{
+    char pRecordName[1000];
+    size_t len1, len2, len3;
+    char *pValue = NULL;
+    int res;
+
+    len1 = strlen(CcspManagementServer_ComponentName);
+    len2 = strlen(objectInfo[ManagementServerID].name);
+    len3 = strlen(objectInfo[ManagementServerID].parameters[parameterID].name);
+
+    assert ((len1 + 1 + len2 + len3 + 7) <= sizeof(pRecordName));
+
+    memcpy(pRecordName, CcspManagementServer_ComponentName, len1);
+    pRecordName[len1] = '.';
+    memcpy(&pRecordName[len1 + 1], objectInfo[ManagementServerID].name, len2);
+    memcpy(&pRecordName[len1 + 1 + len2], objectInfo[ManagementServerID].parameters[parameterID].name, len3);
+    memcpy(&pRecordName[len1 + 1 + len2 + len3], ".Value", 7);
+
+    res = PSM_Get_Record_Value2(
+                        bus_handle,
+                        CcspManagementServer_SubsystemPrefix,
+                        pRecordName,
+                        NULL,
+                        &pValue);
+
+    if(res == CCSP_SUCCESS){
+        CcspTraceDebug2
+            (
+                "ms",
+                ("PSM_Get_Record_Value2 returns %d, name=<%s>, value=<%s>\n", res, pRecordName, pValue ? pValue : "NULL")
+            );
+        }
+
+    if(pValue)
+    {
+        objectInfo[ManagementServerID].parameters[parameterID].value = AnscCloneString(pValue);
+    }
+    else
+    {
+        objectInfo[ManagementServerID].parameters[parameterID].value = AnscCloneString("");
+    }
+}
+
 static void ReadTr69TlvData (int ethwan_enable)
 {
 	int                             res;
@@ -178,6 +285,10 @@ static void ReadTr69TlvData (int ethwan_enable)
 
 	FILE *file = NULL;
 	Tr69TlvData *object2 = NULL;
+	char url[256] = "";
+	FILE *fp_dhcp_v6 = NULL;
+	FILE *fp_dhcp = NULL;
+	CCSP_BOOL bACSChangedURL = FALSE;
 
 	if (!ethwan_enable) //RDKB-40531: As T69_TLVDATA_FILE should not be considered for ETHWAN mode
 	{
@@ -219,6 +330,7 @@ static void ReadTr69TlvData (int ethwan_enable)
 		}
 	}
 
+	/* Change the behavior to use TLV202 as first priority. */
 	if ((file != NULL) && (object2))
 	{
                 /* CID 135272 String not null terminated fix */
@@ -249,6 +361,29 @@ static void ReadTr69TlvData (int ethwan_enable)
 		AnscTraceInfo(("%s -#- , URL: %s\n", __FUNCTION__, ( object2->URL[ 0 ] != '\0' ) ? object2->URL : "NULL"));
 		AnscTraceInfo(("**********************************************************\n"));
 
+                res = PSM_Set_Record_Value2
+                (
+                        bus_handle,
+                        CcspManagementServer_SubsystemPrefix,
+                        TR69_ENABLE_CWMP_VALUE,
+                        ccsp_string,
+                        object2->EnableCWMP ? "1" : "0"
+                );
+                fprintf(stderr, "Set EnableCWMP in PSM: val: %s, res: %d\n", object2->EnableCWMP ? "1" : "0", res);
+                if(res != CCSP_SUCCESS)
+                {
+                        /* Rollback on error. */
+                        CcspManagementServer_RollBackParameterValues();
+                }
+                else
+                {
+                       // restart firewall when EnableCWMP flag is written to PSM
+                       system("firewall restart");
+                }
+
+                bACSChangedURL = isACSChangedURL();
+
+        // Always update ACS Override flag(TLV202.7) recieved from the boot cfg file
         // Always fetch the ACSOverride flag from the boot config file.
         // Revert to default value "0" if AcsOverRide flag is not present.
         if (object2->AcsOverRide==1){
@@ -258,32 +393,85 @@ static void ReadTr69TlvData (int ethwan_enable)
             objectInfo[ManagementServerID].parameters[ManagementServerACSOverrideID].value=AnscCloneString("false");
         }
 
-		if(object2->Username && strlen(object2->Username) > 0)
-		{
-		  objectInfo[ManagementServerID].parameters[ManagementServerUsernameID].value = AnscCloneString(object2->Username);
-		  AnscTraceInfo(("%s -#- , objectInfo[ManagementServerID].parameters[ManagementServerUsernameID].value: %s\n", __FUNCTION__, objectInfo[ManagementServerID].parameters[ManagementServerUsernameID].value));
-		  
-                  _ansc_sprintf(recordName, "%s.%sUsername.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);
-                  AnscTraceInfo(("%s -#- , recordName: %s \n", __FUNCTION__,recordName));
-                  res = PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, recordName, ccsp_string, object2->Username);
-                  if(res != CCSP_SUCCESS)
-                  {
-                    AnscTraceWarning(("%s -#- Failed to write object2->Username <%s> into PSM!\n", __FUNCTION__, object2->Username));   
-                  }
-		}		
-		if(object2->Password && strlen(object2->Password) > 0)
-		{
-		  objectInfo[ManagementServerID].parameters[ManagementServerPasswordID].value = AnscCloneString(object2->Password);
-		  AnscTraceInfo(("%s -#- , objectInfo[ManagementServerID].parameters[ManagementServerPasswordID].value: %s\n", __FUNCTION__, objectInfo[ManagementServerID].parameters[ManagementServerPasswordID].value));
+                /*
+                 * B.4.3.7 ACSOverride in CM-SP-eRouter-I10-130808:
+                 * If enabled, the CPE MUST accept the ACS URL from the CM configuration file, even if the ACS has overwritten the values.
+                 * If disabled, the CPE accepts the CM configuration file values only if the ACS has not overwritten the ACS URL.
+                 *   Type   Length   Value
+                 *   2.7    N        0: disabled
+                 *                   1: enabled
+                 */
+                if ((object2->AcsOverRide == 1) || ((object2->AcsOverRide == 0) && (bACSChangedURL == FALSE)))
+                {
+                        /*
+                         * If ACS URL is changed by TLV202, we need to set initialContact = 1 in order to indicates
+                         * that the Session was established due to a change to the ACS URL.
+                         * Then the event code "0 BOOTSTRAP" will be contained in the first Inform.
+                        */
+                        if(object2->URL && strlen(object2->URL)>0 )
+                        {
+                                objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(object2->URL);
+                        }
+                        else
+                        {
+                                GetConfigFrom_bbhm(ManagementServerURLID);
+                        }
 
-                  _ansc_sprintf(recordName, "%s.%sPassword.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);
-                  AnscTraceInfo(("%s -#- , recordName: %s \n", __FUNCTION__,recordName));
-                  res = PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, recordName, ccsp_string, object2->Password);
-                  if(res != CCSP_SUCCESS)
-                  {
-                    AnscTraceWarning(("%s -#- Failed to write object2->Password <%s> into PSM!\n", __FUNCTION__, object2->Password));   
-                  }
-		}
+                        // Here, we need to check what is the value that we got through boot config file and update TR69 PA
+                        if(object2->EnableCWMP == 1)
+                        {
+                                objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = AnscCloneString("true");
+                        }
+                        else
+                        {
+                                objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = AnscCloneString("false");
+                        }
+
+                        /* Update all the other TLV-202.2 parameters. If TLV 202 were not set, get it from bbhm config */
+                        if(object2->Username && strlen(object2->Username) > 0)
+                        {
+                                objectInfo[ManagementServerID].parameters[ManagementServerUsernameID].value = AnscCloneString(object2->Username);
+                        }
+                        else
+                        {
+                                GetConfigFrom_bbhm(ManagementServerUsernameID);
+                        }
+
+                        if(object2->Password&& strlen(object2->Password) > 0)
+                        {
+                                objectInfo[ManagementServerID].parameters[ManagementServerPasswordID].value = AnscCloneString(object2->Password);
+                        }
+                        else
+                        {
+                                GetConfigFrom_bbhm(ManagementServerPasswordID);
+                        }
+
+                        if (object2->ConnectionRequestUsername && strlen(object2->ConnectionRequestUsername))
+                        {
+                               objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestUsernameID].value = AnscCloneString(object2->ConnectionRequestUsername);
+                        }
+                        else
+                        {
+                               GetConfigFrom_bbhm(ManagementServerConnectionRequestUsernameID);
+                        }
+
+                        if(object2->ConnectionRequestPassword && strlen(object2->ConnectionRequestPassword))
+                        {
+                               objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestPasswordID].value = AnscCloneString(object2->ConnectionRequestPassword);
+                        }
+                        else
+                        {
+                               GetConfigFrom_bbhm(ManagementServerConnectionRequestPasswordID);
+                        }
+
+                       // Free up all resources before exiting the function
+                       if(object2)
+                       {
+                              free(object2);
+                       }
+                       updateInitalContact();
+                       return;
+                }
 
 		// Check if it's a fresh bootup / boot after factory reset / TR69 was never enabled
 		// If TR69 was never enabled, then we will always take URL from boot config file.
@@ -295,6 +483,11 @@ static void ReadTr69TlvData (int ethwan_enable)
                         /* CID 335592 Resource leak fix */
                         AnscTraceWarning(("%s -#- ACS URL from cmconfig - %s\n", __FUNCTION__, object2->URL));
 			object2->FreshBootUp = 0;
+                        /*
+                         * If ACS URL is changed by TLV202, we need to set initialContact = 1 in order to indicates
+                         * that the Session was established due to a change to the ACS URL.
+                         * Then the event code "0 BOOTSTRAP" will be contained in the first Inform.
+                        */
 			objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(object2->URL);
 			//on Fresh bootup / boot after factory reset, if the URL is empty, set default URL value
                         if (object2->URL[0] == '\0')
@@ -517,7 +710,50 @@ static void ReadTr69TlvData (int ethwan_enable)
 			}
 		}
 	}
+        /*
+         * TR-069 CPE WAN Management Protocol - 3.1 ACS Discovery:
+         * If both DHCPv4 and DHCPv6 options are received, the CPE MUST use the DHCPv6 option over the DHCPv4 option.
+         */
+        fp_dhcp_v6 = fopen(DHCP_V6_ACS_URL_FILE, "r");
+        // If DHCP_V6_ACS_URL_FILE is found. Use this as default, else use the URL provided by TLV
+        if (fp_dhcp_v6!= NULL)
+        {
+               fread(url, sizeof(url), 1, fp_dhcp_v6);
+               fclose(fp_dhcp_v6);
+               objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(url);
+               // Free up all resources before exiting the function
+               if(object2)
+               {
+                      free(object2);
+               }
+               if (file)
+               {
+                      fclose(file);
+               }
+               updateInitalContact();
+               return;
+        }
 
+        fp_dhcp = fopen(DHCP_ACS_URL_FILE, "r");
+
+        // If DHCP_ACS_URL_FILE is found. Use this as default, else use the URL provided by TLV
+        if (fp_dhcp!= NULL)
+        {
+               fread(url, sizeof(url), 1, fp_dhcp);
+               fclose(fp_dhcp);
+               objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(url);
+               // Free up all resources before exiting the function
+               if(object2)
+               {
+                       free(object2);
+               }
+               if (file)
+               {
+                       fclose(file);
+               }
+               updateInitalContact();
+               return;
+        }
 	/*RDKB-7333, CID-32939, free unused resources before exit */
 	if(object2)
 	{
@@ -527,6 +763,7 @@ static void ReadTr69TlvData (int ethwan_enable)
 	{
 		fclose(file);;
 	}
+        updateInitalContact();
 	//To be deleted after testing ConnectionRequest
 	//whiteListManagementServerURL();
 }

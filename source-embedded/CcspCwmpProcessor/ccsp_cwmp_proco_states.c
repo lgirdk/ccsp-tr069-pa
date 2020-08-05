@@ -248,23 +248,25 @@ CcspCwmppoGetInitialContact
 	    char                        psmKeyPrefixed[CCSP_TR069PA_PSM_NODE_NAME_MAX_LEN + 16];
 
     	CcspCwmpPrefixPsmKey(psmKeyPrefixed, pCcspCwmpCpeController->SubsysName, CCSP_TR069PA_PSM_KEY_InitialContact);
+	CcspTr069PaTraceDebug(("psmKeyPrefixed is  <%s>\n", psmKeyPrefixed));
 	    pValue =
     	    pCcspCwmpCpeController->LoadCfgFromPsm
 	            (
                 	(ANSC_HANDLE)pCcspCwmpCpeController,
             	    psmKeyPrefixed
         	    );
-
+	CcspTr069PaTraceDebug(("pvalue is  <%s>\n", pValue));
     	pProperty->bInitialContact = pValue ? _ansc_atoi(pValue) : TRUE;
 
         CcspTr069PaTraceDebug(("InitialContact read from PSM is: <%s>\n", pProperty->bInitialContact ? "TRUE":"FALSE")); 
 
-        if (access(CCSP_MGMT_CRPWD_FILE,F_OK)!=0 && pValue!=NULL)
+//This can be removed after testing and validation of existence of CCSP_MGMT_CRPWD_FILE
+/*        if (access(CCSP_MGMT_CRPWD_FILE,F_OK)!=0 && pValue!=NULL)
 	{
 		pProperty->bInitialContact = 1;
         	CcspTr069PaTraceWarning(("bInitialContact switched to <%s> as MgmtCRPwdID was missing\n", pProperty->bInitialContact ? "TRUE":"FALSE")); 
 	}
-
+*/
     	if ( pValue )
 	    {
     	    AnscFreeMemory(pValue);

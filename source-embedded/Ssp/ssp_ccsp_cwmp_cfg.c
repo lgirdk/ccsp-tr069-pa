@@ -467,7 +467,6 @@ CcspTr069PaSsp_CcspCwmpCfgNoRPCMethods
         CCSP_CWMP_CFG_RPC_METHOD_NO_GetQueuedTransfers   |
         CCSP_CWMP_CFG_RPC_METHOD_NO_SetVouchers          |
         CCSP_CWMP_CFG_RPC_METHOD_NO_GetOptions           |
-        CCSP_CWMP_CFG_RPC_METHOD_NO_ScheduleInform       |
         CCSP_CWMP_CFG_RPC_METHOD_NO_Upload;
 
     return ulNoMethods;

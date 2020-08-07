@@ -353,8 +353,8 @@ CcspTr069PaSsp_LoadCfgFile
     /*
      *  Parse the XML content
      */
+    PANSC_XML_DOM_NODE_OBJECT       pRootNode          = (PANSC_XML_DOM_NODE_OBJECT)NULL;
     {
-        PANSC_XML_DOM_NODE_OBJECT       pRootNode          = (PANSC_XML_DOM_NODE_OBJECT)NULL;
         PANSC_XML_DOM_NODE_OBJECT       pChildNode         = (PANSC_XML_DOM_NODE_OBJECT)NULL;
         char*                           pXMLIterator       = pXMLContent;
         
@@ -406,6 +406,9 @@ CcspTr069PaSsp_LoadCfgFile
     }
     
 EXIT:
+    if (pRootNode) {
+        AnscXmlDomNodeRemove(pRootNode);
+    }
     AnscFreeMemory(pXMLContent);
     return  returnStatus;
 }
@@ -447,7 +450,6 @@ CcspTr069PaSsp_CcspCwmpCfgNoRPCMethods
         CCSP_CWMP_CFG_RPC_METHOD_NO_GetQueuedTransfers   |
         CCSP_CWMP_CFG_RPC_METHOD_NO_SetVouchers          |
         CCSP_CWMP_CFG_RPC_METHOD_NO_GetOptions           |
-        CCSP_CWMP_CFG_RPC_METHOD_NO_ScheduleInform       |
         CCSP_CWMP_CFG_RPC_METHOD_NO_Upload;
 
     return ulNoMethods;

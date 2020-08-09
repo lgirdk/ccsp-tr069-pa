@@ -7296,6 +7296,11 @@
             <Name>Device.DynamicDNS.Client.{i}.Hostname.{i}.LastUpdate</Name>
         </Param>
 
+        <!--  Gateway Parameters under "Device.X_LGI-COM_Gateway." -->
+        <Param>
+            <Name>Device.X_LGI-COM_Gateway.IPv6LANMode</Name>
+        </Param>
+
         <!-- WoL configuration Parameters under "Device." -->
         <Param>
             <Name>Device.X_LGI-COM_WoL.MACAddress</Name>

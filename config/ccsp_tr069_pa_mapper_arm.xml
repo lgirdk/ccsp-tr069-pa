@@ -5230,6 +5230,11 @@
         <Param>
             <Name>Device.DSLite.InterfaceSetting.{i}.X_RDKCENTRAL-COM_IPv6FragEnable</Name>
         </Param>
+
+        <!--  Gateway Parameters under "Device.X_LGI-COM_Gateway." -->
+        <Param>
+            <Name>Device.X_LGI-COM_Gateway.IPv6LANMode</Name>
+        </Param>
         
     <!-- WoL configuration Parameters under "Device." -->
         <Param>

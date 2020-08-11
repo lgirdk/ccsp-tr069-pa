@@ -2901,6 +2901,15 @@
         <Param>
             <Name>Device.Firewall.X_RDKCENTRAL-COM_Security.V6.IPFiltering.DayOfWeek.{i}.BlockTimeBitMask</Name>
         </Param>
+        <Param>
+            <Name>Device.NAT.X_CISCO_COM_TCPTimeout</Name>
+        </Param>
+        <Param>
+            <Name>Device.NAT.X_CISCO_COM_UDPTimeout</Name>
+        </Param>
+        <Param>
+            <Name>Device.NAT.X_CISCO_COM_ICMPTimeout</Name>
+        </Param>
 	<Param>
             <Name>Device.NAT.X_Comcast_com_EnablePortMapping</Name>
         </Param>
@@ -2965,6 +2974,21 @@
 	<Param>
 		<Name>Device.NAT.X_CISCO_COM_DMZ.InternalIP</Name>
 	</Param>
+        <Param>
+		<Name>Device.NAT.X_LGI-COM_NATPassthroughNumberOfEntries</Name>
+        </Param>
+        <Param>
+		<Name>Device.NAT.X_LGI-COM_NATPassthrough.{i}.Enable</Name>
+        </Param>
+        <Param>
+		<Name>Device.NAT.X_LGI-COM_NATPassthrough.{i}.Alias</Name>
+        </Param>
+        <Param>
+		<Name>Device.NAT.X_LGI-COM_NATPassthrough.{i}.MACAddr</Name>
+        </Param>
+        <Param>
+		<Name>Device.NAT.X_LGI-COM_NATPassthrough.{i}.Status</Name>
+        </Param>
 	<Param>
 		<Name>Device.X_Comcast_com_ParentalControl.ManagedSites.Enable</Name>
 	</Param>

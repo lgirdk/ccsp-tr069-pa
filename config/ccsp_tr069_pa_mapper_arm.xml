@@ -693,6 +693,9 @@
             <Name>Device.UserInterface.PasswordReset</Name>
         </Param>
         <Param>
+            <Name>Device.UserInterface.X_LGI-COM_ShowDNSConfigPage</Name>
+        </Param>
+        <Param>
             <Name>Device.InterfaceStackNumberOfEntries</Name>
         </Param>
         <Param>
@@ -5234,6 +5237,21 @@
         <!--  Gateway Parameters under "Device.X_LGI-COM_Gateway." -->
         <Param>
             <Name>Device.X_LGI-COM_Gateway.IPv6LANMode</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Gateway.DNS_Override</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Gateway.DNS_IPv4Preferred</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Gateway.DNS_IPv4Alternate</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Gateway.DNS_IPv6Preferred</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Gateway.DNS_IPv6Alternate</Name>
         </Param>
         
     <!-- WoL configuration Parameters under "Device." -->

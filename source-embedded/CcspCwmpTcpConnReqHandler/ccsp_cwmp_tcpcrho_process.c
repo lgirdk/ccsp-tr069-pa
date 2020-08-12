@@ -353,7 +353,7 @@ CcspCwmpTcpcrhoProcessRequest
             }
         }
         errno_t rc = -1;
-#ifdef _ANSC_IPV6_COMPATIBLE
+#ifdef _ANSC_IPV6_COMPATIBLE_
  rc = strcpy_s(pSessAuthInfo->RemoteAddress,sizeof(pSessAuthInfo->RemoteAddress), pWebSocket->PeerAddr);
  if(rc!=EOK)
  {

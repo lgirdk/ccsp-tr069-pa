@@ -551,6 +551,8 @@ CcspCwmppoInitialize
     pMyObject->GetPeriodicInformEnabled  = CcspCwmppoGetPeriodicInformEnabled;
     pMyObject->GetPeriodicInformInterval = CcspCwmppoGetPeriodicInformInterval;
     pMyObject->GetPeriodicInformTime     = CcspCwmppoGetPeriodicInformTime;
+    pMyObject->SetLastContactUrl         = CcspCwmppoSetLastContactUrl;
+    pMyObject->GetLastContactUrl         = CcspCwmppoGetLastContactUrl;
 
     pMyObject->GetCcspCwmpMpaIf          = CcspCwmppoGetCcspCwmpMpaIf;
     pMyObject->GetProperty               = CcspCwmppoGetProperty;

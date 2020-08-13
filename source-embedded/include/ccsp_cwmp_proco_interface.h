@@ -521,6 +521,8 @@ typedef  ULONG
     PFN_CWMPPROCO_GET_BOOL          GetPeriodicInformEnabled;                               \
     PFN_CWMPPROCO_GET_ULONG         GetPeriodicInformInterval;                              \
     PFN_CWMPPROCO_GET_HANDLE        GetPeriodicInformTime;                                  \
+    PFN_CWMPPROCO_SET_HANDLE        SetLastContactUrl;                                      \
+    PFN_CWMPPROCO_GET_STRING        GetLastContactUrl;                                      \
                                                                                             \
     PFN_CWMPPROCO_GET_IF            GetCcspCwmpMpaIf;                                       \
     PFN_CWMPPROCO_GET_PROPERTY      GetProperty;                                            \

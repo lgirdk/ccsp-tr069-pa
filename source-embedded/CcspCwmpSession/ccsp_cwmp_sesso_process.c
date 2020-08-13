@@ -119,6 +119,8 @@ CcspCwmpsoRecvSoapMessage
     PCCSP_CWMP_CPE_CONTROLLER_OBJECT     pCcspCwmpCpeController = (PCCSP_CWMP_CPE_CONTROLLER_OBJECT  )pMyObject->hCcspCwmpCpeController;
     PCCSP_CWMP_PROCESSOR_OBJECT      pCcspCwmpProcessor  = (PCCSP_CWMP_PROCESSOR_OBJECT   )pMyObject->hCcspCwmpProcessor;
     PCCSP_CWMP_SOAP_PARSER_OBJECT        pCcspCwmpSoapParser    = (PCCSP_CWMP_SOAP_PARSER_OBJECT     )pCcspCwmpCpeController->hCcspCwmpSoapParser;
+    char* pAcsUrl = (char* )NULL;
+    char* pLastContactUrl = (char* )NULL;
 
     pSessionTimerObj->Stop((ANSC_HANDLE)pSessionTimerObj);
 
@@ -154,7 +156,19 @@ CcspCwmpsoRecvSoapMessage
                     (ANSC_HANDLE)pCcspCwmpProcessor,
                     (ANSC_HANDLE)pMyObject
                 );
+            return  returnStatus;
         }
+
+        //Set the last Contact URL only after Successful response from the Server
+        pLastContactUrl =  pCcspCwmpProcessor->GetLastContactUrl((ANSC_HANDLE)pCcspCwmpProcessor);
+        pAcsUrl         =  pCcspCwmpProcessor->GetAcsUrl     ((ANSC_HANDLE)pCcspCwmpProcessor);
+
+        if (pAcsUrl && (!pLastContactUrl || (strcmp(pLastContactUrl, pAcsUrl) != 0)))
+        {
+            pCcspCwmpProcessor->SetLastContactUrl(pCcspCwmpProcessor, pAcsUrl);
+        }
+        AnscFreeMemory(pAcsUrl);
+        AnscFreeMemory(pLastContactUrl);
     }
 
     return  returnStatus;

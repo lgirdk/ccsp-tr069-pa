@@ -928,3 +928,51 @@ CcspCwmppoReset
 
     return  ANSC_STATUS_SUCCESS;
 }
+
+ANSC_STATUS
+CcspCwmppoSetLastContactUrl
+    (
+        ANSC_HANDLE                 hThisObject,
+        char*                       pLastContactUrl
+    )
+{
+    ANSC_STATUS returnStatus = ANSC_STATUS_SUCCESS;
+    PCCSP_CWMP_PROCESSOR_OBJECT pMyObject = (PCCSP_CWMP_PROCESSOR_OBJECT) hThisObject;
+    PCCSP_CWMP_CPE_CONTROLLER_OBJECT pCcspCwmpCpeController = (PCCSP_CWMP_CPE_CONTROLLER_OBJECT) pMyObject->hCcspCwmpCpeController;
+    char psmKeyPrefixed[CCSP_TR069PA_PSM_NODE_NAME_MAX_LEN + 16];
+
+    CcspCwmpPrefixPsmKey(psmKeyPrefixed, pCcspCwmpCpeController->SubsysName, CCSP_TR069PA_PSM_KEY_LastContactURL);
+
+    returnStatus =
+        pCcspCwmpCpeController->SaveCfgToPsm
+            (
+                (ANSC_HANDLE)pCcspCwmpCpeController,
+                psmKeyPrefixed,
+                pLastContactUrl
+            );
+
+    return returnStatus;
+}
+
+char*
+CcspCwmppoGetLastContactUrl
+    (
+        ANSC_HANDLE                 hThisObject
+    )
+{
+    PCCSP_CWMP_PROCESSOR_OBJECT pMyObject = (PCCSP_CWMP_PROCESSOR_OBJECT) hThisObject;
+    PCCSP_CWMP_CPE_CONTROLLER_OBJECT pCcspCwmpCpeController = (PCCSP_CWMP_CPE_CONTROLLER_OBJECT) pMyObject->hCcspCwmpCpeController;
+    char psmKeyPrefixed[CCSP_TR069PA_PSM_NODE_NAME_MAX_LEN + 16];
+    char *pValue = NULL;
+
+    CcspCwmpPrefixPsmKey(psmKeyPrefixed, pCcspCwmpCpeController->SubsysName, CCSP_TR069PA_PSM_KEY_LastContactURL);
+
+    pValue =
+        pCcspCwmpCpeController->LoadCfgFromPsm
+            (
+                (ANSC_HANDLE)pCcspCwmpCpeController,
+                psmKeyPrefixed
+            );
+
+    return pValue;
+}

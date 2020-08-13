@@ -155,6 +155,20 @@ CcspCwmpsoRecvSoapMessage
                     (ANSC_HANDLE)pMyObject
                 );
         }
+        else
+        {
+            // Set the last Contact URL only after Successful response from the Server
+            char *pLastContactUrl = pCcspCwmpProcessor->GetLastContactUrl((ANSC_HANDLE) pCcspCwmpProcessor);
+            char *pAcsUrl = pCcspCwmpProcessor->GetAcsUrl((ANSC_HANDLE) pCcspCwmpProcessor);
+
+            if (pAcsUrl && (!pLastContactUrl || (strcmp(pLastContactUrl, pAcsUrl) != 0)))
+            {
+                pCcspCwmpProcessor->SetLastContactUrl(pCcspCwmpProcessor, pAcsUrl);
+            }
+
+            AnscFreeMemory(pAcsUrl);
+            AnscFreeMemory(pLastContactUrl);
+        }
     }
 
     return  returnStatus;

@@ -207,6 +207,19 @@ CcspCwmppoSetPeriodicInformTime
         ANSC_HANDLE                 hTime
     );
 
+ANSC_HANDLE
+CcspCwmppoSetLastContactUrl
+    (
+        ANSC_HANDLE                 hThisObject,
+        char*                       pLastContactUrl
+    );
+
+char*
+CcspCwmppoGetLastContactUrl
+    (
+        ANSC_HANDLE                 hThisObject
+    );
+
 ANSC_STATUS
 CcspCwmppoGetProperty
     (

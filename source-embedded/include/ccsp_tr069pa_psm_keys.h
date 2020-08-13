@@ -78,6 +78,7 @@
 #define  CCSP_TR069PA_PSM_KEY_TriggerCommandKey     "cwmp.triggerCommandKey"
 
 #define  CCSP_TR069PA_PSM_KEY_TransferComplete      "cwmp.TransferComplete"
+#define  CCSP_TR069PA_PSM_KEY_LastContactURL        "cwmp.lastContactUrl"
 
 #endif
 

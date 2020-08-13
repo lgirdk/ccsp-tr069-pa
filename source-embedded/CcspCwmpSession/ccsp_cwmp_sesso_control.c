@@ -178,11 +178,6 @@ CcspCwmpsoConnectToAcs
 		pCcspCwmpAcsConnection->SetPassword((ANSC_HANDLE)pCcspCwmpAcsConnection, pAcsPassword);
 	}
 
-    if ( pAcsUrl ) 
-    {
-        CcspTr069PaFreeMemory(pAcsUrl);
-    }
-
     if ( pAcsUsername )
     {
         CcspTr069PaFreeMemory(pAcsUsername);
@@ -229,6 +224,10 @@ CcspCwmpsoConnectToAcs
                 );
     }
 
+    if ( pAcsUrl )
+    {
+        CcspTr069PaFreeMemory(pAcsUrl);
+    }
 
     /******************************************************************
                 GRACEFUL ROLLBACK PROCEDURES AND EXIT DOORS

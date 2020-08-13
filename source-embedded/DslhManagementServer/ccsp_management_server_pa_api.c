@@ -81,6 +81,7 @@
 #include "ccsp_cwmp_cpeco_interface.h"
 #include "ccsp_cwmp_helper_api.h"
 #include "ccsp_cwmp_ifo_sta.h"
+#include "ccsp_cwmp_proco_interface.h"
 #include "Tr69_Tlv.h"
 #include "syscfg/syscfg.h"
 #include <sys/stat.h>
@@ -184,6 +185,14 @@ static void updateInitalContact (void)
     CCSP_BOOL bEnabled = FALSE;
 
     CcspCwmpPrefixPsmKey(psmKeyPrefixed, CcspManagementServer_SubsystemPrefix, CCSP_TR069PA_PSM_KEY_InitialContact);
+
+    lastContactUrl = ((PCCSP_CWMP_PROCESSOR_OBJECT)CcspManagementServer_cbContext)->GetLastContactUrl((ANSC_HANDLE)CcspManagementServer_cbContext);
+    if ((!lastContactUrl) ||
+        (!AnscEqualString(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value, lastContactUrl, TRUE)))
+    {
+        bEnabled = TRUE;
+    }
+
     nCcspError = PSM_Set_Record_Value2
              (
                   bus_handle,
@@ -196,6 +205,11 @@ static void updateInitalContact (void)
     {
         /* Rollback on error. */
         CcspManagementServer_RollBackParameterValues();
+    }
+
+    if (lastContactUrl)
+    {
+        AnscFreeMemory(lastContactUrl);
     }
 
     return;

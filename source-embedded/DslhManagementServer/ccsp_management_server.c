@@ -260,7 +260,8 @@ msParameterInfo managementServerParameters[] =
     { "NATDetected", NULL, ccsp_boolean, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
     { "AliasBasedAddressing", NULL, ccsp_boolean, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
     { "X_CISCO_COM_ConnectionRequestURLPort", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
-    { "X_CISCO_COM_ConnectionRequestURLPath", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0), (unsigned int)0 }
+    { "X_CISCO_COM_ConnectionRequestURLPath", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
+    { "X_LGI-COM_ConnectionRequestIf", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
 };
 
 msParameterInfo autonomousTransferCompletePolicyParameters[] = 
@@ -493,7 +494,10 @@ CcspManagementServer_FillInObjectInfo()
         /* Now PA is started before PAM. We can't get it now We will try to get from PAM directly when do INFORM */
         objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_ConnectionRequestURLPathID].value 
             = NULL;
-    
+
+        objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ConnectionRequestIfID].value
+            = AnscCloneString(LGI_CWMP_CONNREQ_IFACE_STR);
+
         objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].notification = 1;
             
         _ansc_sprintf(buf, "%d", STUN_PORT);
@@ -1754,6 +1758,9 @@ void CcspManagementServer_GetSingleParameterValue(
         case ManagementServerX_CISCO_COM_DiagCompleteID:
             val->parameterValue = AnscCloneString("false");
             break;
+        case ManagementServerX_LGI_COM_ConnectionRequestIfID:
+            val->parameterValue = CcspManagementServer_GetConnectionRequestIf(NULL);
+            break;
         default: break;
         }
     }
@@ -2371,6 +2378,9 @@ int CcspManagementServer_ValidateParameterValues(
                 case ManagementServerX_CISCO_COM_ConnectionRequestURLPathID:
                     if(CcspManagementServer_ValidateStrLen(val[i].parameterValue, 256) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
                     else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
+                    break;
+                case ManagementServerX_LGI_COM_ConnectionRequestIfID:
+                    parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(LGI_CWMP_CONNREQ_IFACE_STR);
                     break;
                 case ManagementServerPeriodicInformIntervalID:
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, 1, FALSE, 0) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;

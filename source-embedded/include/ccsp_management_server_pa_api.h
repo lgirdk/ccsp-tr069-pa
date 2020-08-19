@@ -359,6 +359,16 @@ CcspManagementServer_GetConnectionRequestURLPath
         CCSP_STRING                 ComponentName
     );
 
+/* CcspManagementServer_GetConnectionRequestIf is called to get
+ * Device.ManagementServer.X_LGI_COM_ConnectionRequestIf.
+ * Return value - the parameter value.
+ */
+CCSP_STRING
+CcspManagementServer_GetConnectionRequestIf
+(
+    CCSP_STRING                 ComponentName
+);
+
 /* CcspManagementServer_SetConnectionRequestURL is called to set
  * Device.ManagementServer.ConnectionRequestURL.
  * This parameter is read-only. 

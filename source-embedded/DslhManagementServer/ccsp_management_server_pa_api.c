@@ -911,9 +911,22 @@ CcspManagementServer_Init
     _ansc_ultoa(g_ulAllocatedSizeCurr, str, 10);
     objectInfo[MemoryID].parameters[MemoryMinUsageID].value = CcspManagementServer_CloneString(str);
 
-	// To check and wait for system ready signal from CR to proceed further
-	waitUntilSystemReady( CcspManagementServer_cbContext );
-
+#ifdef USE_WHITELISTED_IP
+     //By now we know the ACS URL to be used 
+    CCSP_STRING pStr = objectInfo[ManagementServerID].parameters[ManagementServerURLID].value;
+    fprintf(stderr,"\n %s %d ManagementServerURLID:%s",__FUNCTION__,__LINE__,pStr);
+    
+    char cmd [MAX_URL_LEN + MAX_BUF_SIZE] = {0};
+    snprintf(cmd,sizeof(cmd),"sysevent set whitelistedAcsUrl %s",pStr);
+    system(cmd);
+    
+    fprintf(stderr,"\n %s: After sysevent set of WhitelistedManagementServerURL restart firewall \n", __FUNCTION__ );
+    //system("sysevent set firewall-restart");
+    system("firewall restart");
+    fprintf(stderr,"\n %s: After firewall restart continue waiting for system ready signal from CR \n", __FUNCTION__ );
+#endif
+    // To check and wait for system ready signal from CR to proceed further
+    waitUntilSystemReady( CcspManagementServer_cbContext );
     //    return  (CCSP_HANDLE)bus_handle;
     return;
 }

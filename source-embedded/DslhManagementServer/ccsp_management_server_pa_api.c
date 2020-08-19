@@ -1015,6 +1015,22 @@ CcspManagementServer_Init
     snprintf(str, sizeof(str), "%lu", g_ulAllocatedSizeCurr);
     objectInfo[MemoryID].parameters[MemoryMinUsageID].value = AnscCloneString(str);
 
+#ifdef USE_WHITELISTED_IP
+     //By now we know the ACS URL to be used 
+    CCSP_STRING pStr = objectInfo[ManagementServerID].parameters[ManagementServerURLID].value;
+    fprintf(stderr,"%s %d ManagementServerURLID:%s\n",__FUNCTION__,__LINE__,pStr);
+
+    char cmd [MAX_URL_LEN + MAX_BUF_SIZE];
+    /* Fixme: URL should be single quoted (unless it is already) */
+    snprintf(cmd,sizeof(cmd),"sysevent set whitelistedAcsUrl %s",pStr);
+    system(cmd);
+    fprintf(stderr,"%s: After sysevent set of whitelistedAcsUrl\n", __FUNCTION__ );
+
+    //system("sysevent set firewall-restart");
+    system("firewall restart");
+    fprintf(stderr,"%s: After firewall restart continue waiting for system ready signal from CR\n", __FUNCTION__ );
+#endif
+
     // To check and wait for system ready signal from CR to proceed further
     waitUntilSystemReady( CcspManagementServer_cbContext );
 

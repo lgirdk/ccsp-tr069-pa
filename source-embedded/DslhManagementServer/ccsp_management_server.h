@@ -103,6 +103,8 @@
 #define TR69_INVALID_PARAMETER_VALUE    9007
 #define TR69_UPDATE_NON_WRITABLE_PARAMETER    9008
 
+#define LGI_CWMP_CONNREQ_IFACE_STR      "eRouter"
+
 typedef struct _msParameterInfo{
     char * name; /* name without a path */
     char * value; /* always char * for all kinds of parameters */
@@ -182,6 +184,7 @@ enum
     ManagementServerAliasBasedAddressingID,
     ManagementServerX_CISCO_COM_ConnectionRequestURLPortID,
     ManagementServerX_CISCO_COM_ConnectionRequestURLPathID,
+    ManagementServerX_LGI_COM_ConnectionRequestIfID,
     ManagementServerNumOfParameters
 };
 

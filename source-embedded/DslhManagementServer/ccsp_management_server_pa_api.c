@@ -1504,6 +1504,15 @@ CcspManagementServer_GetConnectionRequestURLPath
     return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_ConnectionRequestURLPathID].value);
 }
 
+CCSP_STRING
+CcspManagementServer_GetConnectionRequestIf
+    (
+        CCSP_STRING                 ComponentName
+    )
+{
+    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ConnectionRequestIfID].value);
+}
+
 /* CcspManagementServer_GetConnectionRequestUsername is called to get
  * Device.ManagementServer.ConnectionRequestUsername.
  * Return value - the parameter value.

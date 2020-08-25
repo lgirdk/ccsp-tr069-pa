@@ -364,6 +364,8 @@ CcspCwmpsoInform
 
     BOOL                            bValChange           = FALSE;
     BOOL                            bBootStrap           = FALSE;
+    BOOL                            bHasBoot             = FALSE;
+    int                             fd;
     static int bFirstInform = 1;
     static char Manufacturer[100];
     static char ManufacturerOUI[100];
@@ -1202,6 +1204,15 @@ bFirstInform = 0;
 
                 pCcspCwmpCpeController->bBootInformSent = TRUE;
 
+                for( i = 0; i < pMyObject->EventCount; i ++)
+                {
+                    if ( AnscEqualString(((PCCSP_CWMP_EVENT)pMyObject->EventArray[i])->EventCode, CCSP_CWMP_INFORM_EVENT_NAME_Boot, TRUE) )
+                    {
+                        bHasBoot = TRUE;
+                        break;
+                    }
+                }
+
                 pCcspCwmpProcessor->SignalSession
                     (
                         (ANSC_HANDLE)pCcspCwmpProcessor,
@@ -1325,6 +1336,19 @@ bFirstInform = 0;
         break;
     }
     while ( ulRetryTimes < CCSP_CWMPSO_MAX_CALL_RETRY_TIMES );
+
+    if( bHasBoot )
+    {
+        fd = open(CCSP_TR069_CWMPFORCEDRESTART, O_RDWR | O_CREAT, 0666);
+        if (fd >= 0)
+        {
+            close(fd);
+        }
+        else
+        {
+            CcspTr069PaTraceWarning(("WARNING: failed to create the '%s' file : %m\n",CCSP_TR069_CWMPFORCEDRESTART));
+        }
+    }
 
     returnStatus = ANSC_STATUS_SUCCESS;
 

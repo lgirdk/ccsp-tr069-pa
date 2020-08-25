@@ -72,6 +72,7 @@
 #include "ccsp_tr069pa_mapper_def.h"
 #include "ccsp_base_api.h"
 
+#define CCSP_TR069_CWMPFORCEDRESTART "/tmp/tr069pa_restart"
 
 /* CcspTr069PA_LoadMappingFile is called to load mapping file for TR-069 PA,
  * Return value - transparent handle to caller and will be used for all

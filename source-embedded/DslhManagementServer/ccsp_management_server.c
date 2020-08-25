@@ -1702,8 +1702,7 @@ void CcspManagementServer_GetSingleParameterValue(
             val->parameterValue = CcspManagementServer_GetUsername(NULL);
             break;
         case ManagementServerPasswordID:
-            //val->parameterValue = NULL;
-	    val->parameterValue = CcspManagementServer_GetPassword(NULL);
+            val->parameterValue = NULL;
             break;
         case ManagementServerPeriodicInformEnableID:
             val->parameterValue = CcspManagementServer_GetPeriodicInformEnableStr(NULL);

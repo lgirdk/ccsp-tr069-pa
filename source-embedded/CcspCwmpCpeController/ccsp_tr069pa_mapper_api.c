@@ -245,7 +245,7 @@ CcspTr069PA_GetSubsystemByIndex
 
 
 /* Check for the existence of a config file path */
-static CCSP_BOOL CcspTr069PA_CheckFileExists( const char *path )
+CCSP_BOOL CcspTr069PA_CheckFileExists( const char *path )
 {
     FILE *file;
 

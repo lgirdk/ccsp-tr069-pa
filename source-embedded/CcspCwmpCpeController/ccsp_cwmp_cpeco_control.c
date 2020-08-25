@@ -258,7 +258,7 @@ ccspCwmpCpeFirstInformTask
     ULONG                           ulTimeStart        = AnscGetTickInSeconds();
     ULONG                           ulTimeNow          = ulTimeStart;
 
-    pMyObject->bBootInformScheduled = TRUE;
+    pMyObject->bBootInformScheduled = !CcspTr069PA_CheckFileExists( CCSP_TR069_CWMPFORCEDRESTART );
 
     /*
      * We intend to delay the very first Inform message for 10 seconds.
@@ -300,14 +300,29 @@ ccspCwmpCpeFirstInformTask
             AnscSleep(1000);
         }
 
-        returnStatus =
-            pCcspCwmpMsoIf->Inform
+        if (pMyObject->bBootInformScheduled)
+        {
+            returnStatus =
+                pCcspCwmpMsoIf->Inform
                 (
                     (ANSC_HANDLE)pCcspCwmpMsoIf->hOwnerContext,
                     CCSP_CWMP_INFORM_EVENT_NAME_Boot,
                     NULL,
                     TRUE
                 );
+        }
+        else
+        {
+            returnStatus =
+                pCcspCwmpMsoIf->Inform
+                (
+                    (ANSC_HANDLE)pCcspCwmpMsoIf->hOwnerContext,
+                    CCSP_CWMP_INFORM_EVENT_NAME_Peroidic,
+                    NULL,
+                    TRUE
+                );
+            pMyObject->bBootInformSent = TRUE;
+        }
 
         pCcspCwmpProcessor->ConfigPeriodicInform((ANSC_HANDLE)pCcspCwmpProcessor);
     }

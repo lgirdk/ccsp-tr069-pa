@@ -4945,7 +4945,7 @@ void
 CcspCwmpsoAsyncReboot()
 {
     AnscSleep(3*1000);
-    system("/fss/gw/rdklogger/backupLogs.sh");
+    system("/rdklogger/backupLogs.sh");
     //system("reboot");
 }
 #endif

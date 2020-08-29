@@ -81,7 +81,14 @@
 #include "Tr69_Tlv.h"
 
 #define TR69_TLVDATA_FILE "/nvram/TLVData.bin"
-#define TR69_DEFAULT_URL_FILE "/etc/url"
+/*
+   The "correct" path for the url file is unclear. Previously the file
+   was installed to /usr/ccsp/tr069pa/url but accessed via /etc/url
+   (a symlink back to the actual file). Changing the definition below
+   should hopefully allow the symlink to be removed.
+*/
+#define TR69_DEFAULT_URL_FILE "/usr/ccsp/tr069pa/url"
+
 #define MAX_UDP_VAL  257
 #define MAX_BUF_SIZE 256
 // TELEMETRY 2.0 //RDKB-25996

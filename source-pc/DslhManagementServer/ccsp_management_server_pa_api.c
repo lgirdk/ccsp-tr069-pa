@@ -79,7 +79,7 @@
 #include "ccsp_cwmp_ifo_sta.h"
 #include "Tr69_Tlv.h"
 #define TR69_TLVDATA_FILE "/nvram/TLVData.bin"
-#define TR69_DEFAULT_URL_FILE "/etc/url"
+
 PFN_CCSPMS_VALUECHANGE  CcspManagementServer_ValueChangeCB;
 CCSP_HANDLE             CcspManagementServer_cbContext;
 CCSP_HANDLE             CcspManagementServer_cpeContext;
@@ -139,21 +139,6 @@ void ReadTr69TlvData()
 			//on Fresh bootup / boot after factory reset, if the URL is empty, set default URL value
 			if(AnscEqualString(object2->URL, "", TRUE))
 			{
-				#if 0
-				FILE * urlfile= fopen(TR69_DEFAULT_URL_FILE, "r");
-				if (urlfile != NULL)
-				{
-					char url[256] = "";
-					fread(url, sizeof(url), 1, urlfile);
-					fclose(urlfile);
-					strip_line(url);
-					objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = CcspManagementServer_CloneString(url);
-				}
-				else
-				{
-					printf("Cannot open default url file: \"%s\"\n", TR69_DEFAULT_URL_FILE);
-				}
-                #endif
                 if (g_Tr069PaAcsDefAddr!= NULL)
                 {
                     AnscTraceWarning(("ACS URL = %s  \n",g_Tr069PaAcsDefAddr));
@@ -163,7 +148,6 @@ void ReadTr69TlvData()
                 {
                     AnscTraceWarning(("Unable to retrieve ACS URL  \n"));
                 }
-
 			}
 			else
 			{

@@ -82,7 +82,7 @@
 #include "syscfg/syscfg.h"
 
 #define TR69_TLVDATA_FILE "/nvram/TLVData.bin"
-#define TR69_DEFAULT_URL_FILE "/etc/url"
+
 #define MAX_UDP_VAL  257
 #define MAX_BUF_SIZE 256
 // TELEMETRY 2.0 //RDKB-25996
@@ -233,22 +233,6 @@ void ReadTr69TlvData()
 			//on Fresh bootup / boot after factory reset, if the URL is empty, set default URL value
                         if (object2->URL[0] == '\0')
 			{
-				#if 0
-				FILE * urlfile= fopen(TR69_DEFAULT_URL_FILE, "r");
-				if (urlfile != NULL)
-				{
-					char url[256] = "";
-					fread(url, sizeof(url), 1, urlfile);
-					fclose(urlfile);
-					strip_line(url);
-					AnscTraceWarning(("%s -#- cmconfig file doesnt have an ACS url specified, setting url from TR69_DEFAULT_URL_FILE", __FUNCTION__));
-					objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = CcspManagementServer_CloneString(url);
-				}
-				else
-				{
-					printf("Cannot open default url file: \"%s\"\n", TR69_DEFAULT_URL_FILE);
-				}
-                #endif
                 if (g_Tr069PaAcsDefAddr!= NULL)
                 {
                     AnscTraceWarning(("ACS URL = %s  \n",g_Tr069PaAcsDefAddr));

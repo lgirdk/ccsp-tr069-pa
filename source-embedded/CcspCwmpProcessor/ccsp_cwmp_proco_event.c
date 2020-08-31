@@ -76,7 +76,56 @@
 #include <unistd.h>
 #include "print_uptime.h"
 #include <sys/stat.h>
+#include <sysevent/sysevent.h>
+
 extern ANSC_HANDLE bus_handle;
+
+ANSC_STATUS isBridgeMode(BOOL *bBridgeMode)
+{
+  static int            sysevent_fd = -1;
+  static char          *sysevent_name = "tr069";
+  static token_t        sysevent_token;
+  static unsigned short sysevent_port;
+  static char           sysevent_ip[19];
+  char bridge_mode[10]; 
+  ANSC_STATUS returnStatus = ANSC_STATUS_FAILURE;
+  
+  snprintf(sysevent_ip, sizeof(sysevent_ip), "127.0.0.1");
+  sysevent_port = SE_SERVER_WELL_KNOWN_PORT;  
+  sysevent_fd =  sysevent_open(sysevent_ip, sysevent_port, SE_VERSION, sysevent_name, &sysevent_token);
+  if (0 > sysevent_fd)
+  {
+    fprintf(stderr,"\n TR069 process unable to register with sysevent daemon at %s %u.\n", sysevent_ip, sysevent_port);
+    CcspTr069PaTraceError(("%s, sysevent_open failed!!!\n",__FUNCTION__));      
+    return returnStatus;
+  }
+  CcspTr069PaTraceInfo(("TR069 process opening sysevent_fd %d, token %d\n",sysevent_fd,sysevent_token));
+  if( 0 == sysevent_get(sysevent_fd, sysevent_token, "bridge_mode", bridge_mode, sizeof(bridge_mode)))
+  {    
+    CcspTr069PaTraceInfo(("%s, bridge_mode got from sysevent is: %s\n",__FUNCTION__,bridge_mode));
+    if(0 == strcmp("0", bridge_mode))
+    {
+      *bBridgeMode = FALSE;
+    }
+    else
+    {
+      *bBridgeMode = TRUE;
+    }
+    CcspTr069PaTraceInfo(("%s ridge_mode %d\n",__FUNCTION__,*bBridgeMode));
+    returnStatus =  ANSC_STATUS_SUCCESS;
+  }
+  else
+  {    
+    CcspTr069PaTraceError(("%s:%d  sysevent_get failed to get value of bridge_mode!!!\n",__FUNCTION__,__LINE__));
+  }
+  if (0 <= sysevent_fd)  
+  {
+    CcspTr069PaTraceInfo(("TR069 closing sysevent_fd %d, token %d\n",sysevent_fd,sysevent_token));
+    sysevent_close(sysevent_fd, sysevent_token);
+  }
+  return returnStatus;
+}
+
 
 static
 ANSC_STATUS
@@ -92,6 +141,7 @@ CcspCwmppoSysReadySignalProcTask
     char*                           pConnReqUrl             = NULL;
     int                             nRetryCount             = 0;
     BOOL                            bHavePrintGottenIP      = FALSE;
+    BOOL                            bBridgeMode = FALSE;
 
     pMyObject->AsyncTaskCount ++;
 
@@ -184,6 +234,16 @@ CcspCwmppoSysReadySignalProcTask
     /* put Inform message sending on hold until ConnectionRequestURL is ready (non-empty) */
     while ( pMyObject->bActive && !pConnReqUrl )
     {
+        if( isBridgeMode(&bBridgeMode) == ANSC_STATUS_SUCCESS && bBridgeMode == TRUE)
+        {
+          fprintf(stderr,"\n %s:%d TR-069 agent detected the bridge mode ..exiting as TR069 process should not be enabled in bridge mode.",__FUNCTION__,__LINE__);
+          AnscTraceWarning(("%s:%d TR-069 agent detected the bridge mode ..exiting as TR069 process should not be enabled in bridge mode.\n", __FUNCTION__,__LINE__));
+          exit(1);
+        }
+        else
+        {
+          AnscTraceWarning(("%s:%d TR-069 agent detected the router mode \n", __FUNCTION__,__LINE__));
+        }
         nRetryCount ++;
 
         pConnReqUrl = 

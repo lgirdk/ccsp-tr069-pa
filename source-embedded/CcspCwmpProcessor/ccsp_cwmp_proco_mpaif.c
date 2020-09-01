@@ -2713,6 +2713,20 @@ CcspCwmppoMpaGetParameterNames
     if ( !pParamPath || (AnscSizeOfString(pParamPath) == 0) )
     {
         pParamPath = pRootObjName;
+      /* If ParameterPath were empty, with NextLevel equal true, the response would list only InternetGatewayDevice. (if the CPE is an Internet Gateway Device).*/
+      if(bNextLevel)
+      {
+        ulParameterCount = 1;
+        pCwmpParamInfoArray = (PCCSP_CWMP_PARAM_INFO)AnscAllocateMemory(sizeof(CCSP_CWMP_PARAM_INFO) * ulParameterCount);
+        if ( !pCwmpParamInfoArray )
+        {
+            returnStatus = ANSC_STATUS_RESOURCES;
+            goto  EXIT2;
+        }
+        pCwmpParamInfoArray[0].Name      = AnscCloneString(pParamPath);
+        pCwmpParamInfoArray[0].bWritable = CCSP_FALSE;
+        goto EXIT3;
+      }
     }
 
     if ( bNextLevel && !CcspCwmpIsPartialName(pParamPath) )

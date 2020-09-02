@@ -88,4 +88,4 @@ CcspTr069PaSsp_SOURCES = ssp_main.c ssp_ccsp_cwmp_cfg.c ssp_web_acm.c ssp_debug.
     ../CcspCwmpSoapParser/ccsp_cwmp_soappo_states.c \
     ../CcspCwmpSoapParser/ccsp_cwmp_soappo_build.c
 
-CcspTr069PaSsp_LDFLAGS = -lccsp_common -lsyscfg -lsysevent -lutapi -lutctx -ltelemetry_msgsender -lsecure_wrapper -lprint_uptime -lprivilege -lcjson -lcrypto
+CcspTr069PaSsp_LDFLAGS = -lccsp_common -lsyscfg -lsysevent -lutapi -lutctx -ltelemetry_msgsender -lsecure_wrapper -lprint_uptime -lprivilege -lcjson -lcrypto -lpthread

@@ -87,6 +87,8 @@
 // TELEMETRY 2.0 //RDKB-25996
 #include <telemetry_busmessage_sender.h>
 
+#include <pthread.h>
+
 #define TEMP_SIZE 23
 #define MAX_SIZE_TMPPWD_VALUE 512
 
@@ -310,6 +312,42 @@ msParameterInfo deviceParameters[] =
 {
     { "RootDataModelVersion", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0) }
 };
+
+// ARRIS ADD BEGIN
+static struct hostent *pACSIPv6Addr = NULL;
+static BOOL isResolveAcsActive = false;
+
+static void* AcsResolveIPv6Thread(void *p_param)
+{
+    char *acsURL = p_param;
+    isResolveAcsActive = true;
+    pACSIPv6Addr = NULL;
+    pACSIPv6Addr = gethostbyname2(acsURL, AF_INET6);
+    isResolveAcsActive = false;
+    return NULL;
+}
+
+static void CcspManagementServer_AcsResolveIPv6(char *acsURL)
+{
+    int i;
+
+    if(isResolveAcsActive == false)
+    {
+        pthread_t tid;
+        pthread_create(&tid, NULL, &AcsResolveIPv6Thread, acsURL);
+        pthread_detach(tid); // ARRIS ADD
+    }
+
+    //wait 5 seconds for resolve
+    for(i=0; i<10000; i++)
+    {
+        usleep(500);
+        if(!isResolveAcsActive)
+            break;
+    }
+}
+// ARRIS ADD END
+
 
 extern CCSP_VOID
 CcspManagementServer_FillInObjectInfoCustom(msObjectInfo *objectInfo);
@@ -1095,6 +1133,73 @@ CcspManagementServer_RegisterWanInterface()
     return ANSC_STATUS_SUCCESS;
 }
 
+/* ARRIS ADD BEGIN */
+static BOOL CcspManagementServer_GetHostname(const char *URL, char *host)
+{
+    const char * s = URL;
+    char *tmpStr;
+    char tmpHost[257] = { 0 };
+    int  i, n;
+
+    if (!URL)
+    {
+        return FALSE;
+    }
+
+    if (!*URL)
+    {
+        host[0] = '\0';
+        return TRUE;
+    }
+
+    if ((tmpStr = strstr(s, "http://")))
+    {
+        s = tmpStr + 7; // strlen of "http://"
+    }
+    else if ((tmpStr = strstr(s, "https://")))
+    {
+        s = tmpStr + 8; // strlen of "https://"
+    }
+
+    n = strlen(s);
+    if (n >= sizeof(tmpHost))
+    {
+        n = sizeof(tmpHost) - 1;
+    }
+
+    if (s[0] == '[') // if adress is in IPv6 format anyway
+    {
+        s++;
+        for (i = 0; i < n; i++)
+        {
+            if (s[i] == ']')
+            {
+                s++;
+                --n;
+                break;
+            }
+            tmpHost[i] = s[i];
+        }
+    }
+    else
+    {
+        for (i = 0; i < n; i++)
+        {
+            tmpHost[i] = s[i];
+            if (s[i] == '/' || s[i] == ':' )
+            {
+                break;
+            }
+        }
+    }
+
+    tmpHost[i] = '\0';
+    strcpy(host, tmpHost);
+
+    return TRUE;
+}
+/* ARRIS ADD END */
+
 //Custom
 extern void CcspManagementServer_GenerateConnectionRequestURLCustom(
     BOOL fromValueChangeSignal,
@@ -1142,6 +1247,64 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
             ERR_CHK(rc);
             free_parameterValStruct_t (bus_handle, val_size, parameterval);
         }
+
+        //ARRIS ADD BEGIN
+        {
+            char ipAddrV6[200] = {0};
+            FILE * fp = NULL;
+            char addr6p[8][5];
+            int plen, scope, dad_status, if_idx;
+            char devname[20];
+            fp = fopen("/proc/net/if_inet6", "r");
+            if(fp)
+            {
+                while (fscanf
+                        (fp, "%4s%4s%4s%4s%4s%4s%4s%4s %08x %02x %02x %02x %20s\n",
+                        addr6p[0], addr6p[1], addr6p[2], addr6p[3], addr6p[4],
+                        addr6p[5], addr6p[6], addr6p[7], &if_idx, &plen, &scope,
+                        &dad_status, devname) != EOF
+                        )
+                {
+                    if(strstr(devname, "erouter0") && (scope == 0)) //erouter0 global
+                    {
+                        sprintf(ipAddrV6, "%s:%s:%s:%s:%s:%s:%s:%s",
+                                addr6p[0], addr6p[1], addr6p[2], addr6p[3],
+                                addr6p[4], addr6p[5], addr6p[6], addr6p[7]);
+			break;
+                    }
+                }
+
+                fclose(fp);
+            }
+
+            if(strlen(ipAddrV6) > 0)
+            {
+                if(strlen(ipAddr) <= 0  || AnscEqualString(ipAddr, "0.0.0.0", TRUE))
+                {
+                    sprintf(ipAddr, "[%s]", ipAddrV6);  //erouter0 is IPv6 only
+                }
+                else
+                {
+                    //erouter0 is dualstack
+                    char* URL = CcspManagementServer_GetURL(NULL);
+                    if(URL)
+                    {
+                        char host[256] = {0};
+
+                        CcspManagementServer_GetHostname(URL, host);
+                        CcspManagementServer_AcsResolveIPv6(host);
+                        if (pACSIPv6Addr)
+                        {
+                            //Use IPv6 address if ACS URL is able to resolve IPv6
+                            sprintf(ipAddr, "[%s]", ipAddrV6);
+                        }
+
+                        AnscFreeMemory(URL);
+                    }
+                }
+            }
+        }
+        //ARRIS ADD END
 #else
 
 #if defined(_COSA_HYBRID_LINUX_))

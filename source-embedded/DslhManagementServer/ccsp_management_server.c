@@ -2391,6 +2391,16 @@ int CcspManagementServer_ValidateParameterValues(
                         if(CcspManagementServer_ValidateURL(val[i].parameterValue) != 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
                         else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
                     }
+
+                    if (returnStatus == 0)
+                    {
+                        /*
+                         * Since ACS Discovery feature is supported for LAN side, the DUT have to update
+                         * config file dnsmasq.conf and restart dnsmasq after the related TR69 values
+                         * (ACS URL, CWMPRetryMinimumWaitInterval, CWMPRetryIntervalMultiplier) are changed.
+                         */
+                         system("sysevent set dhcp_server-restart");
+                    }
                 }
                     break;          
                 case ManagementServerConnectionRequestURLID:
@@ -2449,6 +2459,15 @@ int CcspManagementServer_ValidateParameterValues(
 						/* It seems that only chance to invoke roll back is PSM save error. */
 						CcspManagementServer_RollBackParameterValues();
 					}
+                    if (res == CCSP_SUCCESS)
+                    {
+                        /*
+                         * Since ACS Discovery feature is supported for LAN side, the DUT have to update
+                         * config file dnsmasq.conf and restart dnsmasq after the related TR69 values
+                         * (ACS URL, CWMPRetryMinimumWaitInterval, CWMPRetryIntervalMultiplier) are changed.
+                         */
+                         system("sysevent set dhcp_server-restart");
+                    }
                     break;
                 case ManagementServerCWMPRetryIntervalMultiplierID:
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, 1000, TRUE, 65535) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
@@ -2468,6 +2487,15 @@ int CcspManagementServer_ValidateParameterValues(
 						/* It seems that only chance to invoke roll back is PSM save error. */
 						CcspManagementServer_RollBackParameterValues();
 					}
+                    if (res == CCSP_SUCCESS)
+                    {
+                        /*
+                         * Since ACS Discovery feature is supported for LAN side, the DUT have to update
+                         * config file dnsmasq.conf and restart dnsmasq after the related TR69 values
+                         * (ACS URL, CWMPRetryMinimumWaitInterval, CWMPRetryIntervalMultiplier) are changed.
+                         */
+                         system("sysevent set dhcp_server-restart");
+                    }
                     break;
                 case ManagementServerSTUNMinimumKeepAlivePeriodID:
                 case ManagementServerDefaultActiveNotificationThrottleID:

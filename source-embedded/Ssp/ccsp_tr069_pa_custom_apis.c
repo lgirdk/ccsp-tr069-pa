@@ -351,7 +351,7 @@ for(i = 0;i < ArrLen;i++)
                                      if (!dmsb_type_from_name(ParamName[i].name, &type))
                                      {
                                          printf("unrecognized type name: %s", ParamName[i].name);
-                                         return 0;
+                                         return;
                                      }
                                      else
                                      {

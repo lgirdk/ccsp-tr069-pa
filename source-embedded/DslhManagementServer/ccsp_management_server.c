@@ -2925,7 +2925,7 @@ void CcspManagementServer_Free
     void *p
 )
 {
-    return AnscFreeMemory(p);
+    AnscFreeMemory(p);
 }
 
 char * CcspManagementServer_CloneString

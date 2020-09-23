@@ -2581,6 +2581,9 @@
             <Name>Device.Hosts.Host.{i}.HostName</Name>
         </Param>
         <Param>
+            <Name>Device.Hosts.Host.{i}.X_LGI-COM_FriendlyName</Name>
+        </Param>
+        <Param>
             <Name>Device.Hosts.Host.{i}.Active</Name>
         </Param>
         <Param>

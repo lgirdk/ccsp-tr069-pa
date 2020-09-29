@@ -2472,7 +2472,7 @@ int CcspManagementServer_ValidateParameterValues(
                     break;
                 case ManagementServerSTUNMinimumKeepAlivePeriodID:
                 case ManagementServerDefaultActiveNotificationThrottleID:
-                    if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, 0, FALSE, 0) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
+                    if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, 10, FALSE, 0) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
                     else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
 															printf("<<< calling  PSM_Set_Record_Value2 >>>>>>\n");
 					res = PSM_Set_Record_Value2

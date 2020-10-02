@@ -274,6 +274,9 @@
             <Name>Device.DeviceInfo.Description</Name>
         </Param>
         <Param>
+            <Name>Device.DeviceInfo.DeviceCategory</Name>
+        </Param>
+        <Param>
             <Name>Device.DeviceInfo.ProductClass</Name>
         </Param>
         <Param>

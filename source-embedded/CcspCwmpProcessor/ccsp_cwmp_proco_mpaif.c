@@ -1102,14 +1102,50 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
         
        
   if((strstr(pParamValues->parameterValue,"Router")!=NULL && strstr(pParamValues->parameterValue,"Wifi")!=NULL && strstr(pParamValues->parameterValue,"VoIP")!=NULL)||strstr(pParamValues->parameterValue,"Router")!=NULL)
-  {	
-                        
-                    	CcspTr069PaTraceWarning
-                            (
-                                (
-                                    "RDKB_REBOOT : FactoryReset triggered from TR69 with value '%s'\n",pParamValues->parameterValue
-                                )
-                            );
+  {
+    char *factoryResetFcName = "eRT.com.cisco.spvtg.ccsp.pam";
+    char *factoryResetDbusPath = "/com/cisco/spvtg/ccsp/pam";
+    
+    CcspTr069PaTraceWarning
+    (
+      (
+         "RDKB_REBOOT : FactoryReset triggered from TR69 with value '%s'\n",pParamValues->parameterValue
+      )
+    );
+    char  *faultParam = NULL;
+    nResult = CcspBaseIf_setParameterValues
+                (
+                    pCcspCwmpCpeController->hMsgBusHandle,
+                    factoryResetFcName,
+                    factoryResetDbusPath,
+                    ulSessionID,
+                    ulWriteID, 
+                    pParamValues,
+                    1,
+                    TRUE,
+                    &faultParam
+                );
+
+    if (( nResult != CCSP_SUCCESS ) && ( faultParam ))
+    {
+        CcspTr069PaTraceWarning
+        (
+            (
+                "RDKB_REBOOT : Failed to SetValue for param '%s' and ret val is %d\n", 
+                 pParamValues->parameterName,
+                 nResult
+            )
+        );
+
+        bus_info->freefunc(faultParam);
+    }
+
+    CcspTr069PaTraceWarning
+    (
+        (
+            "RDKB_REBOOT : FactoryReset complete from TR69 with value '%s'\n",pParamValues->parameterValue
+        )
+    );
   }
  }
  rc = strcmp_s("Device.X_CISCO_COM_DeviceControl.DeviceMode",strlen("Device.X_CISCO_COM_DeviceControl.DeviceMode"),pNsList->Args.paramValueInfo.parameterName, &ind);

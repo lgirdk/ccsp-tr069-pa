@@ -7326,6 +7326,15 @@
         <Param>
             <Name>Device.X_LGI-COM_Gateway.DNS_IPv6Alternate</Name>
         </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Gateway.ErouterModeControl</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Gateway.IPv6LeaseTimeRemaining</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Gateway.IPv6Router</Name>
+        </Param>
         
     <!-- WoL configuration Parameters under "Device." -->
         <Param>

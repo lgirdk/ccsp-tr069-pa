@@ -186,6 +186,9 @@
             <Name>Device.ManagementServer.AliasBasedAddressing</Name>
         </Param>
         <Param>
+            <Name>Device.ManagementServer.X_RDKCENTRAL-COM_CustomDataModelEnabled</Name>
+        </Param>
+        <Param>
             <Name>Device.ManagementServer.X_LGI-COM_ConnectionRequestIf</Name>
         </Param>
         <Param>

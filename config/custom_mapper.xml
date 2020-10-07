@@ -99,6 +99,63 @@
     <Param invisible="true">
       <Name>Device.X_CISCO_COM_GRE.Interface.{i}.Stats.UnknownProtoPacketsReceived</Name>
     </Param>
+    <Param invisible="true">
+      <Name>Device.NAT.PortMapping.{i}.X_RDKCENTRAL_InternalPortEndRange</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.NAT.PortMapping.{i}.X_RDKCENTRAL_RuleSource</Name>
+    </Param>
+        <Param invisible="true">
+      <Name>Device.NAT.X_CISCO_COM_PortTriggers.TriggerNumberOfEntries</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.TriggerPortStart</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.TriggerPortEnd</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.ForwardPortStart</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.ForwardPortEnd</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.TriggerProtocol</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.Enable</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.NAT.X_CISCO_COM_DMZ.Enable</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.NAT.X_CISCO_COM_DMZ.InternalIP</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.NAT.X_CISCO_COM_DMZ.IPv6Host</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.DHCPv6.Server.Pool.{i}.PrefixRangeBegin</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.DHCPv6.Server.Pool.{i}.PrefixRangeEnd</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.UPnP.Device.X_CISCO_COM_IGD_AdvertisementPeriod</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.UPnP.Device.X_CISCO_COM_IGD_TTL</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_CloudUIEnable</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_CloudUIWebURL</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_CaptivePortalEnable</Name>
+    </Param>
     <Param>
       <Name>Device.X_RDKCENTRAL-COM_GRE.InterfaceNumberOfEntries</Name>
     </Param>
@@ -188,6 +245,63 @@
     </Param>
     <Param>
       <Name>Device.X_RDKCENTRAL-COM_GRE.Interface.{i}.Stats.UnknownProtoPacketsReceived</Name>
+    </Param>
+    <Param>
+      <Name>Device.NAT.PortMapping.{i}.X_LGI-COM_InternalPortEndRange</Name>
+    </Param>
+    <Param>
+      <Name>Device.NAT.PortMapping.{i}.X_LGI-COM_RuleSource</Name>
+    </Param>
+    <Param>
+      <Name>Device.NAT.X_LGI-COM_PortTriggers.TriggerNumberOfEntries</Name>
+    </Param>
+    <Param>
+      <Name>Device.NAT.X_LGI-COM_PortTriggers.Trigger.{i}.TriggerPortStart</Name>
+    </Param>
+    <Param>
+      <Name>Device.NAT.X_LGI-COM_PortTriggers.Trigger.{i}.TriggerPortEnd</Name>
+    </Param>
+    <Param>
+      <Name>Device.NAT.X_LGI-COM_PortTriggers.Trigger.{i}.ForwardPortStart</Name>
+    </Param>
+    <Param>
+      <Name>Device.NAT.X_LGI-COM_PortTriggers.Trigger.{i}.ForwardPortEnd</Name>
+    </Param>
+    <Param>
+      <Name>Device.NAT.X_LGI-COM_PortTriggers.Trigger.{i}.TriggerProtocol</Name>
+    </Param>
+    <Param>
+      <Name>Device.NAT.X_LGI-COM_PortTriggers.Trigger.{i}.Enable</Name>
+    </Param>
+    <Param>
+      <Name>Device.NAT.X_LGI-COM_DMZ.Enable</Name>
+    </Param>
+    <Param>
+      <Name>Device.NAT.X_LGI-COM_DMZ.InternalIP</Name>
+    </Param>
+    <Param>
+      <Name>Device.NAT.X_LGI-COM_DMZ.IPv6Host</Name>
+    </Param>
+    <Param>
+      <Name>Device.DHCPv6.Server.Pool.{i}.X_LGI-COM_PrefixRangeBegin</Name>
+    </Param>
+    <Param>
+      <Name>Device.DHCPv6.Server.Pool.{i}.X_LGI-COM_PrefixRangeEnd</Name>
+    </Param>
+    <Param>
+      <Name>Device.UPnP.Device.X_LGI-COM_IGD_AdvertisementPeriod</Name>
+    </Param>
+    <Param>
+      <Name>Device.UPnP.Device.X_LGI-COM_IGD_TTL</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_General.CloudUIEnable</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_General.CloudUIUrl</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_General.FirstInstallRedirectAll</Name>
     </Param>
 </ParamList>
 <AliasList>
@@ -310,6 +424,82 @@
     <Alias>
       <External>Device.X_RDKCENTRAL-COM_GRE.Interface.{i}.Stats.UnknownProtoPacketsReceived</External>
       <Internal>Device.X_CISCO_COM_GRE.Interface.{i}.Stats.UnknownProtoPacketsReceived</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.NAT.PortMapping.{i}.X_LGI-COM_InternalPortEndRange</External>
+      <Internal>Device.NAT.PortMapping.{i}.X_RDKCENTRAL_InternalPortEndRange</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.NAT.PortMapping.{i}.X_LGI-COM_RuleSource</External>
+      <Internal>Device.NAT.PortMapping.{i}.X_RDKCENTRAL_RuleSource</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.NAT.X_LGI-COM_PortTriggers.TriggerNumberOfEntries</External>
+      <Internal>Device.NAT.X_CISCO_COM_PortTriggers.TriggerNumberOfEntries</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.NAT.X_LGI-COM_PortTriggers.Trigger.{i}.TriggerPortStart</External>
+      <Internal>Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.TriggerPortStart</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.NAT.X_LGI-COM_PortTriggers.Trigger.{i}.TriggerPortEnd</External>
+      <Internal>Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.TriggerPortEnd</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.NAT.X_LGI-COM_PortTriggers.Trigger.{i}.ForwardPortStart</External>
+      <Internal>Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.ForwardPortStart</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.NAT.X_LGI-COM_PortTriggers.Trigger.{i}.ForwardPortEnd</External>
+      <Internal>Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.ForwardPortEnd</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.NAT.X_LGI-COM_PortTriggers.Trigger.{i}.TriggerProtocol</External>
+      <Internal>Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.TriggerProtocol</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.NAT.X_LGI-COM_PortTriggers.Trigger.{i}.Enable</External>
+      <Internal>Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.Enable</Internal>
+    </Alias>
+        <Alias>
+      <External>Device.NAT.X_LGI-COM_DMZ.Enable</External>
+      <Internal>Device.NAT.X_CISCO_COM_DMZ.Enable</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.NAT.X_LGI-COM_DMZ.InternalIP</External>
+      <Internal>Device.NAT.X_CISCO_COM_DMZ.InternalIP</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.NAT.X_LGI-COM_DMZ.IPv6Host</External>
+      <Internal>Device.NAT.X_CISCO_COM_DMZ.IPv6Host</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.DHCPv6.Server.Pool.{i}.X_LGI-COM_PrefixRangeBegin</External>
+      <Internal>Device.DHCPv6.Server.Pool.{i}.PrefixRangeBegin</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.DHCPv6.Server.Pool.{i}.X_LGI-COM_PrefixRangeEnd</External>
+      <Internal>Device.DHCPv6.Server.Pool.{i}.PrefixRangeEnd</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.UPnP.Device.X_LGI-COM_IGD_AdvertisementPeriod</External>
+      <Internal>Device.UPnP.Device.X_CISCO_COM_IGD_AdvertisementPeriod</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.UPnP.Device.X_LGI-COM_IGD_TTL</External>
+      <Internal>Device.UPnP.Device.X_CISCO_COM_IGD_TTL</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_General.CloudUIEnable</External>
+      <Internal>Device.DeviceInfo.X_RDKCENTRAL-COM_CloudUIEnable</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_General.CloudUIUrl</External>
+      <Internal>Device.DeviceInfo.X_RDKCENTRAL-COM_CloudUIWebURL</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_General.FirstInstallRedirectAll</External>
+      <Internal>Device.DeviceInfo.X_RDKCENTRAL-COM_CaptivePortalEnable</Internal>
     </Alias>
 </AliasList>
 </Tr069Mapper>

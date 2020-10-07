@@ -1086,7 +1086,7 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
              pParameterValueArray[i].Name,
              Subsystems,
              &NumSubsystems,
-             !bExcludeInvNs
+             bIncludeInvQuery
             );
 
         if ( NumSubsystems <= 0 )

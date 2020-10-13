@@ -85,6 +85,9 @@
 #include "linux/user_openssl.h"
 extern char* openssl_client_ca_certificate_files;
 extern int openssl_load_ca_certificates(int who_calls);
+/* openssl_connect() will use below variable to authenticate server */
+extern char *g_openSSLServerURL;
+#define g_openSSLServerURL_BUFFER_SIZE 256
 #endif /* _ANSC_USE_OPENSSL_ */
 
 #include "ssp_ccsp_cwmp_cfg.h"
@@ -379,6 +382,19 @@ START:
 
         if ( AnscEqualString2(pRequestURL, "https", 5, FALSE) )
         {
+            size_t len = strlen(pRequestURL);
+
+            if (len >= g_openSSLServerURL_BUFFER_SIZE)
+            {
+                pHttpGetReq->CompleteStatus = ANSC_STATUS_NOT_SUPPORTED;
+                pHttpGetReq->bUnauthorized = FALSE;
+                pHttpGetReq->bIsRedirect = FALSE;
+                CcspTr069PaTraceInfo(("HTTPS URL length is greater than MAX supported length of (%d)\n", (g_openSSLServerURL_BUFFER_SIZE - 1)));
+                break;
+            }
+
+            memcpy(g_openSSLServerURL, pRequestURL, len + 1);
+            CcspTr069PaTraceInfo(("g_openSSLServerURL: %s\n", g_openSSLServerURL));
             bApplyTls = TRUE;
         }
         else if ( AnscEqualString2(pRequestURL, "http", 4, FALSE) )

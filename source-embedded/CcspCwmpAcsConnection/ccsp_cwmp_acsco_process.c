@@ -84,6 +84,9 @@
 #include <openssl/ssl.h>
 #include "linux/user_openssl.h"
 extern char* openssl_client_ca_certificate_files;
+/* openssl_connect() will use below variable to authenticate server */
+extern char *g_openSSLServerURL;
+#define g_openSSLServerURL_BUFFER_SIZE 64
 #endif /* _ANSC_USE_OPENSSL_ */
 
 #ifdef SAFEC_DUMMY_API
@@ -391,6 +394,15 @@ START:
 
         if ( AnscEqualString2(pRequestURL, "https", 5, FALSE) )
         {
+            if (strlen(pRequestURL) >= g_openSSLServerURL_BUFFER_SIZE)
+            {
+                pHttpGetReq->CompleteStatus = ANSC_STATUS_NOT_SUPPORTED;
+                pHttpGetReq->bUnauthorized = FALSE;
+                pHttpGetReq->bIsRedirect = FALSE;
+                break;
+            }
+            strcpy(g_openSSLServerURL, pRequestURL);
+            CcspTr069PaTraceInfo(("g_openSSLServerURL: %s\n", g_openSSLServerURL));
             bApplyTls = TRUE;
         }
         else if ( AnscEqualString2(pRequestURL, "http", 4, FALSE) )

@@ -350,6 +350,33 @@ CcspCwmpTcpcrhoCreateTcpServers
        
            CcspTr069PaTraceInfo(("%s, Call AnscCreateDaemonServerTcp\n",__FUNCTION__));
         }
+#else
+        // If HostAddress value is zero, then bind the outbound interface's ip address. This is for when the DUT is in IPv4 Mode. Any IPv6 mode would have the socket set to :::<CWMP_PORT>. Since wan0 does not have an IPv6, there are no conflicts for listening on the "default" route.
+        if(strcmp(pProperty->HostAddr,"0"))
+        {
+            CcspTr069PaTraceInfo(("%s, HostAdd value is 0\n",__FUNCTION__));
+            token_t  se_token;
+            int      se_fd = s_sysevent_connect(&se_token);
+            if (0 > se_fd)
+            {
+                 CcspTr069PaTraceError(("%s, sysevent_connect failed!!!\n",__FUNCTION__));
+                 //return ERR_SYSEVENT_CONN;
+            }
+            else
+            {
+                // Get ipv4 address from sysevent
+                if( 0 == sysevent_get(se_fd, se_token, "ipv4_wan_ipaddr", buf, sizeof(buf)) && '\0' != buf[0] )
+                {
+                    AnscCopyString(pProperty->HostAddr, buf);
+                }
+                else
+                {
+                    // If sysevent fails, let TR69 bind on 0.0.0.0
+                    CcspTr069PaTraceError(("%s, sysevent_get failed to get value of ipv4_wan_ipaddr!!! Mode might be IPv6, DSLite or DualStack\n",__FUNCTION__));
+                }
+            }
+        }
+        CcspTr069PaTraceInfo(("%s, Call AnscCreateDaemonServerTcp\n",__FUNCTION__));
 #endif
         pTcpServer =
             (PANSC_DAEMON_SERVER_TCP_OBJECT)AnscCreateDaemonServerTcp

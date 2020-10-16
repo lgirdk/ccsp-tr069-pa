@@ -4968,6 +4968,9 @@
 	<Param>
 		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.DSCPMarkPolicy</Name>
 	</Param>
+        <Param>
+                <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.GreTransportInterface</Name>
+        </Param>
 	<Param>
 		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.KeepAlivePolicy</Name>
 	</Param>

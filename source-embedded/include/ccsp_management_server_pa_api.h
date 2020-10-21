@@ -369,6 +369,22 @@ CcspManagementServer_GetConnectionRequestIf
     CCSP_STRING                 ComponentName
 );
 
+CCSP_BOOL
+CcspManagementServer_GetX_LGI_COM_ValidateManagementServerCertificate
+    (
+        CCSP_STRING                 ComponentName
+    );
+
+CCSP_STRING
+CcspManagementServer_GetX_LGI_COM_ValidateManagementServerCertificateStr
+    (
+        CCSP_STRING                 ComponentName
+    );
+
+#ifdef _ANSC_USE_OPENSSL_
+CCSP_VOID CcspManagementServer_UpdateOpenSSLVerifyMode();
+#endif /* _ANSC_USE_OPENSSL_ */
+
 /* CcspManagementServer_SetConnectionRequestURL is called to set
  * Device.ManagementServer.ConnectionRequestURL.
  * This parameter is read-only. 

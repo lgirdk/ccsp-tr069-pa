@@ -262,6 +262,7 @@ msParameterInfo managementServerParameters[] =
     { "X_CISCO_COM_ConnectionRequestURLPort", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "X_CISCO_COM_ConnectionRequestURLPath", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "X_LGI-COM_ConnectionRequestIf", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
+    { "X_LGI_COM_ValidateManagementServerCertificate", NULL, ccsp_boolean, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
 };
 
 msParameterInfo autonomousTransferCompletePolicyParameters[] = 
@@ -497,6 +498,9 @@ CcspManagementServer_FillInObjectInfo()
 
         objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ConnectionRequestIfID].value
             = AnscCloneString(LGI_CWMP_CONNREQ_IFACE_STR);
+
+        objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ValidateManagementServerCertificateID].value
+            = AnscCloneString("1");
 
         objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].notification = 1;
             
@@ -1761,6 +1765,9 @@ void CcspManagementServer_GetSingleParameterValue(
         case ManagementServerX_LGI_COM_ConnectionRequestIfID:
             val->parameterValue = CcspManagementServer_GetConnectionRequestIf(NULL);
             break;
+        case ManagementServerX_LGI_COM_ValidateManagementServerCertificateID:
+            val->parameterValue = CcspManagementServer_GetX_LGI_COM_ValidateManagementServerCertificateStr(NULL);
+            break;
         default: break;
         }
     }
@@ -2267,6 +2274,7 @@ int CcspManagementServer_ValidateParameterValues(
                 case ManagementServerUpgradesManagedID:
                 case ManagementServerSTUNEnableID:
                 case ManagementServerNATDetectedID:
+                case ManagementServerX_LGI_COM_ValidateManagementServerCertificateID:
                     res = CcspManagementServer_ValidateBoolean(val[i].parameterValue);
                     if(res == -1 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
                     else if(res == 0) parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString("0");

@@ -185,6 +185,7 @@ enum
     ManagementServerX_CISCO_COM_ConnectionRequestURLPortID,
     ManagementServerX_CISCO_COM_ConnectionRequestURLPathID,
     ManagementServerX_LGI_COM_ConnectionRequestIfID,
+    ManagementServerX_LGI_COM_ValidateManagementServerCertificateID,
     ManagementServerNumOfParameters
 };
 

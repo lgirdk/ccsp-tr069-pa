@@ -190,6 +190,9 @@
         <Param>
             <Name>Device.ManagementServer.X_LGI-COM_ConnectionRequestIf</Name>
         </Param>
+        <Param>
+            <Name>Device.ManagementServer.X_LGI_COM_ValidateManagementServerCertificate</Name>
+        </Param>
 
         <!-- Device.ManagementServer.DUStateChangeComplPolicy. -->
         <Param>

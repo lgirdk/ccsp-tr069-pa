@@ -85,6 +85,12 @@
 #include "Tr69_Tlv.h"
 #include "syscfg/syscfg.h"
 #include <sys/stat.h>
+
+#ifdef _ANSC_USE_OPENSSL_
+#include <openssl/ssl.h>
+#include "linux/user_openssl.h"
+#endif /* _ANSC_USE_OPENSSL_ */
+
 #define TR69_TLVDATA_FILE "/nvram/TLVData.bin"
 #define ETHWAN_FILE     "/nvram/ETHWAN_ENABLE"
 #include "secure_wrapper.h"
@@ -1572,6 +1578,49 @@ CcspManagementServer_GetConnectionRequestIf
     )
 {
     return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ConnectionRequestIfID].value);
+}
+
+#ifdef _ANSC_USE_OPENSSL_
+CCSP_VOID CcspManagementServer_UpdateOpenSSLVerifyMode(){
+    CCSP_BOOL bValdMgmtCertEnabled = FALSE;
+    bValdMgmtCertEnabled = CcspManagementServer_GetX_LGI_COM_ValidateManagementServerCertificate(NULL);
+    if ( bValdMgmtCertEnabled == TRUE )
+    {
+        openssl_set_verify_mode(SSL_VERIFY_PEER);
+    }
+    else
+    {
+        openssl_set_verify_mode(SSL_VERIFY_NONE);
+    }
+}
+#endif /* _ANSC_USE_OPENSSL_ */
+
+CCSP_BOOL
+CcspManagementServer_GetX_LGI_COM_ValidateManagementServerCertificate
+
+    (
+        CCSP_STRING                 ComponentName
+    )
+{
+    if(AnscEqualString(objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ValidateManagementServerCertificateID].value, "0", FALSE) ||
+       AnscEqualString(objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ValidateManagementServerCertificateID].value, "false", FALSE))
+    {
+        return FALSE;
+    }
+    else
+    {
+        return TRUE;
+    }
+}
+
+CCSP_STRING
+CcspManagementServer_GetX_LGI_COM_ValidateManagementServerCertificateStr
+
+    (
+        CCSP_STRING                 ComponentName
+    )
+{
+    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ValidateManagementServerCertificateID].value, "0");
 }
 
 /* CcspManagementServer_GetConnectionRequestUsername is called to get

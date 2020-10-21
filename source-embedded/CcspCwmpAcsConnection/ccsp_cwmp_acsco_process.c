@@ -396,6 +396,9 @@ START:
             memcpy(g_openSSLServerURL, pRequestURL, len + 1);
             CcspTr069PaTraceInfo(("g_openSSLServerURL: %s\n", g_openSSLServerURL));
             bApplyTls = TRUE;
+#ifdef _ANSC_USE_OPENSSL_
+            CcspManagementServer_UpdateOpenSSLVerifyMode();
+#endif /* _ANSC_USE_OPENSSL_ */
         }
         else if ( AnscEqualString2(pRequestURL, "http", 4, FALSE) )
         {

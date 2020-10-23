@@ -90,7 +90,7 @@ mgsrv_InformNowTask
     PCCSP_CWMP_PROCESSOR_OBJECT      pCcspCwmpProcessor  = (PCCSP_CWMP_PROCESSOR_OBJECT )pCcspCwmpCpeController->hCcspCwmpProcessor;
     BOOL                            bCwmpInSession     = TRUE;
 
-    AnscTrace("ACS URL has changed, wait for current session is over to initiate a new 'Inform'...\n");
+    CcspTr069PaTraceInfo((" \n %s %d ACS URL has changed, wait for current session is over to initiate a new 'Inform'...\n",__FUNCTION__,__LINE__));
 
     while ( bCwmpInSession )
     {
@@ -110,7 +110,18 @@ mgsrv_InformNowTask
             break;
         }
     }
+    
+#ifdef   _CCSP_CWMP_TCP_CONNREQ_HANDLER 
+    //If callback is called because ACS URL is changed...then Cancel TCP server to close the listening port until bootstrap inform in sucessful.
+    if(pCcspCwmpCpeController->bIsACSURLChanged)      
+    {
+      PCCSP_CWMP_TCPCR_HANDLER_OBJECT pCcspCwmpTcpcrHandler   = (PCCSP_CWMP_TCPCR_HANDLER_OBJECT )pCcspCwmpCpeController->hCcspCwmpTcpConnReqHandler;
+      CcspTr069PaTraceInfo(("\n %s %d  Cancel pCcspCwmpTcpcrHandler on ACS URL change\n",__FUNCTION__,__LINE__ ));
+      pCcspCwmpTcpcrHandler->Cancel((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
+    }    
+#endif
 
+   CcspTr069PaTraceDebug((" \n %s %d ACS URL has changed **************** Initiate a new 'Inform'...\n",__FUNCTION__,__LINE__));
     pCcspCwmpMsoIf->Inform
         (
             (ANSC_HANDLE)pCcspCwmpMsoIf->hOwnerContext,
@@ -166,7 +177,6 @@ CcspCwmppoGetAcsInfo
     ULONG                           ulOldInterval           = pProperty->PeriodicInformInterval;
     BOOL                            bStartCWMP              = FALSE;
     BOOL                            bStopCWMP               = FALSE;
-    BOOL                            bAcsUrlChanged          = FALSE;
     PANSC_UNIVERSAL_TIME            pCalendarTime;
     char*                           pValue                  = NULL;
     char*                           pConnReqUrl             = NULL;
@@ -356,9 +366,10 @@ CcspCwmppoGetAcsInfo
 
     /* ACS URL */
     pValue = CcspManagementServer_GetURL(pCcspCwmpCpeController->PANameWithPrefix);
-
+    pCcspCwmpCpeController->bIsACSURLChanged = FALSE;
     if ( pValue && !AnscEqualString(pValue, pProperty->AcsUrl, TRUE) )
     {
+        CcspTr069PaTraceInfo(("\n %s %d New ACS URL:%s  OLD AcsUrl:%s\n",__FUNCTION__,__LINE__,pValue,pProperty->AcsUrl ));
         int                         ulSize = AnscSizeOfString(pValue);
 
         if ( ulSize >= CCSP_CWMP_MAX_URL_SIZE )
@@ -369,8 +380,7 @@ CcspCwmppoGetAcsInfo
         pProperty->AcsUrl[ulSize] = 0;
         
         pMyObject->SetInitialContact((ANSC_HANDLE)pMyObject, TRUE);
-
-        bAcsUrlChanged = TRUE;
+	    pCcspCwmpCpeController->bIsACSURLChanged = TRUE;
     }
 
     if ( pValue )
@@ -410,7 +420,7 @@ CcspCwmppoGetAcsInfo
         pMyObject->ConfigPeriodicInform((ANSC_HANDLE)pMyObject);
     }
 
-    if ( bAcsUrlChanged && !bStopCWMP && bCwmpStarted )
+    if ( pCcspCwmpCpeController->bIsACSURLChanged && !bStopCWMP && bCwmpStarted )
     {
         /* we need to spawn a task and wait for the end of current session  */
         AnscSpawnTask(mgsrv_InformNowTask, (ANSC_HANDLE)pCcspCwmpCpeController, "InformNow");

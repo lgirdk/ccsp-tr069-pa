@@ -156,6 +156,246 @@
     <Param invisible="true">
       <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_CaptivePortalEnable</Name>
     </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.TelephonyDHCPStatus</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.TelephonyTftpStatus</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.TelephonyRegistrationStatus</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DOCSISDHCPAttempts</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DOCSISTftpAttempts</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.MaxCpeAllowed</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DOCSISConfigFileName</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.ToDStatus</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.UpstreamServiceFlowParams</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DownstreamServiceFlowParams</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DOCSISDownstreamDataRate</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DOCSISUpstreamDataRate</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.MACAddress</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.BPIState</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.NetworkAccess</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.UpgradeServerIP</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.Market</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.MDDIPOverride</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.IPAddress</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.BootFileName</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.SubnetMask</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.Gateway</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.TFTPServer</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.TimeServer</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.TimeOffset</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.LeaseTimeRemaining</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.RebindTimeRemaining</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.RenewTimeRemaining</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.IPv6Address</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.IPv6BootFileName</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.IPv6Prefix</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.IPv6Router</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.IPv6TFTPServer</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.IPv6TimeServer</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.IPv6LeaseTimeRemaining</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.IPv6RebindTimeRemaining</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.IPv6RenewTimeRemaining</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DOCSISVersion</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.CMStatus</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DOCSISDownstreamScanning</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DOCSISDownstreamRanging</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DOCSISUpstreamScanning</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DOCSISUpstreamRanging</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DOCSISTftpStatus</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DOCSISDataRegComplete</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.LoopDiagnosticsDetails</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.LoopDiagnosticsStart</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.CoreVersion</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DOCSISDHCPStatus</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.EnableLog</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.LockedUpstreamChID</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.StartDSFrequency</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.ProvIpType</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.CMResetCount</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.LocalResetCount</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DocsisResetCount</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.ErouterResetCount</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.CMErrorCodewordsNumberOfEntries</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DocsisLogNumberOfEntries</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DownstreamChannelNumberOfEntries</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.UpstreamChannelNumberOfEntries</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.ChannelID</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.Frequency</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.PowerLevel</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.SNRLevel</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.Modulation</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.Octets</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.Correcteds</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.Uncorrectables</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.LockStatus</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.ChannelID</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.Frequency</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.PowerLevel</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.ChannelType</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.SymbolRate</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.Modulation</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.LockStatus</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.T3Timeouts</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.T4Timeouts</Name>
+    </Param>
     <Param>
       <Name>Device.X_RDKCENTRAL-COM_GRE.InterfaceNumberOfEntries</Name>
     </Param>
@@ -302,6 +542,246 @@
     </Param>
     <Param>
       <Name>Device.X_LGI-COM_General.FirstInstallRedirectAll</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.TelephonyDHCPStatus</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.TelephonyTftpStatus</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.TelephonyRegistrationStatus</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DOCSISDHCPAttempts</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DOCSISTftpAttempts</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.MaxCpeAllowed</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DOCSISConfigFileName</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.ToDStatus</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.UpstreamServiceFlowParams</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DownstreamServiceFlowParams</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DOCSISDownstreamDataRate</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DOCSISUpstreamDataRate</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.MACAddress</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.BPIState</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_CISCO_COM_CableModem.NetworkAccess</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.UpgradeServerIP</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.Market</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.MDDIPOverride</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.IPAddress</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.BootFileName</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.SubnetMask</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.Gateway</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.TFTPServer</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.TimeServer</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.TimeOffset</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.LeaseTimeRemaining</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.RebindTimeRemaining</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.RenewTimeRemaining</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.IPv6Address</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.IPv6BootFileName</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.IPv6Prefix</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.IPv6Router</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.IPv6TFTPServer</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.IPv6TimeServer</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.IPv6LeaseTimeRemaining</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.IPv6RebindTimeRemaining</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.IPv6RenewTimeRemaining</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DOCSISVersion</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.CMStatus</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DOCSISDownstreamScanning</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DOCSISDownstreamRanging</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DOCSISUpstreamScanning</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DOCSISUpstreamRanging</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DOCSISTftpStatus</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DOCSISDataRegComplete</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.LoopDiagnosticsDetails</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.LoopDiagnosticsStart</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.CoreVersion</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DOCSISDHCPStatus</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.EnableLog</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.LockedUpstreamChID</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.StartDSFrequency</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.ProvIpType</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.CMResetCount</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.LocalResetCount</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DocsisResetCount</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.ErouterResetCount</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.CMErrorCodewordsNumberOfEntries</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DocsisLogNumberOfEntries</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DownstreamChannelNumberOfEntries</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.UpstreamChannelNumberOfEntries</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.ChannelID</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.Frequency</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.PowerLevel</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.SNRLevel</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.Modulation</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.Octets</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.Correcteds</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.Uncorrectables</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.LockStatus</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.ChannelID</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.Frequency</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.PowerLevel</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.ChannelType</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.SymbolRate</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.Modulation</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.LockStatus</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.T3Timeouts</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.T4Timeouts</Name>
     </Param>
 </ParamList>
 <AliasList>
@@ -500,6 +980,326 @@
     <Alias>
       <External>Device.X_LGI-COM_General.FirstInstallRedirectAll</External>
       <Internal>Device.DeviceInfo.X_RDKCENTRAL-COM_CaptivePortalEnable</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.TelephonyDHCPStatus</External>
+      <Internal>Device.X_CISCO_COM_CableModem.TelephonyDHCPStatus</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.TelephonyTftpStatus</External>
+      <Internal>Device.X_CISCO_COM_CableModem.TelephonyTftpStatus</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.TelephonyRegistrationStatus</External>
+      <Internal>Device.X_CISCO_COM_CableModem.TelephonyRegistrationStatus</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DOCSISDHCPAttempts</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DOCSISDHCPAttempts</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DOCSISTftpAttempts</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DOCSISTftpAttempts</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.MaxCpeAllowed</External>
+      <Internal>Device.X_CISCO_COM_CableModem.MaxCpeAllowed</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DOCSISConfigFileName</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DOCSISConfigFileName</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.ToDStatus</External>
+      <Internal>Device.X_CISCO_COM_CableModem.ToDStatus</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.UpstreamServiceFlowParams</External>
+      <Internal>Device.X_CISCO_COM_CableModem.UpstreamServiceFlowParams</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DownstreamServiceFlowParams</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DownstreamServiceFlowParams</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DOCSISDownstreamDataRate</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DOCSISDownstreamDataRate</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DOCSISUpstreamDataRate</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DOCSISUpstreamDataRate</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.MACAddress</External>
+      <Internal>Device.X_CISCO_COM_CableModem.MACAddress</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.BPIState</External>
+      <Internal>Device.X_CISCO_COM_CableModem.BPIState</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.NetworkAccess</External>
+      <Internal>Device.X_CISCO_COM_CableModem.NetworkAccess</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.UpgradeServerIP</External>
+      <Internal>Device.X_CISCO_COM_CableModem.UpgradeServerIP</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.Market</External>
+      <Internal>Device.X_CISCO_COM_CableModem.Market</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.MDDIPOverride</External>
+      <Internal>Device.X_CISCO_COM_CableModem.MDDIPOverride</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.IPAddress</External>
+      <Internal>Device.X_CISCO_COM_CableModem.IPAddress</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.BootFileName</External>
+      <Internal>Device.X_CISCO_COM_CableModem.BootFileName</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.SubnetMask</External>
+      <Internal>Device.X_CISCO_COM_CableModem.SubnetMask</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.</External>
+      <Internal>Device.X_CISCO_COM_CableModem.</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.Gateway</External>
+      <Internal>Device.X_CISCO_COM_CableModem.Gateway</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.TFTPServer</External>
+      <Internal>Device.X_CISCO_COM_CableModem.TFTPServer</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.TimeServer</External>
+      <Internal>Device.X_CISCO_COM_CableModem.TimeServer</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.TimeOffset</External>
+      <Internal>Device.X_CISCO_COM_CableModem.TimeOffset</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.LeaseTimeRemaining</External>
+      <Internal>Device.X_CISCO_COM_CableModem.LeaseTimeRemaining</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.RebindTimeRemaining</External>
+      <Internal>Device.X_CISCO_COM_CableModem.RebindTimeRemaining</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.RenewTimeRemaining</External>
+      <Internal>Device.X_CISCO_COM_CableModem.RenewTimeRemaining</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.IPv6Address</External>
+      <Internal>Device.X_CISCO_COM_CableModem.IPv6Address</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.IPv6BootFileName</External>
+      <Internal>Device.X_CISCO_COM_CableModem.IPv6BootFileName</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.IPv6Prefix</External>
+      <Internal>Device.X_CISCO_COM_CableModem.IPv6Prefix</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.IPv6Router</External>
+      <Internal>Device.X_CISCO_COM_CableModem.IPv6Router</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.IPv6TFTPServer</External>
+      <Internal>Device.X_CISCO_COM_CableModem.IPv6TFTPServer</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.IPv6TimeServer</External>
+      <Internal>Device.X_CISCO_COM_CableModem.IPv6TimeServer</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.IPv6LeaseTimeRemaining</External>
+      <Internal>Device.X_CISCO_COM_CableModem.IPv6LeaseTimeRemaining</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.IPv6RebindTimeRemaining</External>
+      <Internal>Device.X_CISCO_COM_CableModem.IPv6RebindTimeRemaining</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.IPv6RenewTimeRemaining</External>
+      <Internal>Device.X_CISCO_COM_CableModem.IPv6RenewTimeRemaining</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DOCSISVersion</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DOCSISVersion</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.CMStatus</External>
+      <Internal>Device.X_CISCO_COM_CableModem.CMStatus</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DOCSISDownstreamScanning</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DOCSISDownstreamScanning</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DOCSISDownstreamRanging</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DOCSISDownstreamRanging</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DOCSISUpstreamScanning</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DOCSISUpstreamScanning</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DOCSISUpstreamRanging</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DOCSISUpstreamRanging</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DOCSISTftpStatus</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DOCSISTftpStatus</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DOCSISDataRegComplete</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DOCSISDataRegComplete</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.LoopDiagnosticsDetails</External>
+      <Internal>Device.X_CISCO_COM_CableModem.LoopDiagnosticsDetails</Internal>
+    </Alias>
+    <Alias>
+      <External>DDevice.X_LGI-COM_CableModem.LoopDiagnosticsStart</External>
+      <Internal>Device.X_CISCO_COM_CableModem.LoopDiagnosticsStart</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.CoreVersion</External>
+      <Internal>Device.X_CISCO_COM_CableModem.CoreVersion</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DOCSISDHCPStatus</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DOCSISDHCPStatus</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.EnableLog</External>
+      <Internal>Device.X_CISCO_COM_CableModem.EnableLog</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.LockedUpstreamChID</External>
+      <Internal>Device.X_CISCO_COM_CableModem.LockedUpstreamChID</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.StartDSFrequency</External>
+      <Internal>Device.X_CISCO_COM_CableModem.StartDSFrequency</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.ProvIpType</External>
+      <Internal>Device.X_CISCO_COM_CableModem.ProvIpType</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.CMResetCount</External>
+      <Internal>Device.X_CISCO_COM_CableModem.CMResetCount</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.LocalResetCount</External>
+      <Internal>Device.X_CISCO_COM_CableModem.LocalResetCount</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DocsisResetCount</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DocsisResetCount</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.ErouterResetCount</External>
+      <Internal>Device.X_CISCO_COM_CableModem.ErouterResetCount</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.CMErrorCodewordsNumberOfEntries</External>
+      <Internal>Device.X_CISCO_COM_CableModem.CMErrorCodewordsNumberOfEntries</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DocsisLogNumberOfEntries</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DocsisLogNumberOfEntries</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DownstreamChannelNumberOfEntries</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DownstreamChannelNumberOfEntries</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.UpstreamChannelNumberOfEntries</External>
+      <Internal>Device.X_CISCO_COM_CableModem.UpstreamChannelNumberOfEntries</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.ChannelID</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.ChannelID</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.Frequency</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.Frequency</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.PowerLevel</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.PowerLevel</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.SNRLevel</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.SNRLevel</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.Modulation</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.Modulation</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.Octets</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.Octets</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.Correcteds</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.Correcteds</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.Uncorrectables</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.Uncorrectables</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.DownstreamChannel.{i}.LockStatus</External>
+      <Internal>Device.X_CISCO_COM_CableModem.DownstreamChannel.{i}.LockStatus</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.ChannelID</External>
+      <Internal>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.ChannelID</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.Frequency</External>
+      <Internal>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.Frequency</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.PowerLevel</External>
+      <Internal>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.PowerLevel</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.ChannelType</External>
+      <Internal>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.ChannelType</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.SymbolRate</External>
+      <Internal>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.SymbolRate</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.Modulation</External>
+      <Internal>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.Modulation</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.LockStatus</External>
+      <Internal>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.LockStatus</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.T3Timeouts</External>
+      <Internal>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.T3Timeouts</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.T4Timeouts</External>
+      <Internal>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.T4Timeouts</Internal>
     </Alias>
 </AliasList>
 </Tr069Mapper>

@@ -1823,7 +1823,7 @@ static int CcspManagementServer_ValidateStrLen(
     int lenLimit  /* -1 means no limit. */
     )
 {
-    if((lenLimit == -1)||(AnscSizeOfString(str) < lenLimit))
+    if((lenLimit == -1)||(AnscSizeOfString(str) <= lenLimit))
         return 0;
     else
         return -1;

@@ -1776,6 +1776,27 @@
 	    <Name>Device.WiFi.AccessPoint.{i}.X_CISCO_COM_MacFilterTable.{i}.MACAddress</Name>
 	</Param>
 	<Param>
+	    <Name>Device.WiFi.AccessPoint.{i}.Accounting.ServerIPAddr</Name>
+	</Param>
+	<Param>
+	    <Name>Device.WiFi.AccessPoint.{i}.Accounting.ServerPort</Name>
+	</Param>
+	<Param>
+	    <Name>Device.WiFi.AccessPoint.{i}.Accounting.Secret</Name>
+	</Param>
+	<Param>
+	    <Name>Device.WiFi.AccessPoint.{i}.Accounting.SecondaryServerIPAddr</Name>
+	</Param>
+	<Param>
+	    <Name>Device.WiFi.AccessPoint.{i}.Accounting.SecondaryServerPort</Name>
+	</Param>
+	<Param>
+	    <Name>Device.WiFi.AccessPoint.{i}.Accounting.SecondarySecret</Name>
+	</Param>
+	<Param>
+	    <Name>Device.WiFi.AccessPoint.{i}.Accounting.InterimInterval</Name>
+	</Param>
+	<Param>
 	    <Name>Device.WiFi.NeighboringWiFiDiagnostic.Enable</Name>
 	</Param>
 	<Param>

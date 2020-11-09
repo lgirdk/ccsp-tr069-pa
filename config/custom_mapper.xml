@@ -783,6 +783,9 @@
     <Param>
       <Name>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.T4Timeouts</Name>
     </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.RemoteEndpoints</Name>
+    </Param>
 </ParamList>
 <AliasList>
     <Alias>
@@ -1300,6 +1303,10 @@
     <Alias>
       <External>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.T4Timeouts</External>
       <Internal>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.T4Timeouts</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.RemoteEndpoints</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.RemoteEndpoints</Internal>
     </Alias>
 </AliasList>
 </Tr069Mapper>

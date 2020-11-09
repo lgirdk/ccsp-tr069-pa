@@ -4792,6 +4792,9 @@
 		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.SecondaryRemoteEndpoint</Name>
 	</Param>
 	<Param>
+		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.RemoteEndpoints</Name>
+	</Param>
+	<Param>
 		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.ConnectedRemoteEndpoint</Name>
 	</Param>
 	<Param>

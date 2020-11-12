@@ -464,7 +464,6 @@ typedef  ANSC_STATUS
     ANSC_HANDLE                     hCcspCwmpCfgIf;                                         \
     ANSC_HANDLE                     hCcspCwmpStaIf;                                         \
     BOOL                            bActive;                                                \
-    BOOL                            bIsACSURLChanged;                                       \
                                                                                             \
     BOOL                            bBootEventAdded;                                        \
     char*                           pRootObject;                                            \

@@ -85,8 +85,6 @@
 
 
 #include "ccsp_cwmp_sesso_global.h"
-#include "ccsp_cwmp_tcpcrho_interface.h"
-
 #include "slap_definitions.h"
 #include "Tr69_Tlv.h"
 #define TR69_TLVDATA_FILE "/nvram/TLVData.bin"
@@ -1141,18 +1139,8 @@ bFirstInform = 0;
 
         if ( pCwmpSoapResponse )
         {
-
-#ifdef   _CCSP_CWMP_TCP_CONNREQ_HANDLER     
-      if(pCcspCwmpCpeController->bIsACSURLChanged)
-      {
-        CcspTr069PaTraceInfo(("\n %s %d Got Response for the INFORM message to the new ACS URL \n",__FUNCTION__,__LINE__ ));
-        PCCSP_CWMP_TCPCR_HANDLER_OBJECT pCcspCwmpTcpcrHandler   = (PCCSP_CWMP_TCPCR_HANDLER_OBJECT )pCcspCwmpCpeController->hCcspCwmpTcpConnReqHandler;
-        CcspTr069PaTraceInfo(("\n %s %d  Engage pCcspCwmpTcpcrHandler \n",__FUNCTION__,__LINE__ ));
-        pCcspCwmpTcpcrHandler->Engage((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
-        pCcspCwmpCpeController->bIsACSURLChanged = FALSE;
-      }
-#endif
-      pMyObject->AcsMaxEnvelopes = (ULONG)pCwmpSoapResponse->hRepArguments;
+			
+                 pMyObject->AcsMaxEnvelopes = (ULONG)pCwmpSoapResponse->hRepArguments;
 
                 /*
                  * ACS indicates the maximum number of SOAP envelopes in a single HTTP post that the ACS

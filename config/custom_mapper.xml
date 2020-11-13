@@ -396,6 +396,63 @@
     <Param invisible="true">
       <Name>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.T4Timeouts</Name>
     </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.TunnelNumberOfEntries</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.RemoteEndpoints</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Enable</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Status</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.KeepAlivePolicy</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.RemoteEndpointHealthCheckPingIntervalInFailure</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.RemoteEndpointHealthCheckPingFailThreshold</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.DSCPMarkPolicy</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.ConnectedRemoteEndpoint</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.InterfaceNumberOfEntries</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.Enable</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.Status</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.LastChange</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.LocalInterfaces</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.VLANID</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Stats.KeepAliveSent</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Stats.KeepAliveReceived</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Stats.DiscardChecksumReceived</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Stats.DiscardSequenceNumberReceived</Name>
+    </Param>
     <Param>
       <Name>Device.X_RDKCENTRAL-COM_GRE.InterfaceNumberOfEntries</Name>
     </Param>
@@ -784,7 +841,61 @@
       <Name>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.T4Timeouts</Name>
     </Param>
     <Param>
+      <Name>Device.GRE.TunnelNumberOfEntries</Name>
+    </Param>
+    <Param>
       <Name>Device.GRE.Tunnel.{i}.RemoteEndpoints</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.Enable</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.Status</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.KeepAlivePolicy</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.KeepAliveTimeout</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.KeepAliveThreshold</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.DefaultDSCPMark</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.ConnectedRemoteEndpoint</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.InterfaceNumberOfEntries</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.Interface.{i}.Enable</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.Interface.{i}.Status</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.Interface.{i}.LastChange</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.Interface.{i}.LowerLayers</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.Interface.{i}.X_LGI-COM_VLANID</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.Stats.KeepAliveSent</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.Stats.KeepAliveReceived</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.Stats.DiscardChecksumReceived</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.Stats.DiscardSequenceNumberReceived</Name>
     </Param>
 </ParamList>
 <AliasList>
@@ -1305,8 +1416,80 @@
       <Internal>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.T4Timeouts</Internal>
     </Alias>
     <Alias>
+      <External>Device.GRE.TunnelNumberOfEntries</External>
+      <Internal>Device.X_COMCAST-COM_GRE.TunnelNumberOfEntries</Internal>
+    </Alias>
+    <Alias>
       <External>Device.GRE.Tunnel.{i}.RemoteEndpoints</External>
       <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.RemoteEndpoints</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.Enable</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Enable</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.Status</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Status</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.KeepAlivePolicy</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.KeepAlivePolicy</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.KeepAliveTimeout</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.RemoteEndpointHealthCheckPingIntervalInFailure</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.KeepAliveThreshold</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.RemoteEndpointHealthCheckPingFailThreshold</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.DefaultDSCPMark</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.DSCPMarkPolicy</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.ConnectedRemoteEndpoint</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.ConnectedRemoteEndpoint</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.InterfaceNumberOfEntries</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.InterfaceNumberOfEntries</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.Interface.{i}.Enable</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.Enable</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.Interface.{i}.Status</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.Status</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.Interface.{i}.LastChange</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.LastChange</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.Interface.{i}.LowerLayers</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.LocalInterfaces</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.Interface.{i}.X_LGI-COM_VLANID</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.VLANID</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.Stats.KeepAliveSent</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Stats.KeepAliveSent</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.Stats.KeepAliveReceived</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Stats.KeepAliveReceived</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.Stats.DiscardChecksumReceived</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Stats.DiscardChecksumReceived</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.Stats.DiscardSequenceNumberReceived</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Stats.DiscardSequenceNumberReceived</Internal>
     </Alias>
 </AliasList>
 </Tr069Mapper>

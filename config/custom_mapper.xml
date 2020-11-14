@@ -453,6 +453,15 @@
     <Param invisible="true">
       <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Stats.DiscardSequenceNumberReceived</Name>
     </Param>
+    <Param invisible="true">
+      <Name>Device.NAT.X_CISCO_COM_TCPTimeout</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.NAT.X_CISCO_COM_UDPTimeout</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.NAT.X_CISCO_COM_ICMPTimeout</Name>
+    </Param>
     <Param>
       <Name>Device.X_RDKCENTRAL-COM_GRE.InterfaceNumberOfEntries</Name>
     </Param>
@@ -896,6 +905,15 @@
     </Param>
     <Param>
       <Name>Device.GRE.Tunnel.{i}.Stats.DiscardSequenceNumberReceived</Name>
+    </Param>
+    <Param>
+      <Name>Device.NAT.X_LGI-COM_TCPNATtimeout</Name>
+    </Param>
+    <Param>
+      <Name>Device.NAT.X_LGI-COM_UDPNATtimeout</Name>
+    </Param>
+    <Param>
+      <Name>Device.NAT.X_LGI-COM_ICMPNATtimeout</Name>
     </Param>
 </ParamList>
 <AliasList>
@@ -1490,6 +1508,18 @@
     <Alias>
       <External>Device.GRE.Tunnel.{i}.Stats.DiscardSequenceNumberReceived</External>
       <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Stats.DiscardSequenceNumberReceived</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.NAT.X_LGI-COM_TCPNATtimeout</External>
+      <Internal>Device.NAT.X_CISCO_COM_TCPTimeout</Internal>
+    </Alias>
+     <Alias>
+      <External>Device.NAT.X_LGI-COM_UDPNATtimeout</External>
+      <Internal>Device.NAT.X_CISCO_COM_UDPTimeout</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.NAT.X_LGI-COM_ICMPNATtimeout</External>
+      <Internal>Device.NAT.X_CISCO_COM_ICMPTimeout</Internal>
     </Alias>
 </AliasList>
 </Tr069Mapper>

@@ -1521,5 +1521,9 @@
       <External>Device.NAT.X_LGI-COM_ICMPNATtimeout</External>
       <Internal>Device.NAT.X_CISCO_COM_ICMPTimeout</Internal>
     </Alias>
+    <Alias>
+      <External>Device.Users.User.{i}.Password</External>
+      <Internal>Device.Users.User.{i}.X_CISCO_COM_Password</Internal>
+    </Alias>
 </AliasList>
 </Tr069Mapper>

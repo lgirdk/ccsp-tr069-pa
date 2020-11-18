@@ -442,6 +442,9 @@
       <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.VLANID</Name>
     </Param>
     <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.X_LGI-COM_SSID</Name>
+    </Param>
+    <Param invisible="true">
       <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Stats.KeepAliveSent</Name>
     </Param>
     <Param invisible="true">
@@ -893,6 +896,9 @@
     </Param>
     <Param>
       <Name>Device.GRE.Tunnel.{i}.Interface.{i}.X_LGI-COM_VLANID</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.Interface.{i}.X_LGI-COM_SSID</Name>
     </Param>
     <Param>
       <Name>Device.GRE.Tunnel.{i}.Stats.KeepAliveSent</Name>
@@ -1492,6 +1498,10 @@
     <Alias>
       <External>Device.GRE.Tunnel.{i}.Interface.{i}.X_LGI-COM_VLANID</External>
       <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.VLANID</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.Interface.{i}.X_LGI-COM_SSID</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.X_LGI-COM_SSID</Internal>
     </Alias>
     <Alias>
       <External>Device.GRE.Tunnel.{i}.Stats.KeepAliveSent</External>

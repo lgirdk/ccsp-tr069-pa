@@ -4868,6 +4868,9 @@
 		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.AssociatedBridgesWiFiPort</Name>
 	</Param>
 	<Param>
+		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Interface.{i}.X_LGI-COM_SSID</Name>
+	</Param>
+	<Param>
 		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.GRENetworkTunnel</Name>
 	</Param>
 	<Param>

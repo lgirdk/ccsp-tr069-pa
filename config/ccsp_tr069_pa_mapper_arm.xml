@@ -4786,6 +4786,12 @@
 	 <!-- Phase3 hotspot requirements -->
 		<!-- Phase3 hotspot tunnel entries -->
 	<Param>
+		<Name>Device.X_COMCAST-COM_GRE.RemoteEndpointHealthCheckPingInterval</Name>
+	</Param>
+	<Param>
+		<Name>Device.X_COMCAST-COM_GRE.RemoteEndpointHealthCheckPingIntervalInFailure</Name>
+	</Param>
+	<Param>
 		<Name>Device.X_COMCAST-COM_GRE.TunnelNumberOfEntries</Name>
 	</Param>
 	<Param>

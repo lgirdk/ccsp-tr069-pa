@@ -397,6 +397,12 @@
       <Name>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.T4Timeouts</Name>
     </Param>
     <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.RemoteEndpointHealthCheckPingInterval</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.RemoteEndpointHealthCheckPingIntervalInFailure</Name>
+    </Param>
+    <Param invisible="true">
       <Name>Device.X_COMCAST-COM_GRE.TunnelNumberOfEntries</Name>
     </Param>
     <Param invisible="true">
@@ -851,6 +857,12 @@
     </Param>
     <Param>
       <Name>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.T4Timeouts</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.X_LGI-COM_HealthCheckInterval</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.X_LGI-COM_RecoveryCheckInterval</Name>
     </Param>
     <Param>
       <Name>Device.GRE.TunnelNumberOfEntries</Name>
@@ -1438,6 +1450,14 @@
     <Alias>
       <External>Device.X_LGI-COM_CableModem.UpstreamChannel.{i}.T4Timeouts</External>
       <Internal>Device.X_CISCO_COM_CableModem.UpstreamChannel.{i}.T4Timeouts</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.X_LGI-COM_HealthCheckInterval</External>
+      <Internal>Device.X_COMCAST-COM_GRE.RemoteEndpointHealthCheckPingInterval</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.X_LGI-COM_RecoveryCheckInterval</External>
+      <Internal>Device.X_COMCAST-COM_GRE.RemoteEndpointHealthCheckPingIntervalInFailure</Internal>
     </Alias>
     <Alias>
       <External>Device.GRE.TunnelNumberOfEntries</External>

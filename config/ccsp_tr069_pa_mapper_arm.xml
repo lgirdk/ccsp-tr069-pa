@@ -3384,6 +3384,9 @@
             <Name>Device.DHCPv6.Server.Enable</Name>
         </Param>
         <Param>
+            <Name>Device.DHCPv6.Server.Pool.{i}.X_LGI-COM_MaxClients</Name>
+        </Param>
+        <Param>
             <Name>Device.DHCPv6.Server.PoolNumberOfEntries</Name>
         </Param>
         <Param>
@@ -7376,6 +7379,39 @@
         </Param>
         <Param>
             <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Downstream.{i}.QosParamSet.{i}.SchedulingType</Name>
+        </Param>
+  <!--  MTA Parameters under "Device.X_LGI-COM_MTA." -->
+        <Param>
+            <Name>Device.X_LGI-COM_MTA.LineInfo.{i}.AdminStatus</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_MTA.LineInfo.{i}.OperStatus</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_MTA.LineTable.{i}.Status</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_MTA.PacketCableRegion</Name>
+        </Param>
+
+  <!--  General Parameters under "Device.X_LGI-COM_General." -->
+        <Param>
+            <Name>Device.X_LGI-COM_General.FirstInstallState</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_General.TroubleshootWizardEnable</Name>
+        </Param>
+     <Param>
+            <Name>Device.X_LGI-COM_General.CloudUITroubleshootPage.CAppName</Name>
+        </Param>
+     <Param>
+            <Name>Device.X_LGI-COM_General.CloudUITroubleshootPage.WebsiteHelpURL</Name>
+        </Param>
+     <Param>
+            <Name>Device.X_LGI-COM_General.FirstInstallWizardEnable</Name>
+        </Param>
+    <Param>
+           <Name>Device.X_LGI-COM_General.CPE.DataModelVersion</Name>
         </Param>
 
     </ParamList>

@@ -4609,6 +4609,7 @@ CcspCwmppoMpaDeleteObject
                 CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, nRet);
 
                 returnStatus = ANSC_STATUS_INTERNAL_ERROR;
+                nCcspError = nRet;
 
                 goto  EXIT2;
             }

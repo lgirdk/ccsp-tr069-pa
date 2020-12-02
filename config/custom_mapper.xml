@@ -430,6 +430,12 @@
       <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.ConnectedRemoteEndpoint</Name>
     </Param>
     <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.EnableCircuitID</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.EnableRemoteID</Name>
+    </Param>
+    <Param invisible="true">
       <Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.InterfaceNumberOfEntries</Name>
     </Param>
     <Param invisible="true">
@@ -890,6 +896,12 @@
     </Param>
     <Param>
       <Name>Device.GRE.Tunnel.{i}.ConnectedRemoteEndpoint</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.X_LGI-COM_EnableCircuitID</Name>
+    </Param>
+    <Param>
+      <Name>Device.GRE.Tunnel.{i}.X_LGI-COM_EnableRemoteID</Name>
     </Param>
     <Param>
       <Name>Device.GRE.Tunnel.{i}.InterfaceNumberOfEntries</Name>
@@ -1494,6 +1506,14 @@
     <Alias>
       <External>Device.GRE.Tunnel.{i}.ConnectedRemoteEndpoint</External>
       <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.ConnectedRemoteEndpoint</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.X_LGI-COM_EnableCircuitID</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.EnableCircuitID</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.GRE.Tunnel.{i}.X_LGI-COM_EnableRemoteID</External>
+      <Internal>Device.X_COMCAST-COM_GRE.Tunnel.{i}.EnableRemoteID</Internal>
     </Alias>
     <Alias>
       <External>Device.GRE.Tunnel.{i}.InterfaceNumberOfEntries</External>

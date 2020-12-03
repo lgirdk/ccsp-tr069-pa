@@ -2155,7 +2155,7 @@ CcspCwmppoMpaGetParameterValues
             if ( nResult != CCSP_SUCCESS )
             {
             	CcspTr069PaTraceDebug(("GPV failure on FC %s, error = %d\n", pFcNsList->FCName, nResult));
-                nCcspError = CCSP_SUCCESS;
+                nCcspError = nResult;
                 returnStatus = ANSC_STATUS_INTERNAL_ERROR;
                 break;
             }
@@ -2448,7 +2448,7 @@ EXIT2:
         if ( nCcspError != CCSP_SUCCESS )
         {
             CCSP_INT                nCwmpError;
-            
+
             nCwmpError = CcspTr069PA_MapCcspErrCode(pCcspCwmpCpeController->hTr069PaMapper, nCcspError);
 
             CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, nCwmpError);
@@ -2599,7 +2599,7 @@ CcspCwmppoMpaGetParameterNames
     char*                           pRootObjName        = pCcspCwmpCpeController->GetRootObject((ANSC_HANDLE)pCcspCwmpCpeController);
     ULONG                           i                   = 0;
     QUEUE_HEADER                    FcGpnResultListQueue;
-    int                             nRet;
+    int                             nRet = CCSP_SUCCESS;
     char**                          ppFcNameArray        = NULL;
     char**                          ppDbusPathArray      = NULL;
     char**                          ppSubsysArray        = NULL;
@@ -2623,6 +2623,7 @@ CcspCwmppoMpaGetParameterNames
     PCCSP_TR069PA_STRING_SLIST_ENTRY pSListEntry;
     PSINGLE_LINK_ENTRY              pLink;
     CCSP_STRING                     InternalName;
+    CCSP_INT                        nCcspError           = CCSP_SUCCESS;
 
     *ppParamInfoArray = NULL;
     *pulArraySize     = 0;
@@ -2809,6 +2810,7 @@ CcspCwmppoMpaGetParameterNames
         if ( nRet != CCSP_SUCCESS )
         {
             CcspTr069PaTraceDebug(("GPN - FC <%s> returned error %d.\n", ppFcNameArray[i], nRet));
+            nCcspError = nRet;
             continue;
         }
         else
@@ -2986,7 +2988,14 @@ EXIT2:
 
     if ( pCwmpSoapFault )
     {
-        if ( returnStatus == ANSC_STATUS_RESOURCES )
+        if ( nCcspError != CCSP_SUCCESS )
+        {
+          CCSP_INT nCwmpError;
+
+          nCwmpError = CcspTr069PA_MapCcspErrCode(pCcspCwmpCpeController->hTr069PaMapper, nCcspError);
+          CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, nCwmpError);
+        }
+        else if ( returnStatus == ANSC_STATUS_RESOURCES )
         {
             CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_resources);
         }
@@ -3113,6 +3122,7 @@ CcspCwmppoMpaSetParameterAttributes
     PCCSP_TR069PA_FC_NSLIST         pFcNsList            = NULL;
     char*                           pParamName           = NULL;
     PCCSP_TR069PA_NSLIST            pNsList              = NULL;
+    CCSP_INT                        nCcspError           = CCSP_SUCCESS;
 
     BOOL                            bIncludeInvQuery     = !bExcludeInvNs;
     QUEUE_HEADER                    ParamList={{0},0,{0}};
@@ -3371,6 +3381,7 @@ CcspCwmppoMpaSetParameterAttributes
 
             if ( nResult != CCSP_SUCCESS )
             {
+                nCcspError = nResult;
             	CcspTr069PaTraceDebug(("SPA failure on FC %s, error = %d, ignored.\n", pFcNsList->FCName, nResult));
                 if ( nResult >= CCSP_ERR_NOT_CONNECT && nResult <= CCSP_ERR_NOT_SUPPORT )
                 {
@@ -3407,7 +3418,14 @@ EXIT2:
 
     if ( pCwmpSoapFault )
     {
-        if ( returnStatus == ANSC_STATUS_RESOURCES )
+        if ( nCcspError != CCSP_SUCCESS )
+        {
+          CCSP_INT nCwmpError;
+
+          nCwmpError = CcspTr069PA_MapCcspErrCode(pCcspCwmpCpeController->hTr069PaMapper, nCcspError);
+          CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, nCwmpError);
+        }
+        else if ( returnStatus == ANSC_STATUS_RESOURCES )
         {
             CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_resources);
         }

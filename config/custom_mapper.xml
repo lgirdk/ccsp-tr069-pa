@@ -127,6 +127,9 @@
       <Name>Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.Enable</Name>
     </Param>
     <Param invisible="true">
+      <Name>Device.NAT.X_CISCO_COM_DMZ.</Name>
+    </Param>
+    <Param invisible="true">
       <Name>Device.NAT.X_CISCO_COM_DMZ.Enable</Name>
     </Param>
     <Param invisible="true">

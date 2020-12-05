@@ -7396,6 +7396,9 @@
 
   <!--  General Parameters under "Device.X_LGI-COM_General." -->
         <Param>
+            <Name>Device.X_LGI-COM_General.CustomerId</Name>
+        </Param>
+        <Param>
             <Name>Device.X_LGI-COM_General.FirstInstallState</Name>
         </Param>
         <Param>

@@ -7394,27 +7394,27 @@
             <Name>Device.X_LGI-COM_MTA.PacketCableRegion</Name>
         </Param>
 
-  <!--  General Parameters under "Device.X_LGI-COM_General." -->
+  <!--  General Parameters under "Device.X_LGI-COM_General_Internal." -->
         <Param>
-            <Name>Device.X_LGI-COM_General.CustomerId</Name>
-        </Param>
-        <Param>
-            <Name>Device.X_LGI-COM_General.FirstInstallState</Name>
+            <Name>Device.X_LGI-COM_General_Internal.CustomerId</Name>
         </Param>
         <Param>
-            <Name>Device.X_LGI-COM_General.TroubleshootWizardEnable</Name>
+            <Name>Device.X_LGI-COM_General_Internal.FirstInstallState</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_General_Internal.TroubleshootWizardEnable</Name>
         </Param>
      <Param>
-            <Name>Device.X_LGI-COM_General.CloudUITroubleshootPage.CAppName</Name>
+            <Name>Device.X_LGI-COM_General_Internal.CloudUITroubleshootPage.CAppName</Name>
         </Param>
      <Param>
-            <Name>Device.X_LGI-COM_General.CloudUITroubleshootPage.WebsiteHelpURL</Name>
+            <Name>Device.X_LGI-COM_General_Internal.CloudUITroubleshootPage.WebsiteHelpURL</Name>
         </Param>
      <Param>
-            <Name>Device.X_LGI-COM_General.FirstInstallWizardEnable</Name>
+            <Name>Device.X_LGI-COM_General_Internal.FirstInstallWizardEnable</Name>
         </Param>
     <Param>
-           <Name>Device.X_LGI-COM_General.CPE.DataModelVersion</Name>
+           <Name>Device.X_LGI-COM_General_Internal.CPE.DataModelVersion</Name>
         </Param>
 
     </ParamList>

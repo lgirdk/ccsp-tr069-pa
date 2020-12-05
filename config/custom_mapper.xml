@@ -148,6 +148,27 @@
       <Name>Device.UPnP.Device.X_CISCO_COM_IGD_TTL</Name>
     </Param>
     <Param invisible="true">
+      <Name>Device.X_LGI-COM_General_Internal.CustomerId</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_LGI-COM_General_Internal.FirstInstallState</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_LGI-COM_General_Internal.TroubleshootWizardEnable</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_LGI-COM_General_Internal.CloudUITroubleshootPage.CAppName</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_LGI-COM_General_Internal.CloudUITroubleshootPage.WebsiteHelpURL</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_LGI-COM_General_Internal.FirstInstallWizardEnable</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_LGI-COM_General_Internal.CPE.DataModelVersion</Name>
+    </Param>
+    <Param invisible="true">
       <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_CloudUIEnable</Name>
     </Param>
     <Param invisible="true">
@@ -614,6 +635,27 @@
     </Param>
     <Param>
       <Name>Device.UPnP.Device.X_LGI-COM_IGD_TTL</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_General.CustomerId</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_General.FirstInstallState</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_General.TroubleshootWizardEnable</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_General.CloudUITroubleshootPage.CAppName</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_General.CloudUITroubleshootPage.WebsiteHelpURL</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_General.FirstInstallWizardEnable</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_General.CPE.DataModelVersion</Name>
     </Param>
     <Param>
       <Name>Device.X_LGI-COM_General.CloudUIEnable</Name>
@@ -1130,6 +1172,34 @@
     <Alias>
       <External>Device.UPnP.Device.X_LGI-COM_IGD_TTL</External>
       <Internal>Device.UPnP.Device.X_CISCO_COM_IGD_TTL</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_General.CustomerId</External>
+      <Internal>Device.X_LGI-COM_General_Internal.CustomerId</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_General.FirstInstallState</External>
+      <Internal>Device.X_LGI-COM_General_Internal.FirstInstallState</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_General.TroubleshootWizardEnable</External>
+      <Internal>Device.X_LGI-COM_General_Internal.TroubleshootWizardEnable</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_General.CloudUITroubleshootPage.CAppName</External>
+      <Internal>Device.X_LGI-COM_General_Internal.CloudUITroubleshootPage.CAppName</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_General.CloudUITroubleshootPage.WebsiteHelpURL</External>
+      <Internal>Device.X_LGI-COM_General_Internal.CloudUITroubleshootPage.WebsiteHelpURL</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_General.FirstInstallWizardEnable</External>
+      <Internal>Device.X_LGI-COM_General_Internal.FirstInstallWizardEnable</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_General.CPE.DataModelVersion</External>
+      <Internal>Device.X_LGI-COM_General_Internal.CPE.DataModelVersion</Internal>
     </Alias>
     <Alias>
       <External>Device.X_LGI-COM_General.CloudUIEnable</External>

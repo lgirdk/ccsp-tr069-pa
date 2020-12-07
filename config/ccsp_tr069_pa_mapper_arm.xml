@@ -309,6 +309,12 @@
             <Name>Device.DeviceInfo.FirstUseDate</Name>
         </Param>
         <Param>
+            <Name>Device.DeviceInfo.X_LGI-COM_GW_IPv6</Name>
+        </Param>
+        <Param>
+            <Name>Device.DeviceInfo.X_LGI-COM_SerialNumber</Name>
+        </Param>
+        <Param>
             <Name>Device.DeviceInfo.VendorConfigFileNumberOfEntries</Name>
         </Param>
         <Param>
@@ -7282,9 +7288,6 @@
         </Param>
         <Param>
             <Name>Device.X_LGI-COM_Gateway.IPv6LeaseTimeRemaining</Name>
-        </Param>
-        <Param>
-            <Name>Device.X_LGI-COM_Gateway.IPv6Router</Name>
         </Param>
         <Param>
             <Name>Device.X_LGI-COM_Gateway.IPv6LANMode</Name>

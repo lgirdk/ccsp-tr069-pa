@@ -501,6 +501,24 @@
     <Param invisible="true">
       <Name>Device.NAT.X_CISCO_COM_ICMPTimeout</Name>
     </Param>
+    <Param invisible="true">
+      <Name>Device.DeviceInfo.X_COMCAST-COM_CM_IP</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.DeviceInfo.X_COMCAST-COM_CM_MAC</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.DeviceInfo.X_COMCAST-COM_WAN_IP</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.DeviceInfo.X_COMCAST-COM_WAN_MAC</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.DeviceInfo.X_COMCAST-COM_WAN_IPv6</Name>
+    </Param>
+    <Param invisible="true">
+      <Name>Device.X_CISCO_COM_DeviceControl.DeviceMode</Name>
+    </Param>
     <Param>
       <Name>Device.X_RDKCENTRAL-COM_GRE.InterfaceNumberOfEntries</Name>
     </Param>
@@ -989,6 +1007,24 @@
     </Param>
     <Param>
       <Name>Device.NAT.X_LGI-COM_ICMPNATtimeout</Name>
+    </Param>
+    <Param>
+      <Name>Device.DeviceInfo.X_LGI-COM_CM_IP</Name>
+    </Param>
+    <Param>
+      <Name>Device.DeviceInfo.X_LGI-COM_CM_MAC</Name>
+    </Param>
+    <Param>
+      <Name>Device.DeviceInfo.X_LGI-COM_WAN_IP</Name>
+    </Param>
+    <Param>
+      <Name>Device.DeviceInfo.X_LGI-COM_WAN_MAC</Name>
+    </Param>
+    <Param>
+      <Name>Device.DeviceInfo.X_LGI-COM_WAN_IPv6</Name>
+    </Param>
+    <Param>
+      <Name>Device.X_LGI-COM_DeviceControl.DeviceMode</Name>
     </Param>
 </ParamList>
 <AliasList>
@@ -1647,6 +1683,30 @@
     <Alias>
       <External>Device.Users.User.{i}.Password</External>
       <Internal>Device.Users.User.{i}.X_CISCO_COM_Password</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.DeviceInfo.X_LGI-COM_CM_IP</External>
+      <Internal>Device.DeviceInfo.X_COMCAST-COM_CM_IP</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.DeviceInfo.X_LGI-COM_CM_MAC</External>
+      <Internal>Device.DeviceInfo.X_COMCAST-COM_CM_MAC</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.DeviceInfo.X_LGI-COM_WAN_IP</External>
+      <Internal>Device.DeviceInfo.X_COMCAST-COM_WAN_IP</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.DeviceInfo.X_LGI-COM_WAN_MAC</External>
+      <Internal>Device.DeviceInfo.X_COMCAST-COM_WAN_MAC</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.DeviceInfo.X_LGI-COM_WAN_IPv6</External>
+      <Internal>Device.DeviceInfo.X_COMCAST-COM_WAN_IPv6</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.X_LGI-COM_DeviceControl.DeviceMode</External>
+      <Internal>Device.X_CISCO_COM_DeviceControl.DeviceMode</Internal>
     </Alias>
 </AliasList>
 </Tr069Mapper>

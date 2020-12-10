@@ -100,6 +100,7 @@ char* g_Tr069PaAcsDefAddr = NULL;
 
 #define  CCSP_TR069PA_CFG_FILE                      "/usr/ccsp/tr069pa/ccsp_tr069_pa_cfg.xml"
 #define  CCSP_TR069PA_DEF_MAPPER_XML_FILE           "/usr/ccsp/tr069pa/ccsp_tr069_pa_mapper.xml"
+#define  CCSP_TR069PA_CUSTOM_MAPPER_XML_FILE        "/usr/ccsp/tr069pa/custom_mapper.xml"
 
 CCSP_CWMP_CFG_INTERFACE             ccspCwmpCfgIf;
 WEB_ACM_INTERFACE                   webAcmIf;
@@ -358,51 +359,21 @@ static void drop_root()
 }
 #endif
 
-BOOL is_customer_data_model()
+static BOOL is_customer_data_model (void)
 {
-    char sysbuf[8] = {0};
+    char sysbuf[8];
 
     syscfg_init();
 
-    syscfg_get( NULL, "custom_data_model_enabled", sysbuf, sizeof(sysbuf));
-
-    if (sysbuf[0] != 0)
+    if (syscfg_get (NULL, "custom_data_model_enabled", sysbuf, sizeof(sysbuf)) == 0)
     {
-        if ( AnscEqualString(sysbuf, "1", FALSE) )
+        if (strcmp (sysbuf, "1") == 0)
         {
             return TRUE;
         }
-        else
-        {
-            return FALSE;
-        }
     }
-    else
-    {
-        CcspTr069PaTraceDebug(("syscfg_get returned an empty string for custom_data_model_enabled\n"));
-        return FALSE;
-    }
-}
 
-char* get_customer_data_model_file_name()
-{
-    char* sysbuf = AnscAllocateMemory(256);
-    AnscZeroMemory(sysbuf, 256);
-
-    syscfg_init();
-
-    syscfg_get( NULL, "custom_data_model_file_name", sysbuf, 256);
-
-    if ( sysbuf[0] != 0 )
-    {
-        return sysbuf;
-    }
-    else
-    {
-        CcspTr069PaTraceDebug(("syscfg_get returned an empty string for custom_data_model_file_name\n"));
-        AnscFreeMemory(sysbuf);
-        return NULL;
-    }
+    return FALSE;
 }
 
 int main(int argc, char* argv[])
@@ -479,14 +450,7 @@ int main(int argc, char* argv[])
 
     if ( g_PaCustMapperFile[0] == 0 && is_customer_data_model() )
     {
-        char* customer_file_name = get_customer_data_model_file_name();
-
-        if ( customer_file_name )
-        {
-            CcspTr069PaTraceDebug(("Customer data-model file name is %s\n", customer_file_name));
-            AnscCopyString(g_PaCustMapperFile, customer_file_name);
-            AnscFreeMemory(customer_file_name);
-        }
+        AnscCopyString(g_PaCustMapperFile, CCSP_TR069PA_CUSTOM_MAPPER_XML_FILE);
     }
 #ifdef FEATURE_SUPPORT_RDKLOG
 	RDK_LOGGER_INIT();

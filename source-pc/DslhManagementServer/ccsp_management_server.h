@@ -180,7 +180,7 @@ enum
     ManagementServerSTUNMinimumKeepAlivePeriodID,
     ManagementServerNATDetectedID,
     ManagementServerAliasBasedAddressingID,
-    ManagementServerX_CISCO_COM_ConnectionRequestURLPortID,
+    ManagementServerX_LGI_COM_ConnectionRequestPortID,
     ManagementServerX_CISCO_COM_ConnectionRequestURLPathID,
     ManagementServerNumOfParameters
 };
@@ -195,7 +195,6 @@ enum
     ManagementServerDefaultActiveNotificationThrottleID,
     ManagementServerCWMPRetryMinimumWaitIntervalID,
     ManagementServerCWMPRetryIntervalMultiplierID,
-    ManagementServerX_CISCO_COM_ConnectionRequestURLPortID,
     ManagementServerX_CISCO_COM_ConnectionRequestURLPathID,
 };
 #endif

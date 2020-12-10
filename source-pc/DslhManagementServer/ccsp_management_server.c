@@ -254,9 +254,10 @@ msParameterInfo managementServerParameters[] =
     { "AliasBasedAddressing", NULL, ccsp_boolean, CCSP_RO, ~((unsigned int)0) },
 // #if 0 //Not used anymore
 #ifndef _COSA_VEN501_
-    { "X_CISCO_COM_ConnectionRequestURLPort", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0) },
-    { "X_CISCO_COM_ConnectionRequestURLPath", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0) }
+    { "X_LGI-COM_ConnectionRequestPort", NULL, ccsp_unsignedInt, CCSP_RW, ~((unsigned int)0) },
+    { "X_CISCO_COM_ConnectionRequestURLPath", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0) },
 #endif
+
 };
 
 msParameterInfo autonomousTransferCompletePolicyParameters[] = 
@@ -444,7 +445,7 @@ CcspManagementServer_FillInObjectInfo()
         
         _ansc_sprintf(buf, "%d", CWMP_PORT);      
 
-        objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_ConnectionRequestURLPortID].value 
+        objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ConnectionRequestPortID].value
             = CcspManagementServer_CloneString(buf);
 
         /* Now PA is started before PAM. We can't get it now We will try to get from PAM directly when do INFORM */
@@ -1125,11 +1126,11 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
     strcat(result, ipAddr);
     if ( TRUE )
     {
-        char* pPort = objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_ConnectionRequestURLPortID].value;
+        char* pPort = objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ConnectionRequestPortID].value;
         if(pPort && strlen(pPort) > 0) {
             strcat(result, ":");
             if ( strlen(pPort) > 0 )
-                strcat(result, objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_ConnectionRequestURLPortID].value);
+                strcat(result, objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ConnectionRequestPortID].value);
             else
             {
                 char buf[10];
@@ -1498,7 +1499,7 @@ void CcspManagementServer_GetSingleParameterValue(
         case ManagementServerAliasBasedAddressingID:
             val->parameterValue = CcspManagementServer_GetAliasBasedAddressingStr(NULL);
             break;
-        case ManagementServerX_CISCO_COM_ConnectionRequestURLPortID:
+        case ManagementServerX_LGI_COM_ConnectionRequestPortID:
             val->parameterValue = CcspManagementServer_GetConnectionRequestURLPort(NULL);
             break;
         case ManagementServerX_CISCO_COM_ConnectionRequestURLPathID:
@@ -2108,9 +2109,12 @@ int CcspManagementServer_ValidateParameterValues(
                 case ManagementServerConnectionRequestPasswordID:
                 case ManagementServerSTUNUsernameID:
                 case ManagementServerSTUNPasswordID:
-                case ManagementServerX_CISCO_COM_ConnectionRequestURLPortID:
                 case ManagementServerX_CISCO_COM_ConnectionRequestURLPathID:
                     if(CcspManagementServer_ValidateStrLen(val[i].parameterValue, 256) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    break;
+                case ManagementServerX_LGI_COM_ConnectionRequestPortID:
+                    if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, 0, TRUE, 65535) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
                     else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
                     break;
                 case ManagementServerPeriodicInformIntervalID:

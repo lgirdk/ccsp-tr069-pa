@@ -93,6 +93,8 @@ char* g_Tr069PaAcsDefAddr = NULL;
 #define  CCSP_TR069PA_CFG_FILE                      "/usr/ccsp/tr069pa/ccsp_tr069_pa_cfg.xml"
 #define  CCSP_TR069PA_DEF_MAPPER_XML_FILE           "/usr/ccsp/tr069pa/ccsp_tr069_pa_mapper.xml"
 
+#define  ALIAS_MANAGER_MAPPER_FILE                  "/usr/ccsp/custom_mapper.xml"
+
 CCSP_CWMP_CFG_INTERFACE             ccspCwmpCfgIf;
 WEB_ACM_INTERFACE                   webAcmIf;
 
@@ -340,21 +342,6 @@ static void drop_root()
   }
 }
 
-static BOOL is_customer_data_model (void)
-{
-    char sysbuf[8];
-
-    if (syscfg_get(NULL, "custom_data_model_enabled", sysbuf, sizeof(sysbuf)) == 0)
-    {
-        if (strcmp(sysbuf, "1") == 0)
-        {
-            return TRUE;
-        }
-    }
-
-    return FALSE;
-}
-
 int main(int argc, char* argv[])
 {
 	int                             cmdChar = 0;
@@ -427,18 +414,9 @@ int main(int argc, char* argv[])
         AnscCopyString(g_PaMapperXmlFile, CCSP_TR069PA_DEF_MAPPER_XML_FILE);
     }
 
-    if ( g_PaCustMapperFile[0] == 0 && is_customer_data_model() )
+    if ( g_PaCustMapperFile[0] == 0 )
     {
-        syscfg_get(NULL, "custom_data_model_file_name", g_PaCustMapperFile, sizeof(g_PaCustMapperFile));
-
-        if (g_PaCustMapperFile[0] == 0)
-        {
-            CcspTr069PaTraceDebug(("syscfg_get returned an empty string for custom_data_model_file_name\n"));
-        }
-        else
-        {
-            CcspTr069PaTraceDebug(("Customer data-model file name is %s\n", g_PaCustMapperFile));
-        }
+        AnscCopyString(g_PaCustMapperFile, ALIAS_MANAGER_MAPPER_FILE);
     }
 #ifdef FEATURE_SUPPORT_RDKLOG
 	RDK_LOGGER_INIT();

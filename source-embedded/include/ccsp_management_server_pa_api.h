@@ -340,7 +340,7 @@ CcspManagementServer_GetFirstUpstreamIpAddress
     );
 
 /* CcspManagementServer_GetConnectionRequestURLPort is called to get
- * Device.ManagementServer.X_CISCO_COM_ConnectionRequestURLPort.
+ * Device.ManagementServer.X_LGI-COM_ConnectionRequestPort
  * Return value - the parameter value.
  */
 CCSP_STRING

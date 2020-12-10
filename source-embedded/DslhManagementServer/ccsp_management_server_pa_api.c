@@ -1375,7 +1375,7 @@ CcspManagementServer_GetConnectionRequestURL
         if (ifAddrStruct!=NULL) freeifaddrs(ifAddrStruct);
         
         char *ptr_url = objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value;
-        char *ptr_port = objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_ConnectionRequestURLPortID].value;
+        char *ptr_port = objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ConnectionRequestPortID].value;
         char *ptr_path = objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_ConnectionRequestURLPathID].value;
         
         if(ptr_port) sprintf(buf, "http://%s:%s/", ipaddr, ptr_port);
@@ -1453,7 +1453,7 @@ CcspManagementServer_GetFirstUpstreamIpAddress
 }
 
 /* CcspManagementServer_GetConnectionRequestURLPort is called to get
- * Device.ManagementServer.X_CISCO_COM_ConnectionRequestURLPort.
+ * Device.ManagementServer.X_LGI-COM_ConnectionRequestPort
  * Return value - the parameter value.
  */
 CCSP_STRING
@@ -1463,7 +1463,7 @@ CcspManagementServer_GetConnectionRequestURLPort
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_ConnectionRequestURLPortID].value);
+    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ConnectionRequestPortID].value);
 }
 /* CcspManagementServer_GetConnectionRequestURLPath is called to get
  * Device.ManagementServer.X_CISCO_COM_ConnectionRequestURLPath.

@@ -1612,6 +1612,10 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                     bRestartRadio2 = TRUE;
                 }
                 else{
+                    #define X_LGI_COM_BandSteering_SSID "Device.WiFi.X_LGI-COM_BandSteering.SSID."
+                    #define X_LGI_COM_SoftBlock "Device.WiFi.X_LGI-COM_SoftBlock."
+                    #define X_LGI_COM_ATM_Radio_1 "Device.WiFi.X_LGI-COM_ATM.Radio.1."
+                    #define X_LGI_COM_ATM_Radio_2 "Device.WiFi.X_LGI-COM_ATM.Radio.2."
 
                     if((!strncmp(ParamName[x],"Device.WiFi.SSID.",17)))
                     {
@@ -1646,6 +1650,20 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                             bRestartRadio2 = TRUE; 
 
                         }
+                    }
+                    else if((!strncmp(ParamName[x],X_LGI_COM_SoftBlock,sizeof(X_LGI_COM_SoftBlock)-1))
+                            ||(!strncmp(ParamName[x], X_LGI_COM_BandSteering_SSID, sizeof(X_LGI_COM_BandSteering_SSID)-1)))
+                    {
+                        bRestartRadio1 = TRUE;
+                        bRestartRadio2 = TRUE;
+                    }
+                    else if((!strncmp(ParamName[x], X_LGI_COM_ATM_Radio_1, sizeof(X_LGI_COM_ATM_Radio_1)-1)))
+                    {
+                        bRestartRadio1 = TRUE;
+                    }
+                    else if((!strncmp(ParamName[x], X_LGI_COM_ATM_Radio_2, sizeof(X_LGI_COM_ATM_Radio_2)-1)))
+                    {
+                        bRestartRadio2 = TRUE;
                     }
 
                 }

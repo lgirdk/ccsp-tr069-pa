@@ -1336,9 +1336,9 @@
       <External>Device.X_LGI-COM_CableModem.SubnetMask</External>
       <Internal>Device.X_CISCO_COM_CableModem.SubnetMask</Internal>
     </Alias>
-    <Alias>
+    <Alias strict="true">
       <External>Device.X_LGI-COM_CableModem.</External>
-      <Internal>Device.X_CISCO_COM_CableModem.</Internal>
+      <Internal>Device.X_LGI-COM_CableModem.</Internal>
     </Alias>
     <Alias>
       <External>Device.X_LGI-COM_CableModem.Gateway</External>
@@ -1441,7 +1441,7 @@
       <Internal>Device.X_CISCO_COM_CableModem.LoopDiagnosticsDetails</Internal>
     </Alias>
     <Alias>
-      <External>DDevice.X_LGI-COM_CableModem.LoopDiagnosticsStart</External>
+      <External>Device.X_LGI-COM_CableModem.LoopDiagnosticsStart</External>
       <Internal>Device.X_CISCO_COM_CableModem.LoopDiagnosticsStart</Internal>
     </Alias>
     <Alias>

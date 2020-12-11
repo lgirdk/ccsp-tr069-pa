@@ -90,6 +90,12 @@
 #include "ccsp_cwmp_definitions_cwmp.h"
 */
 
+#define X_LGI_COM_ATM_Radio "Device.WiFi.X_LGI-COM_ATM.Radio"
+#define X_LGI_COM_ATM_Radio_1_TR069_INDEX 10000
+#define X_LGI_COM_ATM_Radio_2_TR069_INDEX 10100
+#define X_LGI_COM_ATM_Radio_1_CCSP_INDEX  1
+#define X_LGI_COM_ATM_Radio_2_CCSP_INDEX  2
+
 static PCCSP_TR069_CPEERR_MAP                       CcspTr069CpeErrMaps         = NULL;
 static CCSP_INT                                     NumOfErrMaps                = 0;
 static PCCSP_TR069_RPC_MAP                          CcspTr069RpcMaps            = NULL;
@@ -1355,6 +1361,32 @@ CcspTr069PA_MapInstNumCwmpToDmInt
 
                     if ( pDmIntString )
                     {
+                        /* Map the Device.WiFi.X_LGI-COM_ATM.Radio.10100.SSID.{i} index from 10001-10008/10101-10108 to 1-8 */
+                        if ((strncmp(CcspTr069CpeInstanceMaps[i].CcspDmlName, X_LGI_COM_ATM_Radio, sizeof(X_LGI_COM_ATM_Radio) - 1) == 0) &&
+                            (strncmp(restDmlString, ".SSID.", 6) == 0))
+                        {
+                            unsigned int atmSsidInstNum;
+                            char restDmlString_2[CCSP_TR069_INSTMAP_MaxStringSize];
+
+                            if (sscanf (restDmlString + 6, "%u%s", &atmSsidInstNum, restDmlString_2) == 2)
+                            {
+                                if ((instNum == X_LGI_COM_ATM_Radio_1_TR069_INDEX) &&
+                                    (atmSsidInstNum > X_LGI_COM_ATM_Radio_1_TR069_INDEX) &&
+                                    (atmSsidInstNum <= (X_LGI_COM_ATM_Radio_1_TR069_INDEX + 8)))
+                                {
+                                    atmSsidInstNum -= X_LGI_COM_ATM_Radio_1_TR069_INDEX;
+                                    sprintf (restDmlString, ".SSID.%u%s", atmSsidInstNum, restDmlString_2);
+                                }
+                                else if ((instNum == X_LGI_COM_ATM_Radio_2_TR069_INDEX) &&
+                                         (atmSsidInstNum > X_LGI_COM_ATM_Radio_2_TR069_INDEX) &&
+                                         (atmSsidInstNum <= (X_LGI_COM_ATM_Radio_2_TR069_INDEX + 8)))
+                                {
+                                    atmSsidInstNum -= X_LGI_COM_ATM_Radio_2_TR069_INDEX;
+                                    sprintf (restDmlString, ".SSID.%u%s", atmSsidInstNum, restDmlString_2);
+                                }
+                            }
+                        }
+
                         snprintf
                             (
                                 pDmIntString, (tr069StringSize + 10),
@@ -1466,6 +1498,32 @@ CcspTr069PA_MapInstNumDmIntToCwmp
 
                     if ( pCwmpString )
                     {
+                        /* Map the Device.WiFi.X_LGI-COM_ATM.Radio.10100.SSID.{i} index from 1-8 to 10001-10008/10101-10108 */
+                        if ((strncmp(CcspTr069CpeInstanceMaps[i].CcspDmlName, X_LGI_COM_ATM_Radio, sizeof(X_LGI_COM_ATM_Radio) - 1) == 0) &&
+                            (strncmp(restDmlString, ".SSID.", 6) == 0))
+                        {
+                            unsigned int atmSsidInstNum;
+                            char restDmlString_2[CCSP_TR069_INSTMAP_MaxStringSize];
+
+                            if (sscanf (restDmlString + 6, "%u%s", &atmSsidInstNum, restDmlString_2) == 2)
+                            {
+                                if ((instNum == X_LGI_COM_ATM_Radio_1_CCSP_INDEX) &&
+                                    (atmSsidInstNum >= X_LGI_COM_ATM_Radio_1_CCSP_INDEX) &&
+                                    (atmSsidInstNum < (X_LGI_COM_ATM_Radio_1_CCSP_INDEX + 8)))
+                                {
+                                    atmSsidInstNum += X_LGI_COM_ATM_Radio_1_TR069_INDEX;
+                                    sprintf (restDmlString, ".SSID.%u%s", atmSsidInstNum, restDmlString_2);
+                                }
+                                else if ((instNum == X_LGI_COM_ATM_Radio_2_CCSP_INDEX) &&
+                                         (atmSsidInstNum >= X_LGI_COM_ATM_Radio_1_CCSP_INDEX) &&
+                                         (atmSsidInstNum < (X_LGI_COM_ATM_Radio_1_CCSP_INDEX + 8)))
+                                {
+                                    atmSsidInstNum += X_LGI_COM_ATM_Radio_2_TR069_INDEX;
+                                    sprintf (restDmlString, ".SSID.%u%s", atmSsidInstNum, restDmlString_2);
+                                }
+                            }
+                        }
+
                         sprintf
                             (
                                 pCwmpString,

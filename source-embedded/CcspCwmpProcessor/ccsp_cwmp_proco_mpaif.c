@@ -1679,7 +1679,20 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
 
                         }
                     }
-
+                    else if ((strncmp(ParamName[x], "Device.WiFi.X_LGI-COM_SoftBlock.", 32) == 0) ||
+                             (strncmp(ParamName[x], "Device.WiFi.X_LGI-COM_BandSteering.SSID.", 40) == 0))
+                    {
+                        bRestartRadio1 = TRUE;
+                        bRestartRadio2 = TRUE;
+                    }
+                    else if (strncmp(ParamName[x], "Device.WiFi.X_LGI-COM_ATM.Radio.1.", 34) == 0)
+                    {
+                        bRestartRadio1 = TRUE;
+                    }
+                    else if (strncmp(ParamName[x], "Device.WiFi.X_LGI-COM_ATM.Radio.2.", 34) == 0)
+                    {
+                        bRestartRadio2 = TRUE;
+                    }
                 }
             }
             if((bRestartRadio1 == TRUE) && (bRestartRadio2 == TRUE))

@@ -102,6 +102,13 @@
             <Tr069InstNum>10000</Tr069InstNum> <CcspInstNum>1</CcspInstNum> 
             <Tr069InstNum>10100</Tr069InstNum> <CcspInstNum>2</CcspInstNum> 
         </InstanceMap3>
+        <!-- Add by LGI start -->
+        <InstanceMap4>
+            <DmlTable>Device.WiFi.X_LGI-COM_ATM.Radio</DmlTable>
+            <Tr069InstNum>10000</Tr069InstNum> <CcspInstNum>1</CcspInstNum>
+            <Tr069InstNum>10100</Tr069InstNum> <CcspInstNum>2</CcspInstNum>
+        </InstanceMap4>
+        <!-- Add by LGI end -->
     </InstanceMapper>
     <ParamList>
         <!-- Device.ManagementServer. -->
@@ -1286,6 +1293,11 @@
         <Param>
             <Name>Device.WiFi.Radio.{i}.Channel</Name>
         </Param>
+        <!-- Add by LGI start -->
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.X_LGI-COM_ChannelSetting</Name>
+        </Param>
+        <!-- Add by LGI end -->
         <Param>
             <Name>Device.WiFi.Radio.{i}.AutoChannelSupported</Name>
         </Param>
@@ -1367,6 +1379,14 @@
         <Param>
             <Name>Device.WiFi.Radio.{i}.X_CISCO_COM_BasicRate</Name>
         </Param>
+        <!-- Add by LGI start -->
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.X_CISCO_COM_AutoBlockAck</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.X_CISCO_COM_DeclineBARequest</Name>
+        </Param>
+        <!-- Add by LGI end -->
         <Param>
             <Name>Device.WiFi.Radio.{i}.X_COMCAST-COM_CarrierSenseThresholdRange</Name>
         </Param>
@@ -1382,6 +1402,32 @@
         <Param>
             <Name>Device.WiFi.Radio.{i}.BasicDataTransmitRates</Name>
         </Param>
+        <!-- Add by LGI start -->
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.X_CISCO_COM_11nGreenfieldEnabled</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.X_CISCO_COM_AggregationMSDU</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.X_COMCAST_COM_DFSSupport</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.X_COMCAST_COM_DFSEnable</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.X_LGI-COM_EnhancedACS.DFSMoveBack</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.X_LGI-COM_EnhancedACS.ExcludeDFS</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.X_LGI-COM_EnhancedACS.Weight.Channel.{i}.ChannelWeight</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.CurrentOperatingChannelBandwidth</Name>
+        </Param>
+        <!-- Add by LGI end -->
         <Param>
             <Name>Device.WiFi.Radio.{i}.Stats.BytesSent</Name>
         </Param>
@@ -1451,6 +1497,11 @@
         <Param>
             <Name>Device.WiFi.Radio.{i}.Stats.X_COMCAST-COM_StatisticsStartTime</Name>
         </Param>
+       <!-- Add by LGI start -->
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.Stats.Noise</Name>
+        </Param>
+        <!-- Add by LGI end -->
         <Param>
             <Name>Device.WiFi.SSID.{i}.Enable</Name>
         </Param>
@@ -1598,6 +1649,11 @@
 	<Param>
             <Name>Device.WiFi.AccessPoint.{i}.X_COMCAST-COM_MAC_FilteringMode</Name>
         </Param>
+        <!-- Add by LGI start -->
+        <Param>
+            <Name>Device.WiFi.AccessPoint.{i}.X_LGI-COM_ActiveTimeout</Name>
+        </Param>
+        <!-- Add by LGI end -->
         <Param>
             <Name>Device.WiFi.AccessPoint.{i}.X_RDKCENTRAL-COM_ManagementFramePowerControl</Name>
         </Param>
@@ -1709,6 +1765,29 @@
         <Param>
             <Name>Device.WiFi.AccessPoint.{i}.WPS.ConfigMethodsEnabled</Name>
         </Param>
+        <!-- Add by LGI start -->
+        <Param>
+            <Name>Device.WiFi.AccessPoint.{i}.WPS.X_CISCO_COM_WpsPushButton</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.AccessPoint.{i}.WPS.X_LGI-COM_Pin</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.AccessPoint.{i}.WPS.X_LGI-COM_ActivatePushButton</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.AccessPoint.{i}.WPS.X_LGI-COM_ClientPin</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.AccessPoint.{i}.WPS.X_Comcast_com_Configured</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.AccessPoint.{i}.WPS.X_LGI-COM_CancelSession</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.AccessPoint.{i}.WPS.X_LGI-COM_WpsStatus</Name>
+        </Param>
+        <!-- Add by LGI end -->
         <Param>
             <Name>Device.WiFi.AccessPoint.{i}.AssociatedDevice.{i}.MACAddress</Name>
         </Param>
@@ -1859,6 +1938,176 @@
 	<Param>
 	    <Name>Device.WiFi.NeighboringWiFiDiagnostic.Result.{i}.X_COMCAST-COM_ChannelUtilization</Name>
 	</Param>
+        <!-- Add by LGI start -->
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_SoftBlock.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_SoftBlock.ClearClientBlacklist</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_SoftBlock.ClientBlacklistNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_SoftBlock.ClientBlacklist.{i}.MacAddress</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_SoftBlock.ClientBlacklist.{i}.LastAssocTime</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSIDNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.Active</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.ClearCapable5G</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.ClearBlacklist24G</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.RSSIThreshold5GHz</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.DeltaThreshold5GHz</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.TempTimeout24GHz</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.Capable5GNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.Blacklist24GNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.Capable5G.{i}.MACAddress</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.Capable5G.{i}.EntryTime</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.Blacklist24G.{i}.MACAddress</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.Blacklist24G.{i}.EntryTime</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.Blacklist24G.{i}.TimeRemaining</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Capability</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.RadioNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Radio.{i}.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Radio.{i}.Mode</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Radio.{i}.WaitThreshold</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Radio.{i}.TrafficDirection</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Radio.{i}.EnableWMMApplication</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Radio.{i}.SSIDNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Radio.{i}.STANumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Radio.{i}.WMMApplication.BKWeight</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Radio.{i}.WMMApplication.BEWeight</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Radio.{i}.WMMApplication.VIWeight</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Radio.{i}.WMMApplication.VOWeight</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Radio.{i}.SSID.{i}.DistributionType</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Radio.{i}.SSID.{i}.Weight</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Radio.{i}.STA.{i}.MACAddress</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Radio.{i}.STA.{i}.Weight</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Stats.ClientNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Stats.Client.{i}.MACAddress</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Stats.Client.{i}.STAWeight</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Stats.Client.{i}.SSID</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Stats.Client.{i}.SSIDWeight</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Stats.Client.{i}.CurrentPercentAirTime</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ATM.Stats.Client.{i}.CumulativeAirTime</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_WiFiLog.LogControl</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_WiFiLog.WiFiEventLogNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_WiFiLog.WiFiEventLog.{i}.Index</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_WiFiLog.WiFiEventLog.{i}.Time</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_WiFiLog.WiFiEventLog.{i}.EventID</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_WiFiLog.WiFiEventLog.{i}.EventLevel</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_WiFiLog.WiFiEventLog.{i}.Description</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_WiFiLog.WiFiChannelChangeLogNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_WiFiLog.WiFiChannelChangeLog.{i}.Index</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_WiFiLog.WiFiChannelChangeLog.{i}.Time</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_WiFiLog.WiFiChannelChangeLog.{i}.SelectedChannel</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_WiFiLog.WiFiChannelChangeLog.{i}.Reason</Name>
+        </Param>
+        <!-- Add by LGI end -->
         <Param>
             <Name>Device.PPP.InterfaceNumberOfEntries</Name>
         </Param>
@@ -3912,6 +4161,27 @@
 	<Param>
             <Name>Device.WiFi.X_CISCO_COM_FactoryResetRadioAndAp</Name>
         </Param>
+        <!-- Add by LGI start -->
+        <Param>
+            <Name>Device.WiFi.X_CISCO_COM_FactoryReset</Name>
+        </Param>
+        <!-- X_LGI-COM_SON -->
+        <Param>
+            <Name>Device.X_LGI-COM_SON.SONAdminStatus</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_SON.SONOperationalStatus</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_SON.SONURL</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_SON.SONDFSEnable</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_SON.NativeAtmBsControl</Name>
+        </Param>
+        <!-- Add by LGI end -->
 	<Param>
             <Name>Device.X_CISCO_COM_DeviceControl.UserChangedFlags</Name>
         </Param>

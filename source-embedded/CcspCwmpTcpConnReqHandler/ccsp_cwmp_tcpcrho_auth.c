@@ -1150,19 +1150,18 @@ CcspCwmpTcpcrhoGetAuthInfo
 
     pHfoAuth  = (PHTTP_HFO_AUTHORIZATION)CcspTr069PaAllocateMemory(sizeof(HTTP_HFO_AUTHORIZATION));
 
-    if (pHfoAuth)
-    {
-        pCredential = &pHfoAuth->Credential;
-
-        CcspCwmpTcpcrhoParseCredentials((ANSC_HANDLE)pMyObject, (ANSC_HANDLE)pCredential, pHdrAuth + ulHdrValueOffset, ulHdrValueLen);
-    }
-
     if ( !pHfoAuth )
     {
         return NULL;
     }
 
     pCredential = &pHfoAuth->Credential;
+
+    if ( CcspCwmpTcpcrhoParseCredentials((ANSC_HANDLE)pMyObject, (ANSC_HANDLE)pCredential, pHdrAuth + ulHdrValueOffset, ulHdrValueLen) == FALSE )
+    {
+        CcspTr069PaFreeMemory(pHfoAuth);
+        return NULL;
+    }
 
     switch ( pCredential->AuthType )
     {
@@ -1191,8 +1190,11 @@ CcspCwmpTcpcrhoGetAuthInfo
 
     if ( !pAuthInfo )
     {
+        CcspTr069PaFreeMemory(pHfoAuth);
         return NULL;
     }
+
+    pAuthInfo->AuthType = pCredential->AuthType;
 
     if ( bDigestAuth )
     {
@@ -1206,8 +1208,6 @@ CcspCwmpTcpcrhoGetAuthInfo
             return NULL;
         }
     }
-
-    pAuthInfo->AuthType     = pCredential->AuthType;
 
     if ( !bDigestAuth )
     {

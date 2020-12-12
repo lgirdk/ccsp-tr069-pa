@@ -89,57 +89,6 @@ extern int openssl_load_ca_certificates(int who_calls);
 
 #include "ssp_ccsp_cwmp_cfg.h"
 
-#ifdef SAFEC_DUMMY_API
-/*This is required to support CiscoXB3 platform which cannot include safeclib due to the image size constraints */
-
-//adding strcmp_s definition
-errno_t strcmp_s(const char * d,int max ,const char * src,int *r)
-{
-	UNREFERENCED_PARAMETER(max);
-	if(d)
-	{
-		if(src)
-		{
-			*r= strcmp(d,src);
-			return EOK;
-		}
-		else
-		{
-			CcspTr069PaTraceError(("source string is null\n"));
-		}
-	}
-	else
-	{
-		CcspTr069PaTraceError(("destination string is null\n"));
-	}
-	return -1;
-}
-
-//adding strcasecmp_s definition
-errno_t strcasecmp_s(const char * d,int max ,const char * src,int *r)
-{
-	UNREFERENCED_PARAMETER(max);
-	if(d)
-	{
-		if(src)
-		{
-			*r= strcasecmp(d,src);
-			return EOK;
-		}
-		else
-		{
-			CcspTr069PaTraceError(("source string is null\n"));
-		}
-	}
-	else
-	{
-		CcspTr069PaTraceError(("destination string is null\n"));
-	}
-	return -1;
-}
-
-#endif
-
 /*
  *  RDKB-12305  Adding method to check whether comcast device or not
  *  Procedure     : bIsComcastImage

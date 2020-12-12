@@ -141,8 +141,28 @@ typedef int errno_t;
 #define memset_s(dst,max_1,c,max) EOK; \
  memset(dst,c,max);
 
-errno_t strcmp_s(const char *,int,const char *,int *);
-errno_t strcasecmp_s(const char * ,int , const char * ,int *);
+static inline errno_t strcmp_s(const char *dst, int dmax, const char *src, int *r)
+{
+    /*
+       Don't attempt to handle NULL pointers here. Passing NULL pointers to
+       string functions is a bug - which we want to find and fix, not cover up.
+    */
+
+    *r = strcmp(dst, src);
+    return EOK;
+}
+
+static inline errno_t strcasecmp_s(const char *dst, int dmax, const char *src, int *r)
+{
+    /*
+       Don't attempt to handle NULL pointers here. Passing NULL pointers to
+       string functions is a bug - which we want to find and fix, not cover up.
+    */
+
+    *r = strcasecmp(dst, src);
+    return EOK;
+}
+
 #endif
 
 #endif

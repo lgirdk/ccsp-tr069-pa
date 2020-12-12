@@ -86,25 +86,6 @@
 extern char* openssl_client_ca_certificate_files;
 #endif /* _ANSC_USE_OPENSSL_ */
 
-#ifdef SAFEC_DUMMY_API
-/*This is required to support CiscoXB3 platform which cannot include safeclib due to the image size constraints */
-
-//adding strcmp_s definition
-errno_t strcmp_s(const char * d,int max ,const char * src,int *r)
-{
-  *r= strcmp(d,src);
-  return EOK;
-}
-
-//adding strcasecmp_s definition
-errno_t strcasecmp_s(const char * d,int max ,const char * src,int *r)
-{
-  *r= strcasecmp(d,src);
-  return EOK;
-}
-
-#endif
-
 /*
  *  RDKB-12305  Adding method to check whether comcast device or not
  *  Procedure     : bIsComcastImage

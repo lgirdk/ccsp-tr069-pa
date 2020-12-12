@@ -1910,6 +1910,8 @@ CcspCwmppoMpaGetParameterValues
 	
     AnscQueueInitializeHeader(&FcNsListQueue);
     AnscQueueInitializeHeader(&FcGpvResultListQueue);
+    AnscInitializeQueue(&ParamList);
+    AnscInitializeSList(&StringAllocList);
 
     /*
      * A fault response MUST make use of the SOAP Fault element using the following conventions:
@@ -1937,9 +1939,6 @@ CcspCwmppoMpaGetParameterValues
         bParamNameArrayEmpty = TRUE;
         SlapAllocStringArray2(1, pParamNameArray);
     }
-
-    AnscInitializeQueue(&ParamList);
-    AnscInitializeSList(&StringAllocList);
 
     /* build a full params list including aliasing */
     returnStatus = CcspTr069PaMapArrayToInternalAliases
@@ -2656,6 +2655,7 @@ CcspCwmppoMpaGetParameterNames
     *phSoapFault      = (ANSC_HANDLE)NULL;
 
     AnscQueueInitializeHeader(&FcGpnResultListQueue);
+    AnscInitializeQueue(&ParamList);
 
     /*
      * A fault response MUST make use of the SOAP Fault element using the following conventions:
@@ -2731,7 +2731,6 @@ CcspCwmppoMpaGetParameterNames
     }
 
     pOriginalParam = pParamPath;
-    AnscInitializeQueue(&ParamList);
     if ( (pInternalNames = CcspTr069PA_GetParamInternalNames(pCcspCwmpCpeController->hTr069PaMapper, pParamPath)))
     {
         while ( (InternalName = CcspTr069PA_GetNextInternalName(pInternalNames)) )
@@ -3155,7 +3154,7 @@ CcspCwmppoMpaSetParameterAttributes
     *phSoapFault = (ANSC_HANDLE)NULL;
 
     AnscQueueInitializeHeader(&FcNsListQueue);
-
+    AnscInitializeQueue(&ParamList);
 
     /*
      * A fault response MUST make use of the SOAP Fault element using the following conventions:
@@ -3187,7 +3186,6 @@ CcspCwmppoMpaSetParameterAttributes
 
     // build a full params list including aliasing
     // TODO: this has to be reworked to multiple objects support
-    AnscInitializeQueue(&ParamList);
     for ( i = 0; i < ulArraySize; i++ )
     {
         pSListEntry = (PCCSP_TR069PA_PARAM_ATTR_SLIST_ENTRY) CcspTr069PaAllocateMemory(sizeof(CCSP_TR069PA_PARAM_ATTR_SLIST_ENTRY));
@@ -3615,7 +3613,8 @@ CcspCwmppoMpaGetParameterAttributes
 
     AnscQueueInitializeHeader(&FcNsListQueue);
     AnscQueueInitializeHeader(&FcGpaResultListQueue);
-
+    AnscInitializeQueue(&ParamList);
+    AnscInitializeSList(&StringAllocList);
 
     /*
      * A fault response MUST make use of the SOAP Fault element using the following conventions:
@@ -3642,9 +3641,6 @@ CcspCwmppoMpaGetParameterAttributes
         bParamNameArrayEmpty = TRUE;
         SlapAllocStringArray2(1, pParamNameArray);
     }
-
-    AnscInitializeQueue(&ParamList);
-    AnscInitializeSList(&StringAllocList);
 
     /* build a full params list including aliasing */
     returnStatus = CcspTr069PaMapArrayToInternalAliases

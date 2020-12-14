@@ -2016,6 +2016,9 @@
 	    <Name>Device.IP.Diagnostics.IPPing.DSCP</Name>
 	</Param>
 	<Param> 
+	    <Name>Device.IP.Diagnostics.IPPing.PingDNSQueryIPType</Name>
+	</Param>
+	<Param> 
 	    <Name>Device.IP.Diagnostics.IPPing.SuccessCount</Name>
 	</Param>
 	<Param> 

@@ -78,6 +78,65 @@
 #include "ccsp_cwmp_tcpcrho_global.h"
 #include "sysevent/sysevent.h"
 
+#ifdef _ANSC_IPV6_COMPATIBLE_
+#define HTTP_STR "http://"
+#define HTTPS_STR "https://"
+#define TR69_CRURL_CWMP_VALUE "Device.ManagementServer.ConnectionRequestURL"
+#define ROUTER_MODE "last_erouter_mode"
+
+static int getConnectionRequestIpType(char *pStr)
+{
+  char *str1end = NULL;
+  int af_ipv6 = 0;
+  if(pStr && AnscSizeOfString(pStr) > 0 )
+  {
+    char *str1 = strstr(pStr, HTTPS_STR);
+    if(str1)
+    {
+      str1 += strlen(HTTPS_STR);
+    }
+    else
+    {
+      str1 = strstr(pStr, HTTP_STR);
+      if(str1)
+      {
+        str1 += strlen(HTTP_STR);
+      }
+    }
+    if (str1 == NULL)
+    {
+      CcspTr069PaTraceError(("%s:%d Could not parse URL, str1 == NULL\n",__FUNCTION__,__LINE__));
+      return AF_UNSPEC;
+    }
+
+    if (str1[0] == '[')
+    {
+      str1++;
+      str1end = strchr(str1, ']');
+      af_ipv6 = 1;
+    }
+    else
+    {
+      str1end = strchr(str1, ':');
+    }
+    if (str1end == NULL)
+    {
+      CcspTr069PaTraceError(("%s Could not parse URL \n",__FUNCTION__));
+      return AF_UNSPEC;
+    }
+    if(af_ipv6)
+    {
+      return AF_INET6;
+    }
+    return AF_INET;
+   }
+   else
+   {
+     CcspTr069PaTraceError(("%s:%d ManagementServerConnectionRequestURL not set \n",__FUNCTION__,__LINE__));
+     return AF_UNSPEC;
+   }
+}
+#endif
 /**********************************************************************
 
     caller:     owner of this object
@@ -279,7 +338,14 @@ CcspCwmpTcpcrhoCreateTcpServers
     PCCSP_CWMP_TCPCR_HANDLER_PROPERTY    pProperty     = (PCCSP_CWMP_TCPCR_HANDLER_PROPERTY  )&pMyObject->Property;
     PANSC_DAEMON_SERVER_TCP_OBJECT  pTcpServer    = (PANSC_DAEMON_SERVER_TCP_OBJECT)pMyObject->hTcpServer;
     char  buf[64]      = {0};
-
+#ifdef _ANSC_IPV6_COMPATIBLE_
+    PCCSP_CWMP_CPE_CONTROLLER_OBJECT     pCcspCwmpCpeController  = (PCCSP_CWMP_CPE_CONTROLLER_OBJECT)pMyObject->hCcspCwmpCpeController;
+    PUCHAR                               pUrlPathOrg             = NULL;
+    PUCHAR                               pUrlPath                = NULL;
+    char                                 sysbuf[8]               = { 0 };
+    ANSC_STATUS                          status;
+    int                                  inet_family             = 0;
+#endif
     if ( pProperty->HostPort == 0 && pTcpServer )
     {
         CcspTr069PaTraceDebug(("Port is 0 on current TcpServer: Server will be removed!!!\n"));
@@ -334,15 +400,78 @@ CcspCwmpTcpcrhoCreateTcpServers
             }
             else
             {
-                // Get ipv4 address from sysevent
-                if( 0 == sysevent_get(se_fd, se_token, "ipv4_wan_ipaddr", buf, sizeof(buf)) && '\0' != buf[0] )
+                // Get relevant address from sysevent
+                status =
+                    pCcspCwmpCpeController->GetParamStringValue
+                    (
+                       (ANSC_HANDLE)pCcspCwmpCpeController,
+                       TR69_CRURL_CWMP_VALUE,
+                       (char**)&pUrlPathOrg
+                    );
+                if (( status == ANSC_STATUS_SUCCESS ) && (pUrlPathOrg))
                 {
-                    AnscCopyString(pProperty->HostAddr, buf);
+                        pUrlPath = pUrlPathOrg;
+                        inet_family = getConnectionRequestIpType(pUrlPath);
+                        if ( pUrlPathOrg )
+                        {
+                              CcspTr069PaFreeMemory(pUrlPathOrg);
+                              pUrlPathOrg = NULL;
+                        }
+                }
+                else
+                {
+                        /* somehow CR URL is not ready yet */
+                        CcspTr069PaTraceError(("%s, ConnectionRequest URL not set. Using Router Mode to decide TCP Server Daemon Family\n",__FUNCTION__));
+                        /*if CR URL is empty, get the router mode and base the inet_family based on that */
+                        syscfg_get( NULL, ROUTER_MODE, sysbuf, sizeof(sysbuf));
+                        CcspTr069PaTraceInfo(("%s, sysbuf is %s\n",__FUNCTION__, sysbuf));
+                        if (strcmp(sysbuf,"1") == 0)
+                        {
+                             CcspTr069PaTraceInfo(("%s, Router Mode\n",__FUNCTION__));
+                             inet_family = AF_INET;
+                        }
+                        else if ((strcmp(sysbuf,"2")) == 0 || (strcmp(sysbuf,"3")) == 0)
+                        {
+                             CcspTr069PaTraceInfo(("%s, DualStack or DSLite Mode\n",__FUNCTION__));
+                             inet_family = AF_INET6;
+                        }
+                        else
+                        {
+                             CcspTr069PaTraceInfo(("%s, Something has gone wrong\n",__FUNCTION__));
+                             inet_family = AF_UNSPEC;
+                        }
+                }
+
+                if(inet_family == AF_INET)
+                {
+                     if( 0 == sysevent_get(se_fd, se_token, "ipv4_wan_ipaddr", buf, sizeof(buf)) && '\0' != buf[0] )
+                     {
+                          AnscCopyString(pProperty->HostAddr, buf);
+                          CcspTr069PaTraceInfo(("%s, AF_INET HostAddr value is %s\n",__FUNCTION__, buf));
+                     }
+                     else
+                     {
+                          // If sysevent fails, let TR69 bind on 0.0.0.0
+                          CcspTr069PaTraceError(("%s, sysevent failed, bind on default\n",__FUNCTION__));
+                     }
+                }
+                else if(inet_family == AF_INET6)
+                {
+                     if( 0 == sysevent_get(se_fd, se_token, "tr_erouter0_dhcpv6_client_v6addr", buf, sizeof(buf)) && '\0' != buf[0] )
+                     {
+                          AnscCopyString(pProperty->HostAddr, buf);
+                          CcspTr069PaTraceInfo(("%s, AF_INET6 HostAddr value is %s\n",__FUNCTION__, buf));
+                     }
+                     else
+                     {
+                          // If sysevent fails, let TR69 bind on 0.0.0.0
+                          CcspTr069PaTraceError(("%s, sysevent failed, bind on default\n",__FUNCTION__));
+                     }
                 }
                 else
                 {
                     // If sysevent fails, let TR69 bind on 0.0.0.0
-                    CcspTr069PaTraceError(("%s, sysevent_get failed to get value of ipv4_wan_ipaddr!!! Mode might be IPv6, DSLite or DualStack\n",__FUNCTION__));
+                    CcspTr069PaTraceError(("%s, ConnectionRequest URL not set\n",__FUNCTION__));
                 }
             }
         }

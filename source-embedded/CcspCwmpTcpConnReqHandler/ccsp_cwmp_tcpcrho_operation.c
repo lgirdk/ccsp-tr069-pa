@@ -80,34 +80,6 @@
 
 extern int s_sysevent_connect (token_t *out_se_token);
 
-/*
- *  RDKB-12305  Adding method to check whether comcast device or not
- *  Procedure     : bIsComcastImage
- *  Purpose       : return True for Comcast build.
- *  Parameters    :
- *  Return Values :
- *  1             : 1 for comcast images
- *  2             : 0 for other images
- */
-#define DEVICE_PROPERTIES    "/etc/device.properties" 
-static int bIsComcastImage( void)
-{
-    char PartnerId[255] = {'\0'};
-    int isComcastImg = 1;
-    errno_t rc  = -1;
-    int     ind = -1;
-    
-    getPartnerId ( PartnerId ) ;
-    rc = strcmp_s("comcast", strlen("comcast"), PartnerId, &ind);
-    ERR_CHK(rc);
-    if((rc == EOK) && (ind != 0))
-    {
-        isComcastImg = 0;
-    }
-
-   return isComcastImg;
-}
-
 /**********************************************************************
 
     caller:     owner of this object
@@ -317,38 +289,37 @@ CcspCwmpTcpcrhoCreateTcpServers
     else if ( !pTcpServer && pProperty->HostPort != 0 )
     {
 #ifndef _ANSC_IPV6_COMPATIBLE_
-        if ( bIsComcastImage() ) {
 
-           // If HostAddress value is zero, then bind the outbound interface's ip address
-           if( pProperty->HostAddress.Value == 0)
-           {
-              CcspTr069PaTraceInfo(("%s, HostAddress value is 0\n",__FUNCTION__));
-              token_t  se_token;
-              int      se_fd = s_sysevent_connect(&se_token);
-              if (0 > se_fd) 
-              {
+        // If HostAddress value is zero, then bind the outbound interface's ip address
+        if (pProperty->HostAddress.Value == 0)
+        {
+            CcspTr069PaTraceInfo(("%s, HostAddress value is 0\n",__FUNCTION__));
+            token_t  se_token;
+            int      se_fd = s_sysevent_connect(&se_token);
+            if (0 > se_fd)
+            {
                  CcspTr069PaTraceError(("%s, sysevent_connect failed!!!\n",__FUNCTION__));
                  //return ERR_SYSEVENT_CONN;
-              }
-              else
-              {
-                 // Get ipv4 address from sysevent
-                 if( 0 == sysevent_get(se_fd, se_token, "ipv4_wan_ipaddr", buf, sizeof(buf)) && '\0' != buf[0] )
-                 {
+            }
+            else
+            {
+                // Get ipv4 address from sysevent
+                if( 0 == sysevent_get(se_fd, se_token, "ipv4_wan_ipaddr", buf, sizeof(buf)) && '\0' != buf[0] )
+                {
                     CcspTr069PaTraceInfo(("%s, ipv4_wan_ipaddr got from sysevent is: %s\n",__FUNCTION__,buf));
                     pProperty->HostAddress.Value = _ansc_inet_addr(buf);
                     CcspTr069PaTraceInfo(("%s,pProperty->HostAddress.Value: %u\n",__FUNCTION__,pProperty->HostAddress.Value));
-                 }
-                 else
-                 {
-                  // If sysevent fails, let TR69 bind on 0.0.0.0
-                  CcspTr069PaTraceError(("%s, sysevent_get failed to get value of ipv4_wan_ipaddr!!!\n",__FUNCTION__));
-                 }
-              }
-           }
-       
-           CcspTr069PaTraceInfo(("%s, Call AnscCreateDaemonServerTcp\n",__FUNCTION__));
+                }
+                else
+                {
+                    // If sysevent fails, let TR69 bind on 0.0.0.0
+                    CcspTr069PaTraceError(("%s, sysevent_get failed to get value of ipv4_wan_ipaddr!!!\n",__FUNCTION__));
+                }
+            }
         }
+
+        CcspTr069PaTraceInfo(("%s, Call AnscCreateDaemonServerTcp\n",__FUNCTION__));
+
 #endif
         pTcpServer =
             (PANSC_DAEMON_SERVER_TCP_OBJECT)AnscCreateDaemonServerTcp

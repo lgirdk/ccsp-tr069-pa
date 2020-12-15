@@ -92,34 +92,6 @@ extern char *g_openSSLServerURL;
 
 #include "ssp_ccsp_cwmp_cfg.h"
 
-/*
- *  RDKB-12305  Adding method to check whether comcast device or not
- *  Procedure     : bIsComcastImage
- *  Purpose       : return True for Comcast build.
- *  Parameters    :
- *  Return Values :
- *  1             : 1 for comcast images
- *  2             : 0 for other images
- */
-#define DEVICE_PROPERTIES    "/etc/device.properties" 
-static int bIsComcastImage( void)
-{
-	char PartnerId[255] = {'\0'};
-	int isComcastImg = 1;
-        errno_t rc       = -1;
-        int     ind      = -1;
-	
-	getPartnerId ( PartnerId ) ;
-        rc = strcmp_s("comcast", strlen("comcast"), PartnerId, &ind);
-        ERR_CHK(rc);
-        if((rc == EOK) && (ind != 0))
-        {
-		isComcastImg = 0;
-	}
-
-        return isComcastImg;
-}
-
 /**********************************************************************
 
     prototype:
@@ -402,21 +374,16 @@ START:
         }
         else if ( AnscEqualString2(pRequestURL, "http", 4, FALSE) )
         {
-            if ( bIsComcastImage() ){                
 #ifdef _SUPPORT_HTTP
-               CcspTr069PaTraceInfo(("HTTP request from ACS is supported\n"));
-               bApplyTls = FALSE;
+            CcspTr069PaTraceInfo(("HTTP request from ACS is supported\n"));
+            bApplyTls = FALSE;
 #else
-               CcspTr069PaTraceInfo(("TR-069 blocked unsecured traffic from ACS\n"));
-               pHttpGetReq->CompleteStatus = ANSC_STATUS_NOT_SUPPORTED;
-               pHttpGetReq->bUnauthorized = TRUE;
-               pHttpGetReq->bIsRedirect = FALSE;
-               break;
+            CcspTr069PaTraceInfo(("TR-069 blocked unsecured traffic from ACS\n"));
+            pHttpGetReq->CompleteStatus = ANSC_STATUS_NOT_SUPPORTED;
+            pHttpGetReq->bUnauthorized = TRUE;
+            pHttpGetReq->bIsRedirect = FALSE;
+            break;
 #endif
-            }
-            else {
-               bApplyTls = FALSE; 
-            }
         }
         else
         {

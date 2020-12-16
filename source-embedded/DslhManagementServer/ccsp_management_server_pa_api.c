@@ -478,7 +478,10 @@ void ReadTr69TlvData()
                          * that the Session was established due to a change to the ACS URL.
                          * Then the event code "0 BOOTSTRAP" will be contained in the first Inform.
                         */
-			objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = CcspManagementServer_CloneString(object2->URL);
+                        if(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value == NULL)
+                        {
+                               objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = CcspManagementServer_CloneString(object2->URL);
+                        }
 			//on Fresh bootup / boot after factory reset, if the URL is empty, set default URL value
                         if (object2->URL[0] == '\0')
 			{
@@ -494,7 +497,10 @@ void ReadTr69TlvData()
 			}
 			else
 			{
-				objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = CcspManagementServer_CloneString(object2->URL);
+                                if(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value == NULL)
+                                {
+                                      objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = CcspManagementServer_CloneString(object2->URL);
+                                }
 			}
 			// Here, we need to check what is the value that we got through boot config file and update TR69 PA
 			if(object2->EnableCWMP == 1)

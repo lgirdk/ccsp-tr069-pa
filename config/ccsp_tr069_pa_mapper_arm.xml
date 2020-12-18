@@ -1640,6 +1640,11 @@
 	<Param>
             <Name>Device.WiFi.AccessPoint.{i}.MaxAssociatedDevices</Name>
         </Param>
+	<!-- Add by LGI start -->
+	<Param>
+            <Name>Device.WiFi.AccessPoint.{i}.MaxAllowedAssociations</Name>
+        </Param>
+	<!-- Add by LGI end -->
 	<Param>
             <Name>Device.WiFi.AccessPoint.{i}.X_COMCAST-COM_AssociatedDevicesHighWatermarkThreshold</Name>
         </Param>
@@ -2112,6 +2117,9 @@
         </Param>
         <Param>
             <Name>Device.WiFi.X_LGI-COM_WiFiLog.WiFiChannelChangeLog.{i}.Reason</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_Radius.TransportInterface</Name>
         </Param>
         <Param>
             <Name>Device.WiFi.X_LGI-COM_WifiSupportedRates.WiFiBitmapControlFeature</Name>

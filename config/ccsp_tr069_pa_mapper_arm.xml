@@ -1595,6 +1595,14 @@
        <Param>
             <Name>Device.WiFi.SSID.{i}.Stats.AggregatedPacketCount</Name>
         </Param>
+	<!-- Add by LGI start -->
+        <Param>
+            <Name>Device.WiFi.SSID.{i}.X_LGI-COM_WifiSupportedRates.WiFiDisableBasicRates</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.SSID.{i}.X_LGI-COM_WifiSupportedRates.WiFiDisableSupportedRates</Name>
+        </Param>
+	<!-- Add by LGI end -->
         <Param>
             <Name>Device.WiFi.AccessPoint.{i}.Enable</Name>
         </Param>
@@ -2106,6 +2114,9 @@
         </Param>
         <Param>
             <Name>Device.WiFi.X_LGI-COM_WiFiLog.WiFiChannelChangeLog.{i}.Reason</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_WifiSupportedRates.WiFiBitmapControlFeature</Name>
         </Param>
         <!-- Add by LGI end -->
         <Param>

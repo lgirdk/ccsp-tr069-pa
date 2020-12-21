@@ -1616,6 +1616,7 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                     #define X_LGI_COM_SoftBlock "Device.WiFi.X_LGI-COM_SoftBlock."
                     #define X_LGI_COM_ATM_Radio_1 "Device.WiFi.X_LGI-COM_ATM.Radio.1."
                     #define X_LGI_COM_ATM_Radio_2 "Device.WiFi.X_LGI-COM_ATM.Radio.2."
+                    #define X_LGI_COM_WifiSupportedRates "Device.WiFi.X_LGI-COM_WifiSupportedRates."
 
                     if((!strncmp(ParamName[x],"Device.WiFi.SSID.",17)))
                     {
@@ -1652,7 +1653,8 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                         }
                     }
                     else if((!strncmp(ParamName[x],X_LGI_COM_SoftBlock,sizeof(X_LGI_COM_SoftBlock)-1))
-                            ||(!strncmp(ParamName[x], X_LGI_COM_BandSteering_SSID, sizeof(X_LGI_COM_BandSteering_SSID)-1)))
+                        ||(!strncmp(ParamName[x], X_LGI_COM_BandSteering_SSID, sizeof(X_LGI_COM_BandSteering_SSID)-1))
+                        ||(!strncmp(ParamName[x], X_LGI_COM_WifiSupportedRates, sizeof(X_LGI_COM_WifiSupportedRates)-1)))
                     {
                         bRestartRadio1 = TRUE;
                         bRestartRadio2 = TRUE;

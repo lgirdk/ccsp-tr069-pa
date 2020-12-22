@@ -5155,6 +5155,9 @@
 	<Param>
 		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.EnableRemoteID</Name>
 	</Param>
+	<Param>
+		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.X_LGI-COM_EnableVendorClassID</Name>
+	</Param>
 		<!-- Phase3 hotspot tunnel interface entries -->
 	<Param>
 		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.InterfaceNumberOfEntries</Name>

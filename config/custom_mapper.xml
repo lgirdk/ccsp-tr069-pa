@@ -522,6 +522,9 @@
     <Param invisible="true">
       <Name>Device.X_CISCO_COM_DeviceControl.DeviceMode</Name>
     </Param>
+    <Param invisible="true">
+      <Name>Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_RadiusSettings.ReAuthInterval</Name>
+    </Param>
     <Param>
       <Name>Device.X_RDKCENTRAL-COM_GRE.InterfaceNumberOfEntries</Name>
     </Param>
@@ -1031,6 +1034,9 @@
     </Param>
     <Param>
       <Name>Device.X_LGI-COM_DeviceControl.DeviceMode</Name>
+    </Param>
+    <Param>
+      <Name>Device.WiFi.AccessPoint.{i}.Security.X_LGI-COM_Radius.ReAuthInterval</Name>
     </Param>
 </ParamList>
 <AliasList>
@@ -1717,6 +1723,10 @@
     <Alias>
       <External>Device.X_LGI-COM_DeviceControl.DeviceMode</External>
       <Internal>Device.X_CISCO_COM_DeviceControl.DeviceMode</Internal>
+    </Alias>
+    <Alias>
+      <External>Device.WiFi.AccessPoint.{i}.Security.X_LGI-COM_Radius.ReAuthInterval</External>
+      <Internal>Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_RadiusSettings.ReAuthInterval</Internal>
     </Alias>
 </AliasList>
 </Tr069Mapper>

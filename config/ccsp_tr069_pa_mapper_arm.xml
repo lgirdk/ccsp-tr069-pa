@@ -1756,6 +1756,9 @@
             <Name>Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_RadiusSettings.PMKCacheInterval</Name>
         </Param>
 	<Param>
+            <Name>Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_RadiusSettings.ReAuthInterval</Name>
+	</Param>
+	<Param>
             <Name>Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_RadiusSettings.MaxAuthenticationAttempts</Name>
         </Param>
 	<Param>

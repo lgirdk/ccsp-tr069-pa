@@ -262,6 +262,8 @@ msParameterInfo managementServerParameters[] =
     { "X_LGI-COM_ConnectionRequestPort", NULL, ccsp_unsignedInt, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "X_CISCO_COM_ConnectionRequestURLPath", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "X_LGI-COM_ConnectionRequestIf", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
+    { "ScheduleReboot", NULL, ccsp_dateTime, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
+    { "DelayReboot", NULL, ccsp_int, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "X_LGI_COM_ValidateManagementServerCertificate", NULL, ccsp_boolean, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
 };
 
@@ -498,6 +500,13 @@ CcspManagementServer_FillInObjectInfo()
 
         objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ConnectionRequestIfID].value
             = AnscCloneString(LGI_CWMP_CONNREQ_IFACE_STR);
+
+        objectInfo[ManagementServerID].parameters[ManagementServerScheduleRebootID].value
+            = AnscCloneString("");
+
+        /* Whenever the CPE reboots, this value MUST be reset by the CPE to -1. */
+        objectInfo[ManagementServerID].parameters[ManagementServerDelayRebootID].value
+            = AnscCloneString("-1");
 
         objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ValidateManagementServerCertificateID].value
             = AnscCloneString("1");
@@ -1765,6 +1774,12 @@ void CcspManagementServer_GetSingleParameterValue(
         case ManagementServerX_LGI_COM_ConnectionRequestIfID:
             val->parameterValue = CcspManagementServer_GetConnectionRequestIf(NULL);
             break;
+        case ManagementServerScheduleRebootID:
+            val->parameterValue = CcspManagementServer_GetScheduleRebootStr(NULL);
+            break;
+        case ManagementServerDelayRebootID:
+            val->parameterValue = CcspManagementServer_GetDelayRebootStr(NULL);
+            break;
         case ManagementServerX_LGI_COM_ValidateManagementServerCertificateID:
             val->parameterValue = CcspManagementServer_GetX_LGI_COM_ValidateManagementServerCertificateStr(NULL);
             break;
@@ -2527,6 +2542,30 @@ int CcspManagementServer_ValidateParameterValues(
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, -1, FALSE, 0) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
                     else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                     break;
+
+                case ManagementServerScheduleRebootID:
+                    if(CcspManagementServer_ValidateStrLen(val[i].parameterValue, DATE_TIME_STR_LEN) != 0 && returnStatus == 0)
+                    {
+                        returnStatus = TR69_INVALID_PARAMETER_VALUE;
+                    }
+                    else
+                    {
+                        parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
+                        returnStatus = CcspManagementServer_SetScheduleRebootStr(val[i].parameterValue);
+                    }
+                    break;
+                case ManagementServerDelayRebootID:
+                    if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, -1, FALSE, 0) != 0 && returnStatus == 0)
+                    {
+                        returnStatus = TR69_INVALID_PARAMETER_VALUE;
+                    }
+                    else
+                    {
+                        parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
+                        returnStatus = CcspManagementServer_SetDelayRebootStr(val[i].parameterValue);
+                    }
+                    break;
+
                 default: break;
                 }
             }
@@ -3050,6 +3089,15 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
         objectInfo[objectID].parameters[parameterID].value = parameterSetting.msParameterValSettings[i].parameterValue;
         parameterSetting.msParameterValSettings[i].parameterValue = backup;
         parameterSetting.msParameterValSettings[i].backupStatus = BackupOldValue;
+
+        /*
+         * Whenever the CPE reboots, this value MUST be reset by the CPE to -1.
+         * So we do not store DelayReboot into PSM.
+         */
+        if (objectID == ManagementServerID && parameterID == ManagementServerDelayRebootID)
+        {
+            continue;
+        }
 
 	/*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
 		// Needs to be encrypt on NVMEM files

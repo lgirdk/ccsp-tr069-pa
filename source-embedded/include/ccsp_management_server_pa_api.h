@@ -84,6 +84,8 @@ no set parameter needed ***********************/
 
 #define CCSP_MGMT_CRPWD_FILE		"/nvram/.keys/MgmtCRPwdID"
 
+#define DATE_TIME_STR_LEN 32
+
 typedef
 CCSP_VOID
 (*PFN_CCSPMS_VALUECHANGE)
@@ -366,6 +368,36 @@ CcspManagementServer_GetConnectionRequestIf
 (
     CCSP_STRING                 ComponentName
 );
+
+int
+CcspManagementServer_SetScheduleRebootStr
+    (
+        CCSP_STRING                scheduleRebootStr
+    );
+
+CCSP_STRING
+CcspManagementServer_GetScheduleRebootStr
+    (
+        CCSP_STRING                 ComponentName
+    );
+
+int
+CcspManagementServer_SetDelayRebootStr
+    (
+        CCSP_STRING                delayRebootStr
+    );
+
+CCSP_STRING
+CcspManagementServer_GetDelayRebootStr
+    (
+        CCSP_STRING                 ComponentName
+    );
+
+CCSP_BOOL
+CcspManagementServer_GetHTTPConnectionRequestEnable
+    (
+        CCSP_STRING                 ComponentName
+    );
 
 CCSP_BOOL
 CcspManagementServer_GetX_LGI_COM_ValidateManagementServerCertificate

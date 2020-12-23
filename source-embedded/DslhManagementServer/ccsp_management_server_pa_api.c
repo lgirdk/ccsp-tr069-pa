@@ -104,6 +104,18 @@
 #define DHCP_V6_ACS_URL_FILE "/var/tmp/acs-url-from-dhcp-option-v6.txt"
 #define TR69_ENABLE_CWMP_VALUE "eRT.com.cisco.spvtg.ccsp.tr069pa.Device.ManagementServer.EnableCWMP.Value"
 
+#define SLEEP_PERIOD 500000
+#define DATE_TIME_PARAM_NUMBER 6
+enum rebootType_e
+{
+    NONE = 0,
+    SCHEDULE_REBOOT,
+    DELAY_REBOOT
+};
+static enum rebootType_e rebootType = NONE;
+static ULONG delayRebootTime = 0;
+static pthread_t delayRebootThreadPID = 0;
+
 #if defined (INTEL_PUMA7)
 //Intel Proposed RDKB Generic Bug Fix from XB6 SDK
 #define NO_OF_RETRY 90                 /* No of times the management server will wait before giving up*/
@@ -1578,6 +1590,143 @@ CcspManagementServer_GetConnectionRequestIf
     )
 {
     return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ConnectionRequestIfID].value);
+}
+
+static void waitUntilSessionIsNotActive()
+{
+    ULONG ulActiveSessions = 0;
+
+    do
+    {
+        usleep(SLEEP_PERIOD);
+        ulActiveSessions =
+            ((PCCSP_CWMP_PROCESSOR_OBJECT)CcspManagementServer_cbContext)->GetActiveWmpSessionCount((ANSC_HANDLE)CcspManagementServer_cbContext, FALSE);
+    } while (ulActiveSessions != 0);
+}
+
+static void* delayRebootThread()
+{
+    ULONG ticks = 0;
+
+    pthread_detach(pthread_self());
+
+    while (TRUE)
+    {
+        if (rebootType != NONE)
+        {
+            ticks = delayRebootTime*2;  // 1 second = 2 ticks
+            /*
+             * For Device.ManagementServer.DelayReboot, the CPE have to wait until
+             * the CWMP session in which this parameter value is set has ended
+             * before starting a countdown for reboot.
+             */
+            if (rebootType == DELAY_REBOOT)
+            {
+                waitUntilSessionIsNotActive();
+            }
+            rebootType = NONE;
+        }
+        else
+        {
+            usleep(SLEEP_PERIOD);  // 1 second = 2 ticks
+            ticks--;
+        }
+
+        if (ticks == 0)
+        {
+            /*
+             * If a CWMP session is in progress at the specified time,
+             * the CPE MUST wait until the session has ended before performing the reboot.
+             */
+            waitUntilSessionIsNotActive();
+            system("reboot");
+        }
+    }
+}
+
+int
+CcspManagementServer_SetScheduleRebootStr
+    (
+        CCSP_STRING                scheduleRebootStr
+    )
+{
+    time_t setTime = 0;
+    time_t currentTime = 0;
+    time_t diffTime = 0;
+    struct tm tm = {0};
+
+    if (scheduleRebootStr == NULL)
+    {
+        return TR69_INVALID_PARAMETER_VALUE;
+    }
+
+    if (sscanf(scheduleRebootStr, "%d-%d-%dT%02d:%02d:%02dZ",
+                &tm.tm_year, &tm.tm_mon, &tm.tm_mday,
+                &tm.tm_hour, &tm.tm_min, &tm.tm_sec
+                )!= DATE_TIME_PARAM_NUMBER)
+    {
+        return TR69_INVALID_PARAMETER_VALUE;
+    }
+
+    /* The time t is the number of seconds since 00:00 (midnight) 1 January 1900 GMT. */
+    tm.tm_year -= 1900;
+    tm.tm_mon-- ;
+    setTime = mktime(&tm);
+
+    currentTime = time(NULL);
+    diffTime = setTime-currentTime;
+
+    if (diffTime >= 0)
+    {
+        delayRebootTime = diffTime;
+        rebootType = SCHEDULE_REBOOT;
+        if (delayRebootThreadPID == 0)
+        {
+            pthread_create(&delayRebootThreadPID, NULL, delayRebootThread, NULL);
+        }
+    }
+
+    return 0;
+}
+
+CCSP_STRING
+CcspManagementServer_GetScheduleRebootStr
+    (
+        CCSP_STRING                 ComponentName
+    )
+{
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerScheduleRebootID].value);
+}
+
+int
+CcspManagementServer_SetDelayRebootStr
+    (
+        CCSP_STRING                delayRebootStr
+    )
+{
+    int delayReboot = 0;
+
+    delayReboot = _ansc_atoi(delayRebootStr);
+    if (delayReboot >= 0)
+    {
+        delayRebootTime = delayReboot;
+        rebootType = DELAY_REBOOT;
+        if (delayRebootThreadPID == 0)
+        {
+            pthread_create(&delayRebootThreadPID, NULL, delayRebootThread, NULL);
+        }
+    }
+
+    return 0;
+}
+
+CCSP_STRING
+CcspManagementServer_GetDelayRebootStr
+    (
+        CCSP_STRING                 ComponentName
+    )
+{
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerDelayRebootID].value);
 }
 
 #ifdef _ANSC_USE_OPENSSL_

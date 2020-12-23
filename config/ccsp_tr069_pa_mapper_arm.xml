@@ -198,6 +198,12 @@
             <Name>Device.ManagementServer.X_LGI-COM_ConnectionRequestIf</Name>
         </Param>
         <Param>
+            <Name>Device.ManagementServer.ScheduleReboot</Name>
+        </Param>
+        <Param>
+            <Name>Device.ManagementServer.DelayReboot</Name>
+        </Param>
+        <Param>
             <Name>Device.ManagementServer.X_LGI-COM_ConnectionRequestPort</Name>
         </Param>
         <Param>

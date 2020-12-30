@@ -2135,6 +2135,9 @@
         <Param>
             <Name>Device.WiFi.X_LGI-COM_WifiSupportedRates.WiFiBitmapControlFeature</Name>
         </Param>
+        <Param>
+            <Name>Device.WiFi.X_LGI-COM_ReservedSSIDNames</Name>
+        </Param>
         <!-- Add by LGI end -->
         <Param>
             <Name>Device.PPP.InterfaceNumberOfEntries</Name>

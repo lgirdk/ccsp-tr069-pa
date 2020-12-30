@@ -396,7 +396,9 @@ CcspCwmppoGetAcsInfo
     CcspTr069PaTraceDebug(("CcspCwmppoGetAcsInfo-bStopCWMP=%s\n", bStopCWMP?"Y":"N"));
     CcspTr069PaTraceDebug(("CcspCwmppoGetAcsInfo-bPiChanged=%s\n", bPiChanged?"Y":"N"));
 
-    if ( bStartCWMP )
+    CcspTr069PaTraceDebug(("%s %d bStartCWMP:%d pCcspCwmpCpeController->bActive:%d!\n",__FUNCTION__,__LINE__,bStartCWMP,pCcspCwmpCpeController->bActive));
+
+    if ( bStartCWMP && pCcspCwmpCpeController->bActive)
     {
         pCcspCwmpCpeController->StartCWMP((ANSC_HANDLE)pCcspCwmpCpeController, !pCcspCwmpCpeController->bBootInformSent, pCcspCwmpCpeController->bRestartCWMP);
     }

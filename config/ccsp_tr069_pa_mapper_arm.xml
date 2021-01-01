@@ -1645,9 +1645,6 @@
 	<Param>
             <Name>Device.WiFi.AccessPoint.{i}.X_CISCO_COM_BssMaxNumSta</Name>
         </Param>
-	<Param>
-            <Name>Device.WiFi.AccessPoint.{i}.MaxAssociatedDevices</Name>
-        </Param>
 	<!-- Add by LGI start -->
 	<Param>
             <Name>Device.WiFi.AccessPoint.{i}.MaxAllowedAssociations</Name>

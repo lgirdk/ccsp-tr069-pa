@@ -853,6 +853,12 @@
             <Name>Device.Ethernet.Interface.{i}.DuplexMode</Name>
         </Param>
         <Param>
+            <Name>Device.Ethernet.Interface.{i}.EEECapability</Name>
+        </Param>
+        <Param>
+            <Name>Device.Ethernet.Interface.{i}.EEEEnable</Name>
+        </Param>
+        <Param>
             <Name>Device.Ethernet.Interface.{i}.Stats.BytesSent</Name>
         </Param>
         <Param>

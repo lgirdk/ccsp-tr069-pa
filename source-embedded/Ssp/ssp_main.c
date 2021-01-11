@@ -96,7 +96,8 @@ char* g_Tr069PaAcsDefAddr = NULL;
 
 #define  CCSP_TR069PA_CFG_FILE                      "/usr/ccsp/tr069pa/ccsp_tr069_pa_cfg.xml"
 #define  CCSP_TR069PA_DEF_MAPPER_XML_FILE           "/usr/ccsp/tr069pa/ccsp_tr069_pa_mapper.xml"
-#define  CCSP_TR069PA_CUSTOM_MAPPER_XML_FILE        "/usr/ccsp/tr069pa/custom_mapper.xml"
+
+#define  ALIAS_MANAGER_MAPPER_FILE                  "/usr/ccsp/custom_mapper.xml"
 
 CCSP_CWMP_CFG_INTERFACE             ccspCwmpCfgIf;
 WEB_ACM_INTERFACE                   webAcmIf;
@@ -440,7 +441,7 @@ int main(int argc, char* argv[])
 
     if ( g_PaCustMapperFile[0] == 0 && is_customer_data_model() )
     {
-        AnscCopyString(g_PaCustMapperFile, CCSP_TR069PA_CUSTOM_MAPPER_XML_FILE);
+        AnscCopyString(g_PaCustMapperFile, ALIAS_MANAGER_MAPPER_FILE);
     }
 #ifdef FEATURE_SUPPORT_RDKLOG
 	RDK_LOGGER_INIT();

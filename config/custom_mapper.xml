@@ -105,7 +105,7 @@
     <Param invisible="true">
       <Name>Device.NAT.PortMapping.{i}.X_RDKCENTRAL_RuleSource</Name>
     </Param>
-        <Param invisible="true">
+    <Param invisible="true">
       <Name>Device.NAT.X_CISCO_COM_PortTriggers.TriggerNumberOfEntries</Name>
     </Param>
     <Param invisible="true">
@@ -1196,7 +1196,7 @@
       <External>Device.NAT.X_LGI-COM_PortTriggers.Trigger.{i}.Enable</External>
       <Internal>Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.Enable</Internal>
     </Alias>
-        <Alias>
+    <Alias>
       <External>Device.NAT.X_LGI-COM_DMZ.Enable</External>
       <Internal>Device.NAT.X_CISCO_COM_DMZ.Enable</Internal>
     </Alias>

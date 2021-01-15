@@ -1729,6 +1729,33 @@ CcspManagementServer_GetDelayRebootStr
     return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerDelayRebootID].value);
 }
 
+CCSP_BOOL
+CcspManagementServer_GetHTTPConnectionRequestEnable
+
+    (
+        CCSP_STRING                 ComponentName
+    )
+{
+    if(AnscEqualString(objectInfo[ManagementServerID].parameters[ManagementServerHTTPConnectionRequestEnableID].value, "0", FALSE) ||
+       AnscEqualString(objectInfo[ManagementServerID].parameters[ManagementServerHTTPConnectionRequestEnableID].value, "false", FALSE))
+    {
+        return FALSE;
+    }
+    else
+    {
+        return TRUE;
+    }
+}
+CCSP_STRING
+CcspManagementServer_GetHTTPConnectionRequestEnableStr
+
+    (
+        CCSP_STRING                 ComponentName
+    )
+{
+    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerHTTPConnectionRequestEnableID].value, "0");
+}
+
 #ifdef _ANSC_USE_OPENSSL_
 CCSP_VOID CcspManagementServer_UpdateOpenSSLVerifyMode(){
     CCSP_BOOL bValdMgmtCertEnabled = FALSE;

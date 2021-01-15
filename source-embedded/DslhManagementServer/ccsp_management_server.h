@@ -188,6 +188,8 @@ enum
     ManagementServerScheduleRebootID,
     ManagementServerDelayRebootID,
     ManagementServerX_LGI_COM_ValidateManagementServerCertificateID,
+    ManagementServerHTTPConnectionRequestEnableID,
+    ManagementServerHTTPCompressionSupportedID,
     ManagementServerNumOfParameters
 };
 

@@ -160,6 +160,7 @@ CcspCwmppoGetAcsInfo
     CCSP_CWMP_TCPCR_HANDLER_PROPERTY     tcpCrProperty;
     CCSP_STRING                     tcpCrHostPort           = NULL;
     USHORT                          usTcpCrHostPort         = 0;
+    BOOL                            bCrEnabled              = FALSE;
 #endif
     char*                           pPeriodicInformTime     = NULL;
     BOOL                            bPiEnabled              = pProperty->bPeriodicInformEnabled;
@@ -267,7 +268,16 @@ CcspCwmppoGetAcsInfo
             pCcspCwmpTcpcrHandler->Cancel((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
 
             pCcspCwmpTcpcrHandler->SetProperty((ANSC_HANDLE)pCcspCwmpTcpcrHandler, (ANSC_HANDLE)&tcpCrProperty);
+        }
+
+        bCrEnabled = CcspManagementServer_GetHTTPConnectionRequestEnable(NULL);
+        if ( bCrEnabled == TRUE )
+        {
             pCcspCwmpTcpcrHandler->Engage((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
+        }
+        else
+        {
+            pCcspCwmpTcpcrHandler->Cancel((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
         }
     }
 #endif

@@ -265,6 +265,8 @@ msParameterInfo managementServerParameters[] =
     { "ScheduleReboot", NULL, ccsp_dateTime, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "DelayReboot", NULL, ccsp_int, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "X_LGI_COM_ValidateManagementServerCertificate", NULL, ccsp_boolean, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
+    { "HTTPConnectionRequestEnable", NULL, ccsp_boolean, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
+    { "HTTPCompressionSupported", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
 };
 
 msParameterInfo autonomousTransferCompletePolicyParameters[] = 
@@ -530,6 +532,11 @@ CcspManagementServer_FillInObjectInfo()
             = AnscCloneString("0");
         objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_DiagCompleteID].value
             = AnscCloneString("0");
+
+        objectInfo[ManagementServerID].parameters[ManagementServerHTTPConnectionRequestEnableID].value
+            = AnscCloneString("1");
+        objectInfo[ManagementServerID].parameters[ManagementServerHTTPCompressionSupportedID].value
+            = AnscCloneString("");
 
     }
 
@@ -1700,7 +1707,18 @@ void CcspManagementServer_GetSingleParameterValue(
             val->parameterValue = CcspManagementServer_GetParameterKey(NULL);
             break;
         case ManagementServerConnectionRequestURLID:
-            val->parameterValue = CcspManagementServer_GetConnectionRequestURL(NULL);
+             /*
+              * If HTTP connection request handling is disabled (HTTPConnectionRequestEnable is set to false),
+              * ConnectionRequestURL MUST be set to an empty string.
+              */
+             if (FALSE == CcspManagementServer_GetHTTPConnectionRequestEnable(NULL))
+             {
+                 val->parameterValue = AnscCloneString("");
+             }
+             else
+             {
+                 val->parameterValue = CcspManagementServer_GetConnectionRequestURL(NULL);
+             }
             break;
         case ManagementServerConnectionRequestUsernameID:
             val->parameterValue = CcspManagementServer_GetConnectionRequestUsername(NULL);
@@ -1782,6 +1800,9 @@ void CcspManagementServer_GetSingleParameterValue(
             break;
         case ManagementServerX_LGI_COM_ValidateManagementServerCertificateID:
             val->parameterValue = CcspManagementServer_GetX_LGI_COM_ValidateManagementServerCertificateStr(NULL);
+            break;
+        case ManagementServerHTTPConnectionRequestEnableID:
+            val->parameterValue = CcspManagementServer_GetHTTPConnectionRequestEnableStr(NULL);
             break;
         default: break;
         }
@@ -2290,6 +2311,7 @@ int CcspManagementServer_ValidateParameterValues(
                 case ManagementServerSTUNEnableID:
                 case ManagementServerNATDetectedID:
                 case ManagementServerX_LGI_COM_ValidateManagementServerCertificateID:
+                case ManagementServerHTTPConnectionRequestEnableID:
                     res = CcspManagementServer_ValidateBoolean(val[i].parameterValue);
                     if(res == -1 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
                     else if(res == 0) parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString("0");

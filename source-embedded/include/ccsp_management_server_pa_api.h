@@ -401,6 +401,12 @@ CcspManagementServer_GetHTTPConnectionRequestEnable
         CCSP_STRING                 ComponentName
     );
 
+CCSP_STRING
+CcspManagementServer_GetHTTPConnectionRequestEnableStr
+    (
+        CCSP_STRING                 ComponentName
+    );
+
 CCSP_BOOL
 CcspManagementServer_GetX_LGI_COM_ValidateManagementServerCertificate
     (

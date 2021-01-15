@@ -833,8 +833,9 @@ else
                 else { // parameter value is empty
                     CcspTr069PaFreeMemory(pValue); /*RDKB-7326, CID-33499, free resource before exit*/
                     pValue = NULL;
+                    BOOL bCrEnabled = CcspManagementServer_GetHTTPConnectionRequestEnable(NULL);
                    rc = strcmp_s("Device.ManagementServer.ConnectionRequestURL",strlen("Device.ManagementServer.ConnectionRequestURL"),pCwmpParamValueArray[i].Name,&ind);
-                   if((rc == EOK) && (!ind))
+                   if((rc == EOK) && (!ind) && (bCrEnabled == TRUE))
                    {
                         returnStatus = ANSC_STATUS_FAILURE;
                         goto EXIT1;

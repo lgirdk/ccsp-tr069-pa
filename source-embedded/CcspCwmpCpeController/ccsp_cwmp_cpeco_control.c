@@ -481,6 +481,7 @@ CcspCwmpCpecoStartCWMP
     ULONG                           ulBootDelay        = 0;
 #ifdef   _CCSP_CWMP_TCP_CONNREQ_HANDLER
     PCCSP_CWMP_TCPCR_HANDLER_OBJECT      pCcspCwmpTcpcrHandler  = (PCCSP_CWMP_TCPCR_HANDLER_OBJECT   )pMyObject->hCcspCwmpTcpConnReqHandler;
+    BOOL                            bCrEnabled         = FALSE;
 #endif
     PANSC_TIMER_DESCRIPTOR_OBJECT   pStartCwmpTimerObj = (PANSC_TIMER_DESCRIPTOR_OBJECT)pMyObject->hStartCwmpTimerObj;
     PANSC_TDO_CLIENT_OBJECT         pStartCwmpTimerIf  = (PANSC_TDO_CLIENT_OBJECT      )pMyObject->hStartCwmpTimerIf;
@@ -577,7 +578,15 @@ CcspCwmpCpecoStartCWMP
 #ifdef   _CCSP_CWMP_TCP_CONNREQ_HANDLER
     if ( pCcspCwmpTcpcrHandler )
     {
-        pCcspCwmpTcpcrHandler->Engage((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
+        bCrEnabled = CcspManagementServer_GetHTTPConnectionRequestEnable(NULL);
+        if (bCrEnabled == TRUE)
+        {
+            pCcspCwmpTcpcrHandler->Engage((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
+        }
+        else
+        {
+            pCcspCwmpTcpcrHandler->Cancel((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
+        }
     }
 #endif
 

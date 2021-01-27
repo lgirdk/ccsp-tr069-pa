@@ -1926,6 +1926,17 @@ CcspCwmppoMpaGetParameterValues
         SlapAllocStringArray2(1, pParamNameArray);
     }
 
+    //If passed paramter to GPV is an internal instance of Data Model, return error.
+    for ( i = 0; i < pParamNameArray->VarCount; i++ )
+    {
+      char * pParamName = pParamNameArray->Array.arrayString[i];
+      if(CcspCwmppoMpaCheckInstance(pParamName))
+      {
+         returnStatus = ANSC_STATUS_BAD_NAME;
+         goto EXIT2;
+      }
+    }
+
     /* build a full params list including aliasing */
     returnStatus = CcspTr069PaMapArrayToInternalAliases
         (

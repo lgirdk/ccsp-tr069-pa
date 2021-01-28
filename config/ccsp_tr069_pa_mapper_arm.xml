@@ -2392,6 +2392,57 @@
 	    <Name>Device.IP.Diagnostics.TraceRoute.RouteHops.{i}.RTTimes</Name>
 	</Param>
         <Param>
+            <Name>Device.X_LGI-COM_Telemetry.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.DCMConfigForceDownload</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.DCMConfigFileURL</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.UploadRepositoryURL</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.DcmDownloadStatus.LastSuccessTimestamp</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.DcmDownloadStatus.LastAttemptTimestamp</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.DcmDownloadStatus.HTTPStatusString</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.DcmDownloadStatus.HTTPStatus</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.DcmDownloadStatus.AttemptCount</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.UploadStatus.LastSuccessTimestamp</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.UploadStatus.LastAttemptTimestamp</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.UploadStatus.HTTPStatusString</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.UploadStatus.HTTPStatus</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.UploadStatus.AttemptCount</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.DcmRetryConfig.AttemptInterval</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.DcmRetryConfig.AttemptInterval</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Telemetry.DcmRetryConfig.MaxAttempts</Name>
+        </Param>
+        <Param>
             <Name>Device.IP.Interface.{i}.Enable</Name>
         </Param>
         <Param>

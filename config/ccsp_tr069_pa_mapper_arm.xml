@@ -1787,6 +1787,12 @@
 	<Param>
             <Name>Device.WiFi.AccessPoint.{i}.Security.X_COMCAST-COM_RadiusSettings.QuietPeriodAfterFailedAuthentication</Name>
         </Param>
+	<Param>
+            <Name>Device.WiFi.AccessPoint.{i}.Security.X_LGI-COM_Radius.OperatorName</Name>
+        </Param>
+	<Param>
+            <Name>Device.WiFi.AccessPoint.{i}.Security.X_LGI-COM_Radius.LocationData</Name>
+        </Param>
         <Param>
             <Name>Device.WiFi.AccessPoint.{i}.WPS.Enable</Name>
         </Param>

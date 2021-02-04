@@ -258,6 +258,12 @@
             <Name>Device.ManagementServer.ManageableDevice.{i}.ProductClass</Name>
         </Param>
         <Param>
+            <Name>Device.ManagementServer.DownloadProgressURL</Name>
+        </Param>
+        <Param>
+            <Name>Device.ManagementServer.KickURL</Name>
+        </Param>
+        <Param>
             <Name>Device.ManagementServer.ManageableDevice.{i}.Host</Name>
         </Param>
 
@@ -7752,6 +7758,9 @@
         </Param>
         <Param>
             <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.Downstream.{i}.QosParamSet.{i}.SchedulingType</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CableModem.NetworkAccess</Name>
         </Param>
   <!--  MTA Parameters under "Device.X_LGI-COM_MTA." -->
         <Param>

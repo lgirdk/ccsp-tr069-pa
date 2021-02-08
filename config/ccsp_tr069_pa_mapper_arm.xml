@@ -766,6 +766,9 @@
             <Name>Device.Time.LocalTimeZone</Name>
         </Param>
         <Param>
+            <Name>Device.UserInterface.X_CISCO_COM_RemoteAccess.SSHEnable</Name>
+        </Param>
+        <Param>
             <Name>Device.UserInterface.X_CISCO_COM_RemoteAccess.Enable</Name>
         </Param>
         <Param>

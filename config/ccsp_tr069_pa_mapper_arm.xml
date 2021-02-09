@@ -7713,6 +7713,9 @@
     <Param>
            <Name>Device.X_LGI-COM_General_Internal.CPE.DataModelVersion</Name>
         </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_General_Internal.UserBridgeModeAllowed</Name>
+        </Param>
 
     </ParamList>
 	<RpcMapper>

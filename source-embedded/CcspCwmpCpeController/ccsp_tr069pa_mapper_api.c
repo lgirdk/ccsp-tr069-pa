@@ -921,12 +921,11 @@ CcspTr069PA_LoadParamInfo
         /* First remove namespace from the visible tree if found there */
         if (CcspTr069PiTree && ns[0])
         {
-            bSucc =
-                CcspTr069PA_PiTreeRemoveNamespace
-                    (
-                        CcspTr069PiTree,
-                        ns
-                    );
+            CcspTr069PA_PiTreeRemoveNamespace
+                (
+                    CcspTr069PiTree,
+                    ns
+                );
         }
  
 //        bSucc = 
@@ -961,12 +960,11 @@ CcspTr069PA_LoadParamInfo
         /* First remove namespace from the invisible tree if found there */
         if (ns[0])
         {
-            bSucc =
-                CcspTr069PA_PiTreeRemoveNamespace
-                    (
-                        CcspTr069InvPiTree,
-                        ns
-                    );
+            CcspTr069PA_PiTreeRemoveNamespace
+                (
+                    CcspTr069InvPiTree,
+                    ns
+                );
         }
         // ARRIS ADD END - PD46545
 

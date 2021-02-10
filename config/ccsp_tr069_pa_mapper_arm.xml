@@ -7560,6 +7560,89 @@
             <Name>Device.DSLite.InterfaceSetting.{i}.X_RDKCENTRAL-COM_IPv6FragEnable</Name>
         </Param>
 
+        <!-- Device.DynamicDNS. -->
+        <Param>
+            <Name>Device.DynamicDNS.X_RDK-COM_Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.SupportedServices</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.ServerNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.ClientNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Server.{i}.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Server.{i}.Name</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Server.{i}.Alias</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Server.{i}.ServiceName</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Server.{i}.ServerAddress</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Server.{i}.SupportedProtocols</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Server.{i}.Protocol</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Server.{i}.CheckInterval</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Server.{i}.RetryInterval</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Server.{i}.MaxRetries</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Client.{i}.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Client.{i}.Status</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Client.{i}.Alias</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Client.{i}.LastError</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Client.{i}.Server</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Client.{i}.Interface</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Client.{i}.Username</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Client.{i}.Password</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Client.{i}.HostnameNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Client.{i}.Hostname.{i}.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Client.{i}.Hostname.{i}.Status</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Client.{i}.Hostname.{i}.Name</Name>
+        </Param>
+        <Param>
+            <Name>Device.DynamicDNS.Client.{i}.Hostname.{i}.LastUpdate</Name>
+        </Param>
+
         <!--  Gateway Parameters under "Device.X_LGI-COM_Gateway." -->
         <Param>
             <Name>Device.X_LGI-COM_Gateway.IPv6LANMode</Name>

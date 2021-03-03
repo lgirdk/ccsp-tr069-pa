@@ -85,6 +85,8 @@
 
 
 #include "ccsp_cwmp_sesso_global.h"
+#include "ccsp_cwmp_tcpcrho_interface.h"
+
 #include "slap_definitions.h"
 #include "Tr69_Tlv.h"
 #define TR69_TLVDATA_FILE "/nvram/TLVData.bin"
@@ -1167,6 +1169,14 @@ bFirstInform = 0;
                 }
 
                 pMyObject->SessionState = CCSP_CWMPSO_SESSION_STATE_informed;
+                /*OFW-87 Engage TCP server after informResponse for new ACS*/
+                if(pCcspCwmpCpeController->bIsACSURLChanged && pCcspCwmpCpeController->bInformAfterACSChange)
+                {
+                  PCCSP_CWMP_TCPCR_HANDLER_OBJECT pCcspCwmpTcpcrHandler   = (PCCSP_CWMP_TCPCR_HANDLER_OBJECT )pCcspCwmpCpeController->hCcspCwmpTcpConnReqHandler;
+                  pCcspCwmpTcpcrHandler->Engage((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
+                  pCcspCwmpCpeController->bIsACSURLChanged = FALSE;
+                  pCcspCwmpCpeController->bInformAfterACSChange = FALSE;
+                }
 
                 /* 
                  * TODO: we need to acquire session lock from CR if necessary
@@ -1337,6 +1347,12 @@ bFirstInform = 0;
         break;
     }
     while ( ulRetryTimes < CCSP_CWMPSO_MAX_CALL_RETRY_TIMES );
+  
+    if(pCcspCwmpCpeController->bIsACSURLChanged && pCcspCwmpCpeController->bInformAfterACSChange)
+    {
+       pCcspCwmpCpeController->bIsACSURLChanged = FALSE;
+       pCcspCwmpCpeController->bInformAfterACSChange = FALSE;
+    }
 
     if( bHasBoot )
     {

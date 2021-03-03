@@ -7855,6 +7855,19 @@
         <Param>
             <Name>Device.X_LGI-COM_General_Internal.UserBridgeModeAllowed</Name>
         </Param>
+  <!--  General Parameters under "Device.RemoteAccess." -->
+        <Param>
+            <Name>Device.UserInterface.RemoteAccess.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.UserInterface.RemoteAccess.SupportedProtocols</Name>
+        </Param>
+        <Param>
+            <Name>Device.UserInterface.RemoteAccess.Port</Name>
+        </Param>
+        <Param>
+            <Name>Device.UserInterface.RemoteAccess.Protocol</Name>
+        </Param>
 
     </ParamList>
 	<RpcMapper>

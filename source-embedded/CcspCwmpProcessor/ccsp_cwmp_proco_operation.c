@@ -510,6 +510,13 @@ CcspCwmppoPeriodicTimerInvoke
         pPeriodicTimerObj->SetInterval ((ANSC_HANDLE)pPeriodicTimerObj, pProperty->FollowingInterval * 1000);
         pPeriodicTimerObj->Start       ((ANSC_HANDLE)pPeriodicTimerObj);
     }
+    if ( pCcspCwmpCpeController->bIsACSURLChanged )
+    {
+        /* do not contact ACS for Periodic Inform while ACS change is in progress */
+        CcspTr069PaTraceInfo(("\n %s %d do not contact ACS for Periodic Inform while ACS change is in progress  pCcspCwmpCpeController->bIsACSURLChanged:%d bInformAfterACSChange:%d\n",__FUNCTION__,__LINE__,pCcspCwmpCpeController->bIsACSURLChanged,pCcspCwmpCpeController->bInformAfterACSChange ));
+        return  ANSC_STATUS_SUCCESS;
+    }
+
 
     if ( !pCcspCwmpCpeController->bBootInformSent )
     {

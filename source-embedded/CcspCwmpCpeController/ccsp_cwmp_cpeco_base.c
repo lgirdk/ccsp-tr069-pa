@@ -617,6 +617,8 @@ CcspCwmpCpecoInitialize
     pMyObject->Initialize               = CcspCwmpCpecoInitialize;
 
     pMyObject->bActive                  = FALSE;
+    pMyObject->bIsACSURLChanged         = FALSE;
+    pMyObject->bInformAfterACSChange    = FALSE;
 
     pMyObject->bBootEventAdded          = FALSE;
     pMyObject->pRootObject              = CcspTr069PaCloneString(DM_ROOTNAME);

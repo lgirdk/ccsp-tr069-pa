@@ -2382,6 +2382,9 @@
 	<Param> 
 	    <Name>Device.IP.Diagnostics.TraceRoute.NumberOfTries</Name>
 	</Param>
+	<Param>
+	    <Name>Device.IP.Diagnostics.TraceRoute.X_LGI-COM_BasePort</Name>
+	</Param>
 	<Param> 
 	    <Name>Device.IP.Diagnostics.TraceRoute.Timeout</Name>
 	</Param>

@@ -301,6 +301,9 @@
             <Name>Device.DeviceInfo.ModelName</Name>
         </Param>
         <Param>
+            <Name>Device.DeviceInfo.ModelNumber</Name>
+        </Param>
+        <Param>
             <Name>Device.DeviceInfo.Description</Name>
         </Param>
         <Param>
@@ -2755,6 +2758,9 @@
             <Name>Device.Routing.Router.{i}.IPv4Forwarding.{i}.ForwardingMetric</Name>
         </Param>
         <Param>
+            <Name>Device.Routing.Router.{i}.IPv4Forwarding.{i}.Origin</Name>
+        </Param>
+        <Param>
             <Name>Device.Routing.Router.{i}.IPv6ForwardingNumberOfEntries</Name>
         </Param>
         <Param>
@@ -3479,6 +3485,9 @@
         </Param>
          <Param>
             <Name>Device.X_LGI-COM_CloudUI.HideCustomerDhcpLanChange</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_CloudUI.HideSmartWifiSection</Name>
         </Param>
         <Param>
             <Name>Device.DHCPv4.Server.Pool.{i}.X_LGI-COM_LanAllowedSubnetTableNumberOfEntries</Name>
@@ -7854,6 +7863,15 @@
         </Param>
         <Param>
             <Name>Device.X_LGI-COM_General_Internal.UserBridgeModeAllowed</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_General_Internal.AvailableLanguages</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_General_Internal.CurrentLanguage</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_General_Internal.DefaultAdminPassword</Name>
         </Param>
   <!--  General Parameters under "Device.RemoteAccess." -->
         <Param>

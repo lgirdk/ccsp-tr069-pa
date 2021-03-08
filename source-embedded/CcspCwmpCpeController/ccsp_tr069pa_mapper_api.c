@@ -1350,14 +1350,20 @@ CcspTr069PA_MapInstNumCwmpToDmInt
                         if((!strncmp(CcspTr069CpeInstanceMaps[i].CcspDmlName,X_LGI_COM_ATM_Radio,sizeof(X_LGI_COM_ATM_Radio)-1))
                             && (!strncmp(restDmlString, X_LGI_COM_ATM_SSID_SUBSTRING, sizeof(X_LGI_COM_ATM_SSID_SUBSTRING)-1)))
                         {
-                                sscanf(&restDmlString[6],"%d%s",&atmSsidInstNum,restDmlString_2);
-
-                                if(instNum == X_LGI_COM_ATM_Radio_1_TR069_INDEX)
-                                        atmSsidInstNum -= X_LGI_COM_ATM_Radio_1_TR069_INDEX;
-                                else if(instNum == X_LGI_COM_ATM_Radio_2_TR069_INDEX)
-                                        atmSsidInstNum -=X_LGI_COM_ATM_Radio_2_TR069_INDEX;
-
-                                sprintf(restDmlString,"%s%d%s",X_LGI_COM_ATM_SSID_SUBSTRING,atmSsidInstNum,restDmlString_2);
+                            sscanf(&restDmlString[6],"%d%s",&atmSsidInstNum,restDmlString_2);
+                            if(atmSsidInstNum)
+                            {
+                                if((instNum == X_LGI_COM_ATM_Radio_1_TR069_INDEX) && (atmSsidInstNum > X_LGI_COM_ATM_Radio_1_TR069_INDEX) && (atmSsidInstNum <= (X_LGI_COM_ATM_Radio_1_TR069_INDEX+8)))
+                                {
+                                    atmSsidInstNum -= X_LGI_COM_ATM_Radio_1_TR069_INDEX;
+                                    sprintf(restDmlString,"%s%d%s",X_LGI_COM_ATM_SSID_SUBSTRING,atmSsidInstNum,restDmlString_2);
+                                }
+                                else if((instNum == X_LGI_COM_ATM_Radio_2_TR069_INDEX) && (atmSsidInstNum > X_LGI_COM_ATM_Radio_2_TR069_INDEX) && (atmSsidInstNum <= (X_LGI_COM_ATM_Radio_2_TR069_INDEX+8)))
+                                {
+                                    atmSsidInstNum -=X_LGI_COM_ATM_Radio_2_TR069_INDEX;
+                                    sprintf(restDmlString,"%s%d%s",X_LGI_COM_ATM_SSID_SUBSTRING,atmSsidInstNum,restDmlString_2);
+                                }
+                            }
                         }
 
                         sprintf
@@ -1477,14 +1483,20 @@ CcspTr069PA_MapInstNumDmIntToCwmp
                         if((!strncmp(CcspTr069CpeInstanceMaps[i].CcspDmlName,X_LGI_COM_ATM_Radio,sizeof(X_LGI_COM_ATM_Radio)-1))
                             &&(!strncmp(restDmlString, X_LGI_COM_ATM_SSID_SUBSTRING, sizeof(X_LGI_COM_ATM_SSID_SUBSTRING)-1)))
                         {
-                                sscanf(&restDmlString[6],"%d%s",&atmSsidInstNum,restDmlString_2);
-
-                                if(instNum == X_LGI_COM_ATM_Radio_1_CCSP_INDEX)
-                                        atmSsidInstNum += X_LGI_COM_ATM_Radio_1_TR069_INDEX;
-                                else if(instNum == X_LGI_COM_ATM_Radio_2_CCSP_INDEX)
-                                        atmSsidInstNum += X_LGI_COM_ATM_Radio_2_TR069_INDEX;
-
-                                sprintf(restDmlString,"%s%d%s",X_LGI_COM_ATM_SSID_SUBSTRING,atmSsidInstNum,restDmlString_2);
+                            sscanf(&restDmlString[6],"%d%s",&atmSsidInstNum,restDmlString_2);
+                            if(atmSsidInstNum)
+                            {
+                                if((instNum == X_LGI_COM_ATM_Radio_1_CCSP_INDEX) && (atmSsidInstNum >= X_LGI_COM_ATM_Radio_1_CCSP_INDEX) && (atmSsidInstNum < (X_LGI_COM_ATM_Radio_1_CCSP_INDEX+8)))
+                                {
+                                    atmSsidInstNum += X_LGI_COM_ATM_Radio_1_TR069_INDEX;
+                                    sprintf(restDmlString,"%s%d%s",X_LGI_COM_ATM_SSID_SUBSTRING,atmSsidInstNum,restDmlString_2);
+                                }
+                                else if((instNum == X_LGI_COM_ATM_Radio_2_CCSP_INDEX) && (atmSsidInstNum >= X_LGI_COM_ATM_Radio_1_CCSP_INDEX) && (atmSsidInstNum < (X_LGI_COM_ATM_Radio_1_CCSP_INDEX+8)))
+                                {
+                                    atmSsidInstNum += X_LGI_COM_ATM_Radio_2_TR069_INDEX;
+                                    sprintf(restDmlString,"%s%d%s",X_LGI_COM_ATM_SSID_SUBSTRING,atmSsidInstNum,restDmlString_2);
+                                }
+                            }
                         }
 
                         sprintf

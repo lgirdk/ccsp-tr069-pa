@@ -1466,6 +1466,7 @@ if ( flag_pInvalidParam == FALSE )// Remaining SSID passwords and for TR069PSWDC
 
                     /*CWMP_2_DM_INT_INSTANCE_NUMBER_MAPPING*/
                     CcspCwmppoMpaMapInvalidParamInstNumDmIntToCwmp(pInvalidParam);
+                    CcspTr069PaMapToExternalAlias(pCcspCwmpCpeController->hTr069PaMapper,&pInvalidParam);
 
                     switch ( spvFaultCode )
                     {

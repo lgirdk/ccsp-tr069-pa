@@ -1462,6 +1462,7 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
 
                     /*CWMP_2_DM_INT_INSTANCE_NUMBER_MAPPING*/
                     CcspCwmppoMpaMapInvalidParamInstNumDmIntToCwmp(pInvalidParam);
+                    CcspTr069PaMapToExternalAlias(pCcspCwmpCpeController->hTr069PaMapper,&pInvalidParam);
 
                     switch ( spvFaultCode )
                     {

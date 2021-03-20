@@ -7892,6 +7892,18 @@
         <Param>
             <Name>Device.UserInterface.RemoteAccess.Protocol</Name>
         </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_DeviceControl.DeviceMode</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_DeviceControl.SSH.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_DeviceControl.SSH.Password</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_DeviceControl.SSH.Username</Name>
+        </Param>
 
     </ParamList>
 	<RpcMapper>

@@ -378,6 +378,8 @@ CcspCwmpsoInform
     static char SoftwareVersion[256];
     errno_t     rc =  -1;
     int         ind = -1;
+    char*                           pIntAlias            = NULL;
+    char*                           pExtAlias            = NULL;
 
     if (pCcspCwmpCfgIf == NULL)
     {
@@ -666,6 +668,15 @@ else
             {
                 CcspTr069PaTraceDebug(("CcspCwmpsoInform -- adding VC parameter <%s>.\n", pMyObject->ModifiedParamArray[i]));
 
+                //Save the value of Internal Parameter Name to avoid function call to map param name again
+                pIntAlias = AnscCloneString(pMyObject->ModifiedParamArray[i]);
+                pExtAlias = NULL;
+
+                CcspTr069PaMapToExternalAlias
+                        (
+                            pCcspCwmpCpeController->hTr069PaMapper,
+                            &pMyObject->ModifiedParamArray[i]
+                        );
                 if ( CcspTr069PA_IsNamespaceInvisible
                      (
                          pCcspCwmpCpeController->hTr069PaMapper,
@@ -673,8 +684,16 @@ else
                      ) )
                 {
                     CcspTr069PaTraceDebug(("CcspCwmpsoInform -- should not contain any invisible parameters.\n"));
+                    //Free the internal alias if allocated before the continue
+                    if ( pIntAlias )
+                    {
+                        AnscFreeMemory(pIntAlias);
+                    }
                     continue;
                 }
+                //Save the External Parameter Name and assign the value of Internal Parameter Name to param array
+                pExtAlias = pMyObject->ModifiedParamArray[i];
+                pMyObject->ModifiedParamArray[i] = pIntAlias;
             
                 for ( j = 0; j < ulPresetParamCount; j++ )
                 {
@@ -704,6 +723,11 @@ else
                         pCcspCwmpProcessor->CheckParamAttrCache
                             ( (ANSC_HANDLE)pCcspCwmpProcessor, pMyObject->ModifiedParamArray[i]) )
                     {
+                        //Free the external alias if allocated before the continue
+                        if ( pExtAlias )
+                        {
+                            AnscFreeMemory(pExtAlias);
+                        }
                         continue;
                     }
 
@@ -715,6 +739,13 @@ else
                                 (ANSC_HANDLE)pCcspCwmpCpeController,
                                 pMyObject->ModifiedParamArray[i]
                             );
+                    //Assigning the value of External Parameter Name to param array
+                    pMyObject->ModifiedParamArray[i] = pExtAlias;
+                    if ( pIntAlias )
+                    {
+                        AnscFreeMemory(pIntAlias);
+                    }
+                    pCwmpParamValueArray[ulParamIndex].Name = AnscCloneString(pMyObject->ModifiedParamArray[i]);
 
                     pCwmpParamValueArray[ulParamIndex].Tr069DataType = dataType;
 
@@ -1198,7 +1229,14 @@ bFirstInform = 0;
                     for( x = 0; x<ulParamIndex; x++ )
                     {
                         char* pDMParamName = NULL;
-
+                        BOOL  bIncludeInvQuery = TRUE;
+                        CcspTr069PaMapFirstInternalAlias
+                            (
+                                pCcspCwmpCpeController->hTr069PaMapper,
+                                &pCwmpParamValueArray[x].Name,
+                                &bIncludeInvQuery,
+                                TRUE
+                            );
                         pDMParamName = CcspTr069PA_MapInstNumCwmpToDmInt(pCwmpParamValueArray[x].Name );
                         if ( pDMParamName != NULL )
                         {

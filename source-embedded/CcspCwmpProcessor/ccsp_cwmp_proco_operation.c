@@ -5404,7 +5404,11 @@ CcspCwmppoLoadValueChangedTask
             /* Storing the original Parameter name */
             pParameterName = CcspTr069PaCloneString(pValue);
             CcspCwmppoMapParamInstNumDmIntToCwmp(pValue);
-
+            CcspTr069PaMapToExternalAlias
+                (
+                    pCcspCwmpCpeController->hTr069PaMapper,
+                    &pValue
+                );
             pCcspCwmpCpeController->GetParamStringValue
                 (
                     (ANSC_HANDLE)pCcspCwmpCpeController,

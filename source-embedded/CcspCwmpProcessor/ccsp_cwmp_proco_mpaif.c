@@ -2885,10 +2885,26 @@ CcspCwmppoMpaGetParameterNames
 
         for ( j = 0; j < ParamInfoArraySize; j ++ )
         {
+            if ( !ParamInfoArray[j] ) continue;      /* some FC returns NULL, robustness check */
+
+            if (bNextLevel && CcspTr069PaMatchRequestQuerySingle(ParamInfoArray[j]->parameterName, pOriginalParam))
+            {
+                CcspTr069PaVisibleToCloudServer(bExcludeInvNs, ppSubsysArray[i], ParamInfoArray[j]->parameterName, bNsInvisibleToCloudServer);
+                if (!bNsInvisibleToCloudServer && !CcspTr069PaIsGpnNsInQueue(&pFcNsList->NsList, ParamInfoArray[j]->parameterName))
+                {
+                    char *paramName = AnscCloneString(ParamInfoArray[j]->parameterName);
+                    CcspTr069PaPushGpnNsInQueue(&pFcNsList->NsList, paramName, ParamInfoArray[j]->writable, pNsList);
+                    if ( !pNsList )
+                    {
+                        AnscFreeMemory(paramName);
+                        returnStatus = ANSC_STATUS_RESOURCES;
+                        break;
+                    }
+                }
+            }
             /* filter out namespace that is not supported by this PA, or invisible
              * to cloud server through this PA
              */
-            if ( !ParamInfoArray[j] ) continue;      /* some FC returns NULL, robustness check */
 
             CcspTr069PaMapToExternalAlias
                 (

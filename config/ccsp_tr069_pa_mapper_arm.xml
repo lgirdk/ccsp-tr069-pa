@@ -3667,6 +3667,9 @@
             <Name>Device.DHCPv4.Server.Pool.{i}.OptionNumberOfEntries</Name>
         </Param>
         <Param>
+            <Name>Device.DHCPv4.Server.Pool.{i}.X_LGI-COM_ClearLanAllowedSubnetTable</Name>
+        </Param>
+        <Param>
             <Name>Device.DHCPv4.Server.Pool.{i}.ClientNumberOfEntries</Name>
         </Param>
         <Param>

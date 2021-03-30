@@ -737,6 +737,147 @@ CcspCwmppoInitParamAttrCache
 }
 
 
+/*
+ * This function sets all the notifications to default value of 0, on ACS URL change.
+ * "Device.ManagementServer.ConnectionRequestURL" parameter is set to default value of 2 (ACTIVE notification)
+ */
+
+ANSC_STATUS
+CcspCwmppoClearParamAttrCache
+(
+        ANSC_HANDLE                 hThisObject
+)
+{
+  ANSC_STATUS                     returnStatus        = ANSC_STATUS_SUCCESS;
+  PCCSP_CWMP_PROCESSOR_OBJECT     pMyObject           = (PCCSP_CWMP_PROCESSOR_OBJECT )hThisObject;
+  PCCSP_CWMP_CPE_CONTROLLER_OBJECT pCcspCwmpCpeController  = (PCCSP_CWMP_CPE_CONTROLLER_OBJECT)pMyObject->hCcspCwmpCpeController;
+  void*                           hMBusHandle         = (void* )pCcspCwmpCpeController->hMsgBusHandle;
+  PCCSP_CWMP_MPA_INTERFACE        pCcspCwmpMpaIf        = (PCCSP_CWMP_MPA_INTERFACE )pMyObject->GetCcspCwmpMpaIf((ANSC_HANDLE)pMyObject);
+  char                            keyPrefix[CCSP_BASE_PARAM_LENGTH];
+  int                             nCcspError          = CCSP_SUCCESS;
+  ULONG                           ulNumRecords        = 0;
+  CCSP_BASE_RECORD*               pRecords            = NULL;
+  char*                           pParamName;
+  PCCSP_CWMP_SET_PARAM_ATTRIB     pParamAttrs       = NULL;
+  PCCSP_CWMP_SOAP_FAULT           pCwmpFault        = NULL;
+ 
+  /* assumption: PA name is supposed to be the same over reboot */
+    _ansc_sprintf
+        (
+            keyPrefix, 
+            "%s%s.%s.", 
+            pCcspCwmpCpeController->SubsysName?pCcspCwmpCpeController->SubsysName:"",
+            pCcspCwmpCpeController->PAName,
+            CCSP_TR069PA_PARAM_NOTIF_ATTR
+        );
+
+    nCcspError = 
+       PsmEnumRecords 
+            (
+                hMBusHandle,
+                pCcspCwmpCpeController->SubsysName,
+                keyPrefix,
+                FALSE,          /* next-level is set to FALSE to enumerate all records */
+                (unsigned int*)&ulNumRecords,
+                &pRecords
+            );
+    
+
+    pParamAttrs = 
+        (PCCSP_CWMP_SET_PARAM_ATTRIB)AnscAllocateMemory
+            (
+                sizeof(CCSP_CWMP_SET_PARAM_ATTRIB) * ulNumRecords
+            );
+    if ( !pParamAttrs )
+    {
+        return  ANSC_STATUS_RESOURCES;
+    }
+    
+    /* When SPA is done on "Device.ManagementServer.* object, "Device.ManagementServer.ConnectionRequestURL" is stored as part of the object in PSM and is reset on ACS URL Change
+      Hence "Device.ManagementServer.ConnectionRequestURL" has to be set explicitly with default value*/    
+    BOOL isConnReqURLAttrSet = FALSE;
+    CcspTr069PaTraceDebug(("%s %d ulNumRecords:%d\n",__FUNCTION__,__LINE__, ulNumRecords));
+
+    for (int i = 0; i < ulNumRecords; i ++ )
+    {
+      if ( pRecords[i].RecordType == CCSP_BASE_INSTANCE ) 
+      {
+         continue;
+      }
+      pParamName = pRecords[i].Instance.Name;
+      if ( !pParamName || *pParamName == 0 )
+      {
+         continue;
+      }
+      if(strcmp(pParamName,"Device.ManagementServer.ConnectionRequestURL") == 0)
+      {
+         pParamAttrs[i].Notification = 2;
+         isConnReqURLAttrSet = TRUE;
+      }
+      else
+      {
+          pParamAttrs[i].Notification = 0;
+      }
+      pParamAttrs[i].Name                 = AnscCloneString(pParamName);
+      pParamAttrs[i].bNotificationChange  = TRUE;
+      pParamAttrs[i].bAccessListChange    = FALSE;
+      pParamAttrs[i].AccessList           = NULL;      
+    }
+    if ( pRecords )
+    {
+      AnscFreeMemory(pRecords);
+    }
+    
+    returnStatus = pCcspCwmpMpaIf->SetParameterAttributes
+                   (
+                    pCcspCwmpMpaIf->hOwnerContext,
+                    pParamAttrs,
+                    ulNumRecords,
+                    (ANSC_HANDLE*)&pCwmpFault,
+                    TRUE
+                );
+
+        for (int i = 0; i < ulNumRecords; ++ i)
+        {
+            CcspCwmpCleanSetParamAttrib((pParamAttrs + i));
+        }
+        AnscFreeMemory(pParamAttrs);
+  
+    /*"Device.ManagementServer.ConnectionRequestURL" parameter is set to ACTIVE notifications by default */
+    if(!isConnReqURLAttrSet)
+    {      
+      pParamAttrs = 
+        (PCCSP_CWMP_SET_PARAM_ATTRIB)AnscAllocateMemory
+            (
+                sizeof(CCSP_CWMP_SET_PARAM_ATTRIB)
+            );
+      if ( !pParamAttrs )
+      {
+        return  ANSC_STATUS_RESOURCES;
+      }
+      pParamAttrs->Name                 = AnscCloneString("Device.ManagementServer.ConnectionRequestURL");
+      pParamAttrs->bNotificationChange  = TRUE;
+      pParamAttrs->bAccessListChange    = FALSE;
+      pParamAttrs->AccessList           = NULL;
+      pParamAttrs->Notification  = 2;
+    
+      
+      returnStatus = pCcspCwmpMpaIf->SetParameterAttributes
+                   (
+                    pCcspCwmpMpaIf->hOwnerContext,
+                    pParamAttrs,
+                    1,
+                    (ANSC_HANDLE*)&pCwmpFault,
+                    TRUE
+                );
+
+        CcspCwmpCleanSetParamAttrib(pParamAttrs);        
+        AnscFreeMemory(pParamAttrs);
+    }        
+    
+    return returnStatus;
+}
+
 /**********************************************************************
 
     caller:     owner of this object

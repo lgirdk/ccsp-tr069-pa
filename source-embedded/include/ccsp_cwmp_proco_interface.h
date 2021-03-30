@@ -447,6 +447,11 @@ typedef  ULONG
     );
 
 typedef  ANSC_STATUS
+(*PFN_CWMPPROCO_CLEAR_PAC)
+    (
+        ANSC_HANDLE                 hThisObject        
+    );
+typedef  ANSC_STATUS
 (*PFN_CWMPPROCO_SYNC_CR)
     (
         ANSC_HANDLE                 hThisObject,
@@ -578,6 +583,7 @@ typedef  ULONG
     PFN_CWMPPROCO_INIT_PAC          PushAllVcToBackend;                                     \
     PFN_CWMPPROCO_UPD_PAC           UpdateParamAttrCache;                                   \
     PFN_CWMPPROCO_CHK_PAC           CheckParamAttrCache;                                    \
+    PFN_CWMPPROCO_CLEAR_PAC         ClearParamAttrCache;                                    \
     /* end of object class content */                                                       \
 
 typedef  struct

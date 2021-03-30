@@ -581,6 +581,7 @@ CcspCwmppoInitialize
     pMyObject->SyncNamespacesWithCR      = CcspCwmppoSyncNamespacesWithCR;
     pMyObject->UpdateParamAttrCache      = CcspCwmppoUpdateParamAttrCache;
     pMyObject->CheckParamAttrCache       = CcspCwmppoCheckParamAttrCache;
+    pMyObject->ClearParamAttrCache       = CcspCwmppoClearParamAttrCache;
     pMyObject->HasPendingInform          = CcspCwmppoHasPendingInform;
 
     pMyObject->ConfigPeriodicInform      = CcspCwmppoConfigPeriodicInform;

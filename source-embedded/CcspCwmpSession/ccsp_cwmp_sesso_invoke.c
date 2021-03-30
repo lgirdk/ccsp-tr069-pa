@@ -1203,6 +1203,12 @@ bFirstInform = 0;
                 /*OFW-87 Engage TCP server after informResponse for new ACS*/
                 if(pCcspCwmpCpeController->bIsACSURLChanged && pCcspCwmpCpeController->bInformAfterACSChange)
                 {
+                  CcspTr069PaTraceDebug(("calling ClearParamAttrCache after receiving INFORM Response for new URL\n"));
+                  ANSC_STATUS status = pCcspCwmpProcessor->ClearParamAttrCache
+                  (
+                    (ANSC_HANDLE)pCcspCwmpProcessor
+                  );
+                  CcspTr069PaTraceDebug(("calling TCP Engage after receiving INFORM Response for new URL status:%d \n",status));
                   PCCSP_CWMP_TCPCR_HANDLER_OBJECT pCcspCwmpTcpcrHandler   = (PCCSP_CWMP_TCPCR_HANDLER_OBJECT )pCcspCwmpCpeController->hCcspCwmpTcpConnReqHandler;
                   pCcspCwmpTcpcrHandler->Engage((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
                   pCcspCwmpCpeController->bIsACSURLChanged = FALSE;

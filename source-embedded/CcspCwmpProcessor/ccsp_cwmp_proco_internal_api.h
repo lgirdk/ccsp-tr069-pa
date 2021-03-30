@@ -508,6 +508,12 @@ CcspCwmppoCheckParamAttrCache
     );
 
 ANSC_STATUS
+CcspCwmppoClearParamAttrCache
+    (
+        ANSC_HANDLE                 hThisObject        
+    );
+
+ANSC_STATUS
 CcspCwmppoSyncNamespacesWithCR
     (
         ANSC_HANDLE                 hThisObject,

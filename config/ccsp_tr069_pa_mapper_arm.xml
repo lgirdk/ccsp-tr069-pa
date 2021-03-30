@@ -2996,6 +2996,12 @@
             <Name>Device.XHosts.XHost.{i}.XIPv6AddressNumberOfEntries</Name>
         </Param>
         <Param>
+            <Name>Device.LANConfigSecurity.ConfigPassword</Name>
+        </Param>
+        <Param>
+            <Name>Device.DNS.SupportedRecordTypes</Name>
+        </Param>
+        <Param>
             <Name>Device.DNS.Client.Enable</Name>
         </Param>
         <Param>

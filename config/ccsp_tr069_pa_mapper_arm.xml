@@ -4360,6 +4360,9 @@
             <Name>Device.X_LGI-COM_SON.SONDFSEnable</Name>
         </Param>
         <Param>
+            <Name>Device.X_LGI-COM_SON.SONLogpullEnable</Name>
+        </Param>
+        <Param>
             <Name>Device.X_LGI-COM_SON.NativeAtmBsControl</Name>
         </Param>
         <!-- Add by LGI end -->

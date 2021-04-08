@@ -2846,6 +2846,8 @@ CcspCwmppoMpaGetParameterNames
 
         for ( j = 0; j < ParamInfoArraySize; j ++ )
         {
+            if ( !ParamInfoArray[j] ) continue;      /* some FC returns NULL, robustness check */
+
             if (bNextLevel && CcspTr069PaMatchRequestQuerySingle(ParamInfoArray[j]->parameterName, pOriginalParam))
             {
                 CcspTr069PaVisibleToCloudServer(bExcludeInvNs, ppSubsysArray[i], ParamInfoArray[j]->parameterName, bNsInvisibleToCloudServer);
@@ -2864,7 +2866,6 @@ CcspCwmppoMpaGetParameterNames
             /* filter out namespace that is not supported by this PA, or invisible
              * to cloud server through this PA
              */
-            if ( !ParamInfoArray[j] ) continue;      /* some FC returns NULL, robustness check */
 
             CcspTr069PaMapToExternalAlias
                 (

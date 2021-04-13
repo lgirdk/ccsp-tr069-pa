@@ -249,6 +249,9 @@
             <Name>Device.ManagementServer.ManageableDeviceNumberOfEntries</Name>
         </Param>
         <Param>
+            <Name>Device.ManagementServer.ManageableDeviceNotificationLimit</Name>
+        </Param>
+        <Param>
             <Name>Device.ManagementServer.ManageableDevice.{i}.ManufacturerOUI</Name>
         </Param>
         <Param>

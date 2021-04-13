@@ -2854,3 +2854,18 @@ CcspManagementServer_StunBindingChanged
 }
 #endif
 
+/* CcspManagementServer_GetManageableDeviceNotificationLimit is called to get
+ * Device.ManagementServer.ManageableDeviceNotificationLimit.
+ * Return value - the parameter value.
+ */
+//CCSP_UINT
+CCSP_STRING
+CcspManagementServer_GetManageableDeviceNotificationLimit
+    (
+        CCSP_STRING                 ComponentName
+    )
+{
+    UNREFERENCED_PARAMETER(ComponentName);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerManageableDeviceNotificationLimitID].value);
+}
+

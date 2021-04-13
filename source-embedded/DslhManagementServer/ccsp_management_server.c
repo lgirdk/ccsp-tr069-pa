@@ -273,6 +273,7 @@ msParameterInfo managementServerParameters[] =
     { "X_LGI_COM_ValidateManagementServerCertificate", NULL, ccsp_boolean, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "HTTPConnectionRequestEnable", NULL, ccsp_boolean, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "HTTPCompressionSupported", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
+    { "ManageableDeviceNotificationLimit", NULL, ccsp_unsignedInt, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
 
 };
 
@@ -552,6 +553,8 @@ CcspManagementServer_FillInObjectInfo()
             = CcspManagementServer_CloneString("1");
         objectInfo[ManagementServerID].parameters[ManagementServerHTTPCompressionSupportedID].value
             = CcspManagementServer_CloneString("");
+        objectInfo[ManagementServerID].parameters[ManagementServerManageableDeviceNotificationLimitID].value 
+			= CcspManagementServer_CloneString("0");
 
     }
 
@@ -1832,6 +1835,9 @@ void CcspManagementServer_GetSingleParameterValue(
         case ManagementServerHTTPConnectionRequestEnableID:
             val->parameterValue = CcspManagementServer_GetHTTPConnectionRequestEnableStr(NULL);
             break;
+        case ManagementServerManageableDeviceNotificationLimitID:
+            val->parameterValue = CcspManagementServer_GetManageableDeviceNotificationLimit(NULL);
+            break;
         default: break;
         }
     }
@@ -2618,6 +2624,10 @@ int CcspManagementServer_ValidateParameterValues(
                     }
                     break;
 
+				case ManagementServerManageableDeviceNotificationLimitID:
+                    if(CcspManagementServer_ValidateINT(val[i].parameterValue, FALSE, 0, FALSE, 0) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+					break;
                 default: break;
                 }
             }

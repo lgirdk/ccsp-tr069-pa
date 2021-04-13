@@ -190,6 +190,7 @@ enum
     ManagementServerX_LGI_COM_ValidateManagementServerCertificateID,
     ManagementServerHTTPConnectionRequestEnableID,
     ManagementServerHTTPCompressionSupportedID,
+    ManagementServerManageableDeviceNotificationLimitID,
     ManagementServerNumOfParameters
 };
 

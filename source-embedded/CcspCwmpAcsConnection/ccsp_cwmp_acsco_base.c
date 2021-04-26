@@ -79,8 +79,8 @@
 #include <stdbool.h>
 
 #define TR069_HOSTS_CFG		"/usr/ccsp/tr069pa/tr69Hosts.cfg"
-char **hostNames = NULL;
-int numHosts = 0;
+static char **hostNames = NULL;
+static int numHosts = 0;
 
 /**********************************************************************
 
@@ -252,29 +252,7 @@ CcspCwmpAcscoRemove
     return  ANSC_STATUS_SUCCESS;
 }
 
-#define DEVICE_PROPERTIES    "/etc/device.properties"
-static int bIsComcastImage( void)
-{
-    static int isComcastImage = -1;
-    if (isComcastImage == -1)
-    {
-        char PartnerId[255] = {'\0'};
-        errno_t rc       = -1;
-        int     ind      = -1;
-
-        getPartnerId ( PartnerId ) ;
-        rc = strcmp_s("comcast", strlen("comcast"), PartnerId, &ind);
-        ERR_CHK(rc);
-        if((rc == EOK) && (ind != 0))
-            isComcastImage = 0;
-        else
-            isComcastImage = 1;
-    }
-
-    return isComcastImage;
-}
-
-char **getHostNames()
+static char **getHostNames (void)
 {
 	static bool initialized = false;
 	/* To load hostnames configuration file only once*/
@@ -421,7 +399,7 @@ CcspCwmpAcscoEnrollObjects
     pHttpClient->SetClientMode(pHttpClient, HTTP_SCO_MODE_XSOCKET | HTTP_SCO_MODE_COMPACT | HTTP_SCO_MODE_NOTIFY_ON_ALL_CONN_ONCE);
 
     memset(&hosts, 0, sizeof(HTTP_SCO_HOST_NAMES));
-    if ( bIsComcastImage() && getHostNames() != NULL)
+    if (getHostNames() != NULL)
     {
 		char **phostNames = NULL;
 		int i = 0;

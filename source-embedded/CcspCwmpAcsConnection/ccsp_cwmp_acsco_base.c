@@ -78,9 +78,12 @@
 #include "ccsp_cwmp_acsco_global.h"
 #include <stdbool.h>
 
-#define TR069_HOSTS_CFG		"/usr/ccsp/tr069pa/tr69Hosts.cfg"
+//#define TR069_HOSTS_CFG		"/usr/ccsp/tr069pa/tr69Hosts.cfg"
+
+#if defined (TR069_HOSTS_CFG)
 static char **hostNames = NULL;
 static int numHosts = 0;
+#endif
 
 /**********************************************************************
 
@@ -252,6 +255,7 @@ CcspCwmpAcscoRemove
     return  ANSC_STATUS_SUCCESS;
 }
 
+#if defined (TR069_HOSTS_CFG)
 static char **getHostNames (void)
 {
 	static bool initialized = false;
@@ -292,6 +296,8 @@ static char **getHostNames (void)
 	}
 	return hostNames;
 }
+#endif
+
 /**********************************************************************
 
     caller:     owner of this object
@@ -399,6 +405,8 @@ CcspCwmpAcscoEnrollObjects
     pHttpClient->SetClientMode(pHttpClient, HTTP_SCO_MODE_XSOCKET | HTTP_SCO_MODE_COMPACT | HTTP_SCO_MODE_NOTIFY_ON_ALL_CONN_ONCE);
 
     memset(&hosts, 0, sizeof(HTTP_SCO_HOST_NAMES));
+
+#if defined (TR069_HOSTS_CFG)
     if (getHostNames() != NULL)
     {
 		char **phostNames = NULL;
@@ -416,6 +424,8 @@ CcspCwmpAcscoEnrollObjects
 			}
 		}
     }
+#endif
+
     pHttpClient->SetHostNames(pHttpClient, &hosts);
 
     pMyObject->hHttpSimpleClient = (ANSC_HANDLE)pHttpClient;

@@ -143,7 +143,7 @@
 
 #define MAX_NO_WIFI_PARAM 256
 
-#define WIFI_KEYPASSPHRASE_SET1 16
+#define WIFI_KEYPASSPHRASE_SET1 14
 #define WIFI_KEYPASSPHRASE_SET2 8
 
 /*
@@ -1391,7 +1391,7 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
             flag_pInvalidParam = FALSE;
             // Hide the LNF,XHS,MESH Backhaul SSIDs password based on RFC flag
             int match_found = 0;
-            const char *WiFiAccesspoint1[WIFI_KEYPASSPHRASE_SET1] = {"Device.WiFi.AccessPoint.7.Security.KeyPassphrase", "Device.WiFi.AccessPoint.8.Security.KeyPassphrase", "Device.WiFi.AccessPoint.3.Security.KeyPassphrase", "Device.WiFi.AccessPoint.4.Security.KeyPassphrase", "Device.WiFi.AccessPoint.11.Security.KeyPassphrase", "Device.WiFi.AccessPoint.12.Security.KeyPassphrase", "Device.WiFi.AccessPoint.13.Security.KeyPassphrase", "Device.WiFi.AccessPoint.14.Security.KeyPassphrase", "Device.WiFi.AccessPoint.3.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.4.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.7.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.8.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.11.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.12.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.13.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.14.Security.X_COMCAST-COM_KeyPassphrase"};
+            const char *WiFiAccesspoint1[WIFI_KEYPASSPHRASE_SET1] = {"Device.WiFi.AccessPoint.3.Security.KeyPassphrase", "Device.WiFi.AccessPoint.4.Security.KeyPassphrase", "Device.WiFi.AccessPoint.11.Security.KeyPassphrase", "Device.WiFi.AccessPoint.12.Security.KeyPassphrase", "Device.WiFi.AccessPoint.13.Security.KeyPassphrase", "Device.WiFi.AccessPoint.14.Security.KeyPassphrase", "Device.WiFi.AccessPoint.3.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.4.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.7.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.8.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.11.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.12.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.13.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.14.Security.X_COMCAST-COM_KeyPassphrase"};
 
             const char *WiFiAccesspoint2[WIFI_KEYPASSPHRASE_SET2] = {"Device.WiFi.AccessPoint.5.Security.KeyPassphrase", "Device.WiFi.AccessPoint.6.Security.KeyPassphrase", "Device.WiFi.AccessPoint.9.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10.Security.KeyPassphrase", "Device.WiFi.AccessPoint.5.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.6.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.9.Security.X_COMCAST-COM_KeyPassphrase","Device.WiFi.AccessPoint.10.Security.X_COMCAST-COM_KeyPassphrase"};
 
@@ -2236,7 +2236,7 @@ CcspCwmppoMpaGetParameterValues
                     CcspCwmppoMpaMapParamInstNumDmIntToCwmp(pParamValues[k]->parameterName);
                     CcspCwmppoMpaMapParamInstNumDmIntToCwmp(pParamValues[k]->parameterValue);
 
-                    const char *WiFiAccessPoint3[WIFI_KEYPASSPHRASE_SET1] = {"Device.WiFi.AccessPoint.10004.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10104.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10002.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10102.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10006.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10106.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10007.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10107.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10002.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10102.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10004.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10104.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10006.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10106.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10007.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10107.Security.X_COMCAST-COM_KeyPassphrase"};
+                    const char *WiFiAccessPoint3[WIFI_KEYPASSPHRASE_SET1] = {"Device.WiFi.AccessPoint.10004.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10104.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10002.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10102.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10006.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10106.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10007.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10107.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10002.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10102.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10006.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10106.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10007.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10107.Security.X_COMCAST-COM_KeyPassphrase"};
 
                      for(i = 0; i < WIFI_KEYPASSPHRASE_SET1; i++)
                      {

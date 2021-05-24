@@ -77,10 +77,17 @@
         07/19/11    implement CCSP normalized actions
 
 **********************************************************************/
+/*
+   Define CCSP_ALIAS_MGR to use the original RDKB Alias Manager APIs.
+   Leave undefined to use the (experimental) new replacements.
+*/
+//#define CCSP_ALIAS_MGR 1
 
 #include "ccsp_cwmp_proco_global.h"
 #include "syscfg/syscfg.h"
 #include <string.h>
+#include "custom_alias_utils.h"
+
 /**********************************************************************
                                   MACROS
 **********************************************************************/
@@ -506,7 +513,11 @@ CcspTr069PaMapArrayToInternalAliases
     ANSC_STATUS                     returnStatus = ANSC_STATUS_SUCCESS;
     char*                           pParamName           = NULL;
     char*                           InternalName                 = NULL;
+#ifdef CCSP_ALIAS_MGR
     PSLIST_HEADER                   pInternalNames       = NULL;
+#else
+    aliasNames_t*                   pInternalNames       = NULL;
+#endif
     PCCSP_TR069PA_STRING_SLIST_ENTRY pSListEntry;
     BOOL                            bAliasFound         = FALSE;
     unsigned int                    i;
@@ -523,7 +534,7 @@ CcspTr069PaMapArrayToInternalAliases
 
             break;
         }
-
+#ifdef CCSP_ALIAS_MGR
         pInternalNames =
             CcspTr069PA_GetParamInternalNames
             (
@@ -573,6 +584,51 @@ CcspTr069PaMapArrayToInternalAliases
 
             CcspTr069PA_FreeInternalNamesList(pInternalNames);
         }
+#else
+        pInternalNames = CcspTr069PA_LgiGetParamInternalNames(pParamName);
+        if (pInternalNames)
+        {
+            while ((InternalName = (char*)CcspTr069PA_LgiGetNextInternalName(pInternalNames)))
+            {
+                pSListEntry = (PCCSP_TR069PA_STRING_SLIST_ENTRY)AnscAllocateMemory(sizeof(CCSP_TR069PA_STRING_SLIST_ENTRY));
+
+                if (!pSListEntry)
+                {
+                    CcspTr069PaTraceError(("Failed to allocate memory\n"));
+
+                    AnscFreeMemory(InternalName);
+
+                    returnStatus = ANSC_STATUS_RESOURCES;
+
+                    break;
+                }
+
+                pSListEntry->Value = InternalName; // deliberately no copying here
+                AnscQueuePushEntry(pOutParamList, &pSListEntry->Linkage);
+
+                // Add the same entry in the memory allocation list
+                pSListEntry = (PCCSP_TR069PA_STRING_SLIST_ENTRY)AnscAllocateMemory(sizeof(CCSP_TR069PA_STRING_SLIST_ENTRY));
+
+                if (!pSListEntry)
+                {
+                    CcspTr069PaTraceError(("Failed to allocate memory\n"));
+
+                    AnscFreeMemory(InternalName);
+
+                    returnStatus = ANSC_STATUS_RESOURCES;
+
+                    break;
+                }
+
+                pSListEntry->Value = InternalName;
+                AnscSListPushEntry(pOutStringAllocList, &pSListEntry->Linkage);
+
+                bAliasFound = TRUE;
+            }
+
+            CcspTr069PA_LgiFreeInternalNamesList(pInternalNames);
+        }
+#endif
         else
         {
             pSListEntry = (PCCSP_TR069PA_STRING_SLIST_ENTRY) AnscAllocateMemory(sizeof(CCSP_TR069PA_STRING_SLIST_ENTRY));
@@ -2687,7 +2743,11 @@ CcspCwmppoMpaGetParameterNames
     BOOL                            bAliasFound          = FALSE;
     char*                           pOriginalParam       = NULL;
     QUEUE_HEADER                    ParamList;
+#ifdef CCSP_ALIAS_MGR
     PSLIST_HEADER                   pInternalNames;
+#else
+    aliasNames_t*                   pInternalNames;
+#endif
     PCCSP_TR069PA_STRING_SLIST_ENTRY pSListEntry;
     PSINGLE_LINK_ENTRY              pLink;
     CCSP_STRING                     InternalName;
@@ -2774,6 +2834,7 @@ CcspCwmppoMpaGetParameterNames
     }
 
     pOriginalParam = pParamPath;
+#ifdef CCSP_ALIAS_MGR
     if ( (pInternalNames = CcspTr069PA_GetParamInternalNames(pCcspCwmpCpeController->hTr069PaMapper, pParamPath)))
     {
         while ( (InternalName = (char*)CcspTr069PA_GetNextInternalName(pInternalNames)) )
@@ -2800,6 +2861,34 @@ CcspCwmppoMpaGetParameterNames
 
         CcspTr069PA_FreeInternalNamesList(pInternalNames);
     }
+#else
+    if (pInternalNames = CcspTr069PA_LgiGetParamInternalNames(pParamPath))
+    {
+        while ((InternalName = (char*)CcspTr069PA_LgiGetNextInternalName(pInternalNames)))
+        {
+            pSListEntry = (PCCSP_TR069PA_STRING_SLIST_ENTRY)AnscAllocateMemory(sizeof(CCSP_TR069PA_STRING_SLIST_ENTRY));
+
+            if (!pSListEntry)
+            {
+                CcspTr069PaTraceError(("Failed to allocate memory\n"));
+
+                CcspTr069PA_LgiFreeInternalNamesList(pInternalNames);
+
+                returnStatus = ANSC_STATUS_RESOURCES;
+                goto EXIT2;
+            }
+
+            // Deliberately no copying here;
+            // if we have found the mapping memory will be deallocated from the pSListEntry->Value before exit
+            pSListEntry->Value = InternalName;
+            AnscQueuePushEntry(&ParamList, &pSListEntry->Linkage);
+
+            bAliasFound = TRUE;
+        }
+
+        CcspTr069PA_LgiFreeInternalNamesList(pInternalNames);
+    }
+#endif
     else
     {
         pSListEntry = (PCCSP_TR069PA_STRING_SLIST_ENTRY) AnscAllocateMemory(sizeof(CCSP_TR069PA_STRING_SLIST_ENTRY));

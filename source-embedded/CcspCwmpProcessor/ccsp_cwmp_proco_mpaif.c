@@ -1487,6 +1487,10 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                      (nNumFCs == 1),
                      &pInvalidParam
                     );
+				if(AnscEqualString(pInvalidParam,"Device.DHCPv4.Server.Pool.1.X_LGI-COM_LanAllowedSubnetTable.1.LanAllowedSubnetIP",TRUE) || AnscEqualString(pInvalidParam,"Device.DHCPv4.Server.Pool.1.X_LGI-COM_LanAllowedSubnetTable.1.LanAllowedSubnetMask",TRUE))
+				{
+					nResult=CCSP_CWMP_CPE_CWMP_FaultCode_notWritable;
+				}
             }
 
             if (pParamValues)

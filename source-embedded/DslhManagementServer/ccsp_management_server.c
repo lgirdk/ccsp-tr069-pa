@@ -264,7 +264,7 @@ msParameterInfo managementServerParameters[] =
     { "AliasBasedAddressing", NULL, ccsp_boolean, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
 // #if 0 //Not used anymore
 #ifndef _COSA_VEN501_
-    { "X_LGI-COM_ConnectionRequestPort", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
+    { "X_LGI-COM_ConnectionRequestPort", NULL, ccsp_unsignedInt, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "X_CISCO_COM_ConnectionRequestURLPath", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
 #endif
     { "X_LGI-COM_ConnectionRequestIf", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },

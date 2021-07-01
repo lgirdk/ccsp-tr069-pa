@@ -3259,7 +3259,7 @@ CcspCwmppoMpaSetParameterAttributes
     PCCSP_TR069PA_NSLIST            pNsList              = NULL;
     CCSP_INT                        nCcspError           = CCSP_SUCCESS;
 
-    BOOL                            bIncludeInvQuery     = !bExcludeInvNs;
+    BOOL                            bIncludeInvQuery     = bExcludeInvNs;
     QUEUE_HEADER                    ParamList={{0},0,{0}};
     PCCSP_TR069PA_PARAM_ATTR_SLIST_ENTRY pSListEntry;
     PSINGLE_LINK_ENTRY              pLink;

@@ -1149,7 +1149,7 @@ bFirstInform = 0;
          */
         CcspTr069PaTraceDebug(("CcspCwmpsoInform -- Wait for the AsyncEvent.\n"));
 
-        AnscWaitEvent (&pWmpsoAsyncReq->AsyncEvent, ulRpcCallTimeout * 1000);
+        AnscWaitEvent (&pWmpsoAsyncReq->AsyncEvent, 0xFFFFFFFF);
         AnscResetEvent(&pWmpsoAsyncReq->AsyncEvent);
 
         pCwmpSoapResponse = (PCCSP_CWMP_SOAP_RESPONSE)pWmpsoAsyncReq->hSoapResponse;

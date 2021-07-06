@@ -414,6 +414,8 @@ START:
                     bApplyTls
                 );
 
+        CcspManagementServer_IPv4Fallback_ProcessRequestStatus(returnStatus);
+
         if( returnStatus != ANSC_STATUS_SUCCESS)
         {
             CcspTr069PaTraceError(("ACS Request failed: returnStatus = %.X\n", (unsigned int)returnStatus));

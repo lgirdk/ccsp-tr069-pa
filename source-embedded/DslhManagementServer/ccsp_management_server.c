@@ -1235,6 +1235,36 @@ static BOOL CcspManagementServer_GetHostname(const char *URL, char *host)
 }
 /* ARRIS ADD END */
 
+#include <sys/sysinfo.h>
+#include <sys/time.h>
+#include <sys/resource.h>
+
+static BOOL bIPv4FallbackActive = FALSE;
+static long lIPv4FallbackActiveTime = 0;
+
+void CcspManagementServer_IPv4Fallback_ProcessRequestStatus(ANSC_STATUS status)
+{
+    struct sysinfo si;
+
+    if (status == ANSC_STATUS_SUCCESS)
+    {
+        if (bIPv4FallbackActive)
+        {
+            sysinfo(&si);
+            if ((si.uptime - lIPv4FallbackActiveTime) > 600)
+            {
+                bIPv4FallbackActive = FALSE;
+            }
+        }
+    }
+    else
+    {
+        sysinfo(&si);
+        lIPv4FallbackActiveTime = si.uptime;
+        bIPv4FallbackActive = TRUE;
+    }
+}
+
 //Custom
 extern void CcspManagementServer_GenerateConnectionRequestURLCustom(
     BOOL fromValueChangeSignal,
@@ -1318,7 +1348,7 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
                 {
                     sprintf(ipAddr, "[%s]", ipAddrV6);  //erouter0 is IPv6 only
                 }
-                else
+                else if (!bIPv4FallbackActive)
                 {
                     //erouter0 is dualstack
                     char* URL = CcspManagementServer_GetURL(NULL);

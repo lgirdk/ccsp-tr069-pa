@@ -214,8 +214,6 @@ CcspCwmpAcscoConnect
     return:     the status of the operation;
 
 **********************************************************************/
-ANSC_ACS_INTERN_HTTP_CONTENT    intHttpContent  = { 0 };
-
 ANSC_STATUS
 CcspCwmpAcscoRequest
     (
@@ -237,6 +235,7 @@ CcspCwmpAcscoRequest
     PHTTP_CAS_INTERFACE             pHttpCasIf      = NULL;
     PHTTP_REQUEST_URI               pHttpReqInfo    = NULL;
     ANSC_STATUS                     returnStatus    = ANSC_STATUS_SUCCESS;
+    ANSC_ACS_INTERN_HTTP_CONTENT    intHttpContent = { 0 };
     PANSC_ACS_INTERN_HTTP_CONTENT   pHttpGetReq     = &intHttpContent;
     BOOL                            bApplyTls       = FALSE;
     PCHAR                           pRequestURL     = NULL;

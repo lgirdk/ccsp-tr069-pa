@@ -1027,6 +1027,7 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
     AnscQueueInitializeHeader(&FcNsListQueue);
     errno_t rc = -1;
     int ind = -1;
+    int iDiag = 0;
 
     /*
      * A fault response MUST make use of the SOAP Fault element using the following conventions:
@@ -1167,6 +1168,10 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
 			continue;
 		}
 
+        if (strstr (pParameterValueArray[i].Name, "DiagnosticsState") != NULL)
+        {
+            iDiag++;
+        }
 
         /* identify which sub-system(s) the parameter resides */
         NumSubsystems = CCSP_SUBSYSTEM_MAX_COUNT;
@@ -1308,6 +1313,8 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
          * involved in this request 
          */
         parameterValStruct_t*       pParamValues    = NULL;
+        parameterValStruct_t*       pDiagnosticsStateParamValues = NULL;
+        int                         kDiag = 0;
         int                         nNumFCs         = AnscQueueQueryDepth(&FcNsListQueue);
         PSINGLE_LINK_ENTRY          pSLinkEntry     = NULL;
         PSINGLE_LINK_ENTRY          pSLinkEntryNs   = NULL;
@@ -1340,6 +1347,18 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                 goto EXIT2;
             }
 
+            pDiagnosticsStateParamValues =
+                (parameterValStruct_t*)AnscAllocateMemory
+                (
+                 sizeof(parameterValStruct_t) * iDiag
+                );
+
+            if ( !pDiagnosticsStateParamValues )
+            {
+                returnStatus = ANSC_STATUS_RESOURCES;
+                goto EXIT2;
+            }
+
             k = 0;
 
             pSLinkEntryNs = AnscSListGetFirstEntry(&pFcNsList->NsList);
@@ -1351,6 +1370,14 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                 /*CWMP_2_DM_INT_INSTANCE_NUMBER_MAPPING*/
                 CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramValueInfo.parameterName);
                 CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramValueInfo.parameterValue);
+
+                // if parameterName is DiagnosticsState, store it into pDiagnosticsStateParamValues
+                if (strstr(pNsList->Args.paramValueInfo.parameterName, "DiagnosticsState") != NULL)
+                {
+                    pDiagnosticsStateParamValues[kDiag++] = pNsList->Args.paramValueInfo;
+                    CcspTr069PaTraceDebug(("iDiag = %d, kDiag = %d, parameterName = %s\n", iDiag, kDiag, pNsList->Args.paramValueInfo.parameterName));
+                    continue;
+                }
 
                 pParamValues[k++] = pNsList->Args.paramValueInfo;
             }
@@ -1530,6 +1557,25 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                         nResult = CCSP_CWMP_CPE_CWMP_FaultCode_notWritable;
                     }
                 }
+
+                // set pDiagnosticsStateParamValues after all other parameters are set.
+                if (kDiag > 0)
+                {
+                    nResult =
+                        CcspBaseIf_setParameterValues
+                        (
+                         pCcspCwmpCpeController->hMsgBusHandle,
+                         pFcNsList->FCName,
+                         pFcNsList->DBusPath,
+                         ulSessionID,
+                         ulWriteID,
+                         pDiagnosticsStateParamValues,
+                         kDiag,
+                         (nNumFCs == 1),
+                         &pInvalidParam
+                        );
+                    CcspTr069PaTraceDebug(("set pDiagnosticsStateParamValues, nResult = %d\n", nResult));
+                }
             }
 
             if (pParamValues)
@@ -1537,6 +1583,13 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                 AnscFreeMemory(pParamValues);
                 pParamValues = NULL;
             }
+
+            if (pDiagnosticsStateParamValues)
+            {
+                AnscFreeMemory(pDiagnosticsStateParamValues);
+                pDiagnosticsStateParamValues = NULL;
+            }
+
             rc = strcmp_s("Device.X_CISCO_COM_DeviceControl.ReinitCmMac",strlen("Device.X_CISCO_COM_DeviceControl.ReinitCmMac"),pNsList->Args.paramValueInfo.parameterName,&ind);
             ERR_CHK(rc);
             if((rc == EOK) && (!ind))

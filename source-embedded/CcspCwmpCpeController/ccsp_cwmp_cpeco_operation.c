@@ -149,7 +149,8 @@ CcspCwmpCpecoEngage
     }
     
 #ifdef   _CCSP_CWMP_TCP_CONNREQ_HANDLER
-    pCcspCwmpTcpcrHandler->Engage((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
+    if ( !pCcspCwmpProcessor->GetInitialContact((ANSC_HANDLE)pCcspCwmpProcessor) )
+        pCcspCwmpTcpcrHandler->Engage((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
 #endif
 
 #ifdef   _CCSP_CWMP_STUN_ENABLED

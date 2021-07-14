@@ -295,7 +295,8 @@ CcspCwmppoGetAcsInfo
         bCrEnabled = CcspManagementServer_GetHTTPConnectionRequestEnable(NULL);
         if ( bCrEnabled == TRUE )
         {
-            pCcspCwmpTcpcrHandler->Engage((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
+            if ( !pMyObject->GetInitialContact((ANSC_HANDLE)pMyObject) )
+                pCcspCwmpTcpcrHandler->Engage((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
         }
         else
         {

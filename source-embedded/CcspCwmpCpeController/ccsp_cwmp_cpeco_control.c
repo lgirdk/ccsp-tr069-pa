@@ -581,7 +581,8 @@ CcspCwmpCpecoStartCWMP
         bCrEnabled = CcspManagementServer_GetHTTPConnectionRequestEnable(NULL);
         if (bCrEnabled == TRUE)
         {
-            pCcspCwmpTcpcrHandler->Engage((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
+            if ( !pCcspCwmpProcessor->GetInitialContact((ANSC_HANDLE)pCcspCwmpProcessor) )
+                pCcspCwmpTcpcrHandler->Engage((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
         }
         else
         {

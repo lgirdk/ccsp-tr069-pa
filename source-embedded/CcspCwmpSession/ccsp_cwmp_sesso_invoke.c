@@ -1296,6 +1296,8 @@ bFirstInform = 0;
                 {
 			        pCcspCwmpProcessor->SetInitialContact((ANSC_HANDLE)pCcspCwmpProcessor, FALSE);
                     CcspTr069PaTraceDebug(("Set 'InitialContact' to FALSE.\n"));
+                    PCCSP_CWMP_TCPCR_HANDLER_OBJECT pCcspCwmpTcpcrHandler   = (PCCSP_CWMP_TCPCR_HANDLER_OBJECT )pCcspCwmpCpeController->hCcspCwmpTcpConnReqHandler;
+                    pCcspCwmpTcpcrHandler->Engage((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
 
                     if ( pCcspCwmpCfgIf && pCcspCwmpCfgIf->NotifyEvent )
                     {

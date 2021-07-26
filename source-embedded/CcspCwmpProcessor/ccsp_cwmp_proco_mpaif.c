@@ -180,7 +180,7 @@
    configured to use either internal or external indexes, not a mixture of both.
 */
 
-#define _CWMP_ALLOW_INTERNAL_INDEXES_
+//#define _CWMP_ALLOW_INTERNAL_INDEXES_
 
 
 /**********************************************************************

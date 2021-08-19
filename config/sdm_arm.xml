@@ -35,7 +35,6 @@
    limitations under the License.
 -->
 
-<!-- This file resides in boards/intel_usg_arm/ -->
 <SupportedDataModel>
 	<m1>
 		<URL>aa</URL>

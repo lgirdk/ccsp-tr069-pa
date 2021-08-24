@@ -8003,6 +8003,34 @@
         <Param>
             <Name>Device.X_LGI-COM_DeviceControl.SSH.Username</Name>
         </Param>
+  <!--  Parameters under "Device.X_LGI-COM_DigitalSecurity" -->
+        <Param>
+            <Name>Device.X_LGI-COM_DigitalSecurity.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_DigitalSecurity.UpdaterEnable</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_DigitalSecurity.ProvisionedEnvironment</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_DigitalSecurity.SigningKeyId</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_DigitalSecurity.Status</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_DigitalSecurity.AgentVersion</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_DigitalSecurity.AgentPassword</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_DigitalSecurity.MaxStartDelay</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_DigitalSecurity.ProvisioningModel</Name>
+        </Param>
 
     </ParamList>
 	<RpcMapper>

@@ -166,6 +166,7 @@ CcspManagementServer_InitCustom
         CCSP_STRING             sdmXmlFilename
     );
 
+#if 0
 /* Customizable default password generation, platform specific
  */
 extern ANSC_STATUS
@@ -174,6 +175,7 @@ CcspManagementServer_GenerateDefaultPassword
         CCSP_STRING             pDftPassword,
         PULONG                  pulLength
     );
+#endif
 
 #if defined (INTEL_PUMA7)
 //Intel Proposed RDKB Generic Bug Fix from XB6 SDK
@@ -1267,6 +1269,7 @@ CcspManagementServer_GetPassword
     }
     else 
     {
+#if 0
         char          DftPassword[72] = {0};
         ULONG         ulLength        = sizeof(DftPassword) - 1;
         ANSC_STATUS   returnStatus    = CcspManagementServer_GenerateDefaultPassword(DftPassword, &ulLength);
@@ -1288,6 +1291,9 @@ CcspManagementServer_GetPassword
 
             return  AnscCloneString(DftPassword);
         }
+#else
+        return  AnscCloneString("");
+#endif
     }
 }
 

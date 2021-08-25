@@ -539,7 +539,7 @@ CcspTr069PaSsp_DeviceDefaultUsernameGenerate
     return ANSC_STATUS_SUCCESS;
 }
 
-//#if 0
+#if 0
 
 char * CcspTr069PaSsp_retrieveSharedKey( void )
 {
@@ -636,8 +636,9 @@ char * CcspTr069PaSsp_retrieveSharedKey( void )
       
 	return SharedKey;
 }
-//#endif
+#endif
 
+#if 0
 static ANSC_STATUS
 CcspTr069PaSsp_DeviceDefaultPasswordGenerate
     (
@@ -746,7 +747,8 @@ CcspTr069PaSsp_DeviceDefaultPasswordGenerate
         return ANSC_STATUS_SUCCESS;
     }
 }
-  
+#endif
+
 ANSC_STATUS
 CcspManagementServer_GenerateDefaultUsername
     (
@@ -784,6 +786,7 @@ CcspManagementServer_GenerateDefaultUsername
     }
 }
 
+#if 0
 ANSC_STATUS
 CcspManagementServer_GenerateDefaultPassword
     (
@@ -821,3 +824,4 @@ CcspManagementServer_GenerateDefaultPassword
         }
     }
 }
+#endif

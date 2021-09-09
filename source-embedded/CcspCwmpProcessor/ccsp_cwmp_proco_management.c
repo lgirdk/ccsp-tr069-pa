@@ -834,7 +834,7 @@ CcspCwmppoClearParamAttrCache
                     pParamAttrs,
                     ulNumRecords,
                     (ANSC_HANDLE*)&pCwmpFault,
-                    TRUE
+                    FALSE
                 );
 
         for (int i = 0; i < ulNumRecords; ++ i)

@@ -8032,6 +8032,13 @@
             <Name>Device.X_LGI-COM_DigitalSecurity.ProvisioningModel</Name>
         </Param>
 
+  <!--  Parameters under "Device.X_LGI_COM_SamKnows" -->
+        <Param>
+            <Name>Device.X_LGI-COM_Applications.Speedtest.SamKnows.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Applications.Speedtest.SamKnows.Property</Name>
+        </Param>
     </ParamList>
 	<RpcMapper>
 		<Download>

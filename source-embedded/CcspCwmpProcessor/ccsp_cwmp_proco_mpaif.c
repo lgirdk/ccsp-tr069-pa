@@ -1393,8 +1393,6 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                 if((strstr(pParamValues->parameterValue,"Router")!=NULL && strstr(pParamValues->parameterValue,"Wifi")!=NULL && strstr(pParamValues->parameterValue,"VoIP")!=NULL && strstr(pParamValues->parameterValue,"MoCA")!=NULL)||strstr(pParamValues->parameterValue,"Device")!=NULL)
                 {   
 
-                    if ( strstr( pParamValues->parameterValue, "Device" ) != NULL )
-                    {
                         /* Before reboot device we need to set reboot reason */
                         parameterValStruct_t valStr 	 = { "Device.DeviceInfo.X_RDKCENTRAL-COM_LastRebootReason", "tr069-reboot" , ccsp_string };
                         char				 *faultParam = NULL;
@@ -1428,7 +1426,6 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
 
                             bus_info->freefunc(faultParam);
                         }
-                    }
 
                     CcspTr069PaTraceWarning
                         (
@@ -1448,6 +1445,15 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
 
                 if((strstr(pParamValues->parameterValue,"Router")!=NULL && strstr(pParamValues->parameterValue,"Wifi")!=NULL && strstr(pParamValues->parameterValue,"VoIP")!=NULL)||strstr(pParamValues->parameterValue,"Router")!=NULL)
                 {	
+                    if (syscfg_set(NULL, "X_RDKCENTRAL-COM_LastRebootReason", "Reboot Factory reset ACS") != 0)
+                    {
+                        AnscTraceWarning(("RDKB_REBOOT : Reboot factory reset syscfg_set failed ACS\n"));
+                    }
+
+                    if (syscfg_set_commit(NULL, "X_RDKCENTRAL-COM_LastRebootCounter", "1") != 0)
+                    {
+                        AnscTraceWarning(("syscfg_set failed\n"));
+                    }
 
                     CcspTr069PaTraceWarning
                         (

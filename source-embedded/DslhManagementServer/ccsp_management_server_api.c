@@ -223,6 +223,10 @@ int  CcspManagementServer_SetParameterAttributes(
         /* It is a parameter. */
         if(strlen(name) != 0)
         {
+            if((strcmp("ParameterKey", name) == 0) && (val[i].notification == 1))
+            {
+                return CCSP_ERR_SETATTRIBUTE_REJECTED;
+            }
             int parameterID = CcspManagementServer_GetParameterID(objectID, name);
             if(parameterID < 0)
             {

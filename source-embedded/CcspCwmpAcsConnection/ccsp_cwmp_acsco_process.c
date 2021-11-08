@@ -580,7 +580,7 @@ REDIRECTED:
 
         uRedirect ++;
 
-        if( uRedirect >= uMaxRedirect)
+        if( uRedirect > uMaxRedirect)
         {
             CcspTr069PaTraceDebug(("Maximum Redirection reached. Give up!\n"));
 

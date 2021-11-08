@@ -2518,6 +2518,9 @@
             <Name>Device.X_RDKCENTRAL-COM_SelfHeal.ResourceMonitor.X_RDKCENTRAL-COM_AvgMemoryThreshold</Name>
         </Param>
         <Param>
+            <Name>Device.X_RDKCENTRAL-COM_SelfHeal.ResourceMonitor.X_RDKCENTRAL-COM_ProcessMonitorInterval</Name>
+        </Param>
+        <Param>
             <Name>Device.IP.Interface.{i}.Enable</Name>
         </Param>
         <Param>

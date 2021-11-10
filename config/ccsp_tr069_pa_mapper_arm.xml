@@ -8040,6 +8040,12 @@
         <Param>
             <Name>Device.X_LGI-COM_Applications.Speedtest.SamKnows.GetProperty</Name>
         </Param>
+        <Param>
+    	    <Name>Device.X_LGI-COM_Multicast.Enable</Name>
+        </Param>
+        <Param>
+    	    <Name>Device.X_LGI-COM_Multicast.SnoopingEnable</Name>
+        </Param>
     </ParamList>
 	<RpcMapper>
 		<Download>

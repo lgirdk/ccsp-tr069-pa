@@ -1689,7 +1689,10 @@
 	<Param>
             <Name>Device.WiFi.AccessPoint.{i}.X_COMCAST-COM_AssociatedDevicesHighWatermarkDate</Name>
         </Param>
-	<Param>
+        <Param>
+            <Name>Device.WiFi.AccessPoint.{i}.MACAddressControlEnabled</Name>
+        </Param>
+        <Param>
             <Name>Device.WiFi.AccessPoint.{i}.X_COMCAST-COM_MAC_FilteringMode</Name>
         </Param>
         <!-- Add by LGI start -->

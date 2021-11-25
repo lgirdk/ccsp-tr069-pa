@@ -1716,6 +1716,12 @@
             <Name>Device.WiFi.AccessPoint.{i}.X_CISCO_COM_MACFilter.MACAddress</Name>
         </Param>
         <Param>
+            <Name>Device.WiFi.AccessPoint.{i}.Security.Reset</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.AccessPoint.{i}.Security.MFPConfig</Name>
+        </Param>        
+        <Param>
             <Name>Device.WiFi.AccessPoint.{i}.Security.ModesSupported</Name>
         </Param>
         <Param>
@@ -1911,6 +1917,9 @@
 	</Param>
 	<Param>
 	    <Name>Device.WiFi.AccessPoint.{i}.X_CISCO_COM_MacFilterTable.{i}.MACAddress</Name>
+	</Param>
+	<Param>
+            <Name>Device.WiFi.AccessPoint.{i}.Accounting.Enable</Name>
 	</Param>
 	<Param>
 	    <Name>Device.WiFi.AccessPoint.{i}.Accounting.ServerIPAddr</Name>

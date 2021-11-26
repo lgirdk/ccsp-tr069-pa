@@ -1460,6 +1460,9 @@
         <Param>
             <Name>Device.WiFi.Radio.{i}.CurrentOperatingChannelBandwidth</Name>
         </Param>
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.SupportedDataTransmitRates</Name>
+        </Param>
         <!-- Add by LGI end -->
         <Param>
             <Name>Device.WiFi.Radio.{i}.Stats.BytesSent</Name>

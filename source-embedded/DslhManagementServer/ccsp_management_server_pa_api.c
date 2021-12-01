@@ -175,9 +175,12 @@ CcspManagementServer_GenerateDefaultPassword
     );
 #endif
 
-#if defined (INTEL_PUMA7)
-//Intel Proposed RDKB Generic Bug Fix from XB6 SDK
-//Used to obtain the output from the shell for the given cmd
+/*
+   Note that there are two versions of _get_shell_output() used with RDKB.
+   This version, which accepts a char * command as the first argument, is
+   the older version. The newer version accepts a FILE pointer as created
+   by a call to v_secure_popen().
+*/
 static void _get_shell_output (char *cmd, char *buf, size_t len)
 {
     FILE *fp;
@@ -195,8 +198,6 @@ static void _get_shell_output (char *cmd, char *buf, size_t len)
             buf[len - 1] = 0;
     }
 }
-#endif
-
 
 static void updateInitalContact()
 {
@@ -430,7 +431,20 @@ void ReadTr69TlvData()
                         }
                         else
                         {
-                                GetConfigFrom_bbhm(ManagementServerURLID);
+                                char out[256];
+
+                                AnscTraceInfo(("%s %d. ManagementServer URL is not defined in config file. Check if  ACS URL is available from DHCP options  ",__func__,__LINE__));
+
+                                _get_shell_output("sysevent get DHCPv4_ACS_URL", out, sizeof(out));
+                                if (strlen(out) > 0)
+                                {
+                                    objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(out);
+                                    AnscTraceInfo(("%s %d. ManagementServer URL from DHCP option(DHCPv4_ACS_URL):%s  ",__func__,__LINE__,out));
+                                }
+                                else
+                                {
+                                    GetConfigFrom_bbhm(ManagementServerURLID);
+                                }
                         }
 
                         // Here, we need to check what is the value that we got through boot config file and update TR69 PA
@@ -503,30 +517,40 @@ void ReadTr69TlvData()
                          * that the Session was established due to a change to the ACS URL.
                          * Then the event code "0 BOOTSTRAP" will be contained in the first Inform.
                         */
-			if(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value == NULL)
-			{
-				objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(object2->URL);
-			}
-			//on Fresh bootup / boot after factory reset, if the URL is empty, set default URL value
-                        if (object2->URL[0] == '\0')
-			{
-                if (g_Tr069PaAcsDefAddr!= NULL)
-                {
-                    AnscTraceWarning(("ACS URL = %s  \n",g_Tr069PaAcsDefAddr));
-                    objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(g_Tr069PaAcsDefAddr);
-                }
-                else
-                {
-                    AnscTraceWarning(("Unable to retrieve ACS URL  \n"));
-                }
-			}
-			else
-			{
-				if(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value == NULL)
-				{
-					objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(object2->URL);
-				}
-			}
+                        if(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value == NULL)
+                        {
+                               objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(object2->URL);
+                        }
+                        //on Fresh bootup / boot after factory reset, if the URL is empty, set default URL value
+                      if (object2->URL[0] == '\0')  
+                      {
+                          char out[256];
+
+                          AnscTraceInfo(("%s %d. ManagementServer URL is not defined in config file. Check if  ACS URL is available from DHCP options  ",__func__,__LINE__));
+
+                          _get_shell_output("sysevent get DHCPv4_ACS_URL", out, sizeof(out));
+                          if (strlen(out) > 0)
+                         {
+                             objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(out);
+                             AnscTraceInfo(("%s %d. ManagementServer URL from DHCP option(DHCPv4_ACS_URL):%s  ",__func__,__LINE__,out));                    
+                         }
+                         else if (g_Tr069PaAcsDefAddr!= NULL)
+                         {
+                             AnscTraceWarning(("ACS URL = %s  \n",g_Tr069PaAcsDefAddr));
+                             objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(g_Tr069PaAcsDefAddr);
+                         }
+                        else
+                        {
+                            AnscTraceWarning(("Unable to retrieve ACS URL  \n"));
+                        }
+                    }
+                   else
+                   {
+                                if(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value == NULL)
+                                {
+                                      objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(object2->URL);
+                                }
+                  }
 			// Here, we need to check what is the value that we got through boot config file and update TR69 PA
 			if(object2->EnableCWMP == 1)
 				objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = AnscCloneString("true");

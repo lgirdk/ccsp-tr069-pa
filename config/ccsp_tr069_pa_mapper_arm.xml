@@ -1368,6 +1368,9 @@
             <Name>Device.WiFi.Radio.{i}.RegulatoryDomain</Name>
         </Param>
         <Param>
+            <Name>Device.WiFi.Radio.{i}.RetryLimit</Name>
+        </Param>
+        <Param>
             <Name>Device.WiFi.Radio.{i}.X_CISCO_COM_RTSThreshold</Name>
         </Param>
         <Param>
@@ -1462,6 +1465,9 @@
         </Param>
         <Param>
             <Name>Device.WiFi.Radio.{i}.SupportedDataTransmitRates</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.OperationalDataTransmitRates</Name>
         </Param>
         <!-- Add by LGI end -->
         <Param>

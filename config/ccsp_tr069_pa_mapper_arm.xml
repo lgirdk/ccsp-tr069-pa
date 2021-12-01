@@ -8054,6 +8054,22 @@
         <Param>
     	    <Name>Device.X_LGI-COM_Multicast.SnoopingEnable</Name>
         </Param>
+  <!--  Parameters under "Device.X_LGI-COM_EventLogging" -->
+        <Param>
+            <Name>Device.X_LGI-COM_EventLogging.WiFiEventLogNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_EventLogging.EventLog.{i}.Tag</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_EventLogging.EventLog.{i}.Timestamp</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_EventLogging.EventLog.{i}.Pri</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_EventLogging.EventLog.{i}.Message</Name>
+        </Param>
     </ParamList>
 	<RpcMapper>
 		<Download>

@@ -175,13 +175,6 @@ static void ReadTr69TlvData (int ethwan_enable)
 #if defined (INTEL_PUMA7)
 	//Intel Proposed RDKB Generic Bug Fix from XB6 SDK
 	char out[16];
-#endif
-	Tr69TlvData *object2=malloc(sizeof(Tr69TlvData));
-#if !defined (INTEL_PUMA7)
-	FILE * file= fopen(TR69_TLVDATA_FILE, "rb");
-#else
-	//Intel Proposed RDKB Generic Bug Fix from XB6 SDK
-	FILE *file = NULL;
 	int watchdog = NO_OF_RETRY;
         FILE *fp = NULL;
 	int ret = 0;
@@ -208,10 +201,20 @@ static void ReadTr69TlvData (int ethwan_enable)
 	{
 		fprintf(stderr, "\n%s(): Ccsp_GwProvApp haven't been able to initialize TLV Data.\n", __FUNCTION__);
 	}
-
-	file = fopen(TR69_TLVDATA_FILE, "rb");
 #endif
-	if ((file != NULL) && (object2) && (!ethwan_enable)) //RDKB-40531: As T69_TLVDATA_FILE should not be considered for ETHWAN mode
+
+	FILE *file = NULL;
+	Tr69TlvData *object2 = NULL;
+
+	if (!ethwan_enable) //RDKB-40531: As T69_TLVDATA_FILE should not be considered for ETHWAN mode
+	{
+		if ((file = fopen(TR69_TLVDATA_FILE, "rb")) != NULL)
+		{
+			object2 = malloc(sizeof(Tr69TlvData));
+		}
+	}
+
+	if ((file != NULL) && (object2))
 	{
 		size_t nm = fread(object2, sizeof(Tr69TlvData), 1, file);
 		fclose(file);

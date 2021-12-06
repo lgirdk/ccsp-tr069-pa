@@ -2874,6 +2874,9 @@
 	<Param>
             <Name>Device.Routing.RIP.InterfaceSetting.{i}.X_CISCO_COM_Neighbor</Name>
         </Param>
+        <Param>
+            <Name>Device.Routing.RIP.InterfaceSetting.{i}.X_LGI-COM_UpdateInterval</Name>
+        </Param>
 	
         <Param>
             <Name>Device.Routing.RouteInformation.Enable</Name>

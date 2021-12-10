@@ -2352,6 +2352,8 @@ CcspCwmppoMpaGetParameterValues
             {
 		GetParamSuccessStatus = TRUE;
                 BOOL                bNsInvisibleToCloudServer = FALSE;
+                BOOL                bSyscfgGet = FALSE;
+                BOOL                bPwdFlag = TRUE;
 
                 for ( k = 0; k < nParamCount; k ++ )
                 {
@@ -2361,39 +2363,91 @@ CcspCwmppoMpaGetParameterValues
                     CcspCwmppoMpaMapParamInstNumDmIntToCwmp(pParamValues[k]->parameterName);
                     CcspCwmppoMpaMapParamInstNumDmIntToCwmp(pParamValues[k]->parameterValue);
 
-                    const char *WiFiAccessPoint3[WIFI_KEYPASSPHRASE_SET1] = {"Device.WiFi.AccessPoint.10004.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10104.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10002.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10102.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10006.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10106.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10007.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10107.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10002.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10102.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10006.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10106.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10007.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10107.Security.X_COMCAST-COM_KeyPassphrase"};
+                    CcspTr069PaMapToExternalAlias
+                        (
+                            pCcspCwmpCpeController->hTr069PaMapper,
+                            &pParamValues[k]->parameterName
+                        );
 
-                     for(i = 0; i < WIFI_KEYPASSPHRASE_SET1; i++)
-                     {
-                         rc = strcmp_s(WiFiAccessPoint3[i], strlen(WiFiAccessPoint3[i]), pParamValues[k]->parameterName, &ind);
-                         ERR_CHK(rc);
-                         if((rc == EOK) && (!ind))
-                         {
-                             syscfg_get( NULL, "TR069PSWDCTRLFLAG", sysbuf, sizeof(sysbuf));
+#if !defined (_CWMP_ALLOW_INTERNAL_INDEXES_)
+                    // if the parameter name doesn't match the requested name
+                    // it's a side effect from aliasing, should not be returned
+                    if (!bParamNameArrayEmpty && !CcspTr069PaMatchRequestQuery(pParamValues[k]->parameterName, pParamNameArray) )
+                    {
+                        bNsInvisibleToCloudServer = TRUE;
+                    }
+                    else
+#endif
+                    {
 
-                             // if TR069PSWDCTRLFLAG == false then Get query returns empty string.
-                             rc = strcmp_s("false",strlen("false"),sysbuf,&ind);
-                             ERR_CHK(rc);
-                             if((rc == EOK) && (!ind))
-                             {
-                                 if(pParamValues[k]->parameterValue)
-                                 {
-                                     AnscFreeMemory(pParamValues[k]->parameterValue);
-                                     pParamValues[k]->parameterValue = NULL;
-                                 }
-                                 pParamValues[k]->parameterValue = AnscCloneString(" ");
-                             }
+                    /* filter out namespace that is not supported by this PA, or invisible
+                     * to cloud server through this PA
+                     */
+                    CcspTr069PaVisibleToCloudServer
+                        (
+                            bExcludeInvNs,
+                            pFcNsList->Subsystem,
+                            pParamValues[k]->parameterName,
+                            bNsInvisibleToCloudServer
+                        );
+                    }
+                    if ( bNsInvisibleToCloudServer )
+                    {
+                        if ( pParamValues[k]->parameterName )
+                        {
+                            AnscFreeMemory(pParamValues[k]->parameterName);
+                            pParamValues[k]->parameterName = NULL;
+                        }
+                        if ( pParamValues[k]->parameterValue )
+                        {
+                            AnscFreeMemory(pParamValues[k]->parameterValue);
+                            pParamValues[k]->parameterValue = NULL;
+                        }
+                        bNsInvisibleToCloudServer = FALSE;
+                        continue;
+                    }
 
-                             validArg = 1;
-                             break;
-                          }
-                      }
+                    if (0 ==  strncmp(pParamValues[k]->parameterName, "Device.WiFi.AccessPoint.", 24))
+                    {
+                        if (FALSE == bSyscfgGet)
+                        {
+                            syscfg_get( NULL, "TR069PSWDCTRLFLAG", sysbuf, sizeof(sysbuf));
+                            bSyscfgGet = TRUE;
+                            rc = strcmp_s("false",strlen("false"),sysbuf,&ind);
+                            ERR_CHK(rc);
+                            if((rc == EOK) && (!ind))
+                            {
+                                bPwdFlag = FALSE;
+                            }
+                        }
+                        const char *WiFiAccessPoint3[WIFI_KEYPASSPHRASE_SET1] = {"Device.WiFi.AccessPoint.10004.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10104.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10002.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10102.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10006.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10106.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10007.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10107.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10002.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10102.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10006.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10106.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10007.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10107.Security.X_COMCAST-COM_KeyPassphrase"};
 
-                    //Checking Password control flag
-                   const char *WiFiAccessPoint4[WIFI_KEYPASSPHRASE_SET2] = {"Device.WiFi.AccessPoint.10003.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10103.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10005.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10105.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10003.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10103.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10005.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10105.Security.X_COMCAST-COM_KeyPassphrase"};
+                        for(i = 0; i < WIFI_KEYPASSPHRASE_SET1; i++)
+                        {
+                            rc = strcmp_s(WiFiAccessPoint3[i], strlen(WiFiAccessPoint3[i]), pParamValues[k]->parameterName, &ind);
+                            ERR_CHK(rc);
+                            if((rc == EOK) && (!ind))
+                            {
+                                // if TR069PSWDCTRLFLAG == false then Get query returns empty string.
+                                if(FALSE == bPwdFlag)
+                                {
+                                    if(pParamValues[k]->parameterValue)
+                                    {
+                                        AnscFreeMemory(pParamValues[k]->parameterValue);
+                                        pParamValues[k]->parameterValue = NULL;
+                                    }
+                                    pParamValues[k]->parameterValue = AnscCloneString(" ");
+                                }
 
-                       if(!validArg)
-                       {
+                                validArg = 1;
+                                break;
+                            }
+                        }
+
+                        //Checking Password control flag
+                        const char *WiFiAccessPoint4[WIFI_KEYPASSPHRASE_SET2] = {"Device.WiFi.AccessPoint.10003.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10103.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10005.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10105.Security.KeyPassphrase", "Device.WiFi.AccessPoint.10003.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10103.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10005.Security.X_COMCAST-COM_KeyPassphrase", "Device.WiFi.AccessPoint.10105.Security.X_COMCAST-COM_KeyPassphrase"};
+                        if(!validArg)
+                        {
                             for (i=0; i<WIFI_KEYPASSPHRASE_SET2; i++)
                             {
                                 rc = strcmp_s(WiFiAccessPoint4[i], strlen(WiFiAccessPoint4[i]), pParamValues[k]->parameterName, &ind);
@@ -2402,14 +2456,15 @@ CcspCwmppoMpaGetParameterValues
                                 {
                                     if(pParamValues[k]->parameterValue)
                                     {
-                                         AnscFreeMemory(pParamValues[k]->parameterValue);
-                                         pParamValues[k]->parameterValue = NULL;
+                                        AnscFreeMemory(pParamValues[k]->parameterValue);
+                                        pParamValues[k]->parameterValue = NULL;
                                     }
                                     pParamValues[k]->parameterValue = AnscCloneString(" ");
                                     break;
                                 }
                             }
-                       }
+                        }
+                    }
 
                     //Return empty string for xfinity-open and xfinity-secure WiFi passwords
                     //Completed Password control check
@@ -2454,72 +2509,28 @@ CcspCwmppoMpaGetParameterValues
                                              AnscCopyString(pParamValues[k]->parameterName , "Device.X_COMCAST_COM_CM.ReinitCmMac");
                                          }
 
-                    CcspTr069PaMapToExternalAlias
+                    CcspTr069PaPushGpvNsInQueue
                         (
-                            pCcspCwmpCpeController->hTr069PaMapper,
-                            &pParamValues[k]->parameterName
+                            &pFcGpvResNsList->NsList,
+                            pParamValues[k]->parameterName,
+                            pParamValues[k]->parameterValue,
+                            pParamValues[k]->type,
+                            pNsList
                         );
 
-#if !defined (_CWMP_ALLOW_INTERNAL_INDEXES_)
-                    // if the parameter name doesn't match the requested name
-                    // it's a side effect from aliasing, should not be returned
-                    if (!bParamNameArrayEmpty && !CcspTr069PaMatchRequestQuery(pParamValues[k]->parameterName, pParamNameArray) )
+                    if ( !pNsList )
                     {
-                        bNsInvisibleToCloudServer = TRUE;
+                        returnStatus = ANSC_STATUS_RESOURCES;
+                        break;
                     }
-                    else
-#endif
+
+                    pParamValues[k]->parameterName  = NULL;
+                    pParamValues[k]->parameterValue = NULL;
+
+                    if ( AnscQueueQueryDepth(&pFcGpvResNsList->NsList) > uMaxEntry )
                     {
-
-                    /* filter out namespace that is not supported by this PA, or invisible
-                     * to cloud server through this PA
-                     */
-                    CcspTr069PaVisibleToCloudServer
-                        (
-                            bExcludeInvNs,
-                            pFcNsList->Subsystem,
-                            pParamValues[k]->parameterName, 
-                            bNsInvisibleToCloudServer
-                        );
-                    }
-                    if ( bNsInvisibleToCloudServer )
-                    {
-                        if ( pParamValues[k]->parameterName )
-                        {
-                            AnscFreeMemory(pParamValues[k]->parameterName);
-                            pParamValues[k]->parameterName = NULL;
-                        }
-                        if ( pParamValues[k]->parameterValue )
-                        {
-                            AnscFreeMemory(pParamValues[k]->parameterValue);
-                            pParamValues[k]->parameterValue = NULL;
-                        }
-                    }
-                    else
-                    {
-                        CcspTr069PaPushGpvNsInQueue
-                            (
-                                &pFcGpvResNsList->NsList,
-                                pParamValues[k]->parameterName,
-                                pParamValues[k]->parameterValue,
-                                pParamValues[k]->type,
-                                pNsList
-                            );
-
-                        if ( !pNsList )
-                        {
-                            returnStatus = ANSC_STATUS_RESOURCES;
-                            break;
-                        }
-
-                        pParamValues[k]->parameterName  = NULL;
-                        pParamValues[k]->parameterValue = NULL;
-
-                        if ( AnscQueueQueryDepth(&pFcGpvResNsList->NsList) > uMaxEntry )
-                        {
-                            returnStatus = ANSC_STATUS_RESOURCES;
-                            break;
-                        }
+                        returnStatus = ANSC_STATUS_RESOURCES;
+                        break;
                     }
                 }
             }

@@ -5263,6 +5263,9 @@
             <Name>Device.NeighborDiscovery.InterfaceSetting.{i}.Interface</Name>
         </Param>
         <Param>
+            <Name>Device.NeighborDiscovery.InterfaceSetting.{i}.DADTransmits</Name>
+        </Param>
+        <Param>
             <Name>Device.NeighborDiscovery.InterfaceSetting.{i}.RetransTimer</Name>
         </Param>
         <Param>

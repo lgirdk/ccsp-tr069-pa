@@ -5371,7 +5371,7 @@ CcspCwmppoLoadValueChangedTask
 
     if ( numInstances == 0 )
     {
-        CcspTr069PaTraceWarning(("ccspCwmppoLoadValueChanged - no pending ValueChanged events.\n"));
+        CcspTr069PaTraceDebug(("ccspCwmppoLoadValueChanged - no pending ValueChanged events.\n"));
         status = ANSC_STATUS_CANT_FIND;
         goto EXIT;
     }
@@ -5596,7 +5596,7 @@ CcspCwmppoSaveValueChanged
 
         if ( psmStatus == CCSP_SUCCESS && ( 0 == _ansc_strcmp(pValue, pParameterName ) ) )
         {
-            CcspTr069PaTraceWarning(("CcspCwmppoSaveValueChanged - Parameter %s entry already is available in psm\n",pParameterName));
+            CcspTr069PaTraceDebug(("CcspCwmppoSaveValueChanged - Parameter %s entry already is available in psm\n",pParameterName));
             CcspTr069PaFreeMemory(pValue);
             pValue = NULL;
             returnStatus = ANSC_STATUS_SUCCESS;
@@ -5732,7 +5732,7 @@ CcspCwmppoDiscardValueChanged
     unsigned int*                   pInsNumbers             = NULL;
     char*                           pValue                  = NULL;
 
-    CcspTr069PaTraceWarning(("CcspCwmppoDiscardValueChanged - Discarding Value Changed events...\n"));
+    CcspTr069PaTraceDebug(("CcspCwmppoDiscardValueChanged - Discarding Value Changed events...\n"));
     _ansc_snprintf
         (
             psmTcName,
@@ -5761,7 +5761,7 @@ CcspCwmppoDiscardValueChanged
 
     if ( numInstances == 0 )
     {
-        CcspTr069PaTraceWarning(("ccspCwmppoDiscardValueChanged - no pending ValueChanged events to discard.\n"));
+        CcspTr069PaTraceDebug(("ccspCwmppoDiscardValueChanged - no pending ValueChanged events to discard.\n"));
         status = ANSC_STATUS_CANT_FIND;
         goto EXIT;
     }

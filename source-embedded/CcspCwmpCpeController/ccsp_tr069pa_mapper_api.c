@@ -350,7 +350,7 @@ CcspTr069PA_LoadInstanceMapper
     PANSC_XML_DOM_NODE_OBJECT       pChildNode     = NULL;
     CCSP_ULONG                      ulSize;
 
-    CcspTr069PaTraceWarning(("%s... \n", __FUNCTION__));
+    CcspTr069PaTraceDebug(("%s... \n", __FUNCTION__));
 
     if(pInstanceNode == NULL) return;
 
@@ -380,7 +380,7 @@ CcspTr069PA_LoadInstanceMapper
     }
     else
     {
-        CcspTr069PaTraceWarning(("CcspTr069PA_LoadInstanceMapper map %s has %d maps \n", pMap->CcspDmlName, pMap->numMaps));
+        CcspTr069PaTraceDebug(("CcspTr069PA_LoadInstanceMapper map %s has %d maps \n", pMap->CcspDmlName, pMap->numMaps));
     }
 
     int i = 0;
@@ -406,7 +406,7 @@ CcspTr069PA_LoadInstanceMapper
             break;
         }
         
-        CcspTr069PaTraceWarning(("CcspTr069PA_LoadInstanceMapper Cwmp %d to DmInt %d\n", pMap->InstanceMap[i].Tr069CpeInstanceNumber,  pMap->InstanceMap[i].CcspInstanceNumber));
+        CcspTr069PaTraceDebug(("CcspTr069PA_LoadInstanceMapper Cwmp %d to DmInt %d\n", pMap->InstanceMap[i].Tr069CpeInstanceNumber,  pMap->InstanceMap[i].CcspInstanceNumber));
     }
 }
 /*CWMP_2_DM_INT_INSTANCE_NUMBER_MAPPING ends */
@@ -1024,7 +1024,7 @@ CcspTr069PA_LoadFromXMLFile(void*  pXMLHandle)
         /* CWMP_2_DM_INT_INSTANCE_NUMBER_MAPPING */
         else if(AnscEqualString(pChildNode->Name, "InstanceMapper", TRUE))
         {
-            CcspTr069PaTraceWarning(("InstanceMapper loading...\n"));
+            CcspTr069PaTraceDebug(("InstanceMapper loading...\n"));
             NumOfInstanceMaps = pChildNode->ChildNodeQueue.Depth;
             CcspTr069CpeInstanceMaps = (PCCSP_TR069_CPEINSTANCE_MAP) CcspTr069PaAllocateMemory(NumOfInstanceMaps * sizeof(CCSP_TR069_CPEINSTANCE_MAP));
             i = 0;
@@ -1032,7 +1032,7 @@ CcspTr069PA_LoadFromXMLFile(void*  pXMLHandle)
             while (pListNode != NULL)
             {
                 CcspTr069PA_LoadInstanceMapper( &(CcspTr069CpeInstanceMaps[i]), pListNode);
-                CcspTr069PaTraceWarning(("%s childNodeQueue depth: %d\n", pListNode->Name, pListNode->ChildNodeQueue.Depth));
+                CcspTr069PaTraceDebug(("%s childNodeQueue depth: %d\n", pListNode->Name, pListNode->ChildNodeQueue.Depth));
                 i++;
                 pListNode = (PANSC_XML_DOM_NODE_OBJECT)pChildNode->GetNextChild(pChildNode, pListNode);
             }
@@ -1404,7 +1404,7 @@ CcspTr069PA_MapInstNumCwmpToDmInt
 
     if ( foundMatch == TRUE )
     {
-        CcspTr069PaTraceWarning(("%s - %s -> %s \n", __FUNCTION__, pCwmpString, pDmIntString ? pDmIntString : "NULL"));
+        CcspTr069PaTraceDebug(("%s - %s -> %s \n", __FUNCTION__, pCwmpString, pDmIntString ? pDmIntString : "NULL"));
     }
     else
     {
@@ -1535,7 +1535,7 @@ CcspTr069PA_MapInstNumDmIntToCwmp
 
     if ( foundMatch == TRUE )
     {
-        CcspTr069PaTraceWarning(("%s - %s -> %s \n", __FUNCTION__, pDmIntString, pCwmpString ? pCwmpString : "NULL"));
+        CcspTr069PaTraceDebug(("%s - %s -> %s \n", __FUNCTION__, pDmIntString, pCwmpString ? pCwmpString : "NULL"));
     }
     else
     {
@@ -2114,7 +2114,7 @@ CcspTr069PA_GetParamInternalNames
 
     if (!ParamName || ParamName[0] == 0)
     {
-        CcspTr069PaTraceWarning(("TR-069 PA alias mapping empty parameter name requested\n"));
+        CcspTr069PaTraceDebug(("TR-069 PA alias mapping empty parameter name requested\n"));
         return NULL;
     }
 

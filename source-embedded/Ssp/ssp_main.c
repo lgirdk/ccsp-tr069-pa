@@ -364,8 +364,6 @@ static BOOL is_customer_data_model (void)
 {
     char sysbuf[8];
 
-    syscfg_init();
-
     if (syscfg_get (NULL, "custom_data_model_enabled", sysbuf, sizeof(sysbuf)) == 0)
     {
         if (strcmp (sysbuf, "1") == 0)

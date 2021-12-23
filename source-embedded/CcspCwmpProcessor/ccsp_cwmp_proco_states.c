@@ -257,7 +257,7 @@ CcspCwmppoGetInitialContact
 
     	pProperty->bInitialContact = pValue ? _ansc_atoi(pValue) : TRUE;
 
-        CcspTr069PaTraceWarning(("InitialContact read from PSM is: <%s>\n", pProperty->bInitialContact ? "TRUE":"FALSE")); 
+        CcspTr069PaTraceDebug(("InitialContact read from PSM is: <%s>\n", pProperty->bInitialContact ? "TRUE":"FALSE")); 
 
         if (access(CCSP_MGMT_CRPWD_FILE,F_OK)!=0 && pValue!=NULL)
 	{
@@ -380,7 +380,7 @@ CcspCwmppoGetInitialContactFactory
 
     	bInitialContactFactory = pValue ? _ansc_atoi(pValue) : TRUE;
 
-        CcspTr069PaTraceWarning(("InitialContact read from PSM is: <%s>\n", bInitialContactFactory ? "TRUE":"FALSE")); 
+        CcspTr069PaTraceDebug(("InitialContact read from PSM is: <%s>\n", bInitialContactFactory ? "TRUE":"FALSE")); 
 
     	if ( pValue )
 	    {

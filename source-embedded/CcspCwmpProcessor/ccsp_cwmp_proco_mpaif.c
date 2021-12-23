@@ -1507,7 +1507,6 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                 ERR_CHK(rc);
                 if((rc == EOK) && (!ind))
                 {
-                    syscfg_init();
                     syscfg_get( NULL, "TR069PSWDCTRLFLAG", sysbuf, sizeof(sysbuf));
 
                     // if TR069PSWDCTRLFLAG == false then Set not allowed.
@@ -2423,7 +2422,6 @@ CcspCwmppoMpaGetParameterValues
                     {
                         if (FALSE == bSyscfgGet)
                         {
-                            syscfg_init();
                             syscfg_get( NULL, "TR069PSWDCTRLFLAG", sysbuf, sizeof(sysbuf));
                             bSyscfgGet = TRUE;
                             rc = strcmp_s("false",strlen("false"),sysbuf,&ind);

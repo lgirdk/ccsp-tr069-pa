@@ -354,8 +354,6 @@ BOOL is_customer_data_model()
 {
     char sysbuf[8] = {0};
 
-    syscfg_init();
-
     syscfg_get( NULL, "custom_data_model_enabled", sysbuf, sizeof(sysbuf));
 
     if (sysbuf[0] != 0)
@@ -380,8 +378,6 @@ char* get_customer_data_model_file_name()
 {
     char* sysbuf = AnscAllocateMemory(256);
     AnscZeroMemory(sysbuf, 256);
-
-    syscfg_init();
 
     syscfg_get( NULL, "custom_data_model_file_name", sysbuf, 256);
 
@@ -529,7 +525,6 @@ int main(int argc, char* argv[])
     }
 
     cmd_dispatch('e');
-    syscfg_init();
     CcspTraceInfo(("TR69_DBG:-------Read Log Info\n"));
     char buffer[5] = {0};
     if( 0 == syscfg_get( NULL, "X_RDKCENTRAL-COM_LoggerEnable" , buffer, sizeof( buffer ) ) &&  ( buffer[0] != '\0' ) )

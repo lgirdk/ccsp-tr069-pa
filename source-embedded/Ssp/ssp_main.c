@@ -364,8 +364,6 @@ static BOOL is_customer_data_model (void)
 {
     char sysbuf[8];
 
-    syscfg_init();
-
     if (syscfg_get (NULL, "custom_data_model_enabled", sysbuf, sizeof(sysbuf)) == 0)
     {
         if (strcmp (sysbuf, "1") == 0)
@@ -529,7 +527,6 @@ int main(int argc, char* argv[])
     }
 
     cmd_dispatch('e');
-    syscfg_init();
     CcspTraceInfo(("TR69_DBG:-------Read Log Info\n"));
     char buffer[5] = {0};
     if( 0 == syscfg_get( NULL, "X_RDKCENTRAL-COM_LoggerEnable" , buffer, sizeof( buffer ) ) &&  ( buffer[0] != '\0' ) )

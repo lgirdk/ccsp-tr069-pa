@@ -428,9 +428,6 @@ void ReadTr69TlvData()
 		{
 			char buf[ 8 ] = { 0 };
 
-			//Init syscfg if not already init case
-			syscfg_init( );
-			
 			//Get the Syndication_EnableCWMP value and overwrite always during boot-up when cmconfig file not available case
 			if( ( 0 == syscfg_get( NULL, "Syndication_EnableCWMP", buf, sizeof( buf )) ) && \
 				( '\0' != buf[ 0 ] ) 

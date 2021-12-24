@@ -2046,13 +2046,13 @@
             <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.ClearBlacklist24G</Name>
         </Param>
         <Param>
-            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.RSSIThreshold5GHz</Name>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.RSSIThreshold</Name>
         </Param>
         <Param>
-            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.DeltaThreshold5GHz</Name>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.DeltaThreshold</Name>
         </Param>
         <Param>
-            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.TempTimeout24GHz</Name>
+            <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.BlacklistTimeout</Name>
         </Param>
         <Param>
             <Name>Device.WiFi.X_LGI-COM_BandSteering.SSID.{i}.Capable5GNumberOfEntries</Name>

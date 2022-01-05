@@ -74,12 +74,19 @@
 
 **********************************************************************/
 
+/*
+   Define USE_PARTNER_ID to use partner ID to access some parameters
+*/
+//#define USE_PARTNER_ID
 
 #include "ssp_global.h"
 #include "ansc_xml_dom_parser_interface.h"
 #include "ansc_xml_dom_parser_external_api.h"
 #include "ansc_xml_dom_parser_status.h"
+
+#ifdef USE_PARTNER_ID
 #include "cJSON.h"
+#endif
 
 
 
@@ -93,7 +100,9 @@ extern  ANSC_HANDLE bus_handle;
 
 #ifdef   _ANSC_USE_OPENSSL_
 #define CCSP_TR069PA_CFG_Name_Certificates      "certificates"
+#ifdef USE_PARTNER_ID
 #define CCSP_TR069PA_CERTIFICATE_CFG_Name_ca    "Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation"
+#endif
 #define CCSP_TR069PA_CERTIFICATE_CFG_Name_dev   "DEV"
 #define CCSP_TR069PA_CERTIFICATE_CFG_Name_pkey  "PrivateKey"
 
@@ -107,13 +116,17 @@ extern char* openssl_client_private_key_file;
 #define CCSP_TR069PA_CFG_Name_Outbound_If       "OutboundInterface"
 extern char* g_Tr069PaOutboundIfName;
 
+#ifdef USE_PARTNER_ID
 #define BOOTSTRAP_INFO_FILE                              "/nvram/bootstrap.json"
 #define CCSP_TR069PA_CFG_Name_AcsDefAddr		"Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69ACSConnectURL"
+#endif
 extern char* g_Tr069PaAcsDefAddr;
 
 #define DEVICE_PROPERTIES    "/etc/device.properties"
 
+#ifdef USE_PARTNER_ID
 void CcspTr069PaSsp_GetPartnerID(char *partnerID);
+#endif
 
 #if 0
 static ANSC_STATUS  
@@ -207,6 +220,8 @@ CcspTr069PaSsp_XML_GetOneItemByName
     CcspTr069PaTraceDebug(("%s: %s = %s\n", __FUNCTION__, (ItemName)?(ItemName):"NULL", (*retVal)?(*retVal):"NULL"));                                                     
     //    fprintf(stderr, "%s: %s = %s\n", __FUNCTION__, (ItemName)?(ItemName):"NULL", (*retVal)?(*retVal):"NULL");
 }
+
+#ifdef USE_PARTNER_ID
 
 ANSC_STATUS CcspTr069PaSsp_JSON_GetItemByName    (
         char*                      partnerID,
@@ -304,6 +319,8 @@ ANSC_STATUS CcspTr069PaSsp_JSON_GetItemByName    (
 	return ANSC_STATUS_SUCCESS;
 }
 
+#endif
+
 ANSC_STATUS  
 CcspTr069PaSsp_LoadCfgFile
     (
@@ -313,7 +330,9 @@ CcspTr069PaSsp_LoadCfgFile
     ANSC_STATUS                     returnStatus       = ANSC_STATUS_SUCCESS;
     char*                           pXMLContent        = NULL;
     ULONG                           uBufferSize        = 0;
+#ifdef USE_PARTNER_ID
     char partnerID[128];
+#endif
     /* load configuration file */
     {
         ANSC_HANDLE  pFileHandle = NULL;
@@ -367,7 +386,9 @@ CcspTr069PaSsp_LoadCfgFile
             goto EXIT;
         }
 
+#ifdef USE_PARTNER_ID
 	CcspTr069PaSsp_GetPartnerID(partnerID);
+#endif
 
 #ifdef   _ANSC_USE_OPENSSL_
         pChildNode = (PANSC_XML_DOM_NODE_OBJECT)
@@ -382,7 +403,15 @@ CcspTr069PaSsp_LoadCfgFile
             char cmd[512] = {0};
 
             // Fallback case to load default cerification file
+#ifdef USE_PARTNER_ID
             CcspTr069PaSsp_JSON_GetItemByName(partnerID, CCSP_TR069PA_CERTIFICATE_CFG_Name_ca, &openssl_client_ca_certificate_files);
+#else
+            if (openssl_client_ca_certificate_files)
+            {
+                AnscFreeMemory (openssl_client_ca_certificate_files);
+            }
+            openssl_client_ca_certificate_files = CcspTr069PaCloneString ("/etc/cacert.pem");
+#endif
 
             // Load  Certfication file only if it is not NULL
             if (openssl_client_ca_certificate_files)
@@ -397,12 +426,23 @@ CcspTr069PaSsp_LoadCfgFile
         
         CcspTr069PaSsp_XML_GetOneItemByName(pRootNode, CCSP_TR069PA_CFG_Name_Outbound_If, &g_Tr069PaOutboundIfName);
 
+#ifdef USE_PARTNER_ID
 	if(ANSC_STATUS_SUCCESS != CcspTr069PaSsp_JSON_GetItemByName(partnerID, CCSP_TR069PA_CFG_Name_AcsDefAddr, &g_Tr069PaAcsDefAddr)) {
 		returnStatus = ANSC_STATUS_FAILURE;
 	}
 	else {
         	returnStatus = ANSC_STATUS_SUCCESS;
 	}
+#else
+	if (g_Tr069PaAcsDefAddr)
+	{
+		AnscFreeMemory (g_Tr069PaAcsDefAddr);
+	}
+
+	g_Tr069PaAcsDefAddr = NULL;
+
+	returnStatus = ANSC_STATUS_SUCCESS;
+#endif
     }
     
 EXIT:
@@ -604,8 +644,12 @@ CcspTr069PaSsp_GetTr069CertificateLocationForSyndication
    return  ANSC_STATUS_SUCCESS;
 }
 
+#ifdef USE_PARTNER_ID
+
 void
 CcspTr069PaSsp_GetPartnerID(char *partnerID)
 {
 	getPartnerId ( partnerID ) ;
 }
+
+#endif

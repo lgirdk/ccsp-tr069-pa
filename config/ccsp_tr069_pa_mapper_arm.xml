@@ -462,12 +462,6 @@
         <Param>
             <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadAndFactoryReset</Name>
         </Param>
-        <Param>
-            <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_xOpsDeviceMgmt.Logging.xOpsDMUploadLogsNow</Name>
-        </Param>
-        <Param>
-            <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_xOpsDeviceMgmt.Logging.xOpsDMLogsUploadStatus</Name>
-        </Param>
         <!-- Syndication Partner Information -->
         <Param>
             <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.PartnerId</Name>

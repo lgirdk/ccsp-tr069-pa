@@ -440,6 +440,7 @@ void ReadTr69TlvData()
                                     _get_shell_output("sysevent get DHCPv6_ACS_URL", out, sizeof(out));
                                     if (strlen(out) > 0)
                                     {
+                                        AnscTraceInfo(("%s %d.  DHCPv6_ACS_URL:%s from DHCP options after:%d retries \n ",__func__,__LINE__,out,i));
                                         break;
                                     }
                                     sleep(3);
@@ -458,6 +459,7 @@ void ReadTr69TlvData()
                                         _get_shell_output("sysevent get DHCPv4_ACS_URL", out, sizeof(out));
                                         if (strlen(out) > 0)
                                         {
+                                           AnscTraceInfo(("%s %d.  DHCPv4_ACS_URL:%s from DHCP options after:%d retries \n ",__func__,__LINE__,out,i));
                                            break;
                                         }
                                         sleep(3);
@@ -563,6 +565,7 @@ void ReadTr69TlvData()
                              _get_shell_output("sysevent get DHCPv6_ACS_URL", out, sizeof(out));
                              if (strlen(out) > 0)
                              {
+                                 AnscTraceInfo(("%s %d.  DHCPv6_ACS_URL:%s from DHCP options after:%d retries \n ",__func__,__LINE__,out,i));
                                  break;
                              }
                              sleep(3);
@@ -581,6 +584,7 @@ void ReadTr69TlvData()
                                 _get_shell_output("sysevent get DHCPv4_ACS_URL", out, sizeof(out));
                                 if (strlen(out) > 0)
                                 {
+                                    AnscTraceInfo(("%s %d.  DHCPv4_ACS_URL:%s from DHCP options after:%d retries \n ",__func__,__LINE__,out,i));
                                     break;
                                 }
                                 sleep(3);

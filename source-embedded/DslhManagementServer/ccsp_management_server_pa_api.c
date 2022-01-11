@@ -432,10 +432,20 @@ void ReadTr69TlvData()
                         else
                         {
                                 char out[256];
+                                int i;
 
                                 AnscTraceInfo(("%s %d. ManagementServer URL is not defined in config file. Check if  ACS URL is available from DHCP options \n ",__func__,__LINE__));
                                 //Check DHCPv6 Options for ACS URL
-                                _get_shell_output("sysevent get DHCPv6_ACS_URL", out, sizeof(out));
+                                for (i = 0; i < 5; i++)
+                                {
+                                    _get_shell_output("sysevent get DHCPv6_ACS_URL", out, sizeof(out));
+                                    if (strlen(out) > 0)
+                                    {
+                                        break;
+                                    }
+                                    sleep(3);
+                                }
+
                                 if (strlen(out) > 0)
                                 {
                                     objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(out);
@@ -444,10 +454,19 @@ void ReadTr69TlvData()
                                 else
                                 {
                                     //Check DHCPv4 Optiions for ACS URL
-                                    _get_shell_output("sysevent get DHCPv4_ACS_URL", out, sizeof(out));
+                                    for (i = 0; i < 5; i++)
+                                    {
+                                        _get_shell_output("sysevent get DHCPv4_ACS_URL", out, sizeof(out));
+                                        if (strlen(out) > 0)
+                                        {
+                                           break;
+                                        }
+                                        sleep(3);
+                                    }
+
                                     if (strlen(out) > 0)
                                     {
-                                        objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = CcspManagementServer_CloneString(out);
+                                        objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(out);
                                         AnscTraceInfo(("%s %d. ManagementServer URL from DHCP option(DHCPv4_ACS_URL):%s  \n",__func__,__LINE__,out));                                        
                                     }
                                     else
@@ -535,10 +554,20 @@ void ReadTr69TlvData()
                       if (object2->URL[0] == '\0')  
                       {
                           char out[256];
+                          int i;
 
                           AnscTraceInfo(("%s %d. ManagementServer URL is not defined in config file. Check if  ACS URL is available from DHCP options  \n",__func__,__LINE__));
 
-                         _get_shell_output("sysevent get DHCPv6_ACS_URL", out, sizeof(out));
+                         for (i = 0; i < 5; i++)
+                         {
+                             _get_shell_output("sysevent get DHCPv6_ACS_URL", out, sizeof(out));
+                             if (strlen(out) > 0)
+                             {
+                                 break;
+                             }
+                             sleep(3);
+                         }
+
                          if (strlen(out) > 0)
                          {
                              objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(out);
@@ -547,7 +576,16 @@ void ReadTr69TlvData()
                          else
                          {
                               //Check DHCPv4 Optiions for ACS URL
-                            _get_shell_output("sysevent get DHCPv4_ACS_URL", out, sizeof(out));
+                            for (i = 0; i < 5; i++)
+                            {
+                                _get_shell_output("sysevent get DHCPv4_ACS_URL", out, sizeof(out));
+                                if (strlen(out) > 0)
+                                {
+                                    break;
+                                }
+                                sleep(3);
+                            }
+
                             if (strlen(out) > 0)
                             {
                                  objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(out);

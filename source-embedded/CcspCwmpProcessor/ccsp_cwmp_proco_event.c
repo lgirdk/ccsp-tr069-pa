@@ -283,10 +283,7 @@ void waitUntilSystemReady(	void*	cbContext)
 	while((file = fopen("/var/tmp/tr069paready", "r")) == NULL)
 	{
 		CcspTr069PaTraceInfo(("Waiting for system ready signal\n"));
-		// After waiting for 24 * 5 = 120s (2mins) send dbus message to CR to query for system ready
-		if(wait_time == 24)
-		{
-			wait_time = 0;
+			
 			if(checkIfSystemReady())
 			{
 				CcspTr069PaTraceInfo(("Checked CR - System is ready, proceed with tr069 start up\n"));
@@ -296,17 +293,16 @@ void waitUntilSystemReady(	void*	cbContext)
 				 * We must call from here as it is going to create a thread and return;
 				 */
 				CcspCwmppoProcessSysReadySignal( cbContext );
-				break;
+				return;
 				//Break out, System ready signal already delivered
 			}
 			else
 			{
-				CcspTr069PaTraceInfo(("Queried CR for system ready after waiting for 2 mins, it is still not ready\n"));
+				CcspTr069PaTraceInfo(("Queried CR for system ready after waiting for %d sec, it is still not ready\n", wait_time));
 			}
-		}
-		sleep(5);
+		sleep(1);
 		wait_time++;
-	};
+	}
 	// In case of tr069pa restart, we should be having tr069pa already touched.
 	// In normal boot up we will reach here only when system ready is received.
 	if(file != NULL)

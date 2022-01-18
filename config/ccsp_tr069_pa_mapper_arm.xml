@@ -4045,57 +4045,6 @@
             <Name>Device.UPnP.Device.X_CISCO_COM_IGD_TTL</Name>
         </Param>
 	<Param>
-            <Name>Device.X_CISCO_COM_Security.CleanLog</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.TriggerEmailLog</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.FilterWebTraffic</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.TrafficDetect</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.FilterLanTraffic</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.AllowPassthrough</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.EmailEnable</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.EmailSendTo</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.EmailServer</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.EmailUserName</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.EmailPassword</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.EmailFromAddress</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.EmailFirewallBreach</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.ApplyFirewallSettings</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.EmailParentalControlBreach</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.EmailAlertsOrWarnings</Name>
-	</Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_Security.EmailSendLogs</Name>
-	</Param>
-	<Param>
             <Name>Device.X_CISCO_COM_Security.Firewall.L2TPPassthrough</Name>
         </Param>
         <Param>

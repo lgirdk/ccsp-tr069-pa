@@ -4051,18 +4051,6 @@
             <Name>Device.X_CISCO_COM_Security.Firewall.FilterAnonymousInternetRequests</Name>
         </Param>
         <Param>
-            <Name>Device.X_CISCO_COM_Security.Firewall.WebBlockCookies</Name>
-        </Param>
-        <Param>
-            <Name>Device.X_CISCO_COM_Security.Firewall.WebBlockActiveX</Name>
-        </Param>
-        <Param>
-            <Name>Device.X_CISCO_COM_Security.Firewall.WebBlockJava</Name>
-        </Param>
-        <Param>
-            <Name>Device.X_CISCO_COM_Security.Firewall.WebBlockProxy</Name>
-        </Param>
-        <Param>
             <Name>Device.X_CISCO_COM_Security.Firewall.FirewallLevel</Name>
         </Param>
 	<Param>

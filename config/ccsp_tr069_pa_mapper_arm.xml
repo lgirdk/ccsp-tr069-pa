@@ -4210,17 +4210,8 @@
         <Param>
             <Name>Device.X_CISCO_COM_DeviceControl.SSHEnable</Name>
         </Param>
-		<Param>
-            <Name>Device.X_CISCO_COM_DeviceControl.HNAPEnable</Name>
-        </Param>
-        <Param>
-            <Name>Device.X_CISCO_COM_DeviceControl.MultiHomedHSDFlag</Name>
-        </Param>
         <Param>
             <Name>Device.X_CISCO_COM_DeviceControl.PowerSavingModeStatus</Name>
-        </Param>
-        <Param>
-            <Name>Device.X_CISCO_COM_DeviceControl.MultiHomedUIPageControl</Name>
         </Param>
         <Param>
             <Name>Device.X_CISCO_COM_DeviceControl.MultiHomedMode</Name>
@@ -4230,9 +4221,6 @@
         </Param>
         <Param>
             <Name>Device.X_CISCO_COM_DeviceControl.DeviceMode</Name>
-        </Param>
-        <Param>
-            <Name>Device.X_CISCO_COM_DeviceControl.ResetDefaultEnable</Name>
         </Param>
         <Param>
             <Name>Device.X_CISCO_COM_DeviceControl.RebootDevice</Name>
@@ -4267,14 +4255,8 @@
             <Name>Device.X_LGI-COM_SON.NativeAtmBsControl</Name>
         </Param>
         <!-- Add by LGI end -->
-	<Param>
-            <Name>Device.X_CISCO_COM_DeviceControl.UserChangedFlags</Name>
-        </Param>
         <Param>
             <Name>Device.X_CISCO_COM_DeviceControl.DeviceConfigStatus</Name>
-        </Param>
-        <Param>
-            <Name>Device.X_CISCO_COM_DeviceControl.DeviceConfigIgnore</Name>
         </Param>
         <Param>
             <Name>Device.X_CISCO_COM_DeviceControl.SNMPEnable</Name>
@@ -4304,19 +4286,7 @@
             <Name>Device.X_CISCO_COM_DeviceControl.WanStaticGatewayIP</Name>
         </Param>
         <Param>
-            <Name>Device.X_CISCO_COM_DeviceControl.WanSecondIPAddress</Name>
-        </Param>
-        <Param>
-            <Name>Device.X_CISCO_COM_DeviceControl.WanSecondIPRipAdvertised</Name>
-        </Param>
-	<Param>
-            <Name>Device.X_CISCO_COM_DeviceControl.WanBackupDefaultGateway</Name>
-        </Param>
-        <Param>
             <Name>Device.X_CISCO_COM_DeviceControl.EnableZeroConfig</Name>
-        </Param>
-        <Param>
-            <Name>Device.X_CISCO_COM_DeviceControl.IGMPSnoopingEnable</Name>
         </Param>
         <Param>
             <Name>Device.X_CISCO_COM_DeviceControl.WebUITimeout</Name>

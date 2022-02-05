@@ -1449,24 +1449,10 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                     {
                         AnscTraceWarning(("RDKB_REBOOT : Reboot factory reset syscfg_set failed ACS\n"));
                     }
-                    else
-                    {
-                        if (syscfg_commit() != 0)
-                        {
-                            AnscTraceWarning(("RDKB_REBOOT : Reboot factory reset syscfg_commit failed ACS\n"));
-                        }
-                    }
 
-                    if (syscfg_set(NULL, "X_RDKCENTRAL-COM_LastRebootCounter", "1") != 0)
+                    if (syscfg_set_commit(NULL, "X_RDKCENTRAL-COM_LastRebootCounter", "1") != 0)
                     {
                         AnscTraceWarning(("syscfg_set failed\n"));
-                    }
-                    else
-                    {
-                        if (syscfg_commit() != 0)
-                        {
-                            AnscTraceWarning(("syscfg_commit failed\n"));
-                        }
                     }
 
                     CcspTr069PaTraceWarning

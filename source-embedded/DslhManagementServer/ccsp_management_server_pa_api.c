@@ -295,6 +295,20 @@ static void updateInitalContact (void)
     }
 #endif
 
+#ifdef _PUMA6_ARM_
+    if (bEnabled == FALSE)
+    {
+        if (access("/tmp/migration_to_mng", F_OK) == 0)
+        {
+            bEnabled = TRUE;
+        }
+        else if (access("/tmp/cbn_mv1_to_mng", F_OK) == 0)
+        {
+            bEnabled = TRUE;
+        }
+    }
+#endif
+
     nCcspError = PSM_Set_Record_Value2
              (
                   bus_handle,

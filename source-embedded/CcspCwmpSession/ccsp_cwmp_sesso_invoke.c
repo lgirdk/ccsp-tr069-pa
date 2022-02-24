@@ -1309,6 +1309,18 @@ bFirstInform = 0;
                 {
 			        pCcspCwmpProcessor->SetInitialContact((ANSC_HANDLE)pCcspCwmpProcessor, FALSE);
                     CcspTr069PaTraceDebug(("Set 'InitialContact' to FALSE.\n"));
+
+#ifdef _PUMA6_ARM_
+                    if (access("/tmp/migration_to_mng", F_OK) == 0)
+                    {
+                        unlink("/tmp/migration_to_mng");
+                    }
+                    else if (access("/tmp/cbn_mv1_to_mng", F_OK) == 0)
+                    {
+                        unlink("/tmp/cbn_mv1_to_mng");
+                    }
+#endif
+
                     PCCSP_CWMP_TCPCR_HANDLER_OBJECT pCcspCwmpTcpcrHandler   = (PCCSP_CWMP_TCPCR_HANDLER_OBJECT )pCcspCwmpCpeController->hCcspCwmpTcpConnReqHandler;
                     pCcspCwmpTcpcrHandler->Engage((ANSC_HANDLE)pCcspCwmpTcpcrHandler);
 

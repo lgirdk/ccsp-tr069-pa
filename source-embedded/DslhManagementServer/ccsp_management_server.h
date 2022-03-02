@@ -270,9 +270,6 @@ int SendValueChangeSignal(
     int parameterID,
     const char * oldValue);
 
-//#define CcspManagementServer_Allocate(size) AnscAllocateMemoryCountSize(CcspManagementServer_ComponentName, size)
-//#define CcspManagementServer_Free(p) AnscFreeMemoryCountSize(CcspManagementServer_ComponentName, p)
-
 void CcspManagementServer_GetSingleParameterValue(
         int objectID,
         int parameterID,
@@ -355,30 +352,6 @@ char * CcspManagementServer_RemoveWhiteString
     const char * src
 );
 
-void * CcspManagementServer_Allocate
-(
-    size_t size
-);
-
-void CcspManagementServer_Free
-(
-    void *p
-);
-
-/* Malloc memory that will be freed by other modules.
-  */
-char * CcspManagementServer_CloneString
-    (
-    const char * src
-    );
-
-/* Malloc memory that will be freed by itself.
- */
-char * CcspManagementServer_CloneStringInComponent
-    (
-    const char * src
-    );
-
 /* Malloc memory that will be freed by other modules.
   */
 char * CcspManagementServer_MergeString
@@ -387,14 +360,6 @@ char * CcspManagementServer_MergeString
     const char * src2
     );
 
-/* Malloc memory that will be freed by itself.
- */
-char * CcspManagementServer_MergeStringInComponent
-    (
-    const char * src1,
-    const char * src2
-    );
-    
 ANSC_STATUS
 CcspManagementServer_RestoreDefaultValues
     (

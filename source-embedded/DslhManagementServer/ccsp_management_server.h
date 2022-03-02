@@ -182,21 +182,6 @@ enum
     ManagementServerX_CISCO_COM_ConnectionRequestURLPathID,
     ManagementServerNumOfParameters
 };
-#if 0
-//Not used anymore
-//#ifndef _COSA_VEN501_
-/*for compilation, don't worry for crash, these parameters are not registered.*/
-enum
-{
-    ManagementServerKickURLID = 1000,
-    ManagementServerDownloadProgressURLID,
-    ManagementServerDefaultActiveNotificationThrottleID,
-    ManagementServerCWMPRetryMinimumWaitIntervalID,
-    ManagementServerCWMPRetryIntervalMultiplierID,
-    ManagementServerX_CISCO_COM_ConnectionRequestURLPortID,
-    ManagementServerX_CISCO_COM_ConnectionRequestURLPathID,
-};
-#endif
 
 #define AutonomousTransferCompletePolicyEnableID                0
 #define AutonomousTransferCompletePolicyTransferTypeFilterID    1
@@ -269,9 +254,6 @@ int SendValueChangeSignal(
     int objectID, 
     int parameterID,
     const char * oldValue);
-
-//#define CcspManagementServer_Allocate(size) AnscAllocateMemoryCountSize(CcspManagementServer_ComponentName, size)
-//#define CcspManagementServer_Free(p) AnscFreeMemoryCountSize(CcspManagementServer_ComponentName, p)
 
 void CcspManagementServer_GetSingleParameterValue(
         int objectID,
@@ -355,30 +337,6 @@ char * CcspManagementServer_RemoveWhiteString
     const char * src
 );
 
-void * CcspManagementServer_Allocate
-(
-    size_t size
-);
-
-void CcspManagementServer_Free
-(
-    void *p
-);
-
-/* Malloc memory that will be freed by other modules.
-  */
-char * CcspManagementServer_CloneString
-    (
-    const char * src
-    );
-
-/* Malloc memory that will be freed by itself.
- */
-char * CcspManagementServer_CloneStringInComponent
-    (
-    const char * src
-    );
-
 /* Malloc memory that will be freed by other modules.
   */
 char * CcspManagementServer_MergeString
@@ -387,14 +345,6 @@ char * CcspManagementServer_MergeString
     const char * src2
     );
 
-/* Malloc memory that will be freed by itself.
- */
-char * CcspManagementServer_MergeStringInComponent
-    (
-    const char * src1,
-    const char * src2
-    );
-    
 ANSC_STATUS
 CcspManagementServer_RestoreDefaultValues
     (

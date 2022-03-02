@@ -320,7 +320,7 @@ CcspTr069Pa_run_test_map()
     else
     {
         printf("%s - CwmpToDmInt %s -> %s", __FUNCTION__, pCwmpString, pReturnStr);
-        CcspTr069PaFreeMemory(pReturnStr);
+        AnscFreeMemory(pReturnStr);
         pReturnStr = NULL;
     }
 
@@ -333,7 +333,7 @@ CcspTr069Pa_run_test_map()
     else
     {
         printf("%s - DmIntToCwmp %s -> %s", __FUNCTION__, pCwmpString, pReturnStr);
-        CcspTr069PaFreeMemory(pReturnStr);
+        AnscFreeMemory(pReturnStr);
         pReturnStr = NULL;
     }
 }
@@ -362,7 +362,7 @@ CcspTr069PA_LoadInstanceMapper
         AnscZeroMemory(dmlTable,CCSP_TR069_DmlTable_Length  + 1);
         ulSize = CCSP_TR069_DmlTable_Length;
         pChildNode->GetDataString(pChildNode, "DmlTable", dmlTable, &ulSize);
-        pMap->CcspDmlName = (CCSP_STRING) CcspTr069PaAllocateMemory(ulSize + 1);
+        pMap->CcspDmlName = (CCSP_STRING) AnscAllocateMemory(ulSize + 1);
 
         if ( !pMap->CcspDmlName ) return;
 
@@ -370,7 +370,7 @@ CcspTr069PA_LoadInstanceMapper
     }
 
     pMap->numMaps = (pInstanceNode->ChildNodeQueue.Depth-1)/2;
-    pMap->InstanceMap = (PCCSP_TR069_CPEINSTNUM_MAP) CcspTr069PaAllocateMemory(pMap->numMaps * sizeof(CCSP_TR069_CPEINSTNUM_MAP));
+    pMap->InstanceMap = (PCCSP_TR069_CPEINSTNUM_MAP) AnscAllocateMemory(pMap->numMaps * sizeof(CCSP_TR069_CPEINSTNUM_MAP));
 
     if ( !pMap->InstanceMap )
     {
@@ -430,7 +430,7 @@ CcspTr069PA_LoadArgMapper
         AnscZeroMemory(argName, CCSP_TR069_RPC_ArgName_Length + 1);
         ulSize = CCSP_TR069_RPC_ArgName_Length;
         pChildNode->GetDataString(pChildNode, "ArgName", argName, &ulSize);
-        pMap->Name = (CCSP_STRING) CcspTr069PaAllocateMemory(ulSize + 1);
+        pMap->Name = (CCSP_STRING) AnscAllocateMemory(ulSize + 1);
 	if ( !pMap->Name ) return;
         AnscCopyString(pMap->Name, argName);
     }
@@ -440,7 +440,7 @@ CcspTr069PA_LoadArgMapper
         AnscZeroMemory(nameSpace, CCSP_TR069_RPC_Namespace_Length + 1);
         ulSize = CCSP_TR069_RPC_Namespace_Length;
         pChildNode->GetDataString(pChildNode, "Namespace", nameSpace, &ulSize);
-        pMap->MappedNS = (CCSP_STRING) CcspTr069PaAllocateMemory(ulSize + 1);
+        pMap->MappedNS = (CCSP_STRING) AnscAllocateMemory(ulSize + 1);
 	if ( !pMap->MappedNS ) return;
         AnscCopyString(pMap->MappedNS, nameSpace);
         CcspTr069PaTraceDebug(("CcspTr069PA_LoadArgMapper %s to %s\n", nameSpace, pMap->MappedNS));
@@ -489,7 +489,7 @@ LoadRpcMapper
             AnscZeroMemory(nameSpace, CCSP_TR069_RPC_Namespace_Length + 1);
             ulSize = CCSP_TR069_RPC_Namespace_Length;
             pChildNode->GetDataString(pChildNode, "Namespace", nameSpace, &ulSize);
-            pMap->Namespace = (CCSP_STRING) CcspTr069PaAllocateMemory(ulSize + 1);
+            pMap->Namespace = (CCSP_STRING) AnscAllocateMemory(ulSize + 1);
 	    if ( !pMap->Namespace ) return;
             AnscCopyString(pMap->Namespace, nameSpace);
             pMap->NumOfArgs = 0;
@@ -499,7 +499,7 @@ LoadRpcMapper
     }
 
     pMap->NumOfArgs = pRpcNode->ChildNodeQueue.Depth;
-    pMap->ArgMaps = (PCCSP_RPC_ARG_MAP) CcspTr069PaAllocateMemory(pMap->NumOfArgs * sizeof(CCSP_RPC_ARG_MAP));
+    pMap->ArgMaps = (PCCSP_RPC_ARG_MAP) AnscAllocateMemory(pMap->NumOfArgs * sizeof(CCSP_RPC_ARG_MAP));
     i = 0;
     pChildNode = (PANSC_XML_DOM_NODE_OBJECT)pRpcNode->GetHeadChild(pRpcNode);
     while (pChildNode != NULL)
@@ -538,7 +538,7 @@ CcspTr069PA_AddSubsystem
         }
     }
 
-    CcspTr069Subsystems[CcspTr069SubsystemsCount ++] = Subsys ? CcspTr069PaCloneString(Subsys) : NULL;
+    CcspTr069Subsystems[CcspTr069SubsystemsCount ++] = Subsys ? AnscCloneString(Subsys) : NULL;
 
     return CCSP_TRUE;
 }
@@ -645,7 +645,7 @@ CcspTr069PA_PiTreeAddNamespace
         pNodeName = pStringToken->Name;
 
         pChildNode = 
-            (PCCSP_TR069_PARAM_INFO)CcspTr069PaAllocateMemory(sizeof(CCSP_TR069_PARAM_INFO));
+            (PCCSP_TR069_PARAM_INFO)AnscAllocateMemory(sizeof(CCSP_TR069_PARAM_INFO));
 
         if ( !pChildNode )
         {
@@ -654,7 +654,7 @@ CcspTr069PA_PiTreeAddNamespace
         }
 
 
-        pChildNode->Name        = CcspTr069PaCloneString(pNodeName);
+        pChildNode->Name        = AnscCloneString(pNodeName);
         pChildNode->PartialName = CCSP_TRUE;
 
         if ( pPrevSibling )
@@ -679,7 +679,7 @@ CcspTr069PA_PiTreeAddNamespace
     pChildNode->PartialName = bPartialNs;
     pChildNode->CloudType   = CloudType;
     pChildNode->ReadOnly    = ReadOnly;
-    pChildNode->Subsystem   = Subsystem ? CcspTr069PaCloneString(Subsystem) : NULL;
+    pChildNode->Subsystem   = Subsystem ? AnscCloneString(Subsystem) : NULL;
 
     if ( pNsTokenChain )
     {
@@ -701,8 +701,8 @@ CcspTr069PA_FreePiTree
 
     if ( !pRoot ) return;
 
-    if ( pRoot->Name      ) CcspTr069PaFreeMemory(pRoot->Name);
-    if ( pRoot->Subsystem ) CcspTr069PaFreeMemory(pRoot->Subsystem);
+    if ( pRoot->Name      ) AnscFreeMemory(pRoot->Name);
+    if ( pRoot->Subsystem ) AnscFreeMemory(pRoot->Subsystem);
 
     pChild      = pRoot->Child;
     pSibling    = pRoot->Sibling;
@@ -710,7 +710,7 @@ CcspTr069PA_FreePiTree
     CcspTr069PA_FreePiTree(pSibling);
     CcspTr069PA_FreePiTree(pChild);
 
-    CcspTr069PaFreeMemory(pRoot);
+    AnscFreeMemory(pRoot);
 }
 
 
@@ -897,7 +897,7 @@ CcspTr069PA_LoadParamInfo
         if ( !CcspTr069InvPiTree )
         {
             CcspTr069InvPiTree = 
-                (PCCSP_TR069_PARAM_INFO)CcspTr069PaAllocateMemory(sizeof(CCSP_TR069_PARAM_INFO));
+                (PCCSP_TR069_PARAM_INFO)AnscAllocateMemory(sizeof(CCSP_TR069_PARAM_INFO));
 
             if ( !CcspTr069InvPiTree )
             {
@@ -937,7 +937,7 @@ CcspTr069PA_LoadParamInfo
         if ( !CcspTr069PiTree )
         {
             CcspTr069PiTree = 
-                (PCCSP_TR069_PARAM_INFO)CcspTr069PaAllocateMemory(sizeof(CCSP_TR069_PARAM_INFO));
+                (PCCSP_TR069_PARAM_INFO)AnscAllocateMemory(sizeof(CCSP_TR069_PARAM_INFO));
 
             if ( !CcspTr069PiTree )
             {
@@ -1001,7 +1001,7 @@ CcspTr069PA_LoadFromXMLFile(void*  pXMLHandle)
         if(AnscEqualString(pChildNode->Name, "ErrorMapper", TRUE))
         {
             NumOfErrMaps = pChildNode->ChildNodeQueue.Depth;
-            CcspTr069CpeErrMaps = (PCCSP_TR069_CPEERR_MAP) CcspTr069PaAllocateMemory(NumOfErrMaps * sizeof(CCSP_TR069_CPEERR_MAP));
+            CcspTr069CpeErrMaps = (PCCSP_TR069_CPEERR_MAP) AnscAllocateMemory(NumOfErrMaps * sizeof(CCSP_TR069_CPEERR_MAP));
             i = 0;
             pListNode = (PANSC_XML_DOM_NODE_OBJECT)pChildNode->GetHeadChild(pChildNode);
             while (pListNode != NULL)
@@ -1017,7 +1017,7 @@ CcspTr069PA_LoadFromXMLFile(void*  pXMLHandle)
         {
             CcspTr069PaTraceDebug(("InstanceMapper loading...\n"));
             NumOfInstanceMaps = pChildNode->ChildNodeQueue.Depth;
-            CcspTr069CpeInstanceMaps = (PCCSP_TR069_CPEINSTANCE_MAP) CcspTr069PaAllocateMemory(NumOfInstanceMaps * sizeof(CCSP_TR069_CPEINSTANCE_MAP));
+            CcspTr069CpeInstanceMaps = (PCCSP_TR069_CPEINSTANCE_MAP) AnscAllocateMemory(NumOfInstanceMaps * sizeof(CCSP_TR069_CPEINSTANCE_MAP));
             i = 0;
             pListNode = (PANSC_XML_DOM_NODE_OBJECT)pChildNode->GetHeadChild(pChildNode);
             while (pListNode != NULL)
@@ -1031,7 +1031,7 @@ CcspTr069PA_LoadFromXMLFile(void*  pXMLHandle)
         else if(AnscEqualString(pChildNode->Name, "RpcMapper", TRUE))
         {
             NumOfRpcMaps = pChildNode->ChildNodeQueue.Depth;
-            CcspTr069RpcMaps = (PCCSP_TR069_RPC_MAP) CcspTr069PaAllocateMemory(NumOfRpcMaps * sizeof(CCSP_TR069_RPC_MAP));
+            CcspTr069RpcMaps = (PCCSP_TR069_RPC_MAP) AnscAllocateMemory(NumOfRpcMaps * sizeof(CCSP_TR069_RPC_MAP));
             i = 0;
             pListNode = (PANSC_XML_DOM_NODE_OBJECT)pChildNode->GetHeadChild(pChildNode);
             while (pListNode != NULL)
@@ -1109,7 +1109,7 @@ CcspTr069PA_LoadMappingFile
         }
         else
         {
-            char * pFileContent = CcspTr069PaAllocateMemory(iContentSize + 1);
+            char * pFileContent = AnscAllocateMemory(iContentSize + 1);
             
             if ( pFileContent )
             {
@@ -1131,7 +1131,7 @@ CcspTr069PA_LoadMappingFile
                     pRootNode->Remove(pRootNode);
                 }
 
-                CcspTr069PaFreeMemory(pFileContent);
+                AnscFreeMemory(pFileContent);
             }
         }
 
@@ -1177,37 +1177,37 @@ CcspTr069PA_UnloadMappingFile
     UNREFERENCED_PARAMETER(MapperHandle);
     CCSP_INT    i,j;
 
-    CcspTr069PaFreeMemory(CcspTr069CpeErrMaps);
+    AnscFreeMemory(CcspTr069CpeErrMaps);
     CcspTr069CpeErrMaps = NULL;
 
     for (i=0; i< NumOfInstanceMaps; i++) {
         if (CcspTr069CpeInstanceMaps[i].CcspDmlName) {
-            CcspTr069PaFreeMemory(CcspTr069CpeInstanceMaps[i].CcspDmlName);
+            AnscFreeMemory(CcspTr069CpeInstanceMaps[i].CcspDmlName);
         }
-        CcspTr069PaFreeMemory(CcspTr069CpeInstanceMaps[i].InstanceMap);
+        AnscFreeMemory(CcspTr069CpeInstanceMaps[i].InstanceMap);
     }
-    CcspTr069PaFreeMemory(CcspTr069CpeInstanceMaps);
+    AnscFreeMemory(CcspTr069CpeInstanceMaps);
     
     for(i=0; i<NumOfRpcMaps; i++)
     {
         if ( CcspTr069RpcMaps[i].Namespace )
         {
-            CcspTr069PaFreeMemory(CcspTr069RpcMaps[i].Namespace);
+            AnscFreeMemory(CcspTr069RpcMaps[i].Namespace);
         }
         for (j=0; j<CcspTr069RpcMaps[i].NumOfArgs; j++)
         {
             if ( CcspTr069RpcMaps[i].ArgMaps[j].Name )
             {
-                CcspTr069PaFreeMemory(CcspTr069RpcMaps[i].ArgMaps[j].Name);
+                AnscFreeMemory(CcspTr069RpcMaps[i].ArgMaps[j].Name);
             }
             if ( CcspTr069RpcMaps[i].ArgMaps[j].MappedNS )
             {
-                CcspTr069PaFreeMemory(CcspTr069RpcMaps[i].ArgMaps[j].MappedNS);
+                AnscFreeMemory(CcspTr069RpcMaps[i].ArgMaps[j].MappedNS);
             }
         }
-        CcspTr069PaFreeMemory(CcspTr069RpcMaps[i].ArgMaps);
+        AnscFreeMemory(CcspTr069RpcMaps[i].ArgMaps);
     }
-    CcspTr069PaFreeMemory(CcspTr069RpcMaps);
+    AnscFreeMemory(CcspTr069RpcMaps);
     CcspTr069RpcMaps = NULL;
     NumOfRpcMaps     = 0;
 
@@ -1221,7 +1221,7 @@ CcspTr069PA_UnloadMappingFile
     {
         if ( CcspTr069Subsystems[i] )
         {
-            CcspTr069PaFreeMemory(CcspTr069Subsystems[i]);
+            AnscFreeMemory(CcspTr069Subsystems[i]);
             CcspTr069Subsystems[i] = NULL;
         }
     }
@@ -1336,7 +1336,7 @@ CcspTr069PA_MapInstNumCwmpToDmInt
                 {    
                     foundMatch = TRUE;
             
-                    pDmIntString = (CCSP_STRING) CcspTr069PaAllocateMemory(tr069StringSize + 10);
+                    pDmIntString = (CCSP_STRING) AnscAllocateMemory(tr069StringSize + 10);
 
                     if ( pDmIntString )
                     {
@@ -1473,7 +1473,7 @@ CcspTr069PA_MapInstNumDmIntToCwmp
                 {    
                     foundMatch = TRUE;
             
-                    pCwmpString = (CCSP_STRING) CcspTr069PaAllocateMemory(ccspStringSize + 10);
+                    pCwmpString = (CCSP_STRING) AnscAllocateMemory(ccspStringSize + 10);
 
                     if ( pCwmpString )
                     {
@@ -1729,7 +1729,7 @@ CcspTr069PA_GetNsSubsystemCB
         }
     }
 
-    pEnumNs->pSubsystemArray[*pCount] = pParamInfo->Subsystem ? CcspTr069PaCloneString(pParamInfo->Subsystem) : NULL;
+    pEnumNs->pSubsystemArray[*pCount] = pParamInfo->Subsystem ? AnscCloneString(pParamInfo->Subsystem) : NULL;
     (*pCount) ++;
 
     if ( *pCount >= pEnumNs->MaxSubsystemArraySize )

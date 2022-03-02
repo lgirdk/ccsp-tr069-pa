@@ -104,7 +104,7 @@
                 if ( pReturnStr )                                               \
                 {                                                               \
                     /* Entries in pParamNameArray cannot be freed */            \
-                    /* CcspTr069PaFreeMemory(pParam); */                        \
+                    /* AnscFreeMemory(pParam); */                               \
                     pParam = pReturnStr;                                        \
                 }                                                               \
             }
@@ -702,7 +702,7 @@ CcspCwmppoInitParamAttrCache
 
             if (pValue)
             {
-                CcspTr069PaFreeMemory(pValue);
+                AnscFreeMemory(pValue);
                 pValue = NULL;
             }
 
@@ -730,7 +730,7 @@ CcspCwmppoInitParamAttrCache
     if ( pRecords )
     {
 	g_flagToStartCWMP = 1;
-        CcspTr069PaFreeMemory(pRecords);
+        AnscFreeMemory(pRecords);
     }
 
     return  returnStatus;
@@ -784,7 +784,7 @@ CcspCwmppoClearParamAttrCache
     
 
     pParamAttrs = 
-        (PCCSP_CWMP_SET_PARAM_ATTRIB)CcspTr069PaAllocateMemory
+        (PCCSP_CWMP_SET_PARAM_ATTRIB)AnscAllocateMemory
             (
                 sizeof(CCSP_CWMP_SET_PARAM_ATTRIB) * ulNumRecords
             );
@@ -825,7 +825,7 @@ CcspCwmppoClearParamAttrCache
     }
     if ( pRecords )
     {
-      CcspTr069PaFreeMemory(pRecords);
+      AnscFreeMemory(pRecords);
     }
     
     returnStatus = pCcspCwmpMpaIf->SetParameterAttributes
@@ -841,13 +841,13 @@ CcspCwmppoClearParamAttrCache
         {
             CcspCwmpCleanSetParamAttrib((pParamAttrs + i));
         }
-        CcspTr069PaFreeMemory(pParamAttrs);
+        AnscFreeMemory(pParamAttrs);
   
     /*"Device.ManagementServer.ConnectionRequestURL" parameter is set to ACTIVE notifications by default */
     if(!isConnReqURLAttrSet)
     {      
       pParamAttrs = 
-        (PCCSP_CWMP_SET_PARAM_ATTRIB)CcspTr069PaAllocateMemory
+        (PCCSP_CWMP_SET_PARAM_ATTRIB)AnscAllocateMemory
             (
                 sizeof(CCSP_CWMP_SET_PARAM_ATTRIB)
             );
@@ -872,7 +872,7 @@ CcspCwmppoClearParamAttrCache
                 );
 
         CcspCwmpCleanSetParamAttrib(pParamAttrs);        
-        CcspTr069PaFreeMemory(pParamAttrs);  
+        AnscFreeMemory(pParamAttrs);  
     }        
     
     return returnStatus;
@@ -1243,7 +1243,7 @@ CcspCwmppoGetParentParamName
 
     if ( !pParamName ) return NULL;
 
-    pParentParamName = CcspTr069PaCloneString(pParamName);
+    pParentParamName = AnscCloneString(pParamName);
 
     if ( pParentParamName )
     {
@@ -1255,7 +1255,7 @@ CcspCwmppoGetParentParamName
 
         if ( pLast < pParentParamName )
         {
-            CcspTr069PaFreeMemory(pParentParamName);
+            AnscFreeMemory(pParentParamName);
             pParentParamName = NULL;
         }  
         else
@@ -1278,7 +1278,7 @@ CcspCwmppoCheckParamAttrCache
     PCCSP_CWMP_PROCESSOR_OBJECT      pMyObject       = (PCCSP_CWMP_PROCESSOR_OBJECT)hThisObject;
     PANSC_ATOM_TABLE_OBJECT         pParamAttrCache = (PANSC_ATOM_TABLE_OBJECT   )pMyObject->hParamAttrCache;
     PANSC_ATOM_DESCRIPTOR           pAtomDescriptor = NULL;
-    char*                           pCurName        = CcspTr069PaCloneString(pParamName);
+    char*                           pCurName        = AnscCloneString(pParamName);
     char*                           pParentName     = NULL;
 
     while ( pCurName )
@@ -1287,12 +1287,12 @@ CcspCwmppoCheckParamAttrCache
 
         if ( pAtomDescriptor )
         {
-            CcspTr069PaFreeMemory(pCurName);
+            AnscFreeMemory(pCurName);
             return  (ULONG)pAtomDescriptor->hContext;
         }
 
         pParentName = CcspCwmppoGetParentParamName(pCurName);
-        CcspTr069PaFreeMemory(pCurName);
+        AnscFreeMemory(pCurName);
         pCurName = pParentName;
     }
 
@@ -1350,7 +1350,7 @@ CcspCwmppoSyncRemoteNamespace
     char*                           pCrNameWithPrefix   = NULL;
     int                             nLen = (pCcspCwmpCpeController->SubsysName?AnscSizeOfString(pCcspCwmpCpeController->SubsysName):0) + AnscSizeOfString(pCrName) + 1;
 
-    pCrNameWithPrefix = (char*)CcspTr069PaAllocateMemory(nLen);
+    pCrNameWithPrefix = (char*)AnscAllocateMemory(nLen);
 
     if ( !pCrNameWithPrefix )
     {
@@ -1438,7 +1438,7 @@ CcspCwmppoSyncRemoteNamespace
 
 
 EXIT:
-    CcspTr069PaFreeMemory(pCrNameWithPrefix);
+    AnscFreeMemory(pCrNameWithPrefix);
 
     return CCSP_TRUE;
 }
@@ -1556,7 +1556,7 @@ CcspCwmppoSyncNamespacesWithCR
             {
                 int                 nLen = AnscSizeOfString(pCcspCwmpCpeController->SubsysName) + AnscSizeOfString(pCrName) + 1;
 
-                pCrNameWithPrefix = (char*)CcspTr069PaAllocateMemory(nLen);
+                pCrNameWithPrefix = (char*)AnscAllocateMemory(nLen);
 
                 if ( !pCrNameWithPrefix )
                 {
@@ -1637,7 +1637,7 @@ CcspCwmppoSyncNamespacesWithCR
 
                 if ( !bNoSubsys && pCrNameWithPrefix )
                 {
-                    CcspTr069PaFreeMemory(pCrNameWithPrefix);
+                    AnscFreeMemory(pCrNameWithPrefix);
                 }
 
                 free_registeredComponent_t(hMBusHandle, NumComp, ppComp);

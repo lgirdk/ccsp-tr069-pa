@@ -109,7 +109,7 @@
                 if ( pReturnStr )                                                   \
                 {                                                                   \
                     /* we are responsible for releasing the original string */      \
-                    CcspTr069PaFreeMemory(pParam);                                  \
+                    AnscFreeMemory(pParam);                                  \
                     pParam = pReturnStr;                                            \
                 }                                                                   \
             }
@@ -390,7 +390,7 @@ CcspCwmppoSetupEnv
             memcpy (pProperty->AcsUrl, pAcsUrl, len + 1);
         }
 
-        CcspTr069PaFreeMemory(pAcsUrl);
+        AnscFreeMemory(pAcsUrl);
     }
 
 #ifdef   _CCSP_CWMP_TCP_CONNREQ_HANDLER
@@ -413,7 +413,7 @@ CcspCwmppoSetupEnv
         {
             usTcpCrHostPort = (USHORT)_ansc_atoi(tcpCrHostPort);
 
-            CcspTr069PaFreeMemory(tcpCrHostPort);
+            AnscFreeMemory(tcpCrHostPort);
 
             if ( usTcpCrHostPort!= 0 && usTcpCrHostPort != tcpCrProperty.HostPort )
             {
@@ -530,7 +530,7 @@ CcspCwmppoPeriodicTimerInvoke
         return  ANSC_STATUS_FAILURE;
     }
 
-    pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+    pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
 
     if ( !pCcspCwmpEvent )
     {
@@ -540,7 +540,7 @@ CcspCwmppoPeriodicTimerInvoke
     }
     else
     {
-        pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_Peroidic);
+        pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_Peroidic);
         pCcspCwmpEvent->CommandKey = NULL;
     }
 
@@ -609,7 +609,7 @@ CcspCwmppoScheduleTimerInvoke
         return  ANSC_STATUS_FAILURE;
     }
 
-    pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+    pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
 
     if ( !pCcspCwmpEvent )
     {
@@ -619,7 +619,7 @@ CcspCwmppoScheduleTimerInvoke
     }
     else
     {
-        pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString("3 SCHEDULED");
+        pCcspCwmpEvent->EventCode  = AnscCloneString("3 SCHEDULED");
         pCcspCwmpEvent->CommandKey = NULL ;
     }
 
@@ -631,7 +631,7 @@ CcspCwmppoScheduleTimerInvoke
                 TRUE
             );
 
-     pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+     pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
 
      if ( !pCcspCwmpEvent )
      {
@@ -641,7 +641,7 @@ CcspCwmppoScheduleTimerInvoke
      }
      else
      {
-         pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_M_ScheduleInform);
+         pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_M_ScheduleInform);
          pCcspCwmpEvent->CommandKey = pMyObject->SecheduledCommandKey;
          pMyObject->SecheduledCommandKey = NULL;
          returnStatus =
@@ -963,16 +963,16 @@ CcspCwmppoGetUndeliveredTcEvents
             if ( psmStatus == CCSP_SUCCESS && pValue )
             {
                 bIsDownload = (BOOL)_ansc_atoi(pValue);
-                CcspTr069PaFreeMemory(pValue);
+                AnscFreeMemory(pValue);
             }
         }
 
         if ( !bTcSingleEventAdded )
         {
-            pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+            pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
             if ( pCcspCwmpEvent )
             {
-                pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_TransferComplete);
+                pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_TransferComplete);
                 pCcspCwmpEvent->CommandKey = NULL;
 
                 pCcspCwmpSession->AddCwmpEvent
@@ -987,19 +987,19 @@ CcspCwmppoGetUndeliveredTcEvents
         }
 
         /* add CWMP event code */
-        pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+        pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
         if ( pCcspCwmpEvent )
         {
             if ( bIsDownload )
             {
-                pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_M_Download);
+                pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_M_Download);
             }
             else
             {
-                pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_M_Upload);
+                pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_M_Upload);
             }
 
-            pCcspCwmpEvent->CommandKey = CcspTr069PaCloneString(pCommandKey);
+            pCcspCwmpEvent->CommandKey = AnscCloneString(pCommandKey);
 
             pCcspCwmpSession->AddCwmpEvent
                 (
@@ -1012,7 +1012,7 @@ CcspCwmppoGetUndeliveredTcEvents
         
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
     }
 
     return  returnStatus;
@@ -1094,10 +1094,10 @@ CcspCwmppoGetUndeliveredAtcEvents
 
     if ( numInstances > 0 )
     {
-        pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+        pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
         if ( pCcspCwmpEvent )
         {
-            pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_AutonomousTransferComplete);
+            pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_AutonomousTransferComplete);
             pCcspCwmpEvent->CommandKey = NULL;
 
             pCcspCwmpSession->AddCwmpEvent
@@ -1111,7 +1111,7 @@ CcspCwmppoGetUndeliveredAtcEvents
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
     }
 
     return  returnStatus;
@@ -1221,10 +1221,10 @@ CcspCwmppoGetUndeliveredDscEvents
 
         if ( !bTcSingleEventAdded )
         {
-            pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+            pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
             if ( pCcspCwmpEvent )
             {
-                pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_DUStateChangeComplete);
+                pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_DUStateChangeComplete);
                 pCcspCwmpEvent->CommandKey = NULL;
 
                 pCcspCwmpSession->AddCwmpEvent
@@ -1239,11 +1239,11 @@ CcspCwmppoGetUndeliveredDscEvents
         }
 
         /* add CWMP event code */
-        pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+        pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
         if ( pCcspCwmpEvent )
         {
-            pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_M_ChangeDUState);
-            pCcspCwmpEvent->CommandKey = CcspTr069PaCloneString(pCommandKey);
+            pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_M_ChangeDUState);
+            pCcspCwmpEvent->CommandKey = AnscCloneString(pCommandKey);
 
             pCcspCwmpSession->AddCwmpEvent
                 (
@@ -1256,7 +1256,7 @@ CcspCwmppoGetUndeliveredDscEvents
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
     }
 
     return  returnStatus;
@@ -1336,10 +1336,10 @@ CcspCwmppoGetUndeliveredAdscEvents
 
     if ( numInstances > 0 )
     {
-        pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+        pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
         if ( pCcspCwmpEvent )
         {
-            pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_AutonomousDUStateChangeComplete);
+            pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_AutonomousDUStateChangeComplete);
             pCcspCwmpEvent->CommandKey = NULL;
 
             pCcspCwmpSession->AddCwmpEvent
@@ -1353,7 +1353,7 @@ CcspCwmppoGetUndeliveredAdscEvents
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
     }
 
     return  returnStatus;
@@ -1469,7 +1469,7 @@ CcspCwmppoSaveTransferComplete
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
     }
 
     if ( InsNumber == 0 )
@@ -1862,7 +1862,7 @@ ccspCwmppoLoadTransferCompleteTask
                 AnscZeroMemory(&timeStart, sizeof(ANSC_UNIVERSAL_TIME));
                 AnscSecondToCalendar(uStartTime, &timeStart);
 
-                CcspTr069PaFreeMemory(pValue);
+                AnscFreeMemory(pValue);
             }
             else
             {
@@ -1902,7 +1902,7 @@ ccspCwmppoLoadTransferCompleteTask
                 AnscZeroMemory(&timeStart, sizeof(ANSC_UNIVERSAL_TIME));
                 AnscSecondToCalendar(uEndTime, &timeEnd);
 
-                CcspTr069PaFreeMemory(pValue);
+                AnscFreeMemory(pValue);
             }
             else
             {
@@ -1941,7 +1941,7 @@ ccspCwmppoLoadTransferCompleteTask
             if ( psmStatus == CCSP_SUCCESS && pValue )
             {
                 bIsDownload = (BOOL)_ansc_atoi(pValue);
-                CcspTr069PaFreeMemory(pValue);
+                AnscFreeMemory(pValue);
             }
         }
 
@@ -1973,7 +1973,7 @@ ccspCwmppoLoadTransferCompleteTask
             if ( psmStatus == CCSP_SUCCESS && pValue )
             {
                 Fault.FaultCode = (ULONG)_ansc_atoi(pValue);
-                CcspTr069PaFreeMemory(pValue);
+                AnscFreeMemory(pValue);
             }
         }
 
@@ -2044,7 +2044,7 @@ ccspCwmppoLoadTransferCompleteTask
 
         if ( pCommandKey != NULL )
         {
-            CcspTr069PaFreeMemory(pCommandKey);
+            AnscFreeMemory(pCommandKey);
         }
 
         if ( !pMyObject->bActive )
@@ -2063,7 +2063,7 @@ EXIT:
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
     }
 
     return status;
@@ -2237,7 +2237,7 @@ CcspCwmppoSaveAutonomousTransferComplete
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
     }
 
     if ( InsNumber == 0 )
@@ -2725,7 +2725,7 @@ ccspCwmppoLoadAutonomousTransferCompleteTask
             if ( psmStatus == CCSP_SUCCESS && pValue )
             {
                 bIsDownload = (BOOL)_ansc_atoi(pValue);
-                CcspTr069PaFreeMemory(pValue);
+                AnscFreeMemory(pValue);
             }
         }
 
@@ -2818,7 +2818,7 @@ ccspCwmppoLoadAutonomousTransferCompleteTask
         if ( pValue )
         {
             FileSize = (ULONG)_ansc_atoi(pValue);
-            CcspTr069PaFreeMemory(pValue);
+            AnscFreeMemory(pValue);
         }
 
         _ansc_snprintf
@@ -2870,7 +2870,7 @@ ccspCwmppoLoadAutonomousTransferCompleteTask
             if ( psmStatus == CCSP_SUCCESS && pValue )
             {
                 Fault.FaultCode = (ULONG)_ansc_atoi(pValue);
-                CcspTr069PaFreeMemory(pValue);
+                AnscFreeMemory(pValue);
             }
         }
 
@@ -2927,7 +2927,7 @@ ccspCwmppoLoadAutonomousTransferCompleteTask
                 AnscZeroMemory(&timeStart, sizeof(ANSC_UNIVERSAL_TIME));
                 AnscSecondToCalendar(uStartTime, &timeStart);
 
-                CcspTr069PaFreeMemory(pValue);
+                AnscFreeMemory(pValue);
             }
             else
             {
@@ -2967,7 +2967,7 @@ ccspCwmppoLoadAutonomousTransferCompleteTask
                 AnscZeroMemory(&timeStart, sizeof(ANSC_UNIVERSAL_TIME));
                 AnscSecondToCalendar(uEndTime, &timeEnd);
 
-                CcspTr069PaFreeMemory(pValue);
+                AnscFreeMemory(pValue);
             }
             else
             {
@@ -3025,22 +3025,22 @@ ccspCwmppoLoadAutonomousTransferCompleteTask
 
         if ( pAnnounceURL != NULL )
         {
-            CcspTr069PaFreeMemory(pAnnounceURL);
+            AnscFreeMemory(pAnnounceURL);
         }
 
         if ( pTransferURL != NULL )
         {
-            CcspTr069PaFreeMemory(pTransferURL);
+            AnscFreeMemory(pTransferURL);
         }
 
         if ( pFileType != NULL )
         {
-            CcspTr069PaFreeMemory(pFileType);
+            AnscFreeMemory(pFileType);
         }
 
         if ( pTargetFileName != NULL )
         {
-            CcspTr069PaFreeMemory(pTargetFileName);
+            AnscFreeMemory(pTargetFileName);
         }
     }
 
@@ -3054,7 +3054,7 @@ EXIT:
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
     }
 
     return status;
@@ -3188,7 +3188,7 @@ CcspCwmppoSaveDUStateChangeComplete
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
     }
 
     if ( InsNumber == 0 )
@@ -3680,7 +3680,7 @@ ccspCwmppoLoadDUStateChangeCompleteTask
 
     for ( i = 0; i < numInstances; i ++ )
     {
-        pDsccReq = (PCCSP_TR069_DSCC_REQ)CcspTr069PaAllocateMemory(sizeof(CCSP_TR069_DSCC_REQ));
+        pDsccReq = (PCCSP_TR069_DSCC_REQ)AnscAllocateMemory(sizeof(CCSP_TR069_DSCC_REQ));
 
         if ( !pDsccReq )
         {
@@ -3726,7 +3726,7 @@ ccspCwmppoLoadDUStateChangeCompleteTask
         }
 
         pDsccReq->Results = 
-            (PCCSP_TR069_CDS_OpResult)CcspTr069PaAllocateMemory
+            (PCCSP_TR069_CDS_OpResult)AnscAllocateMemory
                 (
                     sizeof(CCSP_TR069_CDS_OpResult) * NumReqInstances
                 );
@@ -3773,7 +3773,7 @@ ccspCwmppoLoadDUStateChangeCompleteTask
                 if ( psmStatus == CCSP_SUCCESS && pValue )
                 {
                     pDsccOpResult->FaultCode = (ULONG)_ansc_atoi(pValue);
-                    CcspTr069PaFreeMemory(pValue);
+                    AnscFreeMemory(pValue);
                 }
             }
 
@@ -3916,7 +3916,7 @@ ccspCwmppoLoadDUStateChangeCompleteTask
             if ( psmStatus == CCSP_SUCCESS && pValue )
             {
                 pDsccOpResult->Resolved = (BOOL)_ansc_atoi(pValue);
-                CcspTr069PaFreeMemory(pValue);
+                AnscFreeMemory(pValue);
             }
 
             _ansc_snprintf
@@ -3971,7 +3971,7 @@ ccspCwmppoLoadDUStateChangeCompleteTask
                     AnscZeroMemory(&timeStart, sizeof(ANSC_UNIVERSAL_TIME));
                     AnscSecondToCalendar(uStartTime, &timeStart);
 
-                    CcspTr069PaFreeMemory(pValue);
+                    AnscFreeMemory(pValue);
                 }
                 else
                 {
@@ -4012,7 +4012,7 @@ ccspCwmppoLoadDUStateChangeCompleteTask
                     AnscZeroMemory(&timeStart, sizeof(ANSC_UNIVERSAL_TIME));
                     AnscSecondToCalendar(uEndTime, &timeEnd);
 
-                    CcspTr069PaFreeMemory(pValue);
+                    AnscFreeMemory(pValue);
                 }
                 else
                 {
@@ -4078,7 +4078,7 @@ EXIT:
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
     }
 
     return status;
@@ -4212,7 +4212,7 @@ CcspCwmppoSaveAutonomousDUStateChangeComplete
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
     }
 
     if ( InsNumber == 0 )
@@ -4718,7 +4718,7 @@ ccspCwmppoLoadAutonomousDUStateChangeCompleteTask
 
     for ( i = 0; i < numInstances; i ++ )
     {
-        pAdsccReq = (PCCSP_TR069_ADSCC_REQ)CcspTr069PaAllocateMemory(sizeof(CCSP_TR069_ADSCC_REQ));
+        pAdsccReq = (PCCSP_TR069_ADSCC_REQ)AnscAllocateMemory(sizeof(CCSP_TR069_ADSCC_REQ));
 
         if ( !pAdsccReq )
         {
@@ -4754,7 +4754,7 @@ ccspCwmppoLoadAutonomousDUStateChangeCompleteTask
         }
 
         pAdsccReq->Results = 
-            (PCCSP_TR069_ADSCC_OpResult)CcspTr069PaAllocateMemory
+            (PCCSP_TR069_ADSCC_OpResult)AnscAllocateMemory
                 (
                     sizeof(CCSP_TR069_ADSCC_OpResult) * NumReqInstances
                 );
@@ -4801,7 +4801,7 @@ ccspCwmppoLoadAutonomousDUStateChangeCompleteTask
                 if ( psmStatus == CCSP_SUCCESS && pValue )
                 {
                     pAdsccOpResult->FaultCode = (ULONG)_ansc_atoi(pValue);
-                    CcspTr069PaFreeMemory(pValue);
+                    AnscFreeMemory(pValue);
                 }
             }
 
@@ -4966,7 +4966,7 @@ ccspCwmppoLoadAutonomousDUStateChangeCompleteTask
             if ( psmStatus == CCSP_SUCCESS && pValue )
             {
                 pAdsccOpResult->Resolved = (BOOL)_ansc_atoi(pValue);
-                CcspTr069PaFreeMemory(pValue);
+                AnscFreeMemory(pValue);
             }
 
             _ansc_snprintf
@@ -5021,7 +5021,7 @@ ccspCwmppoLoadAutonomousDUStateChangeCompleteTask
                     AnscZeroMemory(&timeStart, sizeof(ANSC_UNIVERSAL_TIME));
                     AnscSecondToCalendar(uStartTime, &timeStart);
 
-                    CcspTr069PaFreeMemory(pValue);
+                    AnscFreeMemory(pValue);
                 }
                 else
                 {
@@ -5062,7 +5062,7 @@ ccspCwmppoLoadAutonomousDUStateChangeCompleteTask
                     AnscZeroMemory(&timeStart, sizeof(ANSC_UNIVERSAL_TIME));
                     AnscSecondToCalendar(uEndTime, &timeEnd);
 
-                    CcspTr069PaFreeMemory(pValue);
+                    AnscFreeMemory(pValue);
                 }
                 else
                 {
@@ -5128,7 +5128,7 @@ EXIT:
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
     }
 
     return status;
@@ -5402,7 +5402,7 @@ CcspCwmppoLoadValueChangedTask
         if ( psmStatus == CCSP_SUCCESS )
         {
             /* Storing the original Parameter name */
-            pParameterName = CcspTr069PaCloneString(pValue);
+            pParameterName = AnscCloneString(pValue);
             CcspCwmppoMapParamInstNumDmIntToCwmp(pValue);
             CcspTr069PaMapToExternalAlias
                 (
@@ -5440,19 +5440,19 @@ CcspCwmppoLoadValueChangedTask
         }
         if ( pValue != NULL )
         {
-            CcspTr069PaFreeMemory(pValue);
+            AnscFreeMemory(pValue);
             pValue = NULL;
         }
 
         if ( pParameterValue != NULL )
         {
-            CcspTr069PaFreeMemory(pParameterValue);
+            AnscFreeMemory(pParameterValue);
             pParameterValue = NULL;
         }
 
         if ( pParameterName != NULL )
         {
-            CcspTr069PaFreeMemory(pParameterName);
+            AnscFreeMemory(pParameterName);
             pParameterName = NULL;
         }
 
@@ -5468,7 +5468,7 @@ EXIT:
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
         pInsNumbers = NULL;
     }
 
@@ -5597,7 +5597,7 @@ CcspCwmppoSaveValueChanged
         if ( psmStatus == CCSP_SUCCESS && ( 0 == _ansc_strcmp(pValue, pParameterName ) ) )
         {
             CcspTr069PaTraceDebug(("CcspCwmppoSaveValueChanged - Parameter %s entry already is available in psm\n",pParameterName));
-            CcspTr069PaFreeMemory(pValue);
+            AnscFreeMemory(pValue);
             pValue = NULL;
             returnStatus = ANSC_STATUS_SUCCESS;
             goto EXIT;
@@ -5605,7 +5605,7 @@ CcspCwmppoSaveValueChanged
 
         if ( pValue != NULL )
         {
-            CcspTr069PaFreeMemory(pValue);
+            AnscFreeMemory(pValue);
             pValue = NULL;
         }
 
@@ -5621,7 +5621,7 @@ CcspCwmppoSaveValueChanged
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
         pInsNumbers = NULL;
     }
 
@@ -5680,7 +5680,7 @@ EXIT:
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
         pInsNumbers = NULL;
     }
 
@@ -5801,7 +5801,7 @@ CcspCwmppoDiscardValueChanged
 
         if ( pValue != NULL )
         {
-            CcspTr069PaFreeMemory(pValue);
+            AnscFreeMemory(pValue);
             pValue = NULL;
         }
 
@@ -5815,7 +5815,7 @@ EXIT:
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
         pInsNumbers = NULL;
     }
 

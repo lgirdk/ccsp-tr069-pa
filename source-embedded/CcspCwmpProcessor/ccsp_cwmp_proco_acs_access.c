@@ -281,7 +281,7 @@ CcspCwmppoGetAcsInfo
     {
         usTcpCrHostPort = (USHORT)_ansc_atoi(tcpCrHostPort);
 
-        CcspTr069PaFreeMemory(tcpCrHostPort);
+        AnscFreeMemory(tcpCrHostPort);
 
         if ( usTcpCrHostPort!= 0 && usTcpCrHostPort != tcpCrProperty.HostPort )
         {
@@ -319,7 +319,7 @@ CcspCwmppoGetAcsInfo
 
     if ( pValue )
     {
-        CcspTr069PaFreeMemory(pValue);
+        AnscFreeMemory(pValue);
     }
 */
 
@@ -357,7 +357,7 @@ CcspCwmppoGetAcsInfo
         if ( pCalendarTime )
         {
             pProperty->PeriodicInformTime = *pCalendarTime;
-            CcspTr069PaFreeMemory(pCalendarTime);
+            AnscFreeMemory(pCalendarTime);
         }
 
         bPiChanged = TRUE;
@@ -369,7 +369,7 @@ CcspCwmppoGetAcsInfo
 
     if ( pPeriodicInformTime )
     {
-        CcspTr069PaFreeMemory(pPeriodicInformTime);
+        AnscFreeMemory(pPeriodicInformTime);
     }
 
     /* Configure Period Inform */
@@ -405,7 +405,7 @@ CcspCwmppoGetAcsInfo
             pCcspCwmpCpeController->bIsACSURLChanged = TRUE;
         }
 
-        CcspTr069PaFreeMemory(pValue);
+        AnscFreeMemory(pValue);
     }
 
     /* Get connection request URL to see if erouter got WAN IP */
@@ -414,7 +414,7 @@ CcspCwmppoGetAcsInfo
     if ( pConnReqUrl )
     {
         bWanIpAcquired = TRUE;
-        CcspTr069PaFreeMemory(pConnReqUrl);
+        AnscFreeMemory(pConnReqUrl);
     }
 
     if ( !bCwmpStarted && bCwmpEnabled && bWanIpAcquired )

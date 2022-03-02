@@ -103,7 +103,7 @@
                 if ( pReturnStr )                                                   \
                 {                                                                   \
                     /* we are responsible for releasing the original string */      \
-                    CcspTr069PaFreeMemory(pParam);                                  \
+                    AnscFreeMemory(pParam);                                  \
                     pParam = pReturnStr;                                            \
                 }                                                                   \
             }
@@ -191,8 +191,8 @@ CcspCwmpsoGetRpcMethods
 
         pWmpsoAsyncReq->CallStatus   = ANSC_STATUS_TIMEOUT;
         pWmpsoAsyncReq->Method       = CCSP_CWMP_METHOD_GetRPCMethods;
-        pWmpsoAsyncReq->MethodName   = CcspTr069PaCloneString("GetRPCMethods");
-        pWmpsoAsyncReq->RequestID    = CcspTr069PaCloneString(request_id);
+        pWmpsoAsyncReq->MethodName   = AnscCloneString("GetRPCMethods");
+        pWmpsoAsyncReq->RequestID    = AnscCloneString(request_id);
         pWmpsoAsyncReq->SoapEnvelope =
             pCcspCwmpSoapParser->BuildSoapReq_GetRpcMethods
                 (
@@ -397,9 +397,9 @@ CcspCwmpsoInform
         return  ANSC_STATUS_FAILURE;
     }
 
-    pCwmpDeviceId        = (PCCSP_CWMP_DEVICE_ID  )CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_DEVICE_ID  ));
-    pCwmpParamValueArray = (PCCSP_CWMP_PARAM_VALUE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_PARAM_VALUE) * ulParamCount);
-    pCurrentSystemTime    = (PANSC_UNIVERSAL_TIME  )CcspTr069PaAllocateMemory(sizeof(ANSC_UNIVERSAL_TIME  ));
+    pCwmpDeviceId        = (PCCSP_CWMP_DEVICE_ID  )AnscAllocateMemory(sizeof(CCSP_CWMP_DEVICE_ID  ));
+    pCwmpParamValueArray = (PCCSP_CWMP_PARAM_VALUE)AnscAllocateMemory(sizeof(CCSP_CWMP_PARAM_VALUE) * ulParamCount);
+    pCurrentSystemTime    = (PANSC_UNIVERSAL_TIME  )AnscAllocateMemory(sizeof(ANSC_UNIVERSAL_TIME  ));
 
     if ( !pCwmpDeviceId || !pCwmpParamValueArray || !pCurrentSystemTime )
     {
@@ -585,13 +585,13 @@ else
          * Although the parameter 'InternetGatewayDevice.DeviceInfo.SpecVersion' is deprecated according to WT151,
          * the parameter is forced in Inform messages.
          */
-        pCwmpParamValueArray[ulPresetParamCount++].Name  = CcspTr069PaCloneString("InternetGatewayDevice.DeviceSummary"                        );
-        pCwmpParamValueArray[ulPresetParamCount++].Name  = CcspTr069PaCloneString("InternetGatewayDevice.DeviceInfo.SpecVersion"               );
-        pCwmpParamValueArray[ulPresetParamCount++].Name  = CcspTr069PaCloneString("InternetGatewayDevice.DeviceInfo.HardwareVersion"           );
-        pCwmpParamValueArray[ulPresetParamCount++].Name  = CcspTr069PaCloneString("InternetGatewayDevice.DeviceInfo.SoftwareVersion"           );
-        pCwmpParamValueArray[ulPresetParamCount++].Name  = CcspTr069PaCloneString("InternetGatewayDevice.DeviceInfo.ProvisioningCode"          );
-        pCwmpParamValueArray[ulPresetParamCount++].Name  = CcspTr069PaCloneString("InternetGatewayDevice.ManagementServer.ConnectionRequestURL");
-        pCwmpParamValueArray[ulPresetParamCount++].Name  = CcspTr069PaCloneString("InternetGatewayDevice.ManagementServer.ParameterKey"        );
+        pCwmpParamValueArray[ulPresetParamCount++].Name  = AnscCloneString("InternetGatewayDevice.DeviceSummary"                        );
+        pCwmpParamValueArray[ulPresetParamCount++].Name  = AnscCloneString("InternetGatewayDevice.DeviceInfo.SpecVersion"               );
+        pCwmpParamValueArray[ulPresetParamCount++].Name  = AnscCloneString("InternetGatewayDevice.DeviceInfo.HardwareVersion"           );
+        pCwmpParamValueArray[ulPresetParamCount++].Name  = AnscCloneString("InternetGatewayDevice.DeviceInfo.SoftwareVersion"           );
+        pCwmpParamValueArray[ulPresetParamCount++].Name  = AnscCloneString("InternetGatewayDevice.DeviceInfo.ProvisioningCode"          );
+        pCwmpParamValueArray[ulPresetParamCount++].Name  = AnscCloneString("InternetGatewayDevice.ManagementServer.ConnectionRequestURL");
+        pCwmpParamValueArray[ulPresetParamCount++].Name  = AnscCloneString("InternetGatewayDevice.ManagementServer.ParameterKey"        );
 
         if ( !pCwmpParamValueArray[0].Name ||
              !pCwmpParamValueArray[1].Name ||
@@ -625,11 +625,11 @@ else
 				pNext = _ansc_strchr(pParamName, ',');
 				if ( pNext ) *pNext = 0;
 
-        		pCwmpParamValueArray[ulPresetParamCount++].Name  = CcspTr069PaCloneString(pParamName);
+        		pCwmpParamValueArray[ulPresetParamCount++].Name  = AnscCloneString(pParamName);
 				pParamName = pNext ? pNext + 1 : NULL;
 			}
 
-			CcspTr069PaFreeMemory(pCFIPs);	
+			AnscFreeMemory(pCFIPs);	
 		}
 	}
 
@@ -664,7 +664,7 @@ else
                 CcspTr069PaTraceDebug(("CcspCwmpsoInform -- adding VC parameter <%s>.\n", pMyObject->ModifiedParamArray[i]));
 
                 //Save the value of Internal Parameter Name to avoid function call to map param name again
-                pIntAlias = CcspTr069PaCloneString(pMyObject->ModifiedParamArray[i]);
+                pIntAlias = AnscCloneString(pMyObject->ModifiedParamArray[i]);
                 pExtAlias = NULL;
 
                 CcspTr069PaMapToExternalAlias
@@ -682,7 +682,7 @@ else
                     //Free the internal alias if allocated before the continue
                     if ( pIntAlias )
                     {
-                        CcspTr069PaFreeMemory(pIntAlias);
+                        AnscFreeMemory(pIntAlias);
                     }
                     continue;
                 }
@@ -721,12 +721,12 @@ else
                         //Free the external alias if allocated before the continue
                         if ( pExtAlias )
                         {
-                            CcspTr069PaFreeMemory(pExtAlias);
+                            AnscFreeMemory(pExtAlias);
                         }
                         continue;
                     }
 
-                    pCwmpParamValueArray[ulParamIndex].Name = CcspTr069PaCloneString(pMyObject->ModifiedParamArray[i]);
+                    pCwmpParamValueArray[ulParamIndex].Name = AnscCloneString(pMyObject->ModifiedParamArray[i]);
                 
                     dataType = 
                         pCcspCwmpCpeController->GetParamDataType
@@ -738,15 +738,15 @@ else
                     pMyObject->ModifiedParamArray[i] = pExtAlias;
                     if ( pIntAlias )
                     {
-                        CcspTr069PaFreeMemory(pIntAlias);
+                        AnscFreeMemory(pIntAlias);
                     }
-                    pCwmpParamValueArray[ulParamIndex].Name = CcspTr069PaCloneString(pMyObject->ModifiedParamArray[i]);
+                    pCwmpParamValueArray[ulParamIndex].Name = AnscCloneString(pMyObject->ModifiedParamArray[i]);
 
                     pCwmpParamValueArray[ulParamIndex].Tr069DataType = dataType;
 
                     SlapAllocVariable(pCwmpParamValueArray[ulParamIndex].Value);
                     pCwmpParamValueArray[ulParamIndex].Value->Syntax = SLAP_VAR_SYNTAX_TYPE_string;
-                    pCwmpParamValueArray[ulParamIndex].Value->Variant.varString = CcspTr069PaCloneString(pMyObject->ModifiedParamValueArray[i]);
+                    pCwmpParamValueArray[ulParamIndex].Value->Variant.varString = AnscCloneString(pMyObject->ModifiedParamValueArray[i]);
 
                     if ( pCwmpParamValueArray[ulParamIndex].Name )
                     {
@@ -864,7 +864,7 @@ else
                     }
                 }
                 else { // parameter value is empty
-                    CcspTr069PaFreeMemory(pValue); /*RDKB-7326, CID-33499, free resource before exit*/
+                    AnscFreeMemory(pValue); /*RDKB-7326, CID-33499, free resource before exit*/
                     pValue = NULL;
                     BOOL bCrEnabled = CcspManagementServer_GetHTTPConnectionRequestEnable(NULL);
                    rc = strcmp_s("Device.ManagementServer.ConnectionRequestURL",strlen("Device.ManagementServer.ConnectionRequestURL"),pCwmpParamValueArray[i].Name,&ind);
@@ -877,7 +877,7 @@ else
                 /*RDKB-7326, CID-33499, free resource before exit*/
                 if(pValue)
                 {
-                    CcspTr069PaFreeMemory(pValue);
+                    AnscFreeMemory(pValue);
                     pValue = NULL;
                 }
             }
@@ -911,7 +911,7 @@ bFirstInform = 0;
         if ( j >= ulParamIndex )
         {
             pValue = NULL;
-            pCwmpParamValueArray[ulParamIndex].Name  = CcspTr069PaCloneString(pPName);
+            pCwmpParamValueArray[ulParamIndex].Name  = AnscCloneString(pPName);
 
 	        pCcspCwmpCpeController->GetParamStringValue
     	       (
@@ -932,7 +932,7 @@ bFirstInform = 0;
                             {
                                  bValue = (!((!notZero) || (!notfalse)) || (!notTRUE));
                             } 
-                            CcspTr069PaFreeMemory(pValue);
+                            AnscFreeMemory(pValue);
                             pValue = NULL;
 		    }
 
@@ -949,7 +949,7 @@ bFirstInform = 0;
     /*RDKB-7326, CID-33388, free if not used*/
     if(pSlapValue)
     {
-        CcspTr069PaFreeMemory(pSlapValue);
+        AnscFreeMemory(pSlapValue);
         pSlapValue = NULL;
     }
 
@@ -996,7 +996,7 @@ bFirstInform = 0;
 					else if ( !pDomainEnd ) pDomainEnd = pPort;
 					else if ( pPort < pDomainEnd ) pDomainEnd = pPort;
 					
-					pDefWanConnIfIpv4Addr = (char*)CcspTr069PaAllocateMemory(pDomainEnd - pDomain + 1);
+					pDefWanConnIfIpv4Addr = (char*)AnscAllocateMemory(pDomainEnd - pDomain + 1);
 					if ( pDefWanConnIfIpv4Addr )
 					{
 						AnscCopyMemory(pDefWanConnIfIpv4Addr, pDomain, pDomainEnd - pDomain);
@@ -1020,17 +1020,17 @@ bFirstInform = 0;
 
                 if(pDefWanConnIfIpv4Addr)
                 {
-                    CcspTr069PaFreeMemory(pDefWanConnIfIpv4Addr);/*RDKB-7326, CID-33309, free if not used*/
+                    AnscFreeMemory(pDefWanConnIfIpv4Addr);/*RDKB-7326, CID-33309, free if not used*/
                     pDefWanConnIfIpv4Addr = NULL;
                 }
 				 ulParamIndex++;
 
-                 CcspTr069PaFreeMemory(pConnReqUrl); 
+                 AnscFreeMemory(pConnReqUrl); 
                  pConnReqUrl = NULL;
 			}
             }
             
-            CcspTr069PaFreeMemory(pDefWanConnection);			
+            AnscFreeMemory(pDefWanConnection);			
             pDefWanConnection = NULL;
         }
 	}
@@ -1066,8 +1066,8 @@ bFirstInform = 0;
 
         pWmpsoAsyncReq->CallStatus   = ANSC_STATUS_TIMEOUT;
         pWmpsoAsyncReq->Method       = CCSP_CWMP_METHOD_Inform;
-        pWmpsoAsyncReq->MethodName   = CcspTr069PaCloneString("Inform");
-        pWmpsoAsyncReq->RequestID    = CcspTr069PaCloneString(request_id);
+        pWmpsoAsyncReq->MethodName   = AnscCloneString("Inform");
+        pWmpsoAsyncReq->RequestID    = AnscCloneString(request_id);
 		 for(x = 0;x<ulParamIndex;x++)
 		 {
 			char *temp = NULL;
@@ -1078,10 +1078,10 @@ bFirstInform = 0;
 				CcspCwmppoMpaMapParamInstNumDmIntToCwmp(temp);
 				if ( pCwmpParamValueArray[x].Name )
 				{
-				    CcspTr069PaFreeMemory(pCwmpParamValueArray[x].Name);
+				    AnscFreeMemory(pCwmpParamValueArray[x].Name);
 				    pCwmpParamValueArray[x].Name = NULL;
 				}
-				pCwmpParamValueArray[x].Name = CcspTr069PaCloneString(temp);
+				pCwmpParamValueArray[x].Name = AnscCloneString(temp);
 				free(temp);
 			}
 		 }
@@ -1242,7 +1242,7 @@ bFirstInform = 0;
                         if ( pDMParamName != NULL )
                         {
                             pCcspCwmpProcessor->DiscardValueChanged((ANSC_HANDLE)pCcspCwmpProcessor, pDMParamName);
-                            CcspTr069PaFreeMemory(pDMParamName);
+                            AnscFreeMemory(pDMParamName);
                             pDMParamName = NULL;
                         }
                         else
@@ -1436,12 +1436,12 @@ EXIT1:
             CcspCwmpCleanParamValue((&pCwmpParamValueArray[i]));
         }
 
-        CcspTr069PaFreeMemory(pCwmpParamValueArray);
+        AnscFreeMemory(pCwmpParamValueArray);
     }
 
     if ( pCurrentSystemTime )
     {
-        CcspTr069PaFreeMemory(pCurrentSystemTime);
+        AnscFreeMemory(pCurrentSystemTime);
     }
 
     if ( returnStatus != ANSC_STATUS_SUCCESS )
@@ -1571,7 +1571,7 @@ CcspCwmpsoTransferComplete
      */
     if ( bAddEventCode )
     {
-        PCCSP_CWMP_EVENT            pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+        PCCSP_CWMP_EVENT            pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
 
         if ( !pCcspCwmpEvent )
         {
@@ -1580,14 +1580,14 @@ CcspCwmpsoTransferComplete
 
 		if( bIsDownload)
 		{
-	        pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_M_Download);
+	        pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_M_Download);
 		}
 		else
 		{
-	        pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_M_Upload);
+	        pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_M_Upload);
 		}
 
-        pCcspCwmpEvent->CommandKey = CcspTr069PaCloneString(pCommandKey);
+        pCcspCwmpEvent->CommandKey = AnscCloneString(pCommandKey);
 
         returnStatus =
             pMyObject->AddCwmpEvent
@@ -1597,14 +1597,14 @@ CcspCwmpsoTransferComplete
                     FALSE
                 );
 
-        pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+        pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
 
         if ( !pCcspCwmpEvent )
         {
             return  ANSC_STATUS_RESOURCES;
         }
 
-        pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_TransferComplete);
+        pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_TransferComplete);
         pCcspCwmpEvent->CommandKey = NULL;
 
         if ( ( pCcspCwmpCpeController->bBootInformScheduled || pCcspCwmpCpeController->bBootstrapInformScheduled ) &&
@@ -1640,8 +1640,8 @@ CcspCwmpsoTransferComplete
 
         pWmpsoAsyncReq->CallStatus   = ANSC_STATUS_TIMEOUT;
         pWmpsoAsyncReq->Method       = CCSP_CWMP_METHOD_TransferComplete;
-        pWmpsoAsyncReq->MethodName   = CcspTr069PaCloneString("TransferComplete");
-        pWmpsoAsyncReq->RequestID    = CcspTr069PaCloneString(request_id);
+        pWmpsoAsyncReq->MethodName   = AnscCloneString("TransferComplete");
+        pWmpsoAsyncReq->RequestID    = AnscCloneString(request_id);
         pWmpsoAsyncReq->SoapEnvelope =
             pCcspCwmpSoapParser->BuildSoapReq_TransferComplete
                 (
@@ -1853,14 +1853,14 @@ CcspCwmpsoAutonomousTransferComplete
      */
     if ( bAddEventCode )
     {
-        PCCSP_CWMP_EVENT            pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+        PCCSP_CWMP_EVENT            pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
 
         if ( !pCcspCwmpEvent )
         {
             return  ANSC_STATUS_RESOURCES;
         }
 
-        pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_AutonomousTransferComplete);
+        pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_AutonomousTransferComplete);
         pCcspCwmpEvent->CommandKey = NULL;
 
         if ( ( pCcspCwmpCpeController->bBootInformScheduled || pCcspCwmpCpeController->bBootstrapInformScheduled ) &&
@@ -1896,8 +1896,8 @@ CcspCwmpsoAutonomousTransferComplete
 
         pWmpsoAsyncReq->CallStatus   = ANSC_STATUS_TIMEOUT;
         pWmpsoAsyncReq->Method       = CCSP_CWMP_METHOD_AutonomousTransferComplete;
-        pWmpsoAsyncReq->MethodName   = CcspTr069PaCloneString("AutonomousTransferComplete");
-        pWmpsoAsyncReq->RequestID    = CcspTr069PaCloneString(request_id);
+        pWmpsoAsyncReq->MethodName   = AnscCloneString("AutonomousTransferComplete");
+        pWmpsoAsyncReq->RequestID    = AnscCloneString(request_id);
         pWmpsoAsyncReq->SoapEnvelope =
             pCcspCwmpSoapParser->BuildSoapReq_AutonomousTransferComplete
                 (
@@ -2095,7 +2095,7 @@ CcspCwmpsoKicked
     if ( (pMyObject->SessionState == CCSP_CWMPSO_SESSION_STATE_idle      ) ||
          (pMyObject->SessionState == CCSP_CWMPSO_SESSION_STATE_connectNow) )
     {
-        PCCSP_CWMP_EVENT            pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+        PCCSP_CWMP_EVENT            pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
 
         if ( !pCcspCwmpEvent )
         {
@@ -2103,7 +2103,7 @@ CcspCwmpsoKicked
         }
         else
         {
-            pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString("5 KICKED");
+            pCcspCwmpEvent->EventCode  = AnscCloneString("5 KICKED");
             pCcspCwmpEvent->CommandKey = NULL;
         }
 
@@ -2129,8 +2129,8 @@ CcspCwmpsoKicked
 
         pWmpsoAsyncReq->CallStatus   = ANSC_STATUS_TIMEOUT;
         pWmpsoAsyncReq->Method       = CCSP_CWMP_METHOD_Kicked;
-        pWmpsoAsyncReq->MethodName   = CcspTr069PaCloneString("Kicked");
-        pWmpsoAsyncReq->RequestID    = CcspTr069PaCloneString(request_id);
+        pWmpsoAsyncReq->MethodName   = AnscCloneString("Kicked");
+        pWmpsoAsyncReq->RequestID    = AnscCloneString(request_id);
         pWmpsoAsyncReq->SoapEnvelope =
             pCcspCwmpSoapParser->BuildSoapReq_Kicked
                 (
@@ -2319,8 +2319,8 @@ CcspCwmpsoRequestDownload
 
         pWmpsoAsyncReq->CallStatus   = ANSC_STATUS_TIMEOUT;
         pWmpsoAsyncReq->Method       = CCSP_CWMP_METHOD_RequestDownload;
-        pWmpsoAsyncReq->MethodName   = CcspTr069PaCloneString("RequestDownload");
-        pWmpsoAsyncReq->RequestID    = CcspTr069PaCloneString(request_id);
+        pWmpsoAsyncReq->MethodName   = AnscCloneString("RequestDownload");
+        pWmpsoAsyncReq->RequestID    = AnscCloneString(request_id);
         pWmpsoAsyncReq->SoapEnvelope =
             pCcspCwmpSoapParser->BuildSoapReq_RequestDownload
                 (
@@ -2489,16 +2489,16 @@ CcspCwmpsoDUStateChangeComplete
      */
     if ( bAddEventCode )
     {
-        PCCSP_CWMP_EVENT            pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+        PCCSP_CWMP_EVENT            pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
 
         if ( !pCcspCwmpEvent )
         {
             return  ANSC_STATUS_RESOURCES;
         }
 
-	    pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_M_ChangeDUState);
+	    pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_M_ChangeDUState);
 
-        pCcspCwmpEvent->CommandKey = CcspTr069PaCloneString(pCommandKey);
+        pCcspCwmpEvent->CommandKey = AnscCloneString(pCommandKey);
 
         returnStatus =
             pMyObject->AddCwmpEvent
@@ -2508,14 +2508,14 @@ CcspCwmpsoDUStateChangeComplete
                     FALSE
                 );
 
-        pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+        pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
 
         if ( !pCcspCwmpEvent )
         {
             return  ANSC_STATUS_RESOURCES;
         }
 
-        pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_DUStateChangeComplete);
+        pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_DUStateChangeComplete);
         pCcspCwmpEvent->CommandKey = NULL; 
 
         if ( ( pCcspCwmpCpeController->bBootInformScheduled || pCcspCwmpCpeController->bBootstrapInformScheduled ) &&
@@ -2551,8 +2551,8 @@ CcspCwmpsoDUStateChangeComplete
 
         pWmpsoAsyncReq->CallStatus   = ANSC_STATUS_TIMEOUT;
         pWmpsoAsyncReq->Method       = CCSP_CWMP_METHOD_AutonomousTransferComplete;
-        pWmpsoAsyncReq->MethodName   = CcspTr069PaCloneString("AutonomousTransferComplete");
-        pWmpsoAsyncReq->RequestID    = CcspTr069PaCloneString(request_id);
+        pWmpsoAsyncReq->MethodName   = AnscCloneString("AutonomousTransferComplete");
+        pWmpsoAsyncReq->RequestID    = AnscCloneString(request_id);
         pWmpsoAsyncReq->SoapEnvelope =
             pCcspCwmpSoapParser->BuildSoapReq_DUStateChangeComplete
                 (
@@ -2721,14 +2721,14 @@ CcspCwmpsoAutonomousDUStateChangeComplete
      */
     if ( bAddEventCode )
     {
-        PCCSP_CWMP_EVENT            pCcspCwmpEvent = (PCCSP_CWMP_EVENT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+        PCCSP_CWMP_EVENT            pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
 
         if ( !pCcspCwmpEvent )
         {
             return  ANSC_STATUS_RESOURCES;
         }
 
-        pCcspCwmpEvent->EventCode  = CcspTr069PaCloneString(CCSP_CWMP_INFORM_EVENT_NAME_AutonomousDUStateChangeComplete);
+        pCcspCwmpEvent->EventCode  = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_AutonomousDUStateChangeComplete);
         pCcspCwmpEvent->CommandKey = NULL;
 
         if ( ( pCcspCwmpCpeController->bBootInformScheduled || pCcspCwmpCpeController->bBootstrapInformScheduled ) &&
@@ -2764,8 +2764,8 @@ CcspCwmpsoAutonomousDUStateChangeComplete
 
         pWmpsoAsyncReq->CallStatus   = ANSC_STATUS_TIMEOUT;
         pWmpsoAsyncReq->Method       = CCSP_CWMP_METHOD_AutonomousTransferComplete;
-        pWmpsoAsyncReq->MethodName   = CcspTr069PaCloneString("AutonomousTransferComplete");
-        pWmpsoAsyncReq->RequestID    = CcspTr069PaCloneString(request_id);
+        pWmpsoAsyncReq->MethodName   = AnscCloneString("AutonomousTransferComplete");
+        pWmpsoAsyncReq->RequestID    = AnscCloneString(request_id);
         pWmpsoAsyncReq->SoapEnvelope =
             pCcspCwmpSoapParser->BuildSoapReq_AutonomousDUStateChangeComplete
                 (

@@ -269,7 +269,7 @@ CcspCwmppoGetInitialContact
 */
     	if ( pValue )
 	    {
-    	    CcspTr069PaFreeMemory(pValue);
+    	    AnscFreeMemory(pValue);
 	    }	
 	}
 
@@ -386,7 +386,7 @@ CcspCwmppoGetInitialContactFactory
 
     	if ( pValue )
 	    {
-    	    CcspTr069PaFreeMemory(pValue);
+    	    AnscFreeMemory(pValue);
 	    }	
 	}
 
@@ -723,7 +723,7 @@ CcspCwmppoGetPeriodicInformTime
     PANSC_UNIVERSAL_TIME            pCalendarTime       = NULL;
     char*                           pPeriodicInformTime = NULL;
 
-	pInformTime = (PANSC_UNIVERSAL_TIME)CcspTr069PaAllocateMemory(sizeof(ANSC_UNIVERSAL_TIME));
+	pInformTime = (PANSC_UNIVERSAL_TIME)AnscAllocateMemory(sizeof(ANSC_UNIVERSAL_TIME));
 
 	if ( !pInformTime ) return NULL;
     
@@ -740,13 +740,13 @@ CcspCwmppoGetPeriodicInformTime
         if ( pCalendarTime )
         {
             *pInformTime = *pCalendarTime;
-            CcspTr069PaFreeMemory(pCalendarTime);
+            AnscFreeMemory(pCalendarTime);
         }
     }
 
     if ( pPeriodicInformTime )
     {
-        CcspTr069PaFreeMemory(pPeriodicInformTime);
+        AnscFreeMemory(pPeriodicInformTime);
     }
 
     return  (ANSC_HANDLE)pInformTime;
@@ -921,7 +921,7 @@ CcspCwmppoReset
 
     if ( pMyObject->SecheduledCommandKey )
     {
-        CcspTr069PaFreeMemory(pMyObject->SecheduledCommandKey);
+        AnscFreeMemory(pMyObject->SecheduledCommandKey);
 
         pMyObject->SecheduledCommandKey = NULL;
     }

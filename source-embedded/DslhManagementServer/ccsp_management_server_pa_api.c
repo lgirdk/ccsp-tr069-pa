@@ -230,7 +230,7 @@ static void updateInitalContact()
 
     if (lastContactUrl)
     {
-        CcspTr069PaFreeMemory(lastContactUrl);
+        AnscFreeMemory(lastContactUrl);
     }
 
     return;

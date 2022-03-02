@@ -1594,7 +1594,7 @@ CcspCwmppoDelayUdpConnReqAddrTask
         if(pNotificationLimit)
         {
             uNotificationLimit = (ULONG)_ansc_atoi(pNotificationLimit);
-            CcspManagementServer_Free(pNotificationLimit);
+            AnscFreeMemory(pNotificationLimit);
         }
         else
         {
@@ -2146,7 +2146,7 @@ CcspCwmppoProcessPvcSignal
                 if(pNotificationLimit)
                 {
                     uNotificationLimit = (ULONG)_ansc_atoi(pNotificationLimit);
-                    CcspManagementServer_Free(pNotificationLimit);
+                    AnscFreeMemory(pNotificationLimit);
                 }
                 else
                 {

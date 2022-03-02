@@ -148,15 +148,15 @@ int  CcspManagementServer_GetParameterValues(
     if (*val_size == 0) return CCSP_FAILURE;
 
     parameterValStruct_t **val = NULL;
-    val = (parameterValStruct_t **)CcspManagementServer_Allocate((*val_size)*sizeof(parameterValStruct_t *));
+    val = (parameterValStruct_t **)AnscAllocateMemory((*val_size)*sizeof(parameterValStruct_t *));
     if(val) {
         for(i=0; i < *val_size; i++) {
             val[i] = NULL;
-            val[i] = (parameterValStruct_t *)CcspManagementServer_Allocate(sizeof(parameterValStruct_t));
+            val[i] = (parameterValStruct_t *)AnscAllocateMemory(sizeof(parameterValStruct_t));
             if(val[i] == NULL) {
                 int j;
-                for(j=0; j<i; j++) CcspManagementServer_Free(val[j]);
-                CcspManagementServer_Free(val);
+                for(j=0; j<i; j++) AnscFreeMemory(val[j]);
+                AnscFreeMemory(val);
                 return CCSP_ERR_MEMORY_ALLOC_FAIL;
             }
         }
@@ -177,8 +177,8 @@ int  CcspManagementServer_GetParameterValues(
             if(parameterID < 0)
             {
                 int j;
-                for(j=0; j<(*val_size); j++) CcspManagementServer_Free(val[j]);
-                CcspManagementServer_Free(val);
+                for(j=0; j<(*val_size); j++) AnscFreeMemory(val[j]);
+                AnscFreeMemory(val);
 
                 return CCSP_FAILURE;
             }
@@ -273,12 +273,12 @@ int  CcspManagementServer_GetParameterAttributes(
     //CcspTraceWarning("ms", ( "CcspManagementServer_GetParameterAttributes 1: %d to %d.\n", size, *val_size)); 
 
     parameterAttributeStruct_t **attr = NULL;
-    attr = CcspManagementServer_Allocate(*val_size*sizeof(parameterAttributeStruct_t *));
+    attr = AnscAllocateMemory(*val_size*sizeof(parameterAttributeStruct_t *));
     if(!attr)
     {
         return CCSP_FAILURE;
     }
-    for(i=0; i < *val_size; i++) attr[i] = CcspManagementServer_Allocate(sizeof(parameterAttributeStruct_t));
+    for(i=0; i < *val_size; i++) attr[i] = AnscAllocateMemory(sizeof(parameterAttributeStruct_t));
 
     int attrID = 0;
     for(i=0; i<size; i++)
@@ -298,11 +298,11 @@ int  CcspManagementServer_GetParameterAttributes(
                 {
                     if(attr[i])
                     {
-                        CcspManagementServer_Free(attr[i]);
+                        AnscFreeMemory(attr[i]);
                         attr[i] = NULL;
                     }
                 }
-                CcspManagementServer_Free(attr);
+                AnscFreeMemory(attr);
                 return CCSP_FAILURE;
             }
             CcspManagementServer_GetSingleParameterAttributes(objectID, parameterID, attr[attrID]);
@@ -388,14 +388,14 @@ static int CcspManagementServer_GetObjectNames(
         }
         for(i = 0; i < objectInfo[objectID].numberOfChildObjects; i++ )
         {
-            info[infoID]->parameterName =  CcspManagementServer_CloneString(objectInfo[objectInfo[objectID].childObjectIDs[i]].name);
+            info[infoID]->parameterName =  AnscCloneString(objectInfo[objectInfo[objectID].childObjectIDs[i]].name);
             info[infoID]->writable = (objectInfo[objectInfo[objectID].childObjectIDs[i]].access == CCSP_RO)? CCSP_FALSE : CCSP_TRUE;
             infoID++;
         }
     }
     else
     {
-        info[infoID]->parameterName = CcspManagementServer_CloneString(objectInfo[objectID].name);
+        info[infoID]->parameterName = AnscCloneString(objectInfo[objectID].name);
         infoID++;
         int i = 0;
         for(; i < objectInfo[objectID].numberOfParameters; i++ )
@@ -449,13 +449,13 @@ int CcspManagementServer_GetParameterNames(
 
         parameterInfoStruct_t **info;
         *size = 1;
-        info = CcspManagementServer_Allocate(*size*sizeof(parameterInfoStruct_t *));
+        info = AnscAllocateMemory(*size*sizeof(parameterInfoStruct_t *));
         if(info == NULL)
         {
             return CCSP_FAILURE;
 	}
-	info[0] = (parameterInfoStruct_t *) CcspManagementServer_Allocate(sizeof(parameterInfoStruct_t));
-	info[0]->parameterName = CcspManagementServer_Allocate(strlen(parameterName)+1);
+	info[0] = (parameterInfoStruct_t *) AnscAllocateMemory(sizeof(parameterInfoStruct_t));
+	info[0]->parameterName = AnscAllocateMemory(strlen(parameterName)+1);
 	rc = strcpy_s(info[0]->parameterName, strlen(parameterName)+1, parameterName);
 	ERR_CHK(rc);
 	info[0]->writable = (objectInfo[objectID].parameters[parameterID].access == CCSP_RO)? CCSP_FALSE : CCSP_TRUE;
@@ -467,13 +467,13 @@ int CcspManagementServer_GetParameterNames(
         //CcspTraceWarning("sample_component", ( "CcspManagementServer_GetParameterNames 4: %s %d %s\n", name, objectID, objectInfo[objectID].name));
         parameterInfoStruct_t **info;
         *size = CcspManagementServer_GetNameInfoRecordCount(objectID, nextLevel);
-        info = CcspManagementServer_Allocate(*size*sizeof(parameterInfoStruct_t *));
+        info = AnscAllocateMemory(*size*sizeof(parameterInfoStruct_t *));
 	if(info == NULL)
         {
             return CCSP_FAILURE;
 	}
 	int i = 0;
-	for(;i < * size; i++) info[i] = (parameterInfoStruct_t *) CcspManagementServer_Allocate(sizeof(parameterInfoStruct_t));
+	for(;i < * size; i++) info[i] = (parameterInfoStruct_t *) AnscAllocateMemory(sizeof(parameterInfoStruct_t));
 	CcspManagementServer_GetObjectNames(
 		    objectID,
 		    nextLevel,

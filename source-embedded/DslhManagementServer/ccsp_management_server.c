@@ -378,23 +378,23 @@ CcspManagementServer_FillInObjectInfo()
     //CcspTraceWarning("ms", ( "CcspManagementServer_FillObjectInfo 0\n"));
     CcspManagementServer_FillInSDMObjectInfo();
     /* First setup default object array. */
-    objectInfo[DeviceID].name = CcspManagementServer_CloneString(_DeviceObjectName);
+    objectInfo[DeviceID].name = AnscCloneString(_DeviceObjectName);
 
     objectInfo[DeviceID].numberOfChildObjects = 3;
     objectInfo[DeviceID].childObjectIDs =
-        CcspManagementServer_Allocate(objectInfo[DeviceID].numberOfChildObjects * sizeof(unsigned int));
+        AnscAllocateMemory(objectInfo[DeviceID].numberOfChildObjects * sizeof(unsigned int));
     objectInfo[DeviceID].childObjectIDs[0] = ManagementServerID;
     objectInfo[DeviceID].childObjectIDs[1] = DeviceInfoID;
     objectInfo[DeviceID].childObjectIDs[2] = NotifyID;
     objectInfo[DeviceID].numberOfParameters = 1;
     objectInfo[DeviceID].parameters = deviceParameters;
 
-    objectInfo[ManagementServerID].name = CcspManagementServer_CloneString(_ManagementServerObjectName);
+    objectInfo[ManagementServerID].name = AnscCloneString(_ManagementServerObjectName);
 // #if 0 //Not used anymore
 #ifndef _COSA_VEN501_
     objectInfo[ManagementServerID].numberOfChildObjects = 2;
     objectInfo[ManagementServerID].childObjectIDs = 
-        CcspManagementServer_Allocate(objectInfo[ManagementServerID].numberOfChildObjects * sizeof(unsigned int));
+        AnscAllocateMemory(objectInfo[ManagementServerID].numberOfChildObjects * sizeof(unsigned int));
     objectInfo[ManagementServerID].childObjectIDs[0] = AutonomousTransferCompletePolicyID;
     objectInfo[ManagementServerID].childObjectIDs[1] = DUStateChangeComplPolicyID;
 #else
@@ -403,86 +403,86 @@ CcspManagementServer_FillInObjectInfo()
     objectInfo[ManagementServerID].numberOfParameters = ManagementServerNumOfParameters;
     objectInfo[ManagementServerID].parameters = managementServerParameters;
 
-    objectInfo[DeviceInfoID].name = CcspManagementServer_CloneString(_DeviceInfoObjectName);
+    objectInfo[DeviceInfoID].name = AnscCloneString(_DeviceInfoObjectName);
     objectInfo[DeviceInfoID].numberOfChildObjects = 1;
     objectInfo[DeviceInfoID].childObjectIDs = 
-        CcspManagementServer_Allocate(objectInfo[DeviceInfoID].numberOfChildObjects * sizeof(unsigned int));
+        AnscAllocateMemory(objectInfo[DeviceInfoID].numberOfChildObjects * sizeof(unsigned int));
     objectInfo[DeviceInfoID].childObjectIDs[0] = SupportedDataModelID;
     objectInfo[DeviceInfoID].numberOfParameters = 1;
     objectInfo[DeviceInfoID].parameters = supportedDMNumberOfEntriesParameters;
 
 // #if 0 //Not used anymore
 #ifndef _COSA_VEN501_    
-    objectInfo[AutonomousTransferCompletePolicyID].name = CcspManagementServer_CloneString(_AutonomousTransferCompletePolicyObjectName);
+    objectInfo[AutonomousTransferCompletePolicyID].name = AnscCloneString(_AutonomousTransferCompletePolicyObjectName);
     objectInfo[AutonomousTransferCompletePolicyID].numberOfChildObjects = 0;
     objectInfo[AutonomousTransferCompletePolicyID].numberOfParameters = AutonomousTransferCompletePolicyNumOfParameters;
     objectInfo[AutonomousTransferCompletePolicyID].parameters = autonomousTransferCompletePolicyParameters;
     
-    objectInfo[DUStateChangeComplPolicyID].name = CcspManagementServer_CloneString(_DUStateChangeComplPolicyObjectName);
+    objectInfo[DUStateChangeComplPolicyID].name = AnscCloneString(_DUStateChangeComplPolicyObjectName);
     objectInfo[DUStateChangeComplPolicyID].numberOfChildObjects = 0;
     objectInfo[DUStateChangeComplPolicyID].numberOfParameters = DUStateChangeComplPolicyNumOfParameters;
     objectInfo[DUStateChangeComplPolicyID].parameters = duStateChangeComplPolicyParameters;
 #endif
 
-    objectInfo[ComID].name = CcspManagementServer_CloneString(_ComObjectName);
+    objectInfo[ComID].name = AnscCloneString(_ComObjectName);
     objectInfo[ComID].numberOfChildObjects = 1;
     objectInfo[ComID].childObjectIDs = 
-        CcspManagementServer_Allocate(objectInfo[ComID].numberOfChildObjects * sizeof(unsigned int));
+        AnscAllocateMemory(objectInfo[ComID].numberOfChildObjects * sizeof(unsigned int));
     objectInfo[ComID].childObjectIDs[0] = CiscoID;
     objectInfo[ComID].numberOfParameters = 0;
     objectInfo[ComID].parameters = NULL;
 
-    objectInfo[CiscoID].name = CcspManagementServer_CloneString(_CiscoObjectName);
+    objectInfo[CiscoID].name = AnscCloneString(_CiscoObjectName);
     objectInfo[CiscoID].numberOfChildObjects = 1;
     objectInfo[CiscoID].childObjectIDs = 
-        CcspManagementServer_Allocate(objectInfo[CiscoID].numberOfChildObjects * sizeof(unsigned int));
+        AnscAllocateMemory(objectInfo[CiscoID].numberOfChildObjects * sizeof(unsigned int));
     objectInfo[CiscoID].childObjectIDs[0] = SpvtgID;
     objectInfo[CiscoID].numberOfParameters = 0;
     objectInfo[CiscoID].parameters = NULL;
 
-    objectInfo[SpvtgID].name = CcspManagementServer_CloneString(_SpvtgObjectName);
+    objectInfo[SpvtgID].name = AnscCloneString(_SpvtgObjectName);
     objectInfo[SpvtgID].numberOfChildObjects = 1;
     objectInfo[SpvtgID].childObjectIDs = 
-        CcspManagementServer_Allocate(objectInfo[SpvtgID].numberOfChildObjects * sizeof(unsigned int));
+        AnscAllocateMemory(objectInfo[SpvtgID].numberOfChildObjects * sizeof(unsigned int));
     objectInfo[SpvtgID].childObjectIDs[0] = CcspID;
     objectInfo[SpvtgID].numberOfParameters = 0;
     objectInfo[SpvtgID].parameters = NULL;
 
-    objectInfo[CcspID].name = CcspManagementServer_CloneString(_CcspObjectName);
+    objectInfo[CcspID].name = AnscCloneString(_CcspObjectName);
     objectInfo[CcspID].numberOfChildObjects = 1;
     objectInfo[CcspID].childObjectIDs = 
-        CcspManagementServer_Allocate(objectInfo[CcspID].numberOfChildObjects * sizeof(unsigned int));
+        AnscAllocateMemory(objectInfo[CcspID].numberOfChildObjects * sizeof(unsigned int));
     objectInfo[CcspID].childObjectIDs[0] = Tr069paID;
     objectInfo[CcspID].numberOfParameters = 0;
     objectInfo[CcspID].parameters = NULL;
 
-    objectInfo[Tr069paID].name = CcspManagementServer_CloneString(_Tr069paObjectName);
+    objectInfo[Tr069paID].name = AnscCloneString(_Tr069paObjectName);
     objectInfo[Tr069paID].numberOfChildObjects = 2;
     objectInfo[Tr069paID].childObjectIDs = 
-        CcspManagementServer_Allocate(objectInfo[Tr069paID].numberOfChildObjects * sizeof(unsigned int));
+        AnscAllocateMemory(objectInfo[Tr069paID].numberOfChildObjects * sizeof(unsigned int));
     objectInfo[Tr069paID].childObjectIDs[0] = MemoryID;
     objectInfo[Tr069paID].childObjectIDs[1] = LoggingID;
     objectInfo[Tr069paID].numberOfParameters = Tr069paNumOfParameters;
     objectInfo[Tr069paID].parameters = tr069paParameters;
-    objectInfo[Tr069paID].parameters[Tr069paNameID].value = CcspManagementServer_CloneString("com.cisco.spvtg.ccsp.tr069pa");
-    objectInfo[Tr069paID].parameters[Tr069paVersionID].value = CcspManagementServer_CloneString("1.0");
-    objectInfo[Tr069paID].parameters[Tr069paAuthorID].value = CcspManagementServer_CloneString("CCSP Team");
-    objectInfo[Tr069paID].parameters[Tr069paHealthID].value = CcspManagementServer_CloneString("Green");
-    objectInfo[Tr069paID].parameters[Tr069paStateID].value = CcspManagementServer_CloneString("2");
-    objectInfo[Tr069paID].parameters[Tr069paDTXmlID].value = CcspManagementServer_CloneString(pDTXml);
+    objectInfo[Tr069paID].parameters[Tr069paNameID].value = AnscCloneString("com.cisco.spvtg.ccsp.tr069pa");
+    objectInfo[Tr069paID].parameters[Tr069paVersionID].value = AnscCloneString("1.0");
+    objectInfo[Tr069paID].parameters[Tr069paAuthorID].value = AnscCloneString("CCSP Team");
+    objectInfo[Tr069paID].parameters[Tr069paHealthID].value = AnscCloneString("Green");
+    objectInfo[Tr069paID].parameters[Tr069paStateID].value = AnscCloneString("2");
+    objectInfo[Tr069paID].parameters[Tr069paDTXmlID].value = AnscCloneString(pDTXml);
 
-    objectInfo[MemoryID].name = CcspManagementServer_CloneString(_MemoryObjectName);
+    objectInfo[MemoryID].name = AnscCloneString(_MemoryObjectName);
     objectInfo[MemoryID].numberOfChildObjects = 0;
     objectInfo[MemoryID].numberOfParameters = MemoryNumOfParameters;
     objectInfo[MemoryID].parameters = memoryParameters;
 
-    objectInfo[LoggingID].name = CcspManagementServer_CloneString(_LoggingObjectName);
+    objectInfo[LoggingID].name = AnscCloneString(_LoggingObjectName);
     objectInfo[LoggingID].numberOfChildObjects = 0;
     objectInfo[LoggingID].numberOfParameters = LoggingNumOfParameters;
     objectInfo[LoggingID].parameters = loggingParameters;
-    objectInfo[LoggingID].parameters[LoggingEnableID].value = CcspManagementServer_CloneString("true");
+    objectInfo[LoggingID].parameters[LoggingEnableID].value = AnscCloneString("true");
 
-	objectInfo[NotifyID].name = CcspManagementServer_CloneString(_TR069NotifyObjectName);
+	objectInfo[NotifyID].name = AnscCloneString(_TR069NotifyObjectName);
     objectInfo[NotifyID].numberOfChildObjects = 0;
     objectInfo[NotifyID].numberOfParameters = TR069NotifyNumOfParameters;
     objectInfo[NotifyID].parameters = notifyParameters;
@@ -490,7 +490,7 @@ CcspManagementServer_FillInObjectInfo()
     char str[100] = {0};
     //_ansc_itoa(g_iTraceLevel, str, 10);
     _ansc_sprintf(str, "%d", g_iTraceLevel);
-    objectInfo[LoggingID].parameters[LoggingLogLevelID].value = CcspManagementServer_CloneString(str);
+    objectInfo[LoggingID].parameters[LoggingLogLevelID].value = AnscCloneString(str);
 
     /* set up default values of Management Server settings, another way to do this is
        through PSM, however on different sub-system, the record names must be
@@ -503,58 +503,58 @@ CcspManagementServer_FillInObjectInfo()
         char    buf[16];
    
         objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value
-            = CcspManagementServer_CloneString("0");
+            = AnscCloneString("0");
 
         // _ansc_sprintf(buf, "%d", 51005);
         
         _ansc_sprintf(buf, "%d", CWMP_PORT);      
 
         objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ConnectionRequestPortID].value
-            = CcspManagementServer_CloneString(buf);
+            = AnscCloneString(buf);
 
         /* Now PA is started before PAM. We can't get it now We will try to get from PAM directly when do INFORM */
         objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_ConnectionRequestURLPathID].value 
             = NULL;
 
         objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ConnectionRequestIfID].value
-            = CcspManagementServer_CloneString(LGI_CWMP_CONNREQ_IFACE_STR);
+            = AnscCloneString(LGI_CWMP_CONNREQ_IFACE_STR);
 
         objectInfo[ManagementServerID].parameters[ManagementServerScheduleRebootID].value
-            = CcspManagementServer_CloneString("");
+            = AnscCloneString("");
 
         /* Whenever the CPE reboots, this value MUST be reset by the CPE to -1. */
         objectInfo[ManagementServerID].parameters[ManagementServerDelayRebootID].value
-            = CcspManagementServer_CloneString("-1");
+            = AnscCloneString("-1");
 
         objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ValidateManagementServerCertificateID].value
-            = CcspManagementServer_CloneString("1");
+            = AnscCloneString("1");
 
         objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].notification = 1;
             
         _ansc_sprintf(buf, "%d", STUN_PORT);
         objectInfo[ManagementServerID].parameters[ManagementServerSTUNServerPortID].value 
-            = CcspManagementServer_CloneString(buf);
+            = AnscCloneString(buf);
 
         objectInfo[ManagementServerID].parameters[ManagementServerSTUNEnableID].value
-            = CcspManagementServer_CloneString("0");
+            = AnscCloneString("0");
 
         objectInfo[ManagementServerID].parameters[ManagementServerSTUNMinimumKeepAlivePeriodID].value 
-            = CcspManagementServer_CloneString("5");
+            = AnscCloneString("5");
 
         objectInfo[ManagementServerID].parameters[ManagementServerSTUNMaximumKeepAlivePeriodID].value 
-            = CcspManagementServer_CloneString("30");
+            = AnscCloneString("30");
 
         objectInfo[ManagementServerID].parameters[ManagementServerUDPConnectionRequestAddressNotificationLimitID].value 
-            = CcspManagementServer_CloneString("0");
+            = AnscCloneString("0");
         objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_DiagCompleteID].value
-            = CcspManagementServer_CloneString("0");
+            = AnscCloneString("0");
 
         objectInfo[ManagementServerID].parameters[ManagementServerHTTPConnectionRequestEnableID].value
-            = CcspManagementServer_CloneString("1");
+            = AnscCloneString("1");
         objectInfo[ManagementServerID].parameters[ManagementServerHTTPCompressionSupportedID].value
-            = CcspManagementServer_CloneString("");
+            = AnscCloneString("");
         objectInfo[ManagementServerID].parameters[ManagementServerManageableDeviceNotificationLimitID].value 
-			= CcspManagementServer_CloneString("0");
+			= AnscCloneString("0");
 
     }
 
@@ -608,7 +608,7 @@ CcspManagementServer_FillInObjectInfo()
                 /* free default value */
                 if ( objectInfo[i].parameters[j].value )
                 {
-                    CcspManagementServer_Free(objectInfo[i].parameters[j].value);
+                    AnscFreeMemory(objectInfo[i].parameters[j].value);
                 }
 
                 objectInfo[i].parameters[j].value = pValue;
@@ -664,10 +664,10 @@ CcspManagementServer_FillInObjectInfo()
 							// free default value 
 							if ( objectInfo[i].parameters[j].value )
 							{
-								CcspManagementServer_Free(objectInfo[i].parameters[j].value);
+								AnscFreeMemory(objectInfo[i].parameters[j].value);
 							}
 						
-							objectInfo[i].parameters[j].value = CcspManagementServer_Allocate( strlen( tmpPWDValue ) + 1 );
+							objectInfo[i].parameters[j].value = AnscAllocateMemory( strlen( tmpPWDValue ) + 1 );
                                                         rc = strncpy_s(objectInfo[i].parameters[j].value, strlen(tmpPWDValue) + 1, tmpPWDValue, strlen( tmpPWDValue ) ) ;
                                                         ERR_CHK(rc);
 						}
@@ -705,7 +705,7 @@ CcspManagementServer_FillInObjectInfo()
                 /*RDKB-7329, CID-33414, null check before use */
                 if(pValue){
                     objectInfo[i].parameters[j].notification = _ansc_atoi(pValue);
-                    CcspManagementServer_Free(pValue);
+                    AnscFreeMemory(pValue);
                 }
                 else{
                     objectInfo[i].parameters[j].notification = 0;
@@ -824,7 +824,7 @@ ANSC_STATUS CcspManagementServer_RegisterNameSpace()
     /* For SupportedDataModel, the parameter number is fixed here. */
     namespaceNumber += 4;
 
-    CcspManagementServer_Namespace = (name_spaceType_t *)CcspManagementServer_Allocate(namespaceNumber * sizeof(name_spaceType_t));
+    CcspManagementServer_Namespace = (name_spaceType_t *)AnscAllocateMemory(namespaceNumber * sizeof(name_spaceType_t));
     for(i=0; i<SupportedDataModelID; i++)
     {
         for(j=0; j<objectInfo[i].numberOfParameters; j++)
@@ -901,10 +901,10 @@ CcspManagementServer_DiscoverComponent
             CcspTraceWarning(("CcspManagementServer_DiscoverComponent find component error %d--%s\n", res, FirstUpstreamIpInterfaceParameterName));
         }
         else{
-            if(pPAMComponentName) CcspManagementServer_Free(pPAMComponentName);
-            if(pPAMComponentPath) CcspManagementServer_Free(pPAMComponentPath);
-            pPAMComponentName = CcspManagementServer_CloneString(components[0]->componentName);
-            pPAMComponentPath = CcspManagementServer_CloneString(components[0]->dbusPath);
+            if(pPAMComponentName) AnscFreeMemory(pPAMComponentName);
+            if(pPAMComponentPath) AnscFreeMemory(pPAMComponentPath);
+            pPAMComponentName = AnscCloneString(components[0]->componentName);
+            pPAMComponentPath = AnscCloneString(components[0]->dbusPath);
             CcspTraceDebug2("ms", ("CcspManagementServer_DiscoverComponent find component %s--%s\n", pPAMComponentName, pPAMComponentPath));
         }
         // free component
@@ -967,8 +967,8 @@ CcspManagementServer_UtilGetParameterValues
         }
         else
         {
-            pComponentName = CcspManagementServer_CloneString(components[0]->componentName);
-            pComponentPath = CcspManagementServer_CloneString(components[0]->dbusPath);
+            pComponentName = AnscCloneString(components[0]->componentName);
+            pComponentPath = AnscCloneString(components[0]->dbusPath);
             CcspTraceNotice(("CcspManagementServer_UtilGetParameterValues find component %s--%s\n", pComponentName, pComponentPath));
         }
 
@@ -995,13 +995,13 @@ CcspManagementServer_UtilGetParameterValues
         }
 
         /*RDKB-7329, CID-33436, free unused resources before exit */
-        CcspManagementServer_Free(pComponentName);
+        AnscFreeMemory(pComponentName);
         
     }
 
     if(pComponentPath)
     {
-        CcspManagementServer_Free(pComponentPath);
+        AnscFreeMemory(pComponentPath);
     }
     return  ret;
 }
@@ -1051,7 +1051,7 @@ CcspManagementServer_RegisterWanInterface()
     /* We get Address path name directly for TR-098*/
 
     char * parameterNames[1];
-    parameterNames[0] = CcspManagementServer_CloneString(FirstUpstreamIpInterfaceParameterName);
+    parameterNames[0] = AnscCloneString(FirstUpstreamIpInterfaceParameterName);
 
     parameterValStruct_t **parameterval = NULL;
     int val_size = 0;
@@ -1063,11 +1063,11 @@ CcspManagementServer_RegisterWanInterface()
         1,
         &val_size,
         &parameterval);
-    if(parameterNames[0]) CcspManagementServer_Free(parameterNames[0]);
+    if(parameterNames[0]) AnscFreeMemory(parameterNames[0]);
     if( (res==CCSP_SUCCESS) && (val_size > 0) && (AnscSizeOfString(parameterval[0]->parameterValue) > 0) ) {
         CcspTraceDebug2("ms", ("CcspManagementServer_RegisterWanInterface pFirstUpstreamIpv4Address is: %s\n", parameterval[0]->parameterValue));
 
-        pFirstUpstreamIpAddress = CcspManagementServer_CloneString(parameterval[0]->parameterValue);
+        pFirstUpstreamIpAddress = AnscCloneString(parameterval[0]->parameterValue);
         free_parameterValStruct_t (bus_handle, val_size, parameterval);
     }
     else
@@ -1077,7 +1077,7 @@ CcspManagementServer_RegisterWanInterface()
 
     // Get FirstUpstreamIpInterfaceParameterName parameter value 
     char * parameterNames[1];
-    parameterNames[0] = CcspManagementServer_CloneString(FirstUpstreamIpInterfaceParameterName);
+    parameterNames[0] = AnscCloneString(FirstUpstreamIpInterfaceParameterName);
     
     parameterValStruct_t **parameterval = NULL;
     int val_size = 0;
@@ -1089,9 +1089,9 @@ CcspManagementServer_RegisterWanInterface()
         1,
         &val_size,
         &parameterval);
-    if( parameterNames[0]) CcspManagementServer_Free(parameterNames[0]);
+    if( parameterNames[0]) AnscFreeMemory(parameterNames[0]);
     if(val_size > 0) {
-        pFirstUpstreamIpInterface = CcspManagementServer_CloneString(parameterval[0]->parameterValue);
+        pFirstUpstreamIpInterface = AnscCloneString(parameterval[0]->parameterValue);
         free_parameterValStruct_t (bus_handle, val_size, parameterval);
     }
     if(!pFirstUpstreamIpInterface) {
@@ -1324,7 +1324,7 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
         {
             // Get FirstUpstreamIpInterfaceParameterName parameter value 
             char * parameterNames[1];
-            parameterNames[0] = CcspManagementServer_CloneString(pFirstUpstreamIpAddress);
+            parameterNames[0] = AnscCloneString(pFirstUpstreamIpAddress);
 
             parameterValStruct_t **parameterval = NULL;
             int val_size = 0;
@@ -1336,7 +1336,7 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
                 1,
                 &val_size,
                 &parameterval);
-            if(parameterNames[0]) CcspManagementServer_Free(parameterNames[0]);
+            if(parameterNames[0]) AnscFreeMemory(parameterNames[0]);
             if(val_size <= 0) return ANSC_STATUS_FAILURE;
             rc = strcpy_s(ipAddr, sizeof(ipAddr), parameterval[0]->parameterValue);
             ERR_CHK(rc);
@@ -1394,7 +1394,7 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
                             sprintf(ipAddr, "[%s]", ipAddrV6);
                         }
 
-                        CcspManagementServer_Free(URL);
+                        AnscFreeMemory(URL);
                     }
                 }
             }
@@ -1466,7 +1466,7 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
     if(!AnscEqualString(objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value, result, TRUE)){
         // Send Value change signal.
         char *oldValue = objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value;
-        objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value = CcspManagementServer_CloneString(result);
+        objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value = AnscCloneString(result);
         /* PSM write */
         char pRecordName[1000] = {0};
         size_t len1, len2, len3;
@@ -1495,7 +1495,7 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
 
         SendValueChangeSignal(ManagementServerID, ManagementServerConnectionRequestURLID, oldValue);
         CcspManagementServer_ValueChangeCB(CcspManagementServer_cbContext, CcspManagementServer_GetPAObjectID(ManagementServerID));
-        if(oldValue) CcspManagementServer_Free(oldValue);
+        if(oldValue) AnscFreeMemory(oldValue);
     }
     
     //Custom
@@ -1519,19 +1519,19 @@ int SendValueChangeSignal(
 {
     parameterSigStruct_t val;
     val.parameterName = CcspManagementServer_MergeString(objectInfo[objectID].name, objectInfo[objectID].parameters[parameterID].name);
-    val.newValue = CcspManagementServer_CloneString(objectInfo[objectID].parameters[parameterID].value);
-    val.oldValue = CcspManagementServer_CloneString(oldValue);
+    val.newValue = AnscCloneString(objectInfo[objectID].parameters[parameterID].value);
+    val.oldValue = AnscCloneString(oldValue);
     val.type = objectInfo[objectID].parameters[parameterID].type;
-    val.subsystem_prefix = CcspManagementServer_CloneString(CcspManagementServer_SubsystemPrefix);
+    val.subsystem_prefix = AnscCloneString(CcspManagementServer_SubsystemPrefix);
     int res = CcspBaseIf_SendparameterValueChangeSignal (
         bus_handle,
         &val,
         1);
     CcspTraceDebug(("send value change signal %s %s \n", val.parameterName, val.newValue));
-    if(val.parameterName) CcspManagementServer_Free((void*)val.parameterName);
-    if(val.oldValue) CcspManagementServer_Free((void*)val.oldValue);
-    if(val.newValue) CcspManagementServer_Free((void*)val.newValue);
-    if(val.subsystem_prefix) CcspManagementServer_Free((void*)val.subsystem_prefix);
+    if(val.parameterName) AnscFreeMemory((void*)val.parameterName);
+    if(val.oldValue) AnscFreeMemory((void*)val.oldValue);
+    if(val.newValue) AnscFreeMemory((void*)val.newValue);
+    if(val.subsystem_prefix) AnscFreeMemory((void*)val.subsystem_prefix);
     return res;
 }
 
@@ -1771,7 +1771,7 @@ void CcspManagementServer_GetSingleParameterValue(
               */
              if (FALSE == CcspManagementServer_GetHTTPConnectionRequestEnable(NULL))
              {
-                 val->parameterValue = CcspManagementServer_CloneString("");
+                 val->parameterValue = AnscCloneString("");
              }
              else
              {
@@ -1845,7 +1845,7 @@ void CcspManagementServer_GetSingleParameterValue(
             val->parameterValue = CcspManagementServer_GetConnectionRequestURLPath(NULL);
             break;
         case ManagementServerX_CISCO_COM_DiagCompleteID:
-            val->parameterValue = CcspManagementServer_CloneString("false");
+            val->parameterValue = AnscCloneString("false");
             break;
         case ManagementServerX_LGI_COM_ConnectionRequestIfID:
             val->parameterValue = CcspManagementServer_GetConnectionRequestIf(NULL);
@@ -2000,7 +2000,7 @@ void CcspManagementServer_GetSingleParameterValue(
         }
     }
     
-    //val->parameterValue = CcspManagementServer_CloneString(objectInfo[objectID].parameters[parameterID].value);
+    //val->parameterValue = AnscCloneString(objectInfo[objectID].parameters[parameterID].value);
 }
 
 /* return how many records have been added. */
@@ -2230,10 +2230,10 @@ static int CcspManagementServer_ValidateDateTime(
     if(!pUniversalTime) return -1;
     if(pUniversalTime->Year > 2100 || pUniversalTime->Year < 1970)
     {
-        CcspManagementServer_Free(pUniversalTime); /*RDKB-7329, CID-33053, free unused resources */
+        AnscFreeMemory(pUniversalTime); /*RDKB-7329, CID-33053, free unused resources */
         return -1;
     }
-    CcspManagementServer_Free(pUniversalTime); /*RDKB-7329, CID-33053, free unused resources */
+    AnscFreeMemory(pUniversalTime); /*RDKB-7329, CID-33053, free unused resources */
     return 0;
 }
 
@@ -2274,13 +2274,13 @@ int CcspManagementServer_ValidateParameterValues(
         {
             parameterSetting.size                   = CCSP_TR069PA_DFT_PARAM_VAL_SETTINGS_NUMBER;
         }
-        parameterSetting.msParameterValSettings = CcspManagementServer_Allocate(sizeof(msParameterValSetting) * parameterSetting.size);
+        parameterSetting.msParameterValSettings = AnscAllocateMemory(sizeof(msParameterValSetting) * parameterSetting.size);
         parameterSetting.currIndex              = 0;
 
         if ( parameterSetting.msParameterValSettings == NULL )
         {
             returnStatus = TR69_INTERNAL_ERROR;
-            *invalidParameterName = CcspManagementServer_CloneString("Insufficient Resources");
+            *invalidParameterName = AnscCloneString("Insufficient Resources");
             return  returnStatus;
         }
     }
@@ -2294,14 +2294,14 @@ int CcspManagementServer_ValidateParameterValues(
         int objectID = CcspManagementServer_GetObjectID(val[i].parameterName, &name);
         if(objectID < 0)
         {
-            if(!invalidParaName) invalidParaName = CcspManagementServer_CloneString(val[i].parameterName);
+            if(!invalidParaName) invalidParaName = AnscCloneString(val[i].parameterName);
             if(returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_NAME; 
             continue;
         }
         /* Device.DeviceInfo.SupportedDataModel. is read only */
         if(objectID >= SupportedDataModelID)
         {
-            if(!invalidParaName) invalidParaName = CcspManagementServer_CloneString(val[i].parameterName);
+            if(!invalidParaName) invalidParaName = AnscCloneString(val[i].parameterName);
             if(returnStatus == 0) returnStatus = TR69_UPDATE_NON_WRITABLE_PARAMETER; 
             continue;
         }
@@ -2311,7 +2311,7 @@ int CcspManagementServer_ValidateParameterValues(
             int parameterID = CcspManagementServer_GetParameterID(objectID, name);
             if(parameterID < 0)
             {
-                if(!invalidParaName) invalidParaName = CcspManagementServer_CloneString(val[i].parameterName);
+                if(!invalidParaName) invalidParaName = AnscCloneString(val[i].parameterName);
                 if(returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_NAME; 
                 continue;
             }
@@ -2319,13 +2319,13 @@ int CcspManagementServer_ValidateParameterValues(
             /* If types mismatch, return invalid argument. */
             if(objectInfo[objectID].parameters[parameterID].type != val[i].type)
             {
-                if(!invalidParaName) invalidParaName = CcspManagementServer_CloneString(val[i].parameterName);
+                if(!invalidParaName) invalidParaName = AnscCloneString(val[i].parameterName);
                 if(returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_TYPE; 
                 continue;
             }
             if(objectInfo[objectID].parameters[parameterID].access == CCSP_RO)
             {
-                if(!invalidParaName) invalidParaName = CcspManagementServer_CloneString(val[i].parameterName);
+                if(!invalidParaName) invalidParaName = AnscCloneString(val[i].parameterName);
                 if(returnStatus == 0) returnStatus = TR69_UPDATE_NON_WRITABLE_PARAMETER; 
                 continue;
             }
@@ -2343,19 +2343,19 @@ int CcspManagementServer_ValidateParameterValues(
                         parameterSetting.size * 2
                     ));
 
-                pNewSettings = CcspManagementServer_Allocate(sizeof(msParameterValSetting) * parameterSetting.size * 2);
+                pNewSettings = AnscAllocateMemory(sizeof(msParameterValSetting) * parameterSetting.size * 2);
 
                 if ( !pNewSettings )
                 {
                     returnStatus = TR69_INTERNAL_ERROR;
-                    *invalidParameterName = CcspManagementServer_CloneString("Insufficient Resources");
+                    *invalidParameterName = AnscCloneString("Insufficient Resources");
                     return  returnStatus;
                 }
                 else
                 {
                     /* Free the old array and replace it with the new one */
                     AnscCopyMemory(pNewSettings, parameterSetting.msParameterValSettings, sizeof(msParameterValSetting) * parameterSetting.size);
-                    CcspManagementServer_Free(parameterSetting.msParameterValSettings);
+                    AnscFreeMemory(parameterSetting.msParameterValSettings);
                     parameterSetting.msParameterValSettings = pNewSettings;
                     parameterSetting.size *= 2;
                 }
@@ -2375,19 +2375,19 @@ int CcspManagementServer_ValidateParameterValues(
                 case ManagementServerHTTPConnectionRequestEnableID:
                     res = CcspManagementServer_ValidateBoolean(val[i].parameterValue);
                     if(res == -1 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else if(res == 0) parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString("0");
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString("1");
+                    else if(res == 0) parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString("0");
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString("1");
                     break;
 				case ManagementServerPeriodicInformEnableID:
 				    res = CcspManagementServer_ValidateBoolean(val[i].parameterValue);
                     if(res == -1 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
                     else if(res == 0)
 					{
-						parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString("0");
+						parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString("0");
 					}
                     else
 					{
-						parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString("1");
+						parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString("1");
 					}
 					res = PSM_Set_Record_Value2
                     (
@@ -2429,7 +2429,7 @@ int CcspManagementServer_ValidateParameterValues(
                         CcspTraceWarning(("%s - Cannot get PSM value for '%s'\n", __FUNCTION__, "dmsb.ManagementServer.ACSChangedURL"));
                         returnStatus = TR69_INTERNAL_ERROR;
                     }
-                    if(pValue) CcspManagementServer_Free(pValue);
+                    if(pValue) AnscFreeMemory(pValue);
 
                     if ( returnStatus == 0)  /* check writeID */
                     {
@@ -2449,7 +2449,7 @@ int CcspManagementServer_ValidateParameterValues(
                                 {
                                     url = CcspManagementServer_GetURL(NULL);
                                     if (AnscEqualString(val[i].parameterValue, url, TRUE) == FALSE) g_ACSChangedURL = 1; 
-                                    if (url) CcspManagementServer_Free(url);
+                                    if (url) AnscFreeMemory(url);
                                 }
                             }
                             break;
@@ -2462,7 +2462,7 @@ int CcspManagementServer_ValidateParameterValues(
                     if ( returnStatus == 0) /* check parameter value */
                     {
                         if(CcspManagementServer_ValidateURL(val[i].parameterValue) != 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                        else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                        else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                     }
 
                     if (returnStatus == 0)
@@ -2482,7 +2482,7 @@ int CcspManagementServer_ValidateParameterValues(
                 case ManagementServerUDPConnectionRequestAddressID:
                 case ManagementServerSTUNServerAddressID:
                     if(CcspManagementServer_ValidateURL(val[i].parameterValue) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                     break;
                 case ManagementServerUsernameID:
                 case ManagementServerPasswordID:
@@ -2492,18 +2492,18 @@ int CcspManagementServer_ValidateParameterValues(
                 case ManagementServerSTUNPasswordID:
                 case ManagementServerX_CISCO_COM_ConnectionRequestURLPathID:
                     if(CcspManagementServer_ValidateStrLen(val[i].parameterValue, 256) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                     break;
                 case ManagementServerX_LGI_COM_ConnectionRequestPortID:
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, 0, TRUE, 65535) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                     break;
                 case ManagementServerX_LGI_COM_ConnectionRequestIfID:
-                    parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(LGI_CWMP_CONNREQ_IFACE_STR);
+                    parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(LGI_CWMP_CONNREQ_IFACE_STR);
                     break;
                 case ManagementServerPeriodicInformIntervalID:
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, 1, FALSE, 0) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
 					res = PSM_Set_Record_Value2
                     (
                         bus_handle,
@@ -2520,7 +2520,7 @@ int CcspManagementServer_ValidateParameterValues(
                     break;
                 case ManagementServerCWMPRetryMinimumWaitIntervalID:
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, 1, TRUE, 65535) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
 	
 					res = PSM_Set_Record_Value2
                     (
@@ -2547,7 +2547,7 @@ int CcspManagementServer_ValidateParameterValues(
                     break;
                 case ManagementServerCWMPRetryIntervalMultiplierID:
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, 1000, TRUE, 65535) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
 					
 					res = PSM_Set_Record_Value2
                     (
@@ -2576,7 +2576,7 @@ int CcspManagementServer_ValidateParameterValues(
                 case ManagementServerSTUNMinimumKeepAlivePeriodID:
                 case ManagementServerDefaultActiveNotificationThrottleID:
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, 10, FALSE, 0) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
 															printf("<<< calling  PSM_Set_Record_Value2 >>>>>>\n");
 					res = PSM_Set_Record_Value2
                     (
@@ -2593,15 +2593,15 @@ int CcspManagementServer_ValidateParameterValues(
 					}
                     break;
                 case ManagementServerUDPConnectionRequestAddressNotificationLimitID:
-                    parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                     break;
                 case ManagementServerSTUNServerPortID:
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, 0, TRUE, 65535) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                     break;
                 case ManagementServerPeriodicInformTimeID:
                     if(CcspManagementServer_ValidateDateTime(val[i].parameterValue) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
 
 					res = PSM_Set_Record_Value2
                     (
@@ -2619,11 +2619,11 @@ int CcspManagementServer_ValidateParameterValues(
                     break;
                 case ManagementServerParameterKeyID:
                     if(CcspManagementServer_ValidateStrLen(val[i].parameterValue, 32) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                     break;
                 case ManagementServerSTUNMaximumKeepAlivePeriodID:
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, -1, FALSE, 0) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                     break;
 
                 case ManagementServerScheduleRebootID:
@@ -2633,7 +2633,7 @@ int CcspManagementServer_ValidateParameterValues(
                     }
                     else
                     {
-                        parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                        parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                         returnStatus = CcspManagementServer_SetScheduleRebootStr(val[i].parameterValue);
                     }
                     break;
@@ -2644,14 +2644,14 @@ int CcspManagementServer_ValidateParameterValues(
                     }
                     else
                     {
-                        parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                        parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                         returnStatus = CcspManagementServer_SetDelayRebootStr(val[i].parameterValue);
                     }
                     break;
 
 				case ManagementServerManageableDeviceNotificationLimitID:
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, FALSE, 0, FALSE, 0) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
 					break;
                 default: break;
                 }
@@ -2662,16 +2662,16 @@ int CcspManagementServer_ValidateParameterValues(
                 case AutonomousTransferCompletePolicyEnableID:
                     res = CcspManagementServer_ValidateBoolean(val[i].parameterValue);
                     if(res == -1 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else if(res == 0) parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString("0");
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString("1");
+                    else if(res == 0) parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString("0");
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString("1");
                     break;
                 case AutonomousTransferCompletePolicyTransferTypeFilterID:
                 case AutonomousTransferCompletePolicyResultTypeFilterID:
-                    parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                     break;
                 case AutonomousTransferCompletePolicyFileTypeFilterID:
                     if(CcspManagementServer_ValidateStrLen(val[i].parameterValue, 1024) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                     break;
                 default: break;
                 }
@@ -2682,13 +2682,13 @@ int CcspManagementServer_ValidateParameterValues(
                 case DUStateChangeComplPolicyEnableID:
                     res = CcspManagementServer_ValidateBoolean(val[i].parameterValue);
                     if(res == -1 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else if(res == 0) parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString("0");
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString("1");
+                    else if(res == 0) parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString("0");
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString("1");
                     break;
                 case DUStateChangeComplPolicyOperationTypeFilterID:
                 case DUStateChangeComplPolicyResultTypeFilterID:
                 case DUStateChangeComplPolicyFaultCodeFilterID:
-                    parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                     break;
                 default: break;
                 }
@@ -2698,7 +2698,7 @@ int CcspManagementServer_ValidateParameterValues(
                 {
                 case TR069Notify_TR069_Notification_ID:
                 case TR069Notify_Connected_ClientID:
-                    parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                     break;
                 default: break;
                 }
@@ -2710,12 +2710,12 @@ int CcspManagementServer_ValidateParameterValues(
                 case LoggingEnableID:
                     res = CcspManagementServer_ValidateBoolean(val[i].parameterValue);
                     if(res == -1 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else if(res == 0) parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString("false");
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString("true");
+                    else if(res == 0) parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString("false");
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString("true");
                     break;
                 case LoggingLogLevelID:
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, FALSE, 0, FALSE, 0) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
-                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = CcspManagementServer_CloneString(val[i].parameterValue);
+                    else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                     break;
                 default: break;
                 }
@@ -2730,7 +2730,7 @@ int CcspManagementServer_ValidateParameterValues(
             {
                 if (!invalidParaName )
                 {
-                    invalidParaName = CcspManagementServer_CloneString(val[i].parameterName);
+                    invalidParaName = AnscCloneString(val[i].parameterName);
                 }
             }
             parameterSetting.msParameterValSettings[parameterSetting.currIndex].objectID = objectID;
@@ -2748,7 +2748,7 @@ int CcspManagementServer_ValidateParameterValues(
             if(parameterSetting.msParameterValSettings[i].objectID == parameterSetting.msParameterValSettings[j].objectID
                 && parameterSetting.msParameterValSettings[i].parameterID == parameterSetting.msParameterValSettings[j].parameterID
                 && returnStatus == 0){
-                if(!invalidParaName) invalidParaName = CcspManagementServer_CloneString(val[i].parameterName);
+                if(!invalidParaName) invalidParaName = AnscCloneString(val[i].parameterName);
                 returnStatus = TR69_INVALID_ARGUMENTS;
             }
         }
@@ -3116,7 +3116,7 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
     slapVar.Syntax = SLAP_VAR_SYNTAX_string;
     
     int valueChangeSize = 0;
-    parameterSigStruct_t *val = CcspManagementServer_Allocate(parameterSetting.currIndex * sizeof(parameterSigStruct_t));
+    parameterSigStruct_t *val = AnscAllocateMemory(parameterSetting.currIndex * sizeof(parameterSigStruct_t));
 
     for(; (unsigned int)i<parameterSetting.currIndex; i++)
     {
@@ -3163,8 +3163,8 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
         }
         if(objectInfo[objectID].parameters[parameterID].notification){
             val[valueChangeSize].parameterName = CcspManagementServer_MergeString(objectInfo[objectID].name, objectInfo[objectID].parameters[parameterID].name);
-            val[valueChangeSize].oldValue = CcspManagementServer_CloneString(objectInfo[objectID].parameters[parameterID].value);
-            val[valueChangeSize].newValue = CcspManagementServer_CloneString(parameterSetting.msParameterValSettings[i].parameterValue);
+            val[valueChangeSize].oldValue = AnscCloneString(objectInfo[objectID].parameters[parameterID].value);
+            val[valueChangeSize].newValue = AnscCloneString(parameterSetting.msParameterValSettings[i].parameterValue);
             val[valueChangeSize].type = objectInfo[objectID].parameters[parameterID].type;
 			val[valueChangeSize].writeID = writeID;
             valueChangeSize++;
@@ -3296,11 +3296,11 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
 EXIT1:
     for(i=0; i<valueChangeSize; i++)
     {
-        if(val[i].parameterName) CcspManagementServer_Free((void*)val[i].parameterName);
-        if(val[i].oldValue) CcspManagementServer_Free((void*)val[i].oldValue);
-        if(val[i].newValue) CcspManagementServer_Free((void*)val[i].newValue);
+        if(val[i].parameterName) AnscFreeMemory((void*)val[i].parameterName);
+        if(val[i].oldValue) AnscFreeMemory((void*)val[i].oldValue);
+        if(val[i].newValue) AnscFreeMemory((void*)val[i].newValue);
     }
-    if(val) CcspManagementServer_Free(val);
+    if(val) AnscFreeMemory(val);
 
     return 0;
 }
@@ -3339,8 +3339,8 @@ int CcspManagementServer_RollBackParameterValues()
         {
             continue;
         }
-        if(objectInfo[objectID].parameters[parameterID].value) CcspManagementServer_Free(objectInfo[objectID].parameters[parameterID].value);
-        objectInfo[objectID].parameters[parameterID].value = CcspManagementServer_CloneString(parameterSetting.msParameterValSettings[i].parameterValue);
+        if(objectInfo[objectID].parameters[parameterID].value) AnscFreeMemory(objectInfo[objectID].parameters[parameterID].value);
+        objectInfo[objectID].parameters[parameterID].value = AnscCloneString(parameterSetting.msParameterValSettings[i].parameterValue);
         parameterSetting.msParameterValSettings[i].backupStatus = NoBackup;
 	/*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
 /*
@@ -3399,12 +3399,12 @@ int CcspManagementServer_FreeParameterSetting()
     for(; (unsigned int)i<parameterSetting.currIndex; i++)
     {
         if(parameterSetting.msParameterValSettings[i].parameterValue) {
-            CcspManagementServer_Free(parameterSetting.msParameterValSettings[i].parameterValue);
+            AnscFreeMemory(parameterSetting.msParameterValSettings[i].parameterValue);
             parameterSetting.msParameterValSettings[i].parameterValue = NULL;
         }
     }
     if(parameterSetting.msParameterValSettings) {
-        CcspManagementServer_Free(parameterSetting.msParameterValSettings);
+        AnscFreeMemory(parameterSetting.msParameterValSettings);
         parameterSetting.msParameterValSettings = NULL;
     }
     parameterSetting.currIndex = 0;
@@ -3425,39 +3425,6 @@ char * CcspManagementServer_RemoveWhiteString
     return p;
 }
 
-void * CcspManagementServer_Allocate
-(
-    size_t size
-)
-{
-    return (void *) AnscAllocateMemory(size);
-}
-
-void CcspManagementServer_Free
-(
-    void *p
-)
-{
-    AnscFreeMemory(p);
-}
-
-char * CcspManagementServer_CloneString
-    (
-    const char * src
-    )
-{
-    errno_t rc = -1;
-    if(src == NULL) return NULL;
-    size_t len = strlen(src) + 1;
-    char * dest = CcspManagementServer_Allocate(len);
-    if ( dest )
-    {
-        rc = strcpy_s(dest, len, src);
-        ERR_CHK(rc);
-    }
-    return dest;
-}
-
 char * CcspManagementServer_MergeString
     (
     const char * src1,
@@ -3470,7 +3437,7 @@ char * CcspManagementServer_MergeString
     if(src2 != NULL) len2 = strlen(src2);
     size_t len = len1 + len2 + 1;
     if(len <= 1) return NULL;
-    char * dest = CcspManagementServer_Allocate(len);
+    char * dest = AnscAllocateMemory(len);
     if ( dest )
     {
         *dest = 0;

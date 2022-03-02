@@ -227,10 +227,10 @@ void ReadTr69TlvData()
         // Always fetch the ACSOverride flag from the boot config file.
         // Revert to default value "0" if AcsOverRide flag is not present.
         if (object2->AcsOverRide==1){
-            objectInfo[ManagementServerID].parameters[ManagementServerACSOverrideID].value=CcspManagementServer_CloneString("true");
+            objectInfo[ManagementServerID].parameters[ManagementServerACSOverrideID].value=AnscCloneString("true");
         }
         else {
-            objectInfo[ManagementServerID].parameters[ManagementServerACSOverrideID].value=CcspManagementServer_CloneString("false");
+            objectInfo[ManagementServerID].parameters[ManagementServerACSOverrideID].value=AnscCloneString("false");
         }
 
 		// Check if it's a fresh bootup / boot after factory reset / TR69 was never enabled
@@ -240,16 +240,16 @@ void ReadTr69TlvData()
 		{
 			AnscTraceWarning(("%s -#- Inside FreshBootUp=1 OR Tr69Enable=0 \n", __FUNCTION__));
 			AnscTraceWarning(("%s -#- ACS URL from PSM DB- %s\n", __FUNCTION__, objectInfo[ManagementServerID].parameters[ManagementServerURLID].value));
-			AnscTraceWarning(("%s -#- ACS URL from cmconfig - %s\n", __FUNCTION__, CcspManagementServer_CloneString(object2->URL)));
+			AnscTraceWarning(("%s -#- ACS URL from cmconfig - %s\n", __FUNCTION__, AnscCloneString(object2->URL)));
 			object2->FreshBootUp = 0;
-			objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = CcspManagementServer_CloneString(object2->URL);
+			objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(object2->URL);
 			//on Fresh bootup / boot after factory reset, if the URL is empty, set default URL value
                         if (object2->URL[0] == '\0')
 			{
                 if (g_Tr069PaAcsDefAddr!= NULL)
                 {
                     AnscTraceWarning(("ACS URL = %s  \n",g_Tr069PaAcsDefAddr));
-                    objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = CcspManagementServer_CloneString(g_Tr069PaAcsDefAddr);
+                    objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(g_Tr069PaAcsDefAddr);
                 }
                 else
                 {
@@ -258,24 +258,24 @@ void ReadTr69TlvData()
 			}
 			else
 			{
-				objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = CcspManagementServer_CloneString(object2->URL);
+				objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(object2->URL);
 			}
 			// Here, we need to check what is the value that we got through boot config file and update TR69 PA
 			if(object2->EnableCWMP == 1)
-				objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = CcspManagementServer_CloneString("true");
+				objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = AnscCloneString("true");
 			else
-				objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = CcspManagementServer_CloneString("false");
+				objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = AnscCloneString("false");
 		}
 		// During normal boot-up check if TR69 was enabled in device anytime.
 		// If TR69 was enabled at least once URL will be already updated. 
 		// But we need to get the latest flag value from boot-config file.
 		if ((object2->FreshBootUp == 0) && (object2->Tr69Enable == 1))
 		{
-                        CCSP_STRING acsURL = CcspManagementServer_CloneString(object2->URL);
+                        CCSP_STRING acsURL = AnscCloneString(object2->URL);
 			AnscTraceWarning(("%s -#-  Inside FreshBootUp=0 AND Tr69Enable=1 \n", __FUNCTION__));
 			AnscTraceWarning(("%s -#-  ACS URL from PSM DB- %s\n", __FUNCTION__, objectInfo[ManagementServerID].parameters[ManagementServerURLID].value));
 			AnscTraceWarning(("%s -#-  ACS URL from cmconfig - %s\n", __FUNCTION__, acsURL));
-                        CcspManagementServer_Free(acsURL);
+                        AnscFreeMemory(acsURL);
 
 			if (access(CCSP_MGMT_CRPWD_FILE,F_OK)!=0)
 				{
@@ -298,16 +298,16 @@ void ReadTr69TlvData()
                  */
                 if(object2->EnableCWMP){
                     if(object2->EnableCWMP == 1)
-                        objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = CcspManagementServer_CloneString("true");
+                        objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = AnscCloneString("true");
                     else
-                        objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = CcspManagementServer_CloneString("false");
+                        objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = AnscCloneString("false");
                 }
                 if(object2->URL && objectInfo[ManagementServerID].parameters[ManagementServerURLID].value){
                     rc = strcasecmp_s(object2->URL,strlen(object2->URL),objectInfo[ManagementServerID].parameters[ManagementServerURLID].value,&ind);
                     ERR_CHK(rc);
                     if ( rc != EOK || ind ){
                         AnscTraceInfo(("%s -#- ACS URL in TLV file different from ACS URL in PSM DB. \n", __FUNCTION__));
-                        objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = CcspManagementServer_CloneString(object2->URL);
+                        objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(object2->URL);
                         _ansc_sprintf(recordName, "%s.%sURL.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);
                         res = PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, recordName, ccsp_string, object2->URL);
                         if(res != CCSP_SUCCESS){
@@ -332,7 +332,7 @@ void ReadTr69TlvData()
                    Update only EnableCWMP value to bbhm. */
                 if(object2->EnableCWMP == 1)
                 {
-                    objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = CcspManagementServer_CloneString("true");
+                    objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = AnscCloneString("true");
                 }
                 else if(object2->EnableCWMP == 0)
                 {
@@ -359,7 +359,7 @@ void ReadTr69TlvData()
 			{
 				//We are here because, PSM DB doesnt have a valid ACS url but cmconfig has. In this case, setting value from cmconfig to PSM DB
 				AnscTraceWarning(("%s -#- PSM DB reported NULL ACS URL.... Setting URL from cmconfig and continue..\n", __FUNCTION__));
-				objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = CcspManagementServer_CloneString(object2->URL);
+				objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(object2->URL);
 				_ansc_sprintf(recordName, "%s.%sURL.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);
 				res = PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, recordName, ccsp_string, object2->URL);
 
@@ -431,12 +431,12 @@ void ReadTr69TlvData()
                                 ERR_CHK(rc);
                                 if((rc == EOK) && (ind == 0))
 				{
-					objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = CcspManagementServer_CloneString("1");
+					objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = AnscCloneString("1");
 					Tr69EnableValue = 1;
 				}
 				else
 				{
-					objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = CcspManagementServer_CloneString("0");
+					objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value = AnscCloneString("0");
 					Tr69EnableValue = 0;
 				}
 			
@@ -504,16 +504,16 @@ CcspManagementServer_Init
     }
     else
     {
-        CcspManagementServer_SubsystemPrefix = CcspManagementServer_CloneString(SubsystemPrefix);
+        CcspManagementServer_SubsystemPrefix = AnscCloneString(SubsystemPrefix);
     }
 
     if ( sdmXmlFilename )
     {
-        _SupportedDataModelConfigFile = CcspManagementServer_CloneString(sdmXmlFilename); 
+        _SupportedDataModelConfigFile = AnscCloneString(sdmXmlFilename); 
     }
     else
     {
-        _SupportedDataModelConfigFile = CcspManagementServer_CloneString(_CCSP_MANAGEMENT_SERVER_DEFAULT_SDM_FILE); 
+        _SupportedDataModelConfigFile = AnscCloneString(_CCSP_MANAGEMENT_SERVER_DEFAULT_SDM_FILE); 
     }
 
     bus_handle = hMBusHandle;
@@ -589,7 +589,7 @@ CcspManagementServer_Init
 			if (g_Tr069PaAcsDefAddr!= NULL)
 			{
 				AnscTraceWarning(("ACS URL = %s  \n",g_Tr069PaAcsDefAddr));
-				objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = CcspManagementServer_CloneString(g_Tr069PaAcsDefAddr);
+				objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(g_Tr069PaAcsDefAddr);
 				rc = memset_s( recordName, sizeof( recordName ), 0, sizeof( recordName ) );                                                                                       
 				ERR_CHK(rc);                                                                                                                                                      
 				_ansc_sprintf(recordName, "%s.%sURL.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);
@@ -609,7 +609,7 @@ CcspManagementServer_Init
 	}
     char str[100] = {0};
     _ansc_ultoa(g_ulAllocatedSizeCurr, str, 10);
-    objectInfo[MemoryID].parameters[MemoryMinUsageID].value = CcspManagementServer_CloneString(str);
+    objectInfo[MemoryID].parameters[MemoryMinUsageID].value = AnscCloneString(str);
 
     // To check and wait for system ready signal from CR to proceed further
     waitUntilSystemReady( CcspManagementServer_cbContext );
@@ -635,7 +635,7 @@ CcspManagementServer_GetBooleanValue
        }
        if ( rc == EOK && !ind )
        {
-          return CcspManagementServer_CloneString("false");
+          return AnscCloneString("false");
        }
        else
        {
@@ -646,7 +646,7 @@ CcspManagementServer_GetBooleanValue
            }
            if ( rc == EOK && !ind )
            {
-              return CcspManagementServer_CloneString("true");
+              return AnscCloneString("true");
            }
         }
      }
@@ -659,7 +659,7 @@ CcspManagementServer_GetBooleanValue
        }
        if ( rc == EOK && !ind )
        {
-          return CcspManagementServer_CloneString("false");
+          return AnscCloneString("false");
        }
        else
        {
@@ -670,7 +670,7 @@ CcspManagementServer_GetBooleanValue
            }
            if ( rc == EOK && !ind )
            {
-               return CcspManagementServer_CloneString("true");
+               return AnscCloneString("true");
            }
        }
     }
@@ -678,7 +678,7 @@ CcspManagementServer_GetBooleanValue
     CcspTraceWarning(("Neither Parameter '%s' nor Default '%s' is valid.  Returning "" for BooleanStr!!!\n", 
                       (ParameterValue)?(ParameterValue):"",
                       (DefaultValue)?(DefaultValue):""));    
-    return CcspManagementServer_CloneString("");
+    return AnscCloneString("");
 }
 
 /* CcspManagementServer_GetEnableCWMP is called to get
@@ -732,7 +732,7 @@ CcspManagementServer_GetURL
     {
         AnscTraceWarning(("%s -#- ManagementServerURLID_PSM: %s\n", __FUNCTION__, pStr));
 	t2_event_s("acs_split", pStr);				
-        return  CcspManagementServer_CloneString(pStr);
+        return  AnscCloneString(pStr);
     }
     else
     {
@@ -741,16 +741,16 @@ CcspManagementServer_GetURL
         {
             if(pStr)
             {
-                CcspManagementServer_Free(pStr);
+                AnscFreeMemory(pStr);
                 objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = NULL;
             }
-            objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = CcspManagementServer_CloneString(g_Tr069PaAcsDefAddr);
-            return CcspManagementServer_CloneString(g_Tr069PaAcsDefAddr);
+            objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(g_Tr069PaAcsDefAddr);
+            return AnscCloneString(g_Tr069PaAcsDefAddr);
         }
         else
       //  #endif
         {
-            return  CcspManagementServer_CloneString("");
+            return  AnscCloneString("");
         }
     }
 }
@@ -780,7 +780,7 @@ CcspManagementServer_GetUsername
 
     if ( pUsername && AnscSizeOfString(pUsername) > 0 )
     {
-        return  CcspManagementServer_CloneString(pUsername);
+        return  AnscCloneString(pUsername);
     }
     else  
     {
@@ -791,19 +791,19 @@ CcspManagementServer_GetUsername
         if ( returnStatus != ANSC_STATUS_SUCCESS )
         {
             AnscTraceWarning(("%s -- default username generation failed\n", __FUNCTION__));
-            return  CcspManagementServer_CloneString("");
+            return  AnscCloneString("");
         }
         else
         {
             // Save Username -- TBD  save it to PSM
             if ( pUsername )
             {
-                CcspManagementServer_Free(pUsername);
+                AnscFreeMemory(pUsername);
                 objectInfo[ManagementServerID].parameters[ManagementServerUsernameID].value = NULL;
             }
-            objectInfo[ManagementServerID].parameters[ManagementServerUsernameID].value = CcspManagementServer_CloneString(DftUsername);
+            objectInfo[ManagementServerID].parameters[ManagementServerUsernameID].value = AnscCloneString(DftUsername);
             AnscTraceWarning(("%s -- default username generation Success %s\n", __FUNCTION__, objectInfo[ManagementServerID].parameters[ManagementServerUsernameID].value));
-            return  CcspManagementServer_CloneString(DftUsername);
+            return  AnscCloneString(DftUsername);
         }
     }
 }
@@ -825,7 +825,7 @@ CcspManagementServer_GetPassword
     // setting pStr to empty string "" will get the default password back
     if ( pStr && AnscSizeOfString(pStr) > 0 )
     {
-        return  CcspManagementServer_CloneString(pStr);
+        return  AnscCloneString(pStr);
     }
     else 
     {
@@ -836,19 +836,19 @@ CcspManagementServer_GetPassword
         if ( returnStatus != ANSC_STATUS_SUCCESS )
         {
             AnscTraceWarning(("%s-- default password generation failed, return the empty one!\n", __FUNCTION__));
-            return  CcspManagementServer_CloneString("");
+            return  AnscCloneString("");
         }
         else
         {
             //  Save the password -- TBD  save it to PSM
             if ( pStr )
             {
-                CcspManagementServer_Free(pStr);
+                AnscFreeMemory(pStr);
                 objectInfo[ManagementServerID].parameters[ManagementServerPasswordID].value = NULL;
             }
-            objectInfo[ManagementServerID].parameters[ManagementServerPasswordID].value = CcspManagementServer_CloneString(DftPassword);
+            objectInfo[ManagementServerID].parameters[ManagementServerPasswordID].value = AnscCloneString(DftPassword);
 
-            return  CcspManagementServer_CloneString(DftPassword);
+            return  AnscCloneString(DftPassword);
         }
     }
 }
@@ -909,7 +909,7 @@ CcspManagementServer_GetPeriodicInformIntervalStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerPeriodicInformIntervalID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerPeriodicInformIntervalID].value);
 }
 
 /* CcspManagementServer_GetPeriodicInformTime is called to get
@@ -953,7 +953,7 @@ CcspManagementServer_GetParameterKey
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerParameterKeyID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerParameterKeyID].value);
 }
 
 /* CcspManagementServer_SetParameterKey is called by PA to set
@@ -975,11 +975,11 @@ CcspManagementServer_SetParameterKey
     char							recordName[MAX_BUF_SIZE];
 
     if ( objectInfo[ManagementServerID].parameters[ManagementServerParameterKeyID].value ) {
-        CcspManagementServer_Free((void*)objectInfo[ManagementServerID].parameters[ManagementServerParameterKeyID].value);
+        AnscFreeMemory((void*)objectInfo[ManagementServerID].parameters[ManagementServerParameterKeyID].value);
     }
 
     objectInfo[ManagementServerID].parameters[ManagementServerParameterKeyID].value = 
-        CcspManagementServer_CloneString(pParameterKey);
+        AnscCloneString(pParameterKey);
     
     _ansc_sprintf(recordName, "%s.%sParameterKey.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);    
     
@@ -1051,12 +1051,12 @@ CcspManagementServer_GetConnectionRequestURL
 	    rc = strcat_s(buf, sizeof(buf), ptr_path);
             ERR_CHK(rc);
         }    
-        if(ptr_url) CcspManagementServer_Free(ptr_url);
+        if(ptr_url) AnscFreeMemory(ptr_url);
 
-        objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value = CcspManagementServer_CloneString(buf);
+        objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value = AnscCloneString(buf);
     }
 
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value);
                                 
 #else
 
@@ -1067,7 +1067,7 @@ CcspManagementServer_GetConnectionRequestURL
         CcspManagementServer_RegisterWanInterface();
     }
     CcspManagementServer_GenerateConnectionRequestURL(FALSE, NULL);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value);
 
 #endif
 }
@@ -1107,15 +1107,15 @@ CcspManagementServer_GetFirstUpstreamIpAddress
             &pValue);
         if(res != CCSP_SUCCESS){
             CcspTraceWarning2("ms", ("CcspManagementServer_GetFirstUpstreamIpAddress PSM_Get_Record_Value2 failed %d, name=<%s>, value=<%s>\n", res, pRecordName, pValue ? pValue : "NULL"));
-            if(pValue) CcspManagementServer_Free(pValue);
+            if(pValue) AnscFreeMemory(pValue);
             return NULL;
         }
         if(pValue) {
-            pFirstUpstreamIpAddress = CcspManagementServer_CloneString(pValue);
-            CcspManagementServer_Free(pValue);
+            pFirstUpstreamIpAddress = AnscCloneString(pValue);
+            AnscFreeMemory(pValue);
         }
     }
-    return CcspManagementServer_CloneString(pFirstUpstreamIpAddress);
+    return AnscCloneString(pFirstUpstreamIpAddress);
 }
 
 /* CcspManagementServer_GetConnectionRequestURLPort is called to get
@@ -1129,7 +1129,7 @@ CcspManagementServer_GetConnectionRequestURLPort
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_ConnectionRequestURLPortID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_ConnectionRequestURLPortID].value);
 }
 /* CcspManagementServer_GetConnectionRequestURLPath is called to get
  * Device.ManagementServer.X_CISCO_COM_ConnectionRequestURLPath.
@@ -1142,7 +1142,7 @@ CcspManagementServer_GetConnectionRequestURLPath
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_ConnectionRequestURLPathID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_ConnectionRequestURLPathID].value);
 }
 
 /* CcspManagementServer_GetConnectionRequestUsername is called to get
@@ -1156,7 +1156,7 @@ CcspManagementServer_GetConnectionRequestUsername
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    // return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestUsernameID].value);
+    // return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestUsernameID].value);
     CCSP_STRING pStr = objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestUsernameID].value;
 
     //    AnscTraceWarning(("%s -- ComponentName = %s...\n", __FUNCTION__, ComponentName));
@@ -1164,7 +1164,7 @@ CcspManagementServer_GetConnectionRequestUsername
     // setting pStr to empty string "" will get the default username back
     if ( pStr && AnscSizeOfString(pStr) > 0 )
     {
-        return  CcspManagementServer_CloneString(pStr);
+        return  AnscCloneString(pStr);
     }
     else  
     {
@@ -1175,19 +1175,19 @@ CcspManagementServer_GetConnectionRequestUsername
         if ( returnStatus != ANSC_STATUS_SUCCESS )
         {
             AnscTraceWarning(("%s -- default username generation failed, return the empty one!\n", __FUNCTION__));
-            return  CcspManagementServer_CloneString("");
+            return  AnscCloneString("");
         }
         else
         {
             // Save Username -- TBD  save it to PSM
             if ( pStr )
             {
-                CcspManagementServer_Free(pStr);
+                AnscFreeMemory(pStr);
                 objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestUsernameID].value = NULL;
             }
-            objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestUsernameID].value = CcspManagementServer_CloneString(DftUsername);
+            objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestUsernameID].value = AnscCloneString(DftUsername);
 
-            return  CcspManagementServer_CloneString(DftUsername);
+            return  AnscCloneString(DftUsername);
         }
     }
 }
@@ -1204,7 +1204,7 @@ CcspManagementServer_GetConnectionRequestPassword
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestPasswordID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestPasswordID].value);
 }
 
 /* CcspManagementServer_GetACSOverride is called to get
@@ -1287,7 +1287,7 @@ CcspManagementServer_GetUpgradesManagedStr
 {
     UNREFERENCED_PARAMETER(ComponentName);
     /* Set as read only and only return TRUE. */
-    //    return CcspManagementServer_CloneString("true"); 
+    //    return AnscCloneString("true"); 
 
     return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerUpgradesManagedID].value, "0");
 }
@@ -1302,7 +1302,7 @@ CcspManagementServer_GetKickURL
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerKickURLID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerKickURLID].value);
 }
 
 /* CcspManagementServer_GetDownloadProgressURL is called to get
@@ -1316,7 +1316,7 @@ CcspManagementServer_GetDownloadProgressURL
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerDownloadProgressURLID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerDownloadProgressURLID].value);
 }
 
 /* CcspManagementServer_GetDefaultActiveNotificationThrottle is called to get
@@ -1341,9 +1341,9 @@ CcspManagementServer_GetDefaultActiveNotificationThrottleStr
 {
     UNREFERENCED_PARAMETER(ComponentName);
      if (objectInfo[ManagementServerID].parameters[ManagementServerDefaultActiveNotificationThrottleID].value == NULL)
-	  return CcspManagementServer_CloneString("1");
+	  return AnscCloneString("1");
      
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerDefaultActiveNotificationThrottleID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerDefaultActiveNotificationThrottleID].value);
 }
 
 /* CcspManagementServer_GetCWMPRetryMinimumWaitInterval is called to get
@@ -1367,7 +1367,7 @@ CcspManagementServer_GetCWMPRetryMinimumWaitIntervalStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerCWMPRetryMinimumWaitIntervalID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerCWMPRetryMinimumWaitIntervalID].value);
 }
 /* CcspManagementServer_GetCWMPRetryIntervalMultiplier is called to get
  * Device.ManagementServer.CWMPRetryIntervalMultiplier.
@@ -1390,7 +1390,7 @@ CcspManagementServer_GetCWMPRetryIntervalMultiplierStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerCWMPRetryIntervalMultiplierID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerCWMPRetryIntervalMultiplierID].value);
 }
 /* CcspManagementServer_GetUDPConnectionRequestAddress is called to get
  * Device.ManagementServer.UDPConnectionRequestAddress.
@@ -1403,7 +1403,7 @@ CcspManagementServer_GetUDPConnectionRequestAddress
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerUDPConnectionRequestAddressID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerUDPConnectionRequestAddressID].value);
 }
 
 /* CcspManagementServer_GetUDPConnectionRequestAddressNotificationLimit is called to get
@@ -1418,7 +1418,7 @@ CcspManagementServer_GetUDPConnectionRequestAddressNotificationLimit
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerUDPConnectionRequestAddressNotificationLimitID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerUDPConnectionRequestAddressNotificationLimitID].value);
 }
 
 /* CcspManagementServer_GetSTUNEnable is called to get
@@ -1465,7 +1465,7 @@ CcspManagementServer_GetSTUNServerAddress
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerSTUNServerAddressID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerSTUNServerAddressID].value);
 }
 
 /* CcspManagementServer_GetSTUNServerPort is called to get
@@ -1489,7 +1489,7 @@ CcspManagementServer_GetSTUNServerPortStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerSTUNServerPortID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerSTUNServerPortID].value);
 }
 /* CcspManagementServer_GetSTUNUsername is called to get
  * Device.ManagementServer.STUNUsername.
@@ -1502,7 +1502,7 @@ CcspManagementServer_GetSTUNUsername
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerSTUNUsernameID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerSTUNUsernameID].value);
 }
 
 /* CcspManagementServer_GetSTUNPassword is called to get
@@ -1517,7 +1517,7 @@ CcspManagementServer_GetSTUNPassword
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerSTUNPasswordID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerSTUNPasswordID].value);
 }
 
 /* CcspManagementServer_GetSTUNMaximumKeepAlivePeriod is called to get
@@ -1541,7 +1541,7 @@ CcspManagementServer_GetSTUNMaximumKeepAlivePeriodStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerSTUNMaximumKeepAlivePeriodID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerSTUNMaximumKeepAlivePeriodID].value);
 }
 /* CcspManagementServer_GetSTUNMinimumKeepAlivePeriod is called to get
  * Device.ManagementServer.STUNMinimumKeepAlivePeriod.
@@ -1564,7 +1564,7 @@ CcspManagementServer_GetSTUNMinimumKeepAlivePeriodStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerSTUNMinimumKeepAlivePeriodID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerSTUNMinimumKeepAlivePeriodID].value);
 }
 /* CcspManagementServer_GetNATDetected is called to get
  * Device.ManagementServer.NATDetected.
@@ -1695,7 +1695,7 @@ CcspManagementServer_GetAutonomousTransferCompletePolicy_TransferTypeFilter
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[AutonomousTransferCompletePolicyID].parameters[AutonomousTransferCompletePolicyTransferTypeFilterID].value);
+    return AnscCloneString(objectInfo[AutonomousTransferCompletePolicyID].parameters[AutonomousTransferCompletePolicyTransferTypeFilterID].value);
 }
 
 /* CcspManagementServer_GetAutonomousTransferCompletePolicy_ResultTypeFilter is called to get
@@ -1709,7 +1709,7 @@ CcspManagementServer_GetAutonomousTransferCompletePolicy_ResultTypeFilter
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[AutonomousTransferCompletePolicyID].parameters[AutonomousTransferCompletePolicyResultTypeFilterID].value);
+    return AnscCloneString(objectInfo[AutonomousTransferCompletePolicyID].parameters[AutonomousTransferCompletePolicyResultTypeFilterID].value);
 }
 
 /* CcspManagementServer_GetAutonomousTransferCompletePolicy_FileTypeFilter is called to get
@@ -1723,7 +1723,7 @@ CcspManagementServer_GetAutonomousTransferCompletePolicy_FileTypeFilter
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[AutonomousTransferCompletePolicyID].parameters[AutonomousTransferCompletePolicyFileTypeFilterID].value);
+    return AnscCloneString(objectInfo[AutonomousTransferCompletePolicyID].parameters[AutonomousTransferCompletePolicyFileTypeFilterID].value);
 }
 
 /* CcspManagementServer_GetDUStateChangeComplPolicy_Enable is called to get
@@ -1773,7 +1773,7 @@ CcspManagementServer_GetDUStateChangeComplPolicy_OperationTypeFilter
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[DUStateChangeComplPolicyID].parameters[DUStateChangeComplPolicyOperationTypeFilterID].value);
+    return AnscCloneString(objectInfo[DUStateChangeComplPolicyID].parameters[DUStateChangeComplPolicyOperationTypeFilterID].value);
 }
 
 /* CcspManagementServer_GetDUStateChangeComplPolicy_ResultTypeFilter is called to get
@@ -1787,7 +1787,7 @@ CcspManagementServer_GetDUStateChangeComplPolicy_ResultTypeFilter
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[DUStateChangeComplPolicyID].parameters[DUStateChangeComplPolicyResultTypeFilterID].value);
+    return AnscCloneString(objectInfo[DUStateChangeComplPolicyID].parameters[DUStateChangeComplPolicyResultTypeFilterID].value);
 }
 
 /* CcspManagementServer_GetDUStateChangeComplPolicy_FaultCodeFilter is called to get
@@ -1801,7 +1801,7 @@ CcspManagementServer_GetDUStateChangeComplPolicy_FaultCodeFilter
         )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[DUStateChangeComplPolicyID].parameters[DUStateChangeComplPolicyFaultCodeFilterID].value);
+    return AnscCloneString(objectInfo[DUStateChangeComplPolicyID].parameters[DUStateChangeComplPolicyFaultCodeFilterID].value);
 }
 
 /* CcspManagementServer_GetTr069pa_Name is called to get
@@ -1815,7 +1815,7 @@ CcspManagementServer_GetTr069pa_Name
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[Tr069paID].parameters[Tr069paNameID].value);
+    return AnscCloneString(objectInfo[Tr069paID].parameters[Tr069paNameID].value);
 }
 
 /* CcspManagementServer_GetTr069pa_Version is called to get
@@ -1829,7 +1829,7 @@ CcspManagementServer_GetTr069pa_Version
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[Tr069paID].parameters[Tr069paVersionID].value);
+    return AnscCloneString(objectInfo[Tr069paID].parameters[Tr069paVersionID].value);
 }
 
 /* CcspManagementServer_GetTr069pa_Author is called to get
@@ -1843,7 +1843,7 @@ CcspManagementServer_GetTr069pa_Author
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[Tr069paID].parameters[Tr069paAuthorID].value);
+    return AnscCloneString(objectInfo[Tr069paID].parameters[Tr069paAuthorID].value);
 }
 
 /* CcspManagementServer_GetTr069pa_Health is called to get
@@ -1857,7 +1857,7 @@ CcspManagementServer_GetTr069pa_Health
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[Tr069paID].parameters[Tr069paHealthID].value);
+    return AnscCloneString(objectInfo[Tr069paID].parameters[Tr069paHealthID].value);
 }
 
 /* CcspManagementServer_GetTr069pa_State is called to get
@@ -1871,7 +1871,7 @@ CcspManagementServer_GetTr069pa_State
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[Tr069paID].parameters[Tr069paStateID].value);
+    return AnscCloneString(objectInfo[Tr069paID].parameters[Tr069paStateID].value);
 }
 
 /* CcspManagementServer_GetTr069pa_DTXml is called to get
@@ -1885,7 +1885,7 @@ CcspManagementServer_GetTr069pa_DTXml
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[Tr069paID].parameters[Tr069paDTXmlID].value);
+    return AnscCloneString(objectInfo[Tr069paID].parameters[Tr069paDTXmlID].value);
 }
 
 /* CcspManagementServer_GetMemory_MinUsageStr is called to get
@@ -1900,7 +1900,7 @@ CcspManagementServer_GetMemory_MinUsageStr
 {
     UNREFERENCED_PARAMETER(ComponentName);
     /* MinUsage is the memory consumed right after init. It does not change. */
-    return CcspManagementServer_CloneString(objectInfo[MemoryID].parameters[MemoryMinUsageID].value);
+    return AnscCloneString(objectInfo[MemoryID].parameters[MemoryMinUsageID].value);
 }
 
 /* CcspManagementServer_GetMemory_MaxUsage is called to get
@@ -1931,8 +1931,8 @@ CcspManagementServer_GetMemory_MaxUsageStr
     char str[100] = {0};
     _ansc_ultoa(g_ulAllocatedSizePeak, str, 10);
 
-    //return CcspManagementServer_CloneString(objectInfo[MemoryID].parameters[MemoryMaxUsageID].value);
-    return CcspManagementServer_CloneString(str);
+    //return AnscCloneString(objectInfo[MemoryID].parameters[MemoryMaxUsageID].value);
+    return AnscCloneString(str);
 }
 
 /* CcspManagementServer_GetMemory_Consumed is called to get
@@ -1962,8 +1962,8 @@ CcspManagementServer_GetMemory_ConsumedStr
     char str[100] = {0};
     _ansc_ultoa(CcspManagementServer_GetMemory_Consumed(ComponentName), str, 10);
 
-    //return CcspManagementServer_CloneString(objectInfo[MemoryID].parameters[MemoryConsumedID].value);
-    return CcspManagementServer_CloneString(str);
+    //return AnscCloneString(objectInfo[MemoryID].parameters[MemoryConsumedID].value);
+    return AnscCloneString(str);
 }
 
 /* CcspManagementServer_GetLogging_EnableStr is called to get
@@ -2002,7 +2002,7 @@ CcspManagementServer_SetLogging_EnableStr
         return CCSP_SUCCESS;
     }
     if(objectInfo[LoggingID].parameters[LoggingEnableID].value) 
-        CcspManagementServer_Free(objectInfo[LoggingID].parameters[LoggingEnableID].value);
+        AnscFreeMemory(objectInfo[LoggingID].parameters[LoggingEnableID].value);
     objectInfo[LoggingID].parameters[LoggingEnableID].value = NULL;
 
     rc = strcasecmp_s("TRUE",strlen("TRUE"),Value,&ind);
@@ -2012,13 +2012,13 @@ CcspManagementServer_SetLogging_EnableStr
     }
     if ( rc == EOK && !ind )
     {
-        objectInfo[LoggingID].parameters[LoggingEnableID].value = CcspManagementServer_CloneString("true");
+        objectInfo[LoggingID].parameters[LoggingEnableID].value = AnscCloneString("true");
         if(objectInfo[LoggingID].parameters[LoggingLogLevelID].value)
             AnscSetTraceLevel(_ansc_atoi(objectInfo[LoggingID].parameters[LoggingLogLevelID].value));
     }
     else
     {
-        objectInfo[LoggingID].parameters[LoggingEnableID].value = CcspManagementServer_CloneString("false");
+        objectInfo[LoggingID].parameters[LoggingEnableID].value = AnscCloneString("false");
         AnscSetTraceLevel(CCSP_TRACE_INVALID_LEVEL);
     }
     return CCSP_SUCCESS;
@@ -2036,14 +2036,14 @@ CcspManagementServer_GetLogging_LogLevelStr
 {
     UNREFERENCED_PARAMETER(ComponentName);
     if(objectInfo[LoggingID].parameters[LoggingLogLevelID].value) {
-        return CcspManagementServer_CloneString(objectInfo[LoggingID].parameters[LoggingLogLevelID].value);
+        return AnscCloneString(objectInfo[LoggingID].parameters[LoggingLogLevelID].value);
     }
     else
     {
         char str[100] = {0};
         //        _ansc_itoa(g_iTraceLevel, str, 10);
         sprintf(str, "%d", g_iTraceLevel);
-        return CcspManagementServer_CloneString(str);
+        return AnscCloneString(str);
     }
 }
 
@@ -2073,14 +2073,14 @@ CcspManagementServer_SetLogging_LogLevelStr
     rc = strcasecmp_s(Value, strlen(Value), objectInfo[LoggingID].parameters[LoggingLogLevelID].value, &ind);
     ERR_CHK(rc);
     if((ind) && (rc == EOK)){
-           CcspManagementServer_Free(objectInfo[LoggingID].parameters[LoggingLogLevelID].value);
-           objectInfo[LoggingID].parameters[LoggingLogLevelID].value = CcspManagementServer_CloneString(Value);
+           AnscFreeMemory(objectInfo[LoggingID].parameters[LoggingLogLevelID].value);
+           objectInfo[LoggingID].parameters[LoggingLogLevelID].value = AnscCloneString(Value);
         }
     }
     else {
-        objectInfo[LoggingID].parameters[LoggingLogLevelID].value = CcspManagementServer_CloneString(Value);
+        objectInfo[LoggingID].parameters[LoggingLogLevelID].value = AnscCloneString(Value);
     }
-    return CcspManagementServer_CloneString("0");  // return CCSP_SUCCESS;
+    return AnscCloneString("0");  // return CCSP_SUCCESS;
 }
 
 #ifdef   _CCSP_CWMP_STUN_ENABLED
@@ -2113,7 +2113,7 @@ CcspManagementServer_StunBindingChanged
     }
 
     objectInfo[ManagementServerID].parameters[ManagementServerNATDetectedID].value = 
-        CcspManagementServer_CloneString(NATDetected ? "1" : "0");
+        AnscCloneString(NATDetected ? "1" : "0");
         
     if ( objectInfo[ManagementServerID].parameters[ManagementServerNATDetectedID].notification &&
          ((bPrevNatDetected && !NATDetected) || (!bPrevNatDetected && NATDetected) ) )
@@ -2121,14 +2121,14 @@ CcspManagementServer_StunBindingChanged
         valChanged[valChangedSize].parameterName = CcspManagementServer_MergeString(objectInfo[ManagementServerID].name, objectInfo[ManagementServerID].parameters[ManagementServerNATDetectedID].name);
         valChanged[valChangedSize].oldValue = pOldNatDetected;
         pOldNatDetected = NULL;
-        valChanged[valChangedSize].newValue = CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerNATDetectedID].value);
+        valChanged[valChangedSize].newValue = AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerNATDetectedID].value);
         valChanged[valChangedSize].type = objectInfo[ManagementServerID].parameters[ManagementServerNATDetectedID].type;
         valChangedSize++;
     }
     
     if ( pOldNatDetected )
     {
-        CcspManagementServer_Free(pOldNatDetected);
+        AnscFreeMemory(pOldNatDetected);
     }
 
     /* UDPConnectionRequestAddress */
@@ -2142,7 +2142,7 @@ CcspManagementServer_StunBindingChanged
             valChanged[valChangedSize].parameterName = CcspManagementServer_MergeString(objectInfo[ManagementServerID].name, objectInfo[ManagementServerID].parameters[ManagementServerUDPConnectionRequestAddressID].name);
             valChanged[valChangedSize].oldValue = pOldUrl;
             pOldUrl = NULL;
-            valChanged[valChangedSize].newValue = CcspManagementServer_CloneString(UdpConnReqURL);
+            valChanged[valChangedSize].newValue = AnscCloneString(UdpConnReqURL);
             valChanged[valChangedSize].type = objectInfo[ManagementServerID].parameters[ManagementServerUDPConnectionRequestAddressID].type;
             valChangedSize++;
         }
@@ -2151,13 +2151,13 @@ CcspManagementServer_StunBindingChanged
     if ( pOldUrl )
     {
         objectInfo[ManagementServerID].parameters[ManagementServerUDPConnectionRequestAddressID].value = NULL;
-        CcspManagementServer_Free(pOldUrl);
+        AnscFreeMemory(pOldUrl);
     }
 
     if ( UdpConnReqURL )
     {
         objectInfo[ManagementServerID].parameters[ManagementServerUDPConnectionRequestAddressID].value =
-            CcspManagementServer_CloneString(UdpConnReqURL);
+            AnscCloneString(UdpConnReqURL);
     }
 
     if ( valChangedSize > 0 )
@@ -2175,9 +2175,9 @@ CcspManagementServer_StunBindingChanged
 
         for(i=0; i<valChangedSize; i++)
         {
-            if(valChanged[i].parameterName) CcspManagementServer_Free((void*)valChanged[i].parameterName);
-            if(valChanged[i].oldValue) CcspManagementServer_Free((void*)valChanged[i].oldValue);
-            if(valChanged[i].newValue) CcspManagementServer_Free((void*)valChanged[i].newValue);
+            if(valChanged[i].parameterName) AnscFreeMemory((void*)valChanged[i].parameterName);
+            if(valChanged[i].oldValue) AnscFreeMemory((void*)valChanged[i].oldValue);
+            if(valChanged[i].newValue) AnscFreeMemory((void*)valChanged[i].newValue);
         }
 
     }

@@ -195,7 +195,7 @@ CcspCwmppoSysReadySignalProcTask
         if ( pConnReqUrl )
         {
             bHavePrintGottenIP  = FALSE;
-            CcspTr069PaFreeMemory(pConnReqUrl);
+            AnscFreeMemory(pConnReqUrl);
             break;
         }
 
@@ -488,7 +488,7 @@ CcspCwmppoCheckCdsResults
             {
                 if ( pCK )
                 {
-                    CcspTr069PaFreeMemory(pCK);
+                    AnscFreeMemory(pCK);
                 }
 
                 for ( j = i; (unsigned int)j < numInstances - 1; j ++ )
@@ -503,7 +503,7 @@ CcspCwmppoCheckCdsResults
 
             if ( pCK )
             {
-                CcspTr069PaFreeMemory(pCK);
+                AnscFreeMemory(pCK);
             }
 
             CcspCwmppoConstructCdsPsmKey(CCSP_NS_CDS_PSM_NODE_COMPLETE);
@@ -521,7 +521,7 @@ CcspCwmppoCheckCdsResults
             if ( pValue )
             {
                 comp = _ansc_atoi(pValue);
-                CcspTr069PaFreeMemory(pValue);
+                AnscFreeMemory(pValue);
             }
             else
             {
@@ -538,7 +538,7 @@ CcspCwmppoCheckCdsResults
         if ( i < 0 && total > 0 )
         {
             /* operation completes, compose DSCC request */
-            pDsccReq = (PCCSP_TR069_DSCC_REQ)CcspTr069PaAllocateMemory(sizeof(CCSP_TR069_DSCC_REQ));
+            pDsccReq = (PCCSP_TR069_DSCC_REQ)AnscAllocateMemory(sizeof(CCSP_TR069_DSCC_REQ));
 
             if ( !pDsccReq )
             {
@@ -546,7 +546,7 @@ CcspCwmppoCheckCdsResults
             }
 
             pDsccReq->Results = 
-                (PCCSP_TR069_CDS_OpResult)CcspTr069PaAllocateMemory
+                (PCCSP_TR069_CDS_OpResult)AnscAllocateMemory
                     (
                         sizeof(CCSP_TR069_CDS_OpResult) * total
                     );
@@ -558,13 +558,13 @@ CcspCwmppoCheckCdsResults
 
             pDsccReq->NumResults = total;
 
-            pParamNames  = (char**)CcspTr069PaAllocateMemory(total * sizeof(char*) * CCSP_NS_CDS_RESULT_ARG_COUNT);
+            pParamNames  = (char**)AnscAllocateMemory(total * sizeof(char*) * CCSP_NS_CDS_RESULT_ARG_COUNT);
             if ( !pParamNames )
             {
                 goto EXIT;
             }
 
-            pParamValues = (char**)CcspTr069PaAllocateMemory(total * sizeof(char*) * CCSP_NS_CDS_RESULT_ARG_COUNT);
+            pParamValues = (char**)AnscAllocateMemory(total * sizeof(char*) * CCSP_NS_CDS_RESULT_ARG_COUNT);
             if ( !pParamValues )
             {
                 goto EXIT;
@@ -603,7 +603,7 @@ CcspCwmppoCheckCdsResults
 
                 if ( pValue )
                 {
-                    CcspTr069PaFreeMemory(pValue);
+                    AnscFreeMemory(pValue);
                 }
 
                 if ( (int)order >= total )
@@ -833,7 +833,7 @@ EXIT:
         CcspTr069DsccReqRemove(pDsccReq);
     }
 
-    CcspTr069PaFreeMemory(pInsNumbers);
+    AnscFreeMemory(pInsNumbers);
 }
 
 
@@ -952,17 +952,17 @@ CcspCwmppoCheckAdsccAgainstPolicy
 
     if ( pOperationTypeFilter )
     {
-        CcspTr069PaFreeMemory(pOperationTypeFilter);
+        AnscFreeMemory(pOperationTypeFilter);
     }
 
     if ( pResultTypeFilter )
     {
-        CcspTr069PaFreeMemory(pResultTypeFilter);
+        AnscFreeMemory(pResultTypeFilter);
     }
 
     if ( pFaultCodeFilter )
     {
-        CcspTr069PaFreeMemory(pFaultCodeFilter);
+        AnscFreeMemory(pFaultCodeFilter);
     }
 }
 
@@ -998,7 +998,7 @@ CcspCwmppoCheckAutonomousCdsResults
     }
 
     /* operation completes, compose ADSCC request */
-    pAdsccReq = (PCCSP_TR069_ADSCC_REQ)CcspTr069PaAllocateMemory(sizeof(CCSP_TR069_ADSCC_REQ));
+    pAdsccReq = (PCCSP_TR069_ADSCC_REQ)AnscAllocateMemory(sizeof(CCSP_TR069_ADSCC_REQ));
 
     if ( !pAdsccReq )
     {
@@ -1006,7 +1006,7 @@ CcspCwmppoCheckAutonomousCdsResults
     }
 
     pAdsccReq->Results = 
-        (PCCSP_TR069_ADSCC_OpResult)CcspTr069PaAllocateMemory
+        (PCCSP_TR069_ADSCC_OpResult)AnscAllocateMemory
             (
                 sizeof(CCSP_TR069_ADSCC_OpResult)
             );
@@ -1018,13 +1018,13 @@ CcspCwmppoCheckAutonomousCdsResults
 
     pAdsccReq->NumResults = 1;
 
-    pParamNames  = (char**)CcspTr069PaAllocateMemory(sizeof(char*) * CCSP_NS_ACDS_RESULT_ARG_COUNT);
+    pParamNames  = (char**)AnscAllocateMemory(sizeof(char*) * CCSP_NS_ACDS_RESULT_ARG_COUNT);
     if ( !pParamNames )
     {
         goto EXIT;
     }
 
-    pParamValues = (char**)CcspTr069PaAllocateMemory(sizeof(char*) * CCSP_NS_ACDS_RESULT_ARG_COUNT);
+    pParamValues = (char**)AnscAllocateMemory(sizeof(char*) * CCSP_NS_ACDS_RESULT_ARG_COUNT);
     if ( !pParamValues )
     {
         goto EXIT;
@@ -1302,17 +1302,17 @@ EXIT:
 
     if ( pTransferTypeFilter )
     {
-        CcspTr069PaFreeMemory(pTransferTypeFilter);
+        AnscFreeMemory(pTransferTypeFilter);
     }
 
     if ( pResultTypeFilter )
     {
-        CcspTr069PaFreeMemory(pResultTypeFilter);
+        AnscFreeMemory(pResultTypeFilter);
     }
 
     if ( pFileTypeFilter )
     {
-        CcspTr069PaFreeMemory(pFileTypeFilter);
+        AnscFreeMemory(pFileTypeFilter);
     }
 
     return  bFilteredOut;
@@ -1346,13 +1346,13 @@ CcspCwmppoRetrieveFirmwareDownloadResults
             "Download - retrieving firmware download operation ...\n"
         ));
 
-    pParamNames  = (char**)CcspTr069PaAllocateMemory(sizeof(char*) * CCSP_NS_DOWNLOAD_RESULT_ARG_COUNT);
+    pParamNames  = (char**)AnscAllocateMemory(sizeof(char*) * CCSP_NS_DOWNLOAD_RESULT_ARG_COUNT);
     if ( !pParamNames )
     {
         goto EXIT;
     }
 
-    pParamValues = (char**)CcspTr069PaAllocateMemory(sizeof(char*) * CCSP_NS_DOWNLOAD_RESULT_ARG_COUNT);
+    pParamValues = (char**)AnscAllocateMemory(sizeof(char*) * CCSP_NS_DOWNLOAD_RESULT_ARG_COUNT);
     if ( !pParamValues )
     {
         goto EXIT;
@@ -1403,14 +1403,14 @@ CcspCwmppoRetrieveFirmwareDownloadResults
         if ( pTime )
         {
             *pStartTime = *pTime;
-            CcspTr069PaFreeMemory(pTime);
+            AnscFreeMemory(pTime);
         }
 
         pTime = CcspStringToCalendarTime(pParamValues[3]);
         if ( pTime )
         {
             *pEndTime = *pTime;
-            CcspTr069PaFreeMemory(pTime);
+            AnscFreeMemory(pTime);
         }
 
         *pulFaultCode = (ULONG)CcspTr069PA_MapCcspErrCode(pCcspCwmpCpeController->hTr069PaMapper, ccspError);
@@ -1446,13 +1446,13 @@ CcspCwmppoFreeParamValueChangeSignalStruct
     {
         pVC = pSigStruct + i;
 
-        if ( pVC->parameterName    ) CcspTr069PaFreeMemory((PVOID)pVC->parameterName   );
-        if ( pVC->oldValue         ) CcspTr069PaFreeMemory((PVOID)pVC->oldValue        );
-        if ( pVC->newValue         ) CcspTr069PaFreeMemory((PVOID)pVC->newValue        );
-        if ( pVC->subsystem_prefix ) CcspTr069PaFreeMemory((PVOID)pVC->subsystem_prefix);
+        if ( pVC->parameterName    ) AnscFreeMemory((PVOID)pVC->parameterName   );
+        if ( pVC->oldValue         ) AnscFreeMemory((PVOID)pVC->oldValue        );
+        if ( pVC->newValue         ) AnscFreeMemory((PVOID)pVC->newValue        );
+        if ( pVC->subsystem_prefix ) AnscFreeMemory((PVOID)pVC->subsystem_prefix);
     }
 
-    CcspTr069PaFreeMemory(pSigStruct);
+    AnscFreeMemory(pSigStruct);
 }
 
 
@@ -1470,7 +1470,7 @@ CcspCwmppoCloneParamValueChangeSignalStruct
 
     if ( size <= 0 ) return NULL;
 
-    pNewSigStruct = CcspTr069PaAllocateMemory(sizeof(parameterSigStruct_t)*size);
+    pNewSigStruct = AnscAllocateMemory(sizeof(parameterSigStruct_t)*size);
 
     if ( pNewSigStruct )
     {
@@ -1481,10 +1481,10 @@ CcspCwmppoCloneParamValueChangeSignalStruct
             pNewVC = pNewSigStruct + i;
             pVC    = pSigStruct + i;
 
-            pNewVC->parameterName    = pVC->parameterName ? CcspTr069PaCloneString((char*)pVC->parameterName) : NULL;
-            pNewVC->oldValue         = pVC->oldValue ? CcspTr069PaCloneString((char*)pVC->oldValue) : NULL;
-            pNewVC->newValue         = pVC->newValue ? CcspTr069PaCloneString((char*)pVC->newValue) : NULL;
-            pNewVC->subsystem_prefix = pVC->subsystem_prefix ? CcspTr069PaCloneString((char*)pVC->subsystem_prefix) : NULL;
+            pNewVC->parameterName    = pVC->parameterName ? AnscCloneString((char*)pVC->parameterName) : NULL;
+            pNewVC->oldValue         = pVC->oldValue ? AnscCloneString((char*)pVC->oldValue) : NULL;
+            pNewVC->newValue         = pVC->newValue ? AnscCloneString((char*)pVC->newValue) : NULL;
+            pNewVC->subsystem_prefix = pVC->subsystem_prefix ? AnscCloneString((char*)pVC->subsystem_prefix) : NULL;
         }
     }
 
@@ -1652,7 +1652,7 @@ CcspCwmppoProcessPvcSignal
     
         if ( NumSubsystems <= 0 )
         {
-            Subsystems[0] = CcspTr069PaCloneString(pCcspCwmpCpeController->SubsysName);    /* assume 'local' sub-system will be used */
+            Subsystems[0] = AnscCloneString(pCcspCwmpCpeController->SubsysName);    /* assume 'local' sub-system will be used */
             NumSubsystems = 1;
         }
 
@@ -1857,7 +1857,7 @@ CcspCwmppoProcessPvcSignal
                         );
                 }
 
-                if ( pCommandKey ) CcspTr069PaFreeMemory(pCommandKey);
+                if ( pCommandKey ) AnscFreeMemory(pCommandKey);
             }
             else
             {
@@ -1930,22 +1930,22 @@ CcspCwmppoProcessPvcSignal
 
                     if ( pAnnounceURL )
                     {
-                        CcspTr069PaFreeMemory(pAnnounceURL);
+                        AnscFreeMemory(pAnnounceURL);
                     }
 
                     if ( pTransferURL )
                     {
-                        CcspTr069PaFreeMemory(pTransferURL);
+                        AnscFreeMemory(pTransferURL);
                     }
 
                     if ( pFileType )
                     {
-                        CcspTr069PaFreeMemory(pFileType);
+                        AnscFreeMemory(pFileType);
                     }
 
                     if ( pTargetFileName )
                     {
-                        CcspTr069PaFreeMemory(pTargetFileName);
+                        AnscFreeMemory(pTargetFileName);
                     }
                 }
             }
@@ -2015,22 +2015,22 @@ CcspCwmppoProcessPvcSignal
 
                     if ( pAnnounceURL )
                     {
-                        CcspTr069PaFreeMemory(pAnnounceURL);
+                        AnscFreeMemory(pAnnounceURL);
                     }
 
                     if ( pTransferURL )
                     {
-                        CcspTr069PaFreeMemory(pTransferURL);
+                        AnscFreeMemory(pTransferURL);
                     }
 
                     if ( pFileType )
                     {
-                        CcspTr069PaFreeMemory(pFileType);
+                        AnscFreeMemory(pFileType);
                     }
 
                     if ( pTargetFileName )
                     {
-                        CcspTr069PaFreeMemory(pTargetFileName);
+                        AnscFreeMemory(pTargetFileName);
                     }
                 }
             }
@@ -2166,7 +2166,7 @@ CcspCwmppoProcessVcSignalTask
                 );
 
             CcspCwmppoFreeParamValueChangeSignalStruct(pPvcSig->pSignalStruct, pPvcSig->size);
-            CcspTr069PaFreeMemory(pPvcSig);
+            AnscFreeMemory(pPvcSig);
 
             nCount ++;
             if ( nCount >= 10 )
@@ -2186,7 +2186,7 @@ CcspCwmppoProcessVcSignalTask
         pPvcSig = ACCESS_CCSP_CWMPPO_PVC_SIGNAL(pSLinkEntry);
     
         CcspCwmppoFreeParamValueChangeSignalStruct(pPvcSig->pSignalStruct, pPvcSig->size);
-        CcspTr069PaFreeMemory(pPvcSig);    
+        AnscFreeMemory(pPvcSig);    
     }
     
 	AnscReleaseLock(&s_PVC_SigList_Lock);
@@ -2214,7 +2214,7 @@ CcspCwmppoParamValueChangedCB
 
     if ( size == 0 ) return;
 
-    pPvcSig = (PCCSP_CWMPPO_PVC_SIGNAL_LIST)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPPO_PVC_SIGNAL_LIST));
+    pPvcSig = (PCCSP_CWMPPO_PVC_SIGNAL_LIST)AnscAllocateMemory(sizeof(CCSP_CWMPPO_PVC_SIGNAL_LIST));
     if ( !pPvcSig )  return;
     pPvcSig->pSignalStruct = CcspCwmppoCloneParamValueChangeSignalStruct(val, size);
     if ( !pPvcSig->pSignalStruct ) goto EXIT;
@@ -2247,7 +2247,7 @@ CcspCwmppoParamValueChangedCB
     return;
 
 EXIT:
-    CcspTr069PaFreeMemory(pPvcSig);
+    AnscFreeMemory(pPvcSig);
 }
 
 

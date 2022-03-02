@@ -499,11 +499,11 @@ if(bFirstInform)
 else
 {
 
-	pCwmpDeviceId->Manufacturer = (char *)CcspManagementServer_CloneString(Manufacturer);
-	pCwmpDeviceId->OUI 			= (char *)CcspManagementServer_CloneString(ManufacturerOUI);
-	pCwmpDeviceId->ProductClass = (char *)CcspManagementServer_CloneString(ProductClass);
-	pCwmpDeviceId->SerialNumber = (char *)CcspManagementServer_CloneString(SerialNumber);
-        pCwmpDeviceId->ProvisioningCode = (char *)CcspManagementServer_CloneString(ProvisioningCode);
+	pCwmpDeviceId->Manufacturer = (char *)AnscCloneString(Manufacturer);
+	pCwmpDeviceId->OUI 			= (char *)AnscCloneString(ManufacturerOUI);
+	pCwmpDeviceId->ProductClass = (char *)AnscCloneString(ProductClass);
+	pCwmpDeviceId->SerialNumber = (char *)AnscCloneString(SerialNumber);
+        pCwmpDeviceId->ProvisioningCode = (char *)AnscCloneString(ProvisioningCode);
         CcspTr069PaTraceWarning((" Manufacturer: %s , OUI : %s, ProductClass: %s, SerialNumber: %s, ProvisionCode: %s\n",pCwmpDeviceId->Manufacturer,pCwmpDeviceId->OUI,
                                pCwmpDeviceId->ProductClass,pCwmpDeviceId->SerialNumber,pCwmpDeviceId->ProvisioningCode));
 }
@@ -796,11 +796,11 @@ else
              {
 		if(!strcmp("Device.DeviceInfo.HardwareVersion",pCwmpParamValueArray[i].Name))
 		{
-			pValue = (char *)CcspManagementServer_CloneString(HardwareVersion);
+			pValue = (char *)AnscCloneString(HardwareVersion);
 		}
 		else if(!strcmp("Device.DeviceInfo.SoftwareVersion",pCwmpParamValueArray[i].Name))
 		{
-			pValue = (char *)CcspManagementServer_CloneString(SoftwareVersion);
+			pValue = (char *)AnscCloneString(SoftwareVersion);
 		}
                 else if(!strcmp("Device.DeviceInfo.ProvisioningCode",pCwmpParamValueArray[i].Name))
                 {

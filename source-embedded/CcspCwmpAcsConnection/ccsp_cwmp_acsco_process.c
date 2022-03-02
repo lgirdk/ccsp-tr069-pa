@@ -453,7 +453,7 @@ START:
 
         if(pHttpGetReq->pContent != NULL)
         {
-            CcspTr069PaFreeMemory(pHttpGetReq->pContent);
+            AnscFreeMemory(pHttpGetReq->pContent);
 
             pHttpGetReq->pContent = NULL;
         }
@@ -514,7 +514,7 @@ START:
     /* AnscResetEvent (&pHttpGetReq->CompleteEvent); */
     AnscFreeEvent(&pHttpGetReq->CompleteEvent);
 
-    CcspTr069PaFreeMemory(pHttpReqInfo);
+    AnscFreeMemory(pHttpReqInfo);
 
     if ( pHttpGetReq->CompleteStatus != ANSC_STATUS_SUCCESS )
     {
@@ -546,8 +546,8 @@ REDIRECTED:
     {
         if( _ansc_strstr((PCHAR)pHttpGetReq->pContent, "http") == pHttpGetReq->pContent)
         {
-            if ( pMyObject->AcsUrl ) CcspTr069PaFreeMemory(pMyObject->AcsUrl);
-            pMyObject->AcsUrl = CcspTr069PaCloneString(pHttpGetReq->pContent);
+            if ( pMyObject->AcsUrl ) AnscFreeMemory(pMyObject->AcsUrl);
+            pMyObject->AcsUrl = AnscCloneString(pHttpGetReq->pContent);
         }
         else
         {
@@ -574,8 +574,8 @@ REDIRECTED:
             AnscCopyMemory(pNewUrl, pRequestURL, (ULONG)(pTempString - pRequestURL));
             AnscCatString(pNewUrl, (PCHAR)pHttpGetReq->pContent);
 
-            if ( pMyObject->AcsUrl ) CcspTr069PaFreeMemory(pMyObject->AcsUrl);
-            pMyObject->AcsUrl = CcspTr069PaCloneString(pNewUrl);
+            if ( pMyObject->AcsUrl ) AnscFreeMemory(pMyObject->AcsUrl);
+            pMyObject->AcsUrl = AnscCloneString(pNewUrl);
         }
 
         uRedirect ++;
@@ -637,7 +637,7 @@ EXIT:
 
     if(pHttpGetReq->pContent != NULL)
     {
-        CcspTr069PaFreeMemory(pHttpGetReq->pContent);
+        AnscFreeMemory(pHttpGetReq->pContent);
 
         pHttpGetReq->pContent = NULL;
     }
@@ -777,7 +777,7 @@ CcspCwmpAcscoRequestOnly
 
     AnscSleep(500);
 
-    CcspTr069PaFreeMemory(pHttpReqInfo);
+    AnscFreeMemory(pHttpReqInfo);
 
     return returnStatus;
 #endif

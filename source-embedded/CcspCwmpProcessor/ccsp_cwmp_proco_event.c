@@ -1036,7 +1036,7 @@ CcspCwmppoCheckAutonomousCdsResults
     PCCSP_CWMP_MSO_INTERFACE             pCcspCwmpMsoIf      = (PCCSP_CWMP_MSO_INTERFACE)pCcspCwmpCpeController->GetCcspCwmpMsoIf(pCcspCwmpCpeController);
     PCCSP_CWMP_PROCESSOR_OBJECT      pCcspCwmpProcessor   = (PCCSP_CWMP_PROCESSOR_OBJECT   )pCcspCwmpCpeController->hCcspCwmpProcessor;
     int                             i;
-    char                            buf[256];
+    char                            buf[600];
     PCCSP_TR069_ADSCC_REQ           pAdsccReq       = NULL;
     char**                          pParamNames     = NULL;
     char**                          pParamValues    = NULL;

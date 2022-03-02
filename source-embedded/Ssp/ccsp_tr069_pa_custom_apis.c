@@ -237,10 +237,10 @@ CcspManagementServer_GetPeriodicInformTimeStrCustom
 		struct tm tm = *localtime(&t);
 		char p[45];
 		sprintf(p, "%d-%02d-%02d%s", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, "T00:00:00Z");
-		objectInfo[ManagementServerID].parameters[ManagementServerPeriodicInformTimeID].value = CcspManagementServer_CloneString(p);
+		objectInfo[ManagementServerID].parameters[ManagementServerPeriodicInformTimeID].value = AnscCloneString(p);
     }
 
-    return CcspManagementServer_CloneString(objectInfo[ManagementServerID].parameters[ManagementServerPeriodicInformTimeID].value);
+    return AnscCloneString(objectInfo[ManagementServerID].parameters[ManagementServerPeriodicInformTimeID].value);
 
 }
 
@@ -380,7 +380,7 @@ CcspManagementServer_FillInObjectInfoCustom(msObjectInfo *objectInfo)
             {
                 printf("type name found - %s", ParamName[i].name);
                 objectInfo[ManagementServerID].parameters[type].value
-                    = CcspManagementServer_CloneString(pValue);
+                    = AnscCloneString(pValue);
             } 
 
         }
@@ -439,9 +439,9 @@ static ANSC_STATUS CcspTr069PaSsp_GetDeviceInfo
     parameterValStruct_t**          ppval                  = NULL;
     char *                          parameterNames[3]      = {NULL, NULL, NULL};
     errno_t rc       = -1;
-    parameterNames[0] = CcspManagementServer_CloneString("Device.DeviceInfo.ManufacturerOUI");
-    parameterNames[1] = CcspManagementServer_CloneString("Device.DeviceInfo.ProductClass");
-    parameterNames[2] = CcspManagementServer_CloneString("Device.DeviceInfo.SerialNumber");
+    parameterNames[0] = AnscCloneString("Device.DeviceInfo.ManufacturerOUI");
+    parameterNames[1] = AnscCloneString("Device.DeviceInfo.ProductClass");
+    parameterNames[2] = AnscCloneString("Device.DeviceInfo.SerialNumber");
 
     returnStatus =
         CcspManagementServer_UtilGetParameterValues
@@ -510,9 +510,9 @@ static ANSC_STATUS CcspTr069PaSsp_GetDeviceInfo
 
 EXIT:
     if(ppval && val_size) { CcspManagementServer_UtilFreeParameterValStruct(val_size, ppval); }
-    CcspManagementServer_Free(parameterNames[0]);
-    CcspManagementServer_Free(parameterNames[1]);
-    CcspManagementServer_Free(parameterNames[2]);
+    AnscFreeMemory(parameterNames[0]);
+    AnscFreeMemory(parameterNames[1]);
+    AnscFreeMemory(parameterNames[2]);
     return returnStatus;
 }
 

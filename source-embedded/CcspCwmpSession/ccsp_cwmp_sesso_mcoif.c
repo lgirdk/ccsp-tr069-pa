@@ -453,7 +453,7 @@ CcspCwmpsoMcoProcessSoapError
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -573,7 +573,7 @@ CcspCwmpsoMcoInvokeUnknownMethod
     PCCSP_CWMPSO_ASYNC_RESPONSE      pWmpsoAsyncRep     = (PCCSP_CWMPSO_ASYNC_RESPONSE )NULL;
     PCCSP_CWMP_SOAP_FAULT           pCwmpSoapFault     = (PCCSP_CWMP_SOAP_FAULT      )NULL;
 
-    pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+    pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
     if ( !pCwmpSoapFault )
     {
@@ -590,7 +590,7 @@ CcspCwmpsoMcoInvokeUnknownMethod
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -778,51 +778,51 @@ CcspCwmpsoMcoGetRpcMethods
     else
     {
         /* required methods */
-        pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("GetRPCMethods"         );
-        pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("SetParameterValues"    );
-        pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("GetParameterValues"    );
-        pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("GetParameterNames"     );
-        pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("SetParameterAttributes");
-        pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("GetParameterAttributes");
-        pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("AddObject"             );
-        pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("DeleteObject"          );
-        pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("Download"              );
-        pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("Reboot"                );
+        pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("GetRPCMethods"         );
+        pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("SetParameterValues"    );
+        pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("GetParameterValues"    );
+        pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("GetParameterNames"     );
+        pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("SetParameterAttributes");
+        pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("GetParameterAttributes");
+        pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("AddObject"             );
+        pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("DeleteObject"          );
+        pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("Download"              );
+        pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("Reboot"                );
 
         /* optional methods */
         if ( !(ulNoRPCMethodMask & CCSP_CWMP_CFG_RPC_METHOD_NO_ChangeDUState) )
         {
-            pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("ChangeDUState");
+            pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("ChangeDUState");
         }
 
         if ( !(ulNoRPCMethodMask & CCSP_CWMP_CFG_RPC_METHOD_NO_GetQueuedTransfers) )
         {
-            pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("GetQueuedTransfers");
+            pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("GetQueuedTransfers");
         }
 
         if ( !(ulNoRPCMethodMask & CCSP_CWMP_CFG_RPC_METHOD_NO_ScheduleInform) )
         {
-            pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("ScheduleInform"    );
+            pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("ScheduleInform"    );
         }
 
         if ( !(ulNoRPCMethodMask & CCSP_CWMP_CFG_RPC_METHOD_NO_SetVouchers) )
         {
-            pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("SetVouchers"       );
+            pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("SetVouchers"       );
         }
 
         if ( !(ulNoRPCMethodMask & CCSP_CWMP_CFG_RPC_METHOD_NO_GetOptions) )
         {
-            pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("GetOptions"        );
+            pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("GetOptions"        );
         }
 
         if ( !(ulNoRPCMethodMask & CCSP_CWMP_CFG_RPC_METHOD_NO_Upload) )
         {
-            pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("Upload"            );
+            pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("Upload"            );
         }
 
         if ( !(ulNoRPCMethodMask & CCSP_CWMP_CFG_RPC_METHOD_NO_FactoryReset) )
         {
-            pMethodStringArray->Array.arrayString[ulIndex++] = CcspTr069PaCloneString("FactoryReset"   );
+            pMethodStringArray->Array.arrayString[ulIndex++] = AnscCloneString("FactoryReset"   );
         }
     }
 
@@ -830,7 +830,7 @@ CcspCwmpsoMcoGetRpcMethods
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -1012,7 +1012,7 @@ CcspCwmpsoMcoSetParameterValues
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -1169,7 +1169,7 @@ CcspCwmpsoMcoGetParameterValues
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -1250,7 +1250,7 @@ EXIT2:
             CcspCwmpCleanParamValue((&pParamValueArray[i]));
         }
 
-        CcspTr069PaFreeMemory(pParamValueArray);
+        AnscFreeMemory(pParamValueArray);
     }
 
     if ( pCwmpSoapFault )
@@ -1365,7 +1365,7 @@ CcspCwmpsoMcoGetParameterNames
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -1446,7 +1446,7 @@ EXIT2:
             CcspCwmpCleanParamInfo((&pParamInfoArray[i]));
         }
 
-        CcspTr069PaFreeMemory(pParamInfoArray);
+        AnscFreeMemory(pParamInfoArray);
     }
 
     if ( pCwmpSoapFault )
@@ -1551,7 +1551,7 @@ CcspCwmpsoMcoSetParameterAttributes
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -1706,7 +1706,7 @@ CcspCwmpsoMcoGetParameterAttributes
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -1786,7 +1786,7 @@ EXIT2:
             CcspCwmpCleanParamAttrib((&pParamAttribArray[i]));
         }
 
-        CcspTr069PaFreeMemory(pParamAttribArray);
+        AnscFreeMemory(pParamAttribArray);
     }
 
     if ( pCwmpSoapFault )
@@ -1884,7 +1884,7 @@ CcspCwmpsoMcoAddObject
 
     if ( ulNoRPCMethodMask & CCSP_CWMP_CFG_RPC_METHOD_NO_AddObject )
     {
-        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
         if ( !pCwmpSoapFault )
         {
@@ -1934,7 +1934,7 @@ CcspCwmpsoMcoAddObject
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -2083,7 +2083,7 @@ CcspCwmpsoMcoDeleteObject
 
     if ( ulNoRPCMethodMask & CCSP_CWMP_CFG_RPC_METHOD_NO_DeleteObject )
     {
-        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
         if ( !pCwmpSoapFault )
         {
@@ -2132,7 +2132,7 @@ CcspCwmpsoMcoDeleteObject
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -2243,7 +2243,7 @@ EXIT1:
 
 **********************************************************************/
 
-#define  CcspCwmpsoMcoConstructDownloadArgName(arg)                                      \
+#define CcspCwmpsoMcoConstructDownloadArgName(arg)                                      \
     do {                                                                                \
         _ansc_sprintf                                                                   \
             (                                                                           \
@@ -2252,7 +2252,7 @@ EXIT1:
                 CCSP_NS_DOWNLOAD,                                                       \
                 arg                                                                     \
             );                                                                          \
-        pParamValueArray[i].Name = CcspTr069PaCloneString(buf);                         \
+        pParamValueArray[i].Name = AnscCloneString(buf);                                \
     } while (0) 
 
 
@@ -2278,7 +2278,7 @@ CcspCwmpsoMcoDownload_PrepareArgs
     *pulArraySize       = 0;
 
     pParamValueArray = 
-        (PCCSP_CWMP_PARAM_VALUE)CcspTr069PaAllocateMemory
+        (PCCSP_CWMP_PARAM_VALUE)AnscAllocateMemory
             (
                 sizeof(CCSP_CWMP_PARAM_VALUE) * CCSP_NS_DOWNLOAD_ARG_MAX_COUNT
             );
@@ -2297,7 +2297,7 @@ CcspCwmpsoMcoDownload_PrepareArgs
     pParamValueArray[i].Value           = pSlapVar;
 
     pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = CcspTr069PaCloneString(pDownloadReq->CommandKey);
+    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->CommandKey);
 
     i++;
 
@@ -2310,7 +2310,7 @@ CcspCwmpsoMcoDownload_PrepareArgs
     pParamValueArray[i].Value           = pSlapVar;
 
     pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = CcspTr069PaCloneString(pDownloadReq->FileType);
+    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->FileType);
 
     i++;
 
@@ -2323,7 +2323,7 @@ CcspCwmpsoMcoDownload_PrepareArgs
     pParamValueArray[i].Value           = pSlapVar;
 
     pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = CcspTr069PaCloneString(pDownloadReq->Url);
+    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->Url);
 
     i++;
 
@@ -2336,7 +2336,7 @@ CcspCwmpsoMcoDownload_PrepareArgs
     pParamValueArray[i].Value           = pSlapVar;
 
     pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = CcspTr069PaCloneString(pDownloadReq->Username);
+    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->Username);
 
     i++;
 
@@ -2349,7 +2349,7 @@ CcspCwmpsoMcoDownload_PrepareArgs
     pParamValueArray[i].Value           = pSlapVar;
 
     pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = CcspTr069PaCloneString(pDownloadReq->Password);
+    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->Password);
 
     i++;
 
@@ -2363,7 +2363,7 @@ CcspCwmpsoMcoDownload_PrepareArgs
     _ansc_sprintf(buf, "%u", (unsigned int)pDownloadReq->FileSize);
 
     pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = CcspTr069PaCloneString(buf);
+    pSlapVar->Variant.varString = AnscCloneString(buf);
 
     i++;
 
@@ -2376,7 +2376,7 @@ CcspCwmpsoMcoDownload_PrepareArgs
     pParamValueArray[i].Value           = pSlapVar;
 
     pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = CcspTr069PaCloneString(pDownloadReq->TargetFileName);
+    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->TargetFileName);
 
     i++;
 
@@ -2391,7 +2391,7 @@ CcspCwmpsoMcoDownload_PrepareArgs
     _ansc_sprintf(buf, "%u", (unsigned int)pDownloadReq->DelaySeconds);
 
     pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = CcspTr069PaCloneString(buf);
+    pSlapVar->Variant.varString = AnscCloneString(buf);
 
     i++;
 
@@ -2404,7 +2404,7 @@ CcspCwmpsoMcoDownload_PrepareArgs
     pParamValueArray[i].Value           = pSlapVar;
 
     pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = CcspTr069PaCloneString(pDownloadReq->SuccessUrl);
+    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->SuccessUrl);
 
     i++;
 
@@ -2417,7 +2417,7 @@ CcspCwmpsoMcoDownload_PrepareArgs
     pParamValueArray[i].Value           = pSlapVar;
 
     pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = CcspTr069PaCloneString(pDownloadReq->FailureUrl);
+    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->FailureUrl);
 
     i++;
 
@@ -2437,7 +2437,7 @@ EXIT1:
             CcspCwmpCleanParamValue((&pParamValueArray[k]));
         }
 
-        CcspTr069PaFreeMemory(pParamValueArray);
+        AnscFreeMemory(pParamValueArray);
         pParamValueArray = NULL;
     }
 
@@ -2481,7 +2481,7 @@ CcspCwmpsoMcoDownload
     ERR_CHK(rc);
     if ((ulNoRPCMethodMask & CCSP_CWMP_CFG_RPC_METHOD_NO_Download) || (!(!ind) && (rc == EOK)))
     {
-        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
         if ( !pCwmpSoapFault )
         {
@@ -2519,7 +2519,7 @@ CcspCwmpsoMcoDownload
         {
             returnStatus = ANSC_STATUS_RESOURCES;
 
-            pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+            pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
             
             if ( !pCwmpSoapFault )
             {
@@ -2553,7 +2553,7 @@ CcspCwmpsoMcoDownload
                     CcspCwmpCleanParamValue((&pParamValueArray[i]));
                 }
 
-                CcspTr069PaFreeMemory(pParamValueArray);
+                AnscFreeMemory(pParamValueArray);
             }
 
             if ( returnStatus != ANSC_STATUS_SUCCESS )
@@ -2632,7 +2632,7 @@ CcspCwmpsoMcoDownload
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -2642,7 +2642,7 @@ CcspCwmpsoMcoDownload
     }
     else
     {
-        pStartTime = (PANSC_UNIVERSAL_TIME)CcspTr069PaAllocateMemory(sizeof(ANSC_UNIVERSAL_TIME));
+        pStartTime = (PANSC_UNIVERSAL_TIME)AnscAllocateMemory(sizeof(ANSC_UNIVERSAL_TIME));
 
         if( pStartTime != NULL)
         {
@@ -2654,7 +2654,7 @@ CcspCwmpsoMcoDownload
             pStartTime->DayOfMonth = 1;
         }
 
-        pCompleteTime = (PANSC_UNIVERSAL_TIME)CcspTr069PaAllocateMemory(sizeof(ANSC_UNIVERSAL_TIME));
+        pCompleteTime = (PANSC_UNIVERSAL_TIME)AnscAllocateMemory(sizeof(ANSC_UNIVERSAL_TIME));
 
         if( pCompleteTime != NULL)
         {
@@ -2718,12 +2718,12 @@ EXIT2:
 
     if ( pStartTime )
     {
-        CcspTr069PaFreeMemory(pStartTime);
+        AnscFreeMemory(pStartTime);
     }
 
     if ( pCompleteTime )
     {
-        CcspTr069PaFreeMemory(pCompleteTime);
+        AnscFreeMemory(pCompleteTime);
     }
 
     if ( pCwmpSoapFault )
@@ -2863,7 +2863,7 @@ CcspCwmpsoMcoReboot
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -3045,7 +3045,7 @@ ANSC_STATUS CcspCwmpSetRebootReason(ANSC_HANDLE                 hThisObject)
                 (unsigned int)pInsNumbers[k],                                           \
                 arg                                                                     \
             );                                                                          \
-        pParamValueArray[i].Name = CcspTr069PaCloneString(buf);                         \
+        pParamValueArray[i].Name = AnscCloneString(buf);                         \
     } while (0) 
 
 
@@ -3074,7 +3074,7 @@ CcspCwmpsoMcoChangeDUState_PrepareArgs
     *pulArraySize       = 0;
 
     pParamValueArray = 
-        (PCCSP_CWMP_PARAM_VALUE)CcspTr069PaAllocateMemory
+        (PCCSP_CWMP_PARAM_VALUE)AnscAllocateMemory
             (
                 sizeof(CCSP_CWMP_PARAM_VALUE) * CCSP_NS_CDS_OPERATION_ARG_MAX_COUNT * pCdsReq->NumOperations
             );
@@ -3115,7 +3115,7 @@ CcspCwmpsoMcoChangeDUState_PrepareArgs
         pParamValueArray[i].Value           = pSlapVar;
 
         pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-        pSlapVar->Variant.varString = CcspTr069PaCloneString(pCdsReq->CommandKey);
+        pSlapVar->Variant.varString = AnscCloneString(pCdsReq->CommandKey);
 
         i++;
 
@@ -3132,17 +3132,17 @@ CcspCwmpsoMcoChangeDUState_PrepareArgs
         {
             case    CCSP_TR069_CDS_OP_Install:
         
-                    pSlapVar->Variant.varString = CcspTr069PaCloneString(CCSP_NS_CDS_OPERATION_Install);
+                    pSlapVar->Variant.varString = AnscCloneString(CCSP_NS_CDS_OPERATION_Install);
 
                     break;
             case    CCSP_TR069_CDS_OP_Update:
         
-                    pSlapVar->Variant.varString = CcspTr069PaCloneString(CCSP_NS_CDS_OPERATION_Update);
+                    pSlapVar->Variant.varString = AnscCloneString(CCSP_NS_CDS_OPERATION_Update);
 
                     break;
             case    CCSP_TR069_CDS_OP_Uninstall:
         
-                    pSlapVar->Variant.varString = CcspTr069PaCloneString(CCSP_NS_CDS_OPERATION_Remove);
+                    pSlapVar->Variant.varString = AnscCloneString(CCSP_NS_CDS_OPERATION_Remove);
 
                     break;
 
@@ -3162,7 +3162,7 @@ CcspCwmpsoMcoChangeDUState_PrepareArgs
         pParamValueArray[i].Value           = pSlapVar;
 
         pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-        pSlapVar->Variant.varString = CcspTr069PaCloneString(CCSP_NS_CDS_OPERATION_STATE_Requested);
+        pSlapVar->Variant.varString = AnscCloneString(CCSP_NS_CDS_OPERATION_STATE_Requested);
 
         i++;
 
@@ -3182,7 +3182,7 @@ CcspCwmpsoMcoChangeDUState_PrepareArgs
             pParamValueArray[i].Value           = pSlapVar;
 
             pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-            pSlapVar->Variant.varString = CcspTr069PaCloneString(pValue);
+            pSlapVar->Variant.varString = AnscCloneString(pValue);
 
             i++;
         }
@@ -3211,7 +3211,7 @@ CcspCwmpsoMcoChangeDUState_PrepareArgs
             pParamValueArray[i].Value           = pSlapVar;
 
             pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-            pSlapVar->Variant.varString = CcspTr069PaCloneString(pValue);
+            pSlapVar->Variant.varString = AnscCloneString(pValue);
 
             i++;
         }
@@ -3232,7 +3232,7 @@ CcspCwmpsoMcoChangeDUState_PrepareArgs
             pParamValueArray[i].Value           = pSlapVar;
 
             pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-            pSlapVar->Variant.varString = CcspTr069PaCloneString(pValue);
+            pSlapVar->Variant.varString = AnscCloneString(pValue);
 
             i++;
         }
@@ -3253,7 +3253,7 @@ CcspCwmpsoMcoChangeDUState_PrepareArgs
             pParamValueArray[i].Value           = pSlapVar;
 
             pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-            pSlapVar->Variant.varString = CcspTr069PaCloneString(pValue);
+            pSlapVar->Variant.varString = AnscCloneString(pValue);
 
             i++;
         }
@@ -3271,7 +3271,7 @@ CcspCwmpsoMcoChangeDUState_PrepareArgs
             pParamValueArray[i].Value           = pSlapVar;
 
             pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-            pSlapVar->Variant.varString = CcspTr069PaCloneString(pValue);
+            pSlapVar->Variant.varString = AnscCloneString(pValue);
 
             i++;
         }
@@ -3292,7 +3292,7 @@ CcspCwmpsoMcoChangeDUState_PrepareArgs
             pParamValueArray[i].Value           = pSlapVar;
 
             pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-            pSlapVar->Variant.varString = CcspTr069PaCloneString(pValue);
+            pSlapVar->Variant.varString = AnscCloneString(pValue);
 
             i++;
         }
@@ -3320,7 +3320,7 @@ EXIT1:
             CcspCwmpCleanParamValue((&pParamValueArray[i]));
         }
 
-        CcspTr069PaFreeMemory(pParamValueArray);
+        AnscFreeMemory(pParamValueArray);
         pParamValueArray = NULL;
     }
 
@@ -3550,7 +3550,7 @@ CcspCwmpsoMcoChangeDUState
 
     if ( ulNoRPCMethodMask & CCSP_CWMP_CFG_RPC_METHOD_NO_Download )
     {
-        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
         if ( !pCwmpSoapFault )
         {
@@ -3569,7 +3569,7 @@ CcspCwmpsoMcoChangeDUState
 
         if ( !bCdsSupported )
         {
-            pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+            pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
             if ( !pCwmpSoapFault )
             {
@@ -3603,7 +3603,7 @@ CcspCwmpsoMcoChangeDUState
             ULONG                   ulArraySize     = 0;
 
             pInsNumbers = 
-                (PULONG)CcspTr069PaAllocateMemory
+                (PULONG)AnscAllocateMemory
                     (
                         sizeof(ULONG) * pCdsReq->NumOperations
                     );
@@ -3620,7 +3620,7 @@ CcspCwmpsoMcoChangeDUState
 
             if ( !pParamValueArray )
             {
-                pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+                pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
                 
                 if ( !pCwmpSoapFault )
                 {
@@ -3689,7 +3689,7 @@ CcspCwmpsoMcoChangeDUState
                                 CcspCwmpCleanParamValue((&pParamValueArray[i]));
                             }
 
-                            CcspTr069PaFreeMemory(pParamValueArray);
+                            AnscFreeMemory(pParamValueArray);
                         }
 
                         if ( returnStatus != ANSC_STATUS_SUCCESS )
@@ -3753,7 +3753,7 @@ CcspCwmpsoMcoChangeDUState
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -3842,7 +3842,7 @@ EXIT1:
 
     if ( pInsNumbers )
     {
-        CcspTr069PaFreeMemory(pInsNumbers);
+        AnscFreeMemory(pInsNumbers);
     }
 
     return  returnStatus;
@@ -3907,7 +3907,7 @@ CcspCwmpsoMcoGetQueuedTransfers
 
     if ( ulNoRPCMethodMask & CCSP_CWMP_CFG_RPC_METHOD_NO_GetQueuedTransfers )
     {
-        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
         if ( !pCwmpSoapFault )
         {
@@ -3933,7 +3933,7 @@ CcspCwmpsoMcoGetQueuedTransfers
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -3990,7 +3990,7 @@ EXIT2:
 
     if ( pQueuedTransferArray )
     {
-        CcspTr069PaFreeMemory(pQueuedTransferArray);
+        AnscFreeMemory(pQueuedTransferArray);
     }
 
     if ( pCwmpSoapFault )
@@ -4085,7 +4085,7 @@ CcspCwmpsoMcoScheduleInform
 
     if ( ulNoRPCMethodMask & CCSP_CWMP_CFG_RPC_METHOD_NO_ScheduleInform )
     {
-        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
         if ( !pCwmpSoapFault )
         {
@@ -4100,7 +4100,7 @@ CcspCwmpsoMcoScheduleInform
     }
     else
     {
-        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
         if ( !pCwmpSoapFault )
         {
@@ -4117,10 +4117,10 @@ CcspCwmpsoMcoScheduleInform
          */
         if ( ulDelaySeconds == 0 )
         {
-            pCwmpSoapFault->soap_faultcode           = CcspTr069PaCloneString(CCSP_CWMP_CPE_SOAP_faultcode_invalidArgs);
-            pCwmpSoapFault->soap_faultstring         = CcspTr069PaCloneString(CCSP_CWMP_CPE_SOAP_faulttext_invalidArgs);
+            pCwmpSoapFault->soap_faultcode           = AnscCloneString(CCSP_CWMP_CPE_SOAP_faultcode_invalidArgs);
+            pCwmpSoapFault->soap_faultstring         = AnscCloneString(CCSP_CWMP_CPE_SOAP_faulttext_invalidArgs);
             pCwmpSoapFault->Fault.FaultCode          = CCSP_CWMP_CPE_CWMP_FaultCode_invalidArgs;
-            pCwmpSoapFault->Fault.FaultString        = CcspTr069PaCloneString(CCSP_CWMP_CPE_CWMP_FaultText_invalidArgs);
+            pCwmpSoapFault->Fault.FaultString        = AnscCloneString(CCSP_CWMP_CPE_CWMP_FaultText_invalidArgs);
             pCwmpSoapFault->SetParamValuesFaultCount = 0;
         }
         else
@@ -4152,7 +4152,7 @@ CcspCwmpsoMcoScheduleInform
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -4281,7 +4281,7 @@ CcspCwmpsoMcoSetVouchers
     PCCSP_CWMP_SOAP_FAULT           pCwmpSoapFault     = (PCCSP_CWMP_SOAP_FAULT      )NULL;
 
     /* this RPC has been deprecated by TR-069 spec */
-    pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+    pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
     if ( !pCwmpSoapFault )
     {
@@ -4298,7 +4298,7 @@ CcspCwmpsoMcoSetVouchers
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -4429,7 +4429,7 @@ CcspCwmpsoMcoGetOptions
     PCCSP_CWMP_SOAP_FAULT           pCwmpSoapFault     = (PCCSP_CWMP_SOAP_FAULT      )NULL;
 
     /* this RPC has been deprecated */
-    pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+    pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
     if ( !pCwmpSoapFault )
     {
@@ -4446,7 +4446,7 @@ CcspCwmpsoMcoGetOptions
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -4588,7 +4588,7 @@ CcspCwmpsoMcoUpload
 
     if ( ulNoRPCMethodMask & CCSP_CWMP_CFG_RPC_METHOD_NO_Upload )
     {
-        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
         if ( !pCwmpSoapFault )
         {
@@ -4617,7 +4617,7 @@ CcspCwmpsoMcoUpload
 
         if ( bUploadSupported )
         {
-            pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+            pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
             if ( !pCwmpSoapFault )
             {
@@ -4632,7 +4632,7 @@ CcspCwmpsoMcoUpload
         }
         else if ( _ansc_strstr(pMcoUploadReq->Url, "@") != NULL )  /* userinfo included */
         {
-            pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+            pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
             if ( !pCwmpSoapFault )
             {
@@ -4664,7 +4664,7 @@ CcspCwmpsoMcoUpload
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {
@@ -4674,7 +4674,7 @@ CcspCwmpsoMcoUpload
     }
     else
     {
-        pStartTime = (PANSC_UNIVERSAL_TIME)CcspTr069PaAllocateMemory(sizeof(ANSC_UNIVERSAL_TIME));
+        pStartTime = (PANSC_UNIVERSAL_TIME)AnscAllocateMemory(sizeof(ANSC_UNIVERSAL_TIME));
 
         if( pStartTime != NULL)
         {
@@ -4686,7 +4686,7 @@ CcspCwmpsoMcoUpload
             pStartTime->DayOfMonth = 1;
         }
 
-        pCompleteTime = (PANSC_UNIVERSAL_TIME)CcspTr069PaAllocateMemory(sizeof(ANSC_UNIVERSAL_TIME));
+        pCompleteTime = (PANSC_UNIVERSAL_TIME)AnscAllocateMemory(sizeof(ANSC_UNIVERSAL_TIME));
 
         if( pCompleteTime != NULL)
         {
@@ -4747,12 +4747,12 @@ EXIT2:
 
     if ( pStartTime )
     {
-        CcspTr069PaFreeMemory(pStartTime);
+        AnscFreeMemory(pStartTime);
     }
 
     if ( pCompleteTime )
     {
-        CcspTr069PaFreeMemory(pCompleteTime);
+        AnscFreeMemory(pCompleteTime);
     }
 
     if ( pCwmpSoapFault )
@@ -4835,7 +4835,7 @@ CcspCwmpsoMcoFactoryReset
 
     if ( ulNoRPCMethodMask & CCSP_CWMP_CFG_RPC_METHOD_NO_FactoryReset )
     {
-        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+        pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
         if ( !pCwmpSoapFault )
         {
@@ -4895,7 +4895,7 @@ CcspCwmpsoMcoFactoryReset
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
-    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)CcspTr069PaAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
+    pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )
     {

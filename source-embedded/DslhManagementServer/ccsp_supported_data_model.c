@@ -122,11 +122,11 @@ LoadSDMObject
     objectInfo[id].numberOfChildObjects = 0;
     objectInfo[id].childObjectIDs = NULL;
     objectInfo[id].numberOfParameters = 3;
-    objectInfo[id].parameters = (msParameterInfo *) CcspManagementServer_Allocate(3 * sizeof(msParameterInfo));
+    objectInfo[id].parameters = (msParameterInfo *) AnscAllocateMemory(3 * sizeof(msParameterInfo));
     objectInfo[id].access = CCSP_RO;
-    objectInfo[id].parameters[SupportedDataModelURLID].name = CcspManagementServer_CloneString("URL");
-    objectInfo[id].parameters[SupportedDataModelURNID].name = CcspManagementServer_CloneString("URN");
-    objectInfo[id].parameters[SupportedDataModelFeaturesID].name = CcspManagementServer_CloneString("Features");
+    objectInfo[id].parameters[SupportedDataModelURLID].name = AnscCloneString("URL");
+    objectInfo[id].parameters[SupportedDataModelURNID].name = AnscCloneString("URN");
+    objectInfo[id].parameters[SupportedDataModelFeaturesID].name = AnscCloneString("Features");
     for(i = 0; i<3; i++)
     {
         objectInfo[id].parameters[i].notification = 0;
@@ -147,7 +147,7 @@ LoadSDMObject
          if((rc == EOK) && (ind == 0))
         {
             pChildNode->GetDataString(pChildNode, "URL", paramterValue, &ulSize);
-            objectInfo[id].parameters[SupportedDataModelURLID].value = CcspManagementServer_CloneString(paramterValue);
+            objectInfo[id].parameters[SupportedDataModelURLID].value = AnscCloneString(paramterValue);
         }
         else
         {
@@ -156,7 +156,7 @@ LoadSDMObject
            if ((rc == EOK) && (ind == 0))
            {
             pChildNode->GetDataString(pChildNode, "URN", paramterValue, &ulSize);
-            objectInfo[id].parameters[SupportedDataModelURNID].value = CcspManagementServer_CloneString(paramterValue);
+            objectInfo[id].parameters[SupportedDataModelURNID].value = AnscCloneString(paramterValue);
             }
           else
           {
@@ -166,7 +166,7 @@ LoadSDMObject
             if ((rc == EOK) && (ind == 0))
            {
             pChildNode->GetDataString(pChildNode, "Features", paramterValue, &ulSize);
-            objectInfo[id].parameters[SupportedDataModelFeaturesID].value = CcspManagementServer_CloneString(paramterValue);
+            objectInfo[id].parameters[SupportedDataModelFeaturesID].value = AnscCloneString(paramterValue);
            }
           }
 
@@ -189,13 +189,13 @@ LoadFromXMLFile(void*  pXMLHandle)
 
     CcspTraceDebug(( "LoadFromXMLFile 0: %p, smbObjNum=%d\n", pXMLHandle, sdmObjectNumber));
 
-    objectInfo = (msObjectInfo *)CcspManagementServer_Allocate((SupportedDataModelID + sdmObjectNumber + 1) * sizeof(msObjectInfo));
+    objectInfo = (msObjectInfo *)AnscAllocateMemory((SupportedDataModelID + sdmObjectNumber + 1) * sizeof(msObjectInfo));
 
-    objectInfo[SupportedDataModelID].name = CcspManagementServer_CloneString(_SupportedDataModelObjectName);
+    objectInfo[SupportedDataModelID].name = AnscCloneString(_SupportedDataModelObjectName);
     objectInfo[SupportedDataModelID].numberOfChildObjects = sdmObjectNumber;
     if(sdmObjectNumber > 0)
     {
-        objectInfo[SupportedDataModelID].childObjectIDs = (unsigned int *) CcspManagementServer_Allocate(sdmObjectNumber * sizeof(unsigned int));
+        objectInfo[SupportedDataModelID].childObjectIDs = (unsigned int *) AnscAllocateMemory(sdmObjectNumber * sizeof(unsigned int));
         for(i = 0; i<sdmObjectNumber; i++)
         {
             objectInfo[SupportedDataModelID].childObjectIDs[i] = SupportedDataModelID + i + 1;
@@ -263,7 +263,7 @@ CcspManagementServer_FillInSDMObjectInfo()
 
             if( iContentSize < 500000)
             {
-                char * pOrigFileContent = CcspManagementServer_Allocate(iContentSize + 1);
+                char * pOrigFileContent = AnscAllocateMemory(iContentSize + 1);
                 /*RDKB-7334, CID-33035, null check and use*/
                 if(pOrigFileContent)
                 {
@@ -284,7 +284,7 @@ CcspManagementServer_FillInSDMObjectInfo()
                         pRootNode->Remove(pRootNode);
                     }
                     /*RDKB-7334, CID-33035, free memory after use*/
-                    CcspManagementServer_Free(pOrigFileContent);
+                    AnscFreeMemory(pOrigFileContent);
                     pOrigFileContent = pFileContent = NULL;
                 }
 
@@ -296,9 +296,9 @@ CcspManagementServer_FillInSDMObjectInfo()
     else
     {
         sdmObjectNumber = 0;
-        objectInfo = (msObjectInfo *)CcspManagementServer_Allocate((SupportedDataModelID + sdmObjectNumber + 1) * sizeof(msObjectInfo));
+        objectInfo = (msObjectInfo *)AnscAllocateMemory((SupportedDataModelID + sdmObjectNumber + 1) * sizeof(msObjectInfo));
 
-        objectInfo[SupportedDataModelID].name = CcspManagementServer_CloneString(_SupportedDataModelObjectName);
+        objectInfo[SupportedDataModelID].name = AnscCloneString(_SupportedDataModelObjectName);
         objectInfo[SupportedDataModelID].numberOfChildObjects = sdmObjectNumber;
         objectInfo[SupportedDataModelID].childObjectIDs = NULL;
         objectInfo[SupportedDataModelID].numberOfParameters = 0;
@@ -321,7 +321,7 @@ CcspManagementServer_GetSupportedDataModel_URL
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ObjectID].parameters[SupportedDataModelURLID].value);
+    return AnscCloneString(objectInfo[ObjectID].parameters[SupportedDataModelURLID].value);
 }
 
 /* CcspManagementServer_GetSupportedDataModel_URN is called to get
@@ -336,7 +336,7 @@ CcspManagementServer_GetSupportedDataModel_URN
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ObjectID].parameters[SupportedDataModelURNID].value);
+    return AnscCloneString(objectInfo[ObjectID].parameters[SupportedDataModelURNID].value);
 }
 
 /* CcspManagementServer_GetSupportedDataModel_Features is called to get
@@ -351,5 +351,5 @@ CcspManagementServer_GetSupportedDataModel_Features
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_CloneString(objectInfo[ObjectID].parameters[SupportedDataModelFeaturesID].value);
+    return AnscCloneString(objectInfo[ObjectID].parameters[SupportedDataModelFeaturesID].value);
 }

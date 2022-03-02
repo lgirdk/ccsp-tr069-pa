@@ -2337,14 +2337,6 @@ CcspCwmpsoMcoDownload_PrepareArgs
     {
         return  ANSC_STATUS_RESOURCES;
     }
-    else
-    {
-        AnscZeroMemory
-            (
-                pParamValueArray, 
-                CCSP_NS_DOWNLOAD_ARG_MAX_COUNT * sizeof(CCSP_CWMP_PARAM_VALUE)
-            );
-    }
 
     /* CommandKey */
     SlapAllocVariable(pSlapVar);
@@ -2706,7 +2698,6 @@ CcspCwmpsoMcoDownload
         {
             /* according to TR-069 Spec, and rev 1-4, use unknown time if operation has not finished */
             /* AnscGetSystemTime(pStartTime); */
-            AnscZeroMemory(pStartTime, sizeof(ANSC_UNIVERSAL_TIME));
 
             pStartTime->Year       = 1;
             pStartTime->Month      = 1;
@@ -2720,7 +2711,6 @@ CcspCwmpsoMcoDownload
             /* AnscGetSystemTime(pCompleteTime); */
 
             /* WT-151 requires to return Unknown Time if the operation is not fully complete */
-            AnscZeroMemory(pCompleteTime, sizeof(ANSC_UNIVERSAL_TIME));
 
             pCompleteTime->Year       = 1;
             pCompleteTime->Month      = 1;
@@ -3151,14 +3141,6 @@ CcspCwmpsoMcoChangeDUState_PrepareArgs
     if ( !pParamValueArray )
     {
         return  ANSC_STATUS_RESOURCES;
-    }
-    else
-    {
-        AnscZeroMemory
-            (
-                pParamValueArray, 
-                CCSP_NS_CDS_OPERATION_ARG_MAX_COUNT * sizeof(CCSP_CWMP_PARAM_VALUE) * pCdsReq->NumOperations
-            );
     }
 
     returnStatus =
@@ -4757,7 +4739,6 @@ CcspCwmpsoMcoUpload
         {
             /* according to TR-069 Spec, and rev 1-4, use unknown time if operation has not finished */
             /* AnscGetSystemTime(pStartTime); */
-            AnscZeroMemory(pStartTime, sizeof(ANSC_UNIVERSAL_TIME));
 
             pStartTime->Year       = 1;
             pStartTime->Month      = 1;
@@ -4771,7 +4752,6 @@ CcspCwmpsoMcoUpload
             /* AnscGetSystemTime(pCompleteTime); */
 
             /* WT-151 requires to return Unknown Time if the operation is not fully complete */
-            AnscZeroMemory(pCompleteTime, sizeof(ANSC_UNIVERSAL_TIME));
 
             pCompleteTime->Year       = 1;
             pCompleteTime->Month      = 1;

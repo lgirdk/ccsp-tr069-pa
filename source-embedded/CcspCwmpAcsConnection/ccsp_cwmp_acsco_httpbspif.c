@@ -157,8 +157,6 @@ CcspCwmpAcscoHttpBspPolish
     	char    *cookies        = (char *)CcspTr069PaAllocateMemory(size_cookies);
 
     	if (cookies) {
-        	AnscZeroMemory(cookies, size_cookies);
-
             for ( i = 0; i < pMyObject->NumCookies; i ++ )
             {
             	if ( pMyObject->Cookies[i] == NULL )

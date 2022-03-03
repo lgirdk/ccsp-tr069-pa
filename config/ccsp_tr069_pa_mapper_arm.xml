@@ -515,6 +515,9 @@
 	<Param>
             <Name>Device.DeviceInfo.X_CISCO_COM_FirmwareName</Name>
         </Param>
+        <Param>
+            <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_LastRebootReason</Name>
+        </Param>
 		<Param>
             <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_LoggerEnable</Name>
         </Param>

@@ -3516,6 +3516,12 @@ CcspCwmppoMpaSetParameterAttributes
                 pNsList->NaType = CCSP_NORMALIZED_ACTION_TYPE_SPA;
                 pAttrInfo       = &pNsList->Args.paramAttrInfo;
 
+                if((strstr(pParamName,"CPUUsage") != NULL) && (pParamAttr->Notification == CCSP_CWMP_NOTIFICATION_active))
+                {
+                    returnStatus = ANSC_STATUS_FAILURE;
+                    goto EXIT2;
+                }
+
                 pAttrInfo->parameterName        = pParamName;
                 pAttrInfo->notificationChanged  = pParamAttr->bNotificationChange;
                 pAttrInfo->notification         = pParamAttr->Notification != CCSP_CWMP_NOTIFICATION_off;

@@ -3321,6 +3321,24 @@
             <Name>Device.NAT.X_Comcast_com_EnableHSPortMapping</Name>
         </Param>
 	<Param>
+            <Name>Device.NAT.X_Comcast_com_EnableNATMapping</Name>
+        </Param>
+	<Param>
+            <Name>Device.NAT.X_CISCO_COM_DMZ.RemoteIPStart</Name>
+        </Param>
+	<Param>
+            <Name>Device.NAT.X_CISCO_COM_DMZ.RemoteIPEnd</Name>
+        </Param>
+	<Param>
+            <Name>Device.NAT.X_CISCO_COM_DMZ.InternalMAC</Name>
+        </Param>
+	<Param>
+            <Name>Device.NAT.X_CISCO_COM_DMZ.Data</Name>
+        </Param>
+	<Param>
+            <Name>Device.NAT.X_RDK_PortMapping.Data</Name>
+        </Param>
+	<Param>
             <Name>Device.NAT.PortMapping.{i}.X_CISCO_COM_InternalClientV6</Name>
         </Param>
 	<Param>

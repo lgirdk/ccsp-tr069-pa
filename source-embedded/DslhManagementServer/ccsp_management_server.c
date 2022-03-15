@@ -1243,9 +1243,16 @@ static long lIPv4FallbackActiveTime = 0;
 void CcspManagementServer_IPv4Fallback_ProcessRequestStatus(ANSC_STATUS status)
 {
     struct sysinfo si;
+    static int retryCount = 0;
+    static int fallbackCount = 0;
+    static BOOL previousConnectedURLwasIPv6 = FALSE;
 
     if (status == ANSC_STATUS_SUCCESS)
     {
+        retryCount = 0;
+        fallbackCount = 0;
+        previousConnectedURLwasIPv6 = (strchr(objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value, '[')) ? TRUE : FALSE;
+
         if (bIPv4FallbackActive)
         {
             sysinfo(&si);
@@ -1255,11 +1262,39 @@ void CcspManagementServer_IPv4Fallback_ProcessRequestStatus(ANSC_STATUS status)
             }
         }
     }
+    else if ((fallbackCount == 0) && (retryCount <= 2))
+    {
+        if (previousConnectedURLwasIPv6)
+        {
+            sysinfo(&si);
+            lIPv4FallbackActiveTime = si.uptime;
+            bIPv4FallbackActive = TRUE;
+        }
+        else
+        {
+            bIPv4FallbackActive = FALSE;
+        }
+
+        if (++retryCount == 2)
+        {
+            fallbackCount = 2;
+        }
+    }
     else
     {
-        sysinfo(&si);
-        lIPv4FallbackActiveTime = si.uptime;
-        bIPv4FallbackActive = TRUE;
+        if (fallbackCount == 2)
+        {
+            bIPv4FallbackActive = !bIPv4FallbackActive;
+        }
+
+        if (--fallbackCount == 0)
+        {
+            retryCount = 0;
+        }
+        else
+        {
+            retryCount = 2;
+        }
     }
 }
 

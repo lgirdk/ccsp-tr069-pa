@@ -1904,6 +1904,9 @@
 	    <Name>Device.WiFi.AccessPoint.{i}.X_CISCO_COM_MacFilterTable.{i}.MACAddress</Name>
 	</Param>
 	<Param>
+	    <Name>Device.WiFi.AccessPoint.{i}.X_CISCO_COM_MacFilterTable.{i}.Description</Name>
+	</Param>
+	<Param>
             <Name>Device.WiFi.AccessPoint.{i}.Accounting.Enable</Name>
 	</Param>
 	<Param>
@@ -3132,6 +3135,9 @@
         </Param>
         <Param>
             <Name>Device.Firewall.X_RDKCENTRAL-COM_Security.MACFiltering.Device.{i}.MACAddress</Name>
+        </Param>
+        <Param>
+            <Name>Device.Firewall.X_RDKCENTRAL-COM_Security.MACFiltering.Device.{i}.Description</Name>
         </Param>
         <Param>
             <Name>Device.Firewall.X_RDKCENTRAL-COM_Security.V4.Enable</Name>

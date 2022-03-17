@@ -929,9 +929,13 @@ CcspCwmpAcsboMsoValueChanged
     PCCSP_CWMP_SESSION_OBJECT        pCcspCwmpSession       = (PCCSP_CWMP_SESSION_OBJECT   )NULL;
 
     /*
-     * The target WmpSession must be inactive...
+     * The target WmpSession must be the first available session...
+     *
+     * Target session changed from inactive to first available session
+     * to handle a scenario where 4 VALUE CHANGE is not sent when a 6 CONNECTION REQUEST
+     * event is being deleted due to network failure
      */
-    pCcspCwmpSession = (PCCSP_CWMP_SESSION_OBJECT)pCcspCwmpProcessor->AcqWmpSession2((ANSC_HANDLE)pCcspCwmpProcessor);
+    pCcspCwmpSession = (PCCSP_CWMP_SESSION_OBJECT)pCcspCwmpProcessor->AcqWmpSession((ANSC_HANDLE)pCcspCwmpProcessor);
 
     if ( !pCcspCwmpSession )
     {

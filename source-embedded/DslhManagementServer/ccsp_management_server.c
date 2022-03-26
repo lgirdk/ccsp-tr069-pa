@@ -1288,19 +1288,22 @@ void CcspManagementServer_IPv4Fallback_ProcessRequestStatus(ANSC_STATUS status)
 {
     struct sysinfo si;
 
-    sysinfo(&si);
-
     if (status == ANSC_STATUS_SUCCESS)
     {
-        if (bIPv4FallbackActive && (si.uptime - lIPv4FallbackActiveTime) > 600)
+        if (bIPv4FallbackActive)
         {
-            bIPv4FallbackActive = FALSE;
+            sysinfo(&si);
+            if ((si.uptime - lIPv4FallbackActiveTime) > 600)
+            {
+                bIPv4FallbackActive = FALSE;
+            }
         }
     }
     else
     {
-        bIPv4FallbackActive = TRUE;
+        sysinfo(&si);
         lIPv4FallbackActiveTime = si.uptime;
+        bIPv4FallbackActive = TRUE;
     }
 }
 

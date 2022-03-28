@@ -614,8 +614,9 @@ CcspManagementServer_Init
 		AnscTraceWarning(("%s -#- ACS URL from PSM DB- %s\n", __FUNCTION__, objectInfo[ManagementServerID].parameters[ManagementServerURLID].value));
 
 	}
-    char str[100] = {0};
-    _ansc_ultoa(g_ulAllocatedSizeCurr, str, 10);
+
+    char str[24];
+    snprintf(str, sizeof(str), "%lu", g_ulAllocatedSizeCurr);
     objectInfo[MemoryID].parameters[MemoryMinUsageID].value = CcspManagementServer_CloneString(str);
 
     // To check and wait for system ready signal from CR to proceed further
@@ -1935,10 +1936,9 @@ CcspManagementServer_GetMemory_MaxUsageStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    char str[100] = {0};
-    _ansc_ultoa(g_ulAllocatedSizePeak, str, 10);
 
-    //return CcspManagementServer_CloneString(objectInfo[MemoryID].parameters[MemoryMaxUsageID].value);
+    char str[24];
+    snprintf(str, sizeof(str), "%lu", g_ulAllocatedSizePeak);
     return CcspManagementServer_CloneString(str);
 }
 
@@ -1966,10 +1966,8 @@ CcspManagementServer_GetMemory_ConsumedStr
         CCSP_STRING                 ComponentName
     )
 {
-    char str[100] = {0};
-    _ansc_ultoa(CcspManagementServer_GetMemory_Consumed(ComponentName), str, 10);
-
-    //return CcspManagementServer_CloneString(objectInfo[MemoryID].parameters[MemoryConsumedID].value);
+    char str[24];
+    snprintf(str, sizeof(str), "%lu", CcspManagementServer_GetMemory_Consumed(ComponentName));
     return CcspManagementServer_CloneString(str);
 }
 

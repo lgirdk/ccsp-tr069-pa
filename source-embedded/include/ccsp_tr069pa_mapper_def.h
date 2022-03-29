@@ -152,6 +152,7 @@ CCSP_TR069_RPC_MAP, *PCCSP_TR069_RPC_MAP;
 #define  CCSP_CLOUD_DATA_TYPE_NAME_BOOL             "bool"
 #define  CCSP_CLOUD_DATA_TYPE_NAME_DATETIME         "dateTime"
 #define  CCSP_CLOUD_DATA_TYPE_NAME_BASE64           "base64"
+#define  CCSP_CLOUD_DATA_TYPE_NAME_hexBinary        "hexBinary"
 
 #define  CCSP_CLOUD_DATA_TYPE_UNSPECIFIED           0
 #define  CCSP_CLOUD_DATA_TYPE_OBJECT                1
@@ -161,6 +162,7 @@ CCSP_TR069_RPC_MAP, *PCCSP_TR069_RPC_MAP;
 #define  CCSP_CLOUD_DATA_TYPE_BOOL                  5
 #define  CCSP_CLOUD_DATA_TYPE_DATETIME              6
 #define  CCSP_CLOUD_DATA_TYPE_BASE64                7
+#define  CCSP_CLOUD_DATA_TYPE_HEXBINARY             8
 
 
 typedef  struct

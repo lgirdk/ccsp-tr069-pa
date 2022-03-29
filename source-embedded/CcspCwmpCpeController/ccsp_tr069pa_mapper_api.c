@@ -157,6 +157,12 @@ CcspTr069PA_Cwmp2CcspType
                 ccspType = ccsp_base64;
 
                 break;
+
+        case    CCSP_CWMP_TR069_DATA_TYPE_HexBinary:
+
+                ccspType = ccsp_hexBinary;
+
+                break;
     }
 
     return  ccspType;
@@ -206,6 +212,12 @@ CcspTr069PA_Ccsp2CwmpType
         case    ccsp_base64:
 
                 cwmpType = CCSP_CWMP_TR069_DATA_TYPE_Base64;
+
+                break;
+
+        case    ccsp_hexBinary:
+
+                cwmpType = CCSP_CWMP_TR069_DATA_TYPE_HexBinary;
 
                 break;
 

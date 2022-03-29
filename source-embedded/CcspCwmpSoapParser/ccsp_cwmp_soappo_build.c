@@ -179,6 +179,18 @@ BOOL                                bAddArrayTypeAttr            = TRUE;
                                                                                         \
                     break;                                                              \
                                                                                         \
+            case    CCSP_CWMP_TR069_DATA_TYPE_HexBinary:                                     \
+                                                                                        \
+                    AnscXmlDomNodeSetAttrString                                         \
+                        (                                                               \
+                            pChildNode,                                                 \
+                            "xsi:type",                                                 \
+                            "xsd:hexBinary",                                            \
+                            AnscSizeOfString("xsd:hexBinary")                           \
+                        );                                                              \
+                                                                                        \
+                    break;                                                              \
+                                                                                        \
             default:                                                                    \
                                                                                         \
                     AnscXmlDomNodeSetAttrString                                         \

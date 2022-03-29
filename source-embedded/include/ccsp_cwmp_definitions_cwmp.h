@@ -413,6 +413,7 @@
 #define  CCSP_CWMP_TR069_DATA_TYPE_Boolean               4
 #define  CCSP_CWMP_TR069_DATA_TYPE_DateTime              5
 #define  CCSP_CWMP_TR069_DATA_TYPE_Base64                6
+#define  CCSP_CWMP_TR069_DATA_TYPE_HexBinary             7
 
 /*
  * On successful receipt of a SetParameterValues RPC, the CPE MUST apply the changes to each of the

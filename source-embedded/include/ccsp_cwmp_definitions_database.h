@@ -137,6 +137,7 @@
 #define  CCSP_CWMP_DATA_NAME_boolean                "boolean"
 #define  CCSP_CWMP_DATA_NAME_dateTime               "dateTime"
 #define  CCSP_CWMP_DATA_NAME_base64                 "base64"
+#define  CCSP_CWMP_DATA_NAME_hexBinary              "hexBinary"
 
 #define  CCSP_CWMP_DATA_INVALID_VALUE_TYPE          1
 

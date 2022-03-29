@@ -825,6 +825,10 @@ CcspCwmpSoappoUtilGetParamValue
             {
                 pCwmpParam->Tr069DataType = CCSP_CWMP_TR069_DATA_TYPE_Base64;
             }
+            else if ( AnscEqualString(pDataType, CCSP_CWMP_DATA_NAME_hexBinary, TRUE) )
+            {
+                pCwmpParam->Tr069DataType = CCSP_CWMP_TR069_DATA_TYPE_HexBinary;
+            }
             else
             {
                 pCwmpParam->Tr069DataType = CCSP_CWMP_TR069_DATA_TYPE_Unspecified;

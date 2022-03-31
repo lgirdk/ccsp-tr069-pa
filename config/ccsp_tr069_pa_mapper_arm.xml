@@ -7901,6 +7901,9 @@
         <Param>
             <Name>Device.X_LGI-COM_DeviceControl.SSH.Username</Name>
         </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_DeviceControl.SSH.SessionTimeout</Name>
+        </Param>
   <!--  Parameters under "Device.X_LGI-COM_DigitalSecurity" -->
         <Param>
             <Name>Device.X_LGI-COM_DigitalSecurity.Enable</Name>

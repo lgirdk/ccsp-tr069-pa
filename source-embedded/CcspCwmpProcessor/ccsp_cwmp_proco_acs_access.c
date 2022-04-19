@@ -396,8 +396,17 @@ CcspCwmppoGetAcsInfo
 
         /*
            If the new URL is too long or the same as the current URL then ignore it.
+           Note that the current URL could be an empty string.
         */
-     	if ((strlen(pProperty->AcsUrl) > 0) && (len < sizeof(pProperty->AcsUrl)) && (strncmp (pValue, pProperty->AcsUrl, (sizeof(pProperty->AcsUrl) -1 )) != 0))
+        if (len >= sizeof(pProperty->AcsUrl))
+        {
+            /* new string too long, ignoring */
+        }
+        else if (memcmp (pProperty->AcsUrl, pValue, len + 1) == 0)
+        {
+            /* new string matches current one, ignoring */
+        }
+        else
         {
             CcspTr069PaTraceDebug(("%s %d  (ACS URL CHANGED) OLD ACS URL:%s NEW ACS URL:%s\n",__FUNCTION__,__LINE__,pProperty->AcsUrl,pValue));
             memcpy (pProperty->AcsUrl, pValue, len + 1);

@@ -193,20 +193,6 @@ enum
     ManagementServerManageableDeviceNotificationLimitID,
     ManagementServerNumOfParameters
 };
-#if 0
-//Not used anymore
-//#ifndef _COSA_VEN501_
-/*for compilation, don't worry for crash, these parameters are not registered.*/
-enum
-{
-    ManagementServerKickURLID = 1000,
-    ManagementServerDownloadProgressURLID,
-    ManagementServerDefaultActiveNotificationThrottleID,
-    ManagementServerCWMPRetryMinimumWaitIntervalID,
-    ManagementServerCWMPRetryIntervalMultiplierID,
-    ManagementServerX_CISCO_COM_ConnectionRequestURLPathID,
-};
-#endif
 
 #define AutonomousTransferCompletePolicyEnableID                0
 #define AutonomousTransferCompletePolicyTransferTypeFilterID    1

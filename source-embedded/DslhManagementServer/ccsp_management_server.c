@@ -233,14 +233,11 @@ msParameterInfo managementServerParameters[] =
     { "ACSOverride", NULL, ccsp_boolean, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "UpgradesManaged", NULL, ccsp_boolean, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "X_CISCO_COM_DiagComplete", NULL, ccsp_boolean, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
-// #if 0 //Not used anymore
-#ifndef _COSA_VEN501_
     { "KickURL", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
     { "DownloadProgressURL", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
     { "DefaultActiveNotificationThrottle", NULL, ccsp_unsignedInt, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "CWMPRetryMinimumWaitInterval", NULL, ccsp_unsignedInt, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "CWMPRetryIntervalMultiplier", NULL, ccsp_unsignedInt, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
-#endif
     { "UDPConnectionRequestAddress", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
     { "UDPConnectionRequestAddressNotificationLimit", NULL, ccsp_unsignedInt, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "STUNEnable", NULL, ccsp_boolean, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
@@ -252,11 +249,8 @@ msParameterInfo managementServerParameters[] =
     { "STUNMinimumKeepAlivePeriod", NULL, ccsp_unsignedInt, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "NATDetected", NULL, ccsp_boolean, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
     { "AliasBasedAddressing", NULL, ccsp_boolean, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
-// #if 0 //Not used anymore
-#ifndef _COSA_VEN501_
     { "X_CISCO_COM_ConnectionRequestURLPort", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "X_CISCO_COM_ConnectionRequestURLPath", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0), (unsigned int)0 }
-#endif
 };
 
 msParameterInfo autonomousTransferCompletePolicyParameters[] = 
@@ -319,16 +313,11 @@ CcspManagementServer_FillInObjectInfo()
     objectInfo[DeviceID].parameters = NULL;
 
     objectInfo[ManagementServerID].name = AnscCloneString(_ManagementServerObjectName);
-// #if 0 //Not used anymore
-#ifndef _COSA_VEN501_
     objectInfo[ManagementServerID].numberOfChildObjects = 2;
     objectInfo[ManagementServerID].childObjectIDs = 
         AnscAllocateMemory(objectInfo[ManagementServerID].numberOfChildObjects * sizeof(unsigned int));
     objectInfo[ManagementServerID].childObjectIDs[0] = AutonomousTransferCompletePolicyID;
     objectInfo[ManagementServerID].childObjectIDs[1] = DUStateChangeComplPolicyID;
-#else
-    objectInfo[ManagementServerID].numberOfChildObjects = 0;
-#endif
     objectInfo[ManagementServerID].numberOfParameters = ManagementServerNumOfParameters;
     objectInfo[ManagementServerID].parameters = managementServerParameters;
 
@@ -340,8 +329,6 @@ CcspManagementServer_FillInObjectInfo()
     objectInfo[DeviceInfoID].numberOfParameters = 0;
     objectInfo[DeviceInfoID].parameters = NULL;
 
-// #if 0 //Not used anymore
-#ifndef _COSA_VEN501_    
     objectInfo[AutonomousTransferCompletePolicyID].name = AnscCloneString(_AutonomousTransferCompletePolicyObjectName);
     objectInfo[AutonomousTransferCompletePolicyID].numberOfChildObjects = 0;
     objectInfo[AutonomousTransferCompletePolicyID].numberOfParameters = AutonomousTransferCompletePolicyNumOfParameters;
@@ -351,7 +338,6 @@ CcspManagementServer_FillInObjectInfo()
     objectInfo[DUStateChangeComplPolicyID].numberOfChildObjects = 0;
     objectInfo[DUStateChangeComplPolicyID].numberOfParameters = DUStateChangeComplPolicyNumOfParameters;
     objectInfo[DUStateChangeComplPolicyID].parameters = duStateChangeComplPolicyParameters;
-#endif
 
     objectInfo[ComID].name = AnscCloneString(_ComObjectName);
     objectInfo[ComID].numberOfChildObjects = 1;
@@ -473,12 +459,7 @@ CcspManagementServer_FillInObjectInfo()
     rc = strncpy_s(pRecordName, sizeof(pRecordName), CcspManagementServer_ComponentName, len1);
     ERR_CHK(rc);
     pRecordName[len1] = '.';
-// #if 0 //Not used anymore_
-#ifndef _COSA_VEN501_
     for(i = ManagementServerID; i<=DUStateChangeComplPolicyID; i++){ /* Assume no persistent state for com. objects. */
-#else
-        for(i = ManagementServerID; i<= DeviceInfoID; i++){ /* Assume no persistent state for com. objects. */
-#endif
         len2 = strlen(objectInfo[i].name);
         rc = strncat_s(pRecordName, sizeof(pRecordName), objectInfo[i].name, len2);
         ERR_CHK(rc);
@@ -939,36 +920,6 @@ CcspManagementServer_RegisterWanInterface()
         _ansc_sprintf(CrName, "%s", CCSP_DBUS_INTERFACE_CR);
     }
 
-    /*this macro should be DM_IGD. But currently the root name switch is not finish. DM_IGD is not defined. */
-#if 0
-//#if defined(_COSA_VEN501_)
-    /* We get Address path name directly for TR-098*/
-
-    char * parameterNames[1];
-    parameterNames[0] = AnscCloneString(FirstUpstreamIpInterfaceParameterName);
-
-    parameterValStruct_t **parameterval = NULL;
-    int val_size = 0;
-    int res = CcspBaseIf_getParameterValues(
-        bus_handle,
-        pPAMComponentName,
-        pPAMComponentPath,
-        parameterNames,
-        1,
-        &val_size,
-        &parameterval);
-    if(parameterNames[0]) AnscFreeMemory(parameterNames[0]);
-    if( (res==CCSP_SUCCESS) && (val_size > 0) && (AnscSizeOfString(parameterval[0]->parameterValue) > 0) ) {
-        CcspTraceDebug2("ms", ("CcspManagementServer_RegisterWanInterface pFirstUpstreamIpv4Address is: %s\n", parameterval[0]->parameterValue));
-
-        pFirstUpstreamIpAddress = AnscCloneString(parameterval[0]->parameterValue);
-        free_parameterValStruct_t (bus_handle, val_size, parameterval);
-    }
-    else
-        CcspTraceWarning2("ms", ("CcspManagementServer_RegisterWanInterface gets pFirstUpstreamIpv4Address fail..\n"));
-    
-#else
-
     // Get FirstUpstreamIpInterfaceParameterName parameter value 
     char * parameterNames[1];
     parameterNames[0] = AnscCloneString(FirstUpstreamIpInterfaceParameterName);
@@ -1030,8 +981,6 @@ CcspManagementServer_RegisterWanInterface()
         pFirstUpstreamIpAddress = CcspManagementServer_MergeString(parameterInfo[minInstanceFlag]->parameterName, "IPAddress");
         free_parameterInfoStruct_t (bus_handle, val_size, parameterInfo);
     }
-
-#endif
 
     if(!pFirstUpstreamIpAddress) {
         CcspTraceWarning(("CcspManagementServer_RegisterWanInterface failed to get pFirstUpstreamIpAddress\n"));

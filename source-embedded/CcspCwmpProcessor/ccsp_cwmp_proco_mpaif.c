@@ -1791,20 +1791,23 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                         }				
 
                     }
-                    else if(!strncmp(ParamName[x],"Device.WiFi.AccessPoint.",24))
+                    else if (strncmp(ParamName[x], "Device.WiFi.AccessPoint.", 24) == 0)
                     {
-                        sscanf(ParamName[x],"Device.WiFi.AccessPoint.%d",&index);
-                        //SSID = (1 << ((index)-1));
-                        apply_rf = (2  - ((index)%2));
-                        if(apply_rf == 1)
+                        if ((strcmp(ParamName[x] + 24, "1.WPS.X_LGI-COM_CancelSession") != 0) &&
+                            (strcmp(ParamName[x] + 24, "2.WPS.X_LGI-COM_CancelSession") != 0))
                         {
-                            bRestartRadio1 = TRUE; 
-
-                        }
-                        else if(apply_rf == 2)
-                        {
-                            bRestartRadio2 = TRUE; 
-
+                            if (sscanf(ParamName[x] + 24, "%d", &index) == 1)
+                            {
+                                apply_rf = (2  - (index % 2));
+                                if (apply_rf == 1)
+                                {
+                                    bRestartRadio1 = TRUE;
+                                }
+                                else if (apply_rf == 2)
+                                {
+                                    bRestartRadio2 = TRUE;
+                                }
+                            }
                         }
                     }
                     else if ((strncmp(ParamName[x], "Device.WiFi.X_LGI-COM_SoftBlock.", 32) == 0) ||

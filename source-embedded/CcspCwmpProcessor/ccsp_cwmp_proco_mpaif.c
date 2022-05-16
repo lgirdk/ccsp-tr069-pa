@@ -1791,7 +1791,9 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                     else if (strncmp(ParamName[x], "Device.WiFi.AccessPoint.", 24) == 0)
                     {
                         if ((strcmp(ParamName[x] + 24, "1.WPS.X_LGI-COM_CancelSession") != 0) &&
-                            (strcmp(ParamName[x] + 24, "2.WPS.X_LGI-COM_CancelSession") != 0))
+                            (strcmp(ParamName[x] + 24, "2.WPS.X_LGI-COM_CancelSession") != 0) &&
+                            (strcmp(ParamName[x] + 24, "1.WPS.X_LGI-COM_ActivatePushButton") != 0) &&
+                            (strcmp(ParamName[x] + 24, "2.WPS.X_LGI-COM_ActivatePushButton") != 0))
                         {
                             if (sscanf(ParamName[x] + 24, "%d", &index) == 1)
                             {

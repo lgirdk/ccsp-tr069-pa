@@ -2341,16 +2341,26 @@ CcspCwmpsoMcoDownload_PrepareArgs
         return  ANSC_STATUS_RESOURCES;
     }
 
-    /* CommandKey */
     SlapAllocVariable(pSlapVar);
     if ( !pSlapVar ) goto EXIT1;
 
-    CcspCwmpsoMcoConstructDownloadArgName(CCSP_NS_DOWNLOAD_COMMAND_KEY);
+    char *ptr = strrchr( pDownloadReq->Url, '/' );
+    if( !ptr )
+    {
+        returnStatus = ANSC_STATUS_BAD_PARAMETER;
+        goto EXIT1;
+    }
+
+    char URL[512];
+    memset(URL, 0, sizeof(URL));
+    memcpy(URL, pDownloadReq->Url, strlen(pDownloadReq->Url)-strlen(ptr));
+
+    pParamValueArray[i].Name            = AnscCloneString(CCSP_NS_DOWNLOAD_URL);
     pParamValueArray[i].Tr069DataType   = CCSP_CWMP_TR069_DATA_TYPE_String;
     pParamValueArray[i].Value           = pSlapVar;
 
     pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->CommandKey);
+    pSlapVar->Variant.varString = AnscCloneString(URL);
 
     i++;
 
@@ -2358,121 +2368,15 @@ CcspCwmpsoMcoDownload_PrepareArgs
     SlapAllocVariable(pSlapVar);
     if ( !pSlapVar ) goto EXIT1;
 
-    CcspCwmpsoMcoConstructDownloadArgName(CCSP_NS_DOWNLOAD_FILE_TYPE);
+    pParamValueArray[i].Name            = AnscCloneString(CCSP_NS_DOWNLOAD_FILE_NAME);
     pParamValueArray[i].Tr069DataType   = CCSP_CWMP_TR069_DATA_TYPE_String;
     pParamValueArray[i].Value           = pSlapVar;
 
     pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->FileType);
+    pSlapVar->Variant.varString = AnscCloneString(++ptr);
 
     i++;
 
-    /* URL */
-    SlapAllocVariable(pSlapVar);
-    if ( !pSlapVar ) goto EXIT1;
-
-    CcspCwmpsoMcoConstructDownloadArgName(CCSP_NS_DOWNLOAD_URL);
-    pParamValueArray[i].Tr069DataType   = CCSP_CWMP_TR069_DATA_TYPE_String;
-    pParamValueArray[i].Value           = pSlapVar;
-
-    pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->Url);
-
-    i++;
-
-    /* Username */
-    SlapAllocVariable(pSlapVar);
-    if ( !pSlapVar ) goto EXIT1;
-
-    CcspCwmpsoMcoConstructDownloadArgName(CCSP_NS_DOWNLOAD_USERNAME);
-    pParamValueArray[i].Tr069DataType   = CCSP_CWMP_TR069_DATA_TYPE_String;
-    pParamValueArray[i].Value           = pSlapVar;
-
-    pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->Username);
-
-    i++;
-
-    /* Password */
-    SlapAllocVariable(pSlapVar);
-    if ( !pSlapVar ) goto EXIT1;
-
-    CcspCwmpsoMcoConstructDownloadArgName(CCSP_NS_DOWNLOAD_PASSWORD);
-    pParamValueArray[i].Tr069DataType   = CCSP_CWMP_TR069_DATA_TYPE_String;
-    pParamValueArray[i].Value           = pSlapVar;
-
-    pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->Password);
-
-    i++;
-
-    /* FileSize */
-    SlapAllocVariable(pSlapVar);
-
-    CcspCwmpsoMcoConstructDownloadArgName(CCSP_NS_DOWNLOAD_FILE_SIZE);
-    pParamValueArray[i].Tr069DataType   = CCSP_CWMP_TR069_DATA_TYPE_UnsignedInt;
-    pParamValueArray[i].Value           = pSlapVar;
-
-    _ansc_sprintf(buf, "%u", (unsigned int)pDownloadReq->FileSize);
-
-    pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = AnscCloneString(buf);
-
-    i++;
-
-    /* TargetFileName */
-    SlapAllocVariable(pSlapVar);
-    if ( !pSlapVar ) goto EXIT1;
-
-    CcspCwmpsoMcoConstructDownloadArgName(CCSP_NS_DOWNLOAD_TARGET_FILE_NAME);
-    pParamValueArray[i].Tr069DataType   = CCSP_CWMP_TR069_DATA_TYPE_String;
-    pParamValueArray[i].Value           = pSlapVar;
-
-    pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->TargetFileName);
-
-    i++;
-
-    /* DelaySeconds */
-    SlapAllocVariable(pSlapVar);
-    if ( !pSlapVar ) goto EXIT1;
-
-    CcspCwmpsoMcoConstructDownloadArgName(CCSP_NS_DOWNLOAD_DELAY_SECONDS);
-    pParamValueArray[i].Tr069DataType   = CCSP_CWMP_TR069_DATA_TYPE_UnsignedInt;
-    pParamValueArray[i].Value           = pSlapVar;
-
-    _ansc_sprintf(buf, "%u", (unsigned int)pDownloadReq->DelaySeconds);
-
-    pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = AnscCloneString(buf);
-
-    i++;
-
-    /* SuccessURL */
-    SlapAllocVariable(pSlapVar);
-    if ( !pSlapVar ) goto EXIT1;
-
-    CcspCwmpsoMcoConstructDownloadArgName(CCSP_NS_DOWNLOAD_SUCCESS_URL);
-    pParamValueArray[i].Tr069DataType   = CCSP_CWMP_TR069_DATA_TYPE_String;
-    pParamValueArray[i].Value           = pSlapVar;
-
-    pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->SuccessUrl);
-
-    i++;
-
-    /* FailureURL */
-    SlapAllocVariable(pSlapVar);
-    if ( !pSlapVar ) goto EXIT1;
-
-    CcspCwmpsoMcoConstructDownloadArgName(CCSP_NS_DOWNLOAD_FAILURE_URL);
-    pParamValueArray[i].Tr069DataType   = CCSP_CWMP_TR069_DATA_TYPE_String;
-    pParamValueArray[i].Value           = pSlapVar;
-
-    pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = AnscCloneString(pDownloadReq->FailureUrl);
-
-    i++;
 
     *pulArraySize = (ULONG)i;
     *ppParamValueArray = pParamValueArray;
@@ -2597,6 +2501,40 @@ CcspCwmpsoMcoDownload
                         FALSE
                     );
 
+        if ( returnStatus != ANSC_STATUS_SUCCESS )
+	        goto FAIL_EXIT;
+
+        CCSP_CWMP_PARAM_VALUE       ParamValue      = {0};
+        ULONG                       ulSize          = 1;
+        int                         iStatus         = 0;
+        SLAP_VARIABLE               slapVar;
+
+
+        ParamValue.Name          = AnscCloneString(CCSP_NS_DOWNLOAD_TRIGGER);
+        ParamValue.Tr069DataType = CCSP_CWMP_TR069_DATA_TYPE_Boolean;
+        ParamValue.Value         = &slapVar;
+
+        SlapInitVariable (&slapVar);
+        slapVar.Syntax        = SLAP_VAR_SYNTAX_string;
+        slapVar.Variant.varString   = "1";
+
+        returnStatus =
+            pCcspCwmpMpaIf->SetParameterValues
+                (
+                    pCcspCwmpMpaIf->hOwnerContext,
+                    (ANSC_HANDLE)&ParamValue,
+                    ulSize,
+                    &iStatus,
+                    (ANSC_HANDLE*)&pCwmpSoapFault,
+                    FALSE
+                );
+
+        if ( ParamValue.Name )
+        {
+            AnscFreeMemory(ParamValue.Name);
+            ParamValue.Name = NULL;
+        }
+FAIL_EXIT:
             if ( pParamValueArray )
             {
                 unsigned int                 i;

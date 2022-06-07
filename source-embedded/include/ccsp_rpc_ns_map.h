@@ -107,10 +107,7 @@
 
 #define  CCSP_NS_DOWNLOAD_COMMAND_KEY               "CommandKey"
 #define  CCSP_NS_DOWNLOAD_FILE_TYPE                 "FileType"
-#define  CCSP_NS_DOWNLOAD_URL                       "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadURL"
-#define  CCSP_NS_DOWNLOAD_FILE_NAME                 "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareToDownload"
-#define  CCSP_NS_DOWNLOAD_TRIGGER                   "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadNow"
-
+#define  CCSP_NS_DOWNLOAD_URL                       "URL"
 #define  CCSP_NS_DOWNLOAD_USERNAME                  "UserName"
 #define  CCSP_NS_DOWNLOAD_PASSWORD                  "Password"
 #define  CCSP_NS_DOWNLOAD_FILE_SIZE                 "FileSize"
@@ -125,7 +122,7 @@
 
 #define  CCSP_NS_DOWNLOAD_STATE                     "State"
 
-#define  CCSP_NS_DOWNLOAD_ARG_MAX_COUNT             2
+#define  CCSP_NS_DOWNLOAD_ARG_MAX_COUNT             10
 #define  CCSP_NS_DOWNLOAD_RESULT_ARG_COUNT          4
 
 /**********************************************************************

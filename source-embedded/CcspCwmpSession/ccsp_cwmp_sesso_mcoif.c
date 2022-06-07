@@ -95,6 +95,8 @@
 
 **********************************************************************/
 
+#include <string.h>
+
 #include "ccsp_cwmp_sesso_global.h"
 #include "ccsp_cwmp_acsbo_interface.h"
 #include "ccsp_cwmp_acsbo_exported_api.h"
@@ -2296,20 +2298,6 @@ EXIT1:
 
 **********************************************************************/
 
-#define CcspCwmpsoMcoConstructDownloadArgName(arg)                                      \
-    do {                                                                                \
-        _ansc_sprintf                                                                   \
-            (                                                                           \
-                buf,                                                                    \
-                "%s%s",                                                                 \
-                CCSP_NS_DOWNLOAD,                                                       \
-                arg                                                                     \
-            );                                                                          \
-        pParamValueArray[i].Name = AnscCloneString(buf);                                \
-    } while (0) 
-
-
-
 static
 ANSC_STATUS
 CcspCwmpsoMcoDownload_PrepareArgs
@@ -2323,17 +2311,33 @@ CcspCwmpsoMcoDownload_PrepareArgs
     UNREFERENCED_PARAMETER(pCcspCwmpCpeController);
     ANSC_STATUS                     returnStatus        = ANSC_STATUS_SUCCESS;
     PCCSP_CWMP_PARAM_VALUE          pParamValueArray    = NULL;
-    int                             i                   = 0;
     PSLAP_VARIABLE                  pSlapVar;
-    char                            buf[512];
+    size_t                          len;
+    char                           *p;
 
     *ppParamValueArray  = NULL;
     *pulArraySize       = 0;
 
+    /*
+       Split pDownloadReq->Url at the last '/' to find base URL and filename.
+    */
+    p = strrchr(pDownloadReq->Url, '/');
+    if ((p == NULL) || (p == pDownloadReq->Url) || (p[1] == 0))
+    {
+        return ANSC_STATUS_BAD_PARAMETER;
+    }
+
+    len = (p - pDownloadReq->Url);
+
+    /*
+       Since there are always only 2 arguments setup below, ignore
+       CCSP_NS_DOWNLOAD_ARG_MAX_COUNT and allocate pParamValueArray to contain
+       2 entries.
+    */
     pParamValueArray = 
         (PCCSP_CWMP_PARAM_VALUE)AnscAllocateMemory
             (
-                sizeof(CCSP_CWMP_PARAM_VALUE) * CCSP_NS_DOWNLOAD_ARG_MAX_COUNT
+                sizeof(CCSP_CWMP_PARAM_VALUE) * 2 /* CCSP_NS_DOWNLOAD_ARG_MAX_COUNT */
             );
 
     if ( !pParamValueArray )
@@ -2341,44 +2345,31 @@ CcspCwmpsoMcoDownload_PrepareArgs
         return  ANSC_STATUS_RESOURCES;
     }
 
+    /* FirmwareDownloadURL */
     SlapAllocVariable(pSlapVar);
     if ( !pSlapVar ) goto EXIT1;
 
-    char *ptr = strrchr( pDownloadReq->Url, '/' );
-    if( !ptr )
-    {
-        returnStatus = ANSC_STATUS_BAD_PARAMETER;
-        goto EXIT1;
-    }
+    pSlapVar->Syntax = SLAP_VAR_SYNTAX_string;
+    pSlapVar->Variant.varString = malloc(len + 1);
+    memcpy(pSlapVar->Variant.varString, pDownloadReq->Url, len);
+    pSlapVar->Variant.varString[len] = 0;
 
-    char URL[512];
-    memset(URL, 0, sizeof(URL));
-    memcpy(URL, pDownloadReq->Url, strlen(pDownloadReq->Url)-strlen(ptr));
+    pParamValueArray[0].Name            = AnscCloneString("Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadURL");
+    pParamValueArray[0].Tr069DataType   = CCSP_CWMP_TR069_DATA_TYPE_String;
+    pParamValueArray[0].Value           = pSlapVar;
 
-    pParamValueArray[i].Name            = AnscCloneString(CCSP_NS_DOWNLOAD_URL);
-    pParamValueArray[i].Tr069DataType   = CCSP_CWMP_TR069_DATA_TYPE_String;
-    pParamValueArray[i].Value           = pSlapVar;
-
-    pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = AnscCloneString(URL);
-
-    i++;
-
-    /* FileType */
+    /* FirmwareToDownload */
     SlapAllocVariable(pSlapVar);
     if ( !pSlapVar ) goto EXIT1;
 
-    pParamValueArray[i].Name            = AnscCloneString(CCSP_NS_DOWNLOAD_FILE_NAME);
-    pParamValueArray[i].Tr069DataType   = CCSP_CWMP_TR069_DATA_TYPE_String;
-    pParamValueArray[i].Value           = pSlapVar;
+    pSlapVar->Syntax = SLAP_VAR_SYNTAX_string;
+    pSlapVar->Variant.varString = strdup(p + 1);
 
-    pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
-    pSlapVar->Variant.varString = AnscCloneString(++ptr);
+    pParamValueArray[1].Name            = AnscCloneString("Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareToDownload");
+    pParamValueArray[1].Tr069DataType   = CCSP_CWMP_TR069_DATA_TYPE_String;
+    pParamValueArray[1].Value           = pSlapVar;
 
-    i++;
-
-
-    *pulArraySize = (ULONG)i;
+    *pulArraySize = 2;
     *ppParamValueArray = pParamValueArray;
 
     goto EXIT;
@@ -2387,12 +2378,8 @@ EXIT1:
 
     if ( pParamValueArray )
     {
-        int                         k = 0;
-
-        for ( k = 0; k < i; i ++ )
-        {
-            CcspCwmpCleanParamValue((&pParamValueArray[k]));
-        }
+        CcspCwmpCleanParamValue((&pParamValueArray[0]));
+        CcspCwmpCleanParamValue((&pParamValueArray[1]));
 
         AnscFreeMemory(pParamValueArray);
         pParamValueArray = NULL;
@@ -2501,40 +2488,32 @@ CcspCwmpsoMcoDownload
                         FALSE
                     );
 
-        if ( returnStatus != ANSC_STATUS_SUCCESS )
-	        goto FAIL_EXIT;
+            if (returnStatus == ANSC_STATUS_SUCCESS)
+            {
+                CCSP_CWMP_PARAM_VALUE ParamValue = { 0 };
+                SLAP_VARIABLE slapVar;
+                int status = 0;
 
-        CCSP_CWMP_PARAM_VALUE       ParamValue      = {0};
-        ULONG                       ulSize          = 1;
-        int                         iStatus         = 0;
-        SLAP_VARIABLE               slapVar;
+                ParamValue.Name = "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadNow";
+                ParamValue.Tr069DataType = CCSP_CWMP_TR069_DATA_TYPE_Boolean;
+                ParamValue.Value = &slapVar;
 
+                SlapInitVariable (&slapVar);
+                slapVar.Syntax = SLAP_VAR_SYNTAX_string;
+                slapVar.Variant.varString = "1";
 
-        ParamValue.Name          = AnscCloneString(CCSP_NS_DOWNLOAD_TRIGGER);
-        ParamValue.Tr069DataType = CCSP_CWMP_TR069_DATA_TYPE_Boolean;
-        ParamValue.Value         = &slapVar;
+                returnStatus =
+                    pCcspCwmpMpaIf->SetParameterValues
+                        (
+                            pCcspCwmpMpaIf->hOwnerContext,
+                            (ANSC_HANDLE)&ParamValue,
+                            1,
+                            &status,
+                            (ANSC_HANDLE*)&pCwmpSoapFault,
+                            FALSE
+                        );
+            }
 
-        SlapInitVariable (&slapVar);
-        slapVar.Syntax        = SLAP_VAR_SYNTAX_string;
-        slapVar.Variant.varString   = "1";
-
-        returnStatus =
-            pCcspCwmpMpaIf->SetParameterValues
-                (
-                    pCcspCwmpMpaIf->hOwnerContext,
-                    (ANSC_HANDLE)&ParamValue,
-                    ulSize,
-                    &iStatus,
-                    (ANSC_HANDLE*)&pCwmpSoapFault,
-                    FALSE
-                );
-
-        if ( ParamValue.Name )
-        {
-            AnscFreeMemory(ParamValue.Name);
-            ParamValue.Name = NULL;
-        }
-FAIL_EXIT:
             if ( pParamValueArray )
             {
                 unsigned int                 i;
@@ -2545,7 +2524,6 @@ FAIL_EXIT:
                 }
 
                 AnscFreeMemory(pParamValueArray);
-                pParamValueArray = NULL;
             }
 
             if ( returnStatus != ANSC_STATUS_SUCCESS )

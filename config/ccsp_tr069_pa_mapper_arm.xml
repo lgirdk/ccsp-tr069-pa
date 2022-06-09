@@ -512,6 +512,12 @@
 	<Param>
             <Name>Device.DeviceInfo.X_CISCO_COM_ProcessorSpeed</Name>
         </Param>
+        <Param>
+            <Name>Device.DeviceInfo.X_CISCO_COM_BootloaderVersion</Name>
+        </Param>
+        <Param>
+            <Name>Device.DeviceInfo.X_LGI-COM_BootloaderBuildTime</Name>
+        </Param>
 	<Param>
             <Name>Device.DeviceInfo.X_CISCO_COM_FirmwareName</Name>
         </Param>

@@ -1251,6 +1251,7 @@ EXIT2:
         }
 
         AnscFreeMemory(pParamValueArray);
+        pParamValueArray = NULL;
     }
 
     if ( pCwmpSoapFault )
@@ -1447,6 +1448,7 @@ EXIT2:
         }
 
         AnscFreeMemory(pParamInfoArray);
+        pParamInfoArray = NULL;
     }
 
     if ( pCwmpSoapFault )
@@ -1787,6 +1789,7 @@ EXIT2:
         }
 
         AnscFreeMemory(pParamAttribArray);
+        pParamAttribArray = NULL;
     }
 
     if ( pCwmpSoapFault )
@@ -2554,6 +2557,7 @@ CcspCwmpsoMcoDownload
                 }
 
                 AnscFreeMemory(pParamValueArray);
+                pParamValueArray = NULL;
             }
 
             if ( returnStatus != ANSC_STATUS_SUCCESS )
@@ -2719,11 +2723,13 @@ EXIT2:
     if ( pStartTime )
     {
         AnscFreeMemory(pStartTime);
+        pStartTime = NULL;
     }
 
     if ( pCompleteTime )
     {
         AnscFreeMemory(pCompleteTime);
+        pCompleteTime = NULL;
     }
 
     if ( pCwmpSoapFault )
@@ -3690,6 +3696,7 @@ CcspCwmpsoMcoChangeDUState
                             }
 
                             AnscFreeMemory(pParamValueArray);
+                            pParamValueArray = NULL;
                         }
 
                         if ( returnStatus != ANSC_STATUS_SUCCESS )
@@ -3843,6 +3850,7 @@ EXIT1:
     if ( pInsNumbers )
     {
         AnscFreeMemory(pInsNumbers);
+        pInsNumbers = NULL;
     }
 
     return  returnStatus;
@@ -3991,6 +3999,7 @@ EXIT2:
     if ( pQueuedTransferArray )
     {
         AnscFreeMemory(pQueuedTransferArray);
+        pQueuedTransferArray = NULL;
     }
 
     if ( pCwmpSoapFault )
@@ -4748,11 +4757,13 @@ EXIT2:
     if ( pStartTime )
     {
         AnscFreeMemory(pStartTime);
+        pStartTime = NULL;
     }
 
     if ( pCompleteTime )
     {
         AnscFreeMemory(pCompleteTime);
+        pCompleteTime = NULL;
     }
 
     if ( pCwmpSoapFault )

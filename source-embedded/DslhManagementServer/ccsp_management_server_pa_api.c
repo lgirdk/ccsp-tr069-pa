@@ -116,10 +116,8 @@ static enum rebootType_e rebootType = NONE;
 static ULONG delayRebootTime = 0;
 static pthread_t delayRebootThreadPID = 0;
 
-#if defined (INTEL_PUMA7)
 //Intel Proposed RDKB Generic Bug Fix from XB6 SDK
 #define NO_OF_RETRY 90                 /* No of times the management server will wait before giving up*/
-#endif
 
 #define MAX_URL_LEN 1024 
 #define HTTP_STR "http://"
@@ -177,9 +175,6 @@ CcspManagementServer_GenerateDefaultPassword
     );
 #endif
 
-#if defined (INTEL_PUMA7)
-//Intel Proposed RDKB Generic Bug Fix from XB6 SDK
-//Used to obtain the output from the shell for the given cmd
 static void _get_shell_output (FILE *fp, char *out, size_t len)
 {
     if (len <= 0)
@@ -195,7 +190,6 @@ static void _get_shell_output (FILE *fp, char *out, size_t len)
             out[len - 1] = 0;
     }
 }
-#endif
 
 static void _get_shell_output2 (char *cmd, char *buf, size_t len)
 {
@@ -346,9 +340,13 @@ static void ReadTr69TlvData (int ethwan_enable)
 
 	if (!ethwan_enable) //RDKB-40531: As T69_TLVDATA_FILE should not be considered for ETHWAN mode
 	{
-#if defined (INTEL_PUMA7)
-		//Intel Proposed RDKB Generic Bug Fix from XB6 SDK
+		/* Intel Proposed RDKB Generic Bug Fix from XB6 SDK
+		Wait for TLV202 parsing made Generic as CcspTr069Process is triggerd for start at the early stage of boot up.
+		T69_TLVDATA_FILE should not be considered for ETHWAN mode
+		Inorder to support ACS URL from DHCP options in DOCSIS mode added wait for wan-status to come up.
+		*/
 		char out[16];
+		char buf[16];
 		int watchdog = NO_OF_RETRY;
 		FILE *fp = NULL;
 		int ret = 0;
@@ -368,15 +366,27 @@ static void ReadTr69TlvData (int ethwan_enable)
 					AnscTraceWarning(("%s Error in closing command pipe! [%d] \n",__FUNCTION__,ret));
 				}
 			}
+			fp = v_secure_popen("r", "sysevent get wan-status");
+			if (!fp)
+			{
+				AnscTraceWarning(("%s Error in opening pipe! \n",__FUNCTION__));
+			}
+			else
+			{
+				_get_shell_output(fp, buf, sizeof(buf));
+				ret = v_secure_pclose(fp);
+				if (ret !=0) {
+					AnscTraceWarning(("%s Error in closing command pipe! [%d] \n",__FUNCTION__,ret));
+				}
+			}
 			sleep(1);
 			watchdog--;
-		} while ((!strstr(out,"success")) && (watchdog != 0));
+		} while ((!strstr(out,"success")) && (!strstr(buf,"started")) && (watchdog != 0));
 
 		if ( watchdog == 0 )
 		{
 			AnscTraceVerbose(("%s(): Ccsp_GwProvApp haven't been able to initialize TLV Data.\n", __FUNCTION__));
 		}
-#endif
 
 		if ((file = fopen(TR69_TLVDATA_FILE, "rb")) != NULL)
 		{

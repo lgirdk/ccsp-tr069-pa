@@ -115,10 +115,8 @@ static enum rebootType_e rebootType = NONE;
 static ULONG delayRebootTime = 0;
 static pthread_t delayRebootThreadPID = 0;
 
-#if defined (INTEL_PUMA7)
 //Intel Proposed RDKB Generic Bug Fix from XB6 SDK
 #define NO_OF_RETRY 90                 /* No of times the management server will wait before giving up*/
-#endif
 
 #define MAX_URL_LEN 1024 
 #define HTTP_STR "http://"
@@ -314,24 +312,6 @@ static void ReadTr69TlvData (int ethwan_enable)
 	errno_t                         rc               = -1;
     	int                             ind              = -1;
 
-#if defined (INTEL_PUMA7)
-	//Intel Proposed RDKB Generic Bug Fix from XB6 SDK
-	char out[MAX_BUF_SIZE];
-	int watchdog = NO_OF_RETRY;
-
-	do
-	{
-		_get_shell_output("sysevent get TLV202-status", out, sizeof(out));
-		sleep(1);
-		watchdog--;
-	}while ((!strstr(out,"success")) && (watchdog != 0));
-
-	if ( watchdog == 0 )
-	{
-		fprintf(stderr, "\n%s(): Ccsp_GwProvApp haven't been able to initialize TLV Data.\n", __FUNCTION__);
-	}
-#endif
-
 	FILE *file = NULL;
 	Tr69TlvData *object2 = NULL;
 	char url[256] = "";
@@ -341,6 +321,30 @@ static void ReadTr69TlvData (int ethwan_enable)
 
 	if (!ethwan_enable) //RDKB-40531: As T69_TLVDATA_FILE should not be considered for ETHWAN mode
 	{
+
+		/* Intel Proposed RDKB Generic Bug Fix from XB6 SDK
+		Wait for TLV202 parsing made Generic as CcspTr069Process is triggerd for start at the early stage of boot up.
+		T69_TLVDATA_FILE should not be considered for ETHWAN mode
+		Inorder to support ACS URL from DHCP options in DOCSIS mode added wait for wan-status to come up.
+		*/
+		char out[MAX_BUF_SIZE];
+		char buf[16];
+		int watchdog = NO_OF_RETRY;
+
+		do
+		{
+			_get_shell_output("sysevent get TLV202-status", out, sizeof(out));
+			_get_shell_output("sysevent get wan-status", buf, sizeof(buf));
+			sleep(1);
+			watchdog--;
+		}while ((!strstr(out,"success")) && (!strstr(buf,"started")) && (watchdog != 0));
+
+		if ( watchdog == 0 )
+		{
+			fprintf(stderr, "\n%s(): Ccsp_GwProvApp haven't been able to initialize TLV Data.\n", __FUNCTION__);
+		}
+
+
 		if ((file = fopen(TR69_TLVDATA_FILE, "rb")) != NULL)
 		{
 			object2 = malloc(sizeof(Tr69TlvData));

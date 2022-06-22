@@ -96,6 +96,7 @@
 **********************************************************************/
 
 #include "ccsp_cwmp_proco_global.h"
+#include "sysevent/sysevent.h"
 
 #define  CcspCwmppoMapParamInstNumDmIntToCwmp(pParam)                               \
             {                                                                       \
@@ -115,6 +116,8 @@
             }
 
 int g_flagToStartCWMP = 0;
+token_t se_token;
+int se_fd;
 
 /**********************************************************************
 
@@ -165,6 +168,15 @@ CcspCwmppoEngage
      * may be created and this may cause side effects
      */    
     pMyObject->bActive = TRUE;
+
+
+    /* Open sysevent deamon connection at the time tr069 bootup */
+    se_fd = sysevent_open("127.0.0.1", SE_SERVER_WELL_KNOWN_PORT, SE_VERSION, "tr069", &se_token);
+
+    if (0 > se_fd)
+    {
+        CcspTr069PaTraceError(("%s, sysevent_open failed!!!\n",__FUNCTION__));
+    }
 
     returnStatus = pMyObject->SetupEnv((ANSC_HANDLE)pMyObject, bRestart);
 

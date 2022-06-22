@@ -77,9 +77,8 @@
 
 #include "ccsp_cwmp_tcpcrho_global.h"
 #include "sysevent/sysevent.h"
-
-extern int s_sysevent_connect (token_t *out_se_token);
-
+extern token_t se_token;
+extern int se_fd;
 /**********************************************************************
 
     caller:     owner of this object
@@ -294,8 +293,6 @@ CcspCwmpTcpcrhoCreateTcpServers
         if (pProperty->HostAddress.Value == 0)
         {
             CcspTr069PaTraceInfo(("%s, HostAddress value is 0\n",__FUNCTION__));
-            token_t  se_token;
-            int      se_fd = s_sysevent_connect(&se_token);
             if (0 > se_fd)
             {
                  CcspTr069PaTraceError(("%s, sysevent_connect failed!!!\n",__FUNCTION__));

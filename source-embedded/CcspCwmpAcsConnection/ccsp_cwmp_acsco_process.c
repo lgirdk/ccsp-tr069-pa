@@ -92,6 +92,10 @@ extern char *g_openSSLServerURL;
 
 #include "ssp_ccsp_cwmp_cfg.h"
 
+#ifdef DHCP_PROV_ENABLE
+#define DHCP_ACS_URL "/tmp/dhcp_acs_url"
+#endif
+
 /**********************************************************************
 
     prototype:
@@ -249,6 +253,10 @@ CcspCwmpAcscoRequest
     ULONG                           uRedirect       = 0;
     ULONG                           uMaxRedirect    = 5;
 	ULONG							ulRpcCallTimeout= CCSP_CWMPSO_RPCCALL_TIMEOUT; 
+#ifdef DHCP_PROV_ENABLE
+    int                             fd              = 0;
+    static UINT                     retry_count     = 0;
+#endif
 
     /* If the response is 401 authentication required, we need to try again */
     int                             nMaxAuthRetries = 2;
@@ -348,6 +356,10 @@ START:
 
     AnscInitializeEvent(&pHttpGetReq->CompleteEvent);
 
+#ifdef DHCP_PROV_ENABLE
+    fd = open(DHCP_ACS_URL, O_WRONLY|O_APPEND);
+#endif
+
     while ( nMaxAuthRetries > 0 )
     {
         CcspTr069PaTraceInfo(("ACS Request now at: %u\n", (unsigned int)AnscGetTickInSeconds()));
@@ -419,8 +431,24 @@ START:
         if( returnStatus != ANSC_STATUS_SUCCESS)
         {
             CcspTr069PaTraceError(("ACS Request failed: returnStatus = %.X\n", (unsigned int)returnStatus));
-			break;
+#ifdef DHCP_PROV_ENABLE
+            // max_retry count is kept as 3 to make sure ACS connectivity retry with both IPV4 and IPV6 connection request URL.
+            retry_count ++;
+            if (retry_count > 3){
+                  if (fd > 0)
+                  {
+                      write(fd, "CONNECTION_STATUS failed",25);
+                      retry_count = 0;
+                  }
+            }
+#endif
+
+            break;
         }
+
+#ifdef DHCP_PROV_ENABLE
+        retry_count = 0;
+#endif
 
 		if ( pCcspCwmpCfgIf && pCcspCwmpCfgIf->GetCwmpRpcTimeout )
 		{
@@ -453,7 +481,23 @@ START:
 
             break;
         }
+#ifdef DHCP_PROV_ENABLE
+        if ( nMaxAuthRetries == 0 )
+        {
+            if(fd > 0)
+            {
+                write(fd, "CONNECTION_STATUS failed",25);
+            }
+        }
     }
+
+    if(fd > 0)
+    {
+        close(fd);
+    }
+#else
+    }
+#endif
 
     /* AnscResetEvent (&pHttpGetReq->CompleteEvent); */
     AnscFreeEvent(&pHttpGetReq->CompleteEvent);

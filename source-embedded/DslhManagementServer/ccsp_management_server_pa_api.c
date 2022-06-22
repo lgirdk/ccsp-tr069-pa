@@ -144,6 +144,14 @@ static CCSP_BOOL        s_MS_Init_Done  = FALSE;
 
 extern void waitUntilSystemReady(   void*   cbContext);
 
+#ifdef DHCP_PROV_ENABLE
+#include "sysevent/sysevent.h"
+#define MAX_URL_LENGTH 256
+#define DHCP_ACS_URL "/tmp/dhcp_acs_url"
+static pthread_t ethwanURLThread = 0;
+extern token_t se_token;
+extern int se_fd;
+#endif
 
 /* CcspManagementServer_Init is called by PA to register component and
  * load configuration file.
@@ -858,59 +866,14 @@ static void ReadTr69TlvData (int ethwan_enable)
 				}
 			}
 		}
-	}
-        /*
-         * TR-069 CPE WAN Management Protocol - 3.1 ACS Discovery:
-         * If both DHCPv4 and DHCPv6 options are received, the CPE MUST use the DHCPv6 option over the DHCPv4 option.
-         */
-        fp_dhcp_v6 = fopen(DHCP_V6_ACS_URL_FILE, "r");
-        // If DHCP_V6_ACS_URL_FILE is found. Use this as default, else use the URL provided by TLV
-        if (fp_dhcp_v6!= NULL)
-        {
-               fread(url, sizeof(url), 1, fp_dhcp_v6);
-               fclose(fp_dhcp_v6);
-               objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(url);
-               // Free up all resources before exiting the function
-               if(object2)
-               {
-                      free(object2);
-               }
-               if (file)
-               {
-                      fclose(file);
-               }
-               updateInitalContact();
-               return;
-        }
 
-        fp_dhcp = fopen(DHCP_ACS_URL_FILE, "r");
-
-        // If DHCP_ACS_URL_FILE is found. Use this as default, else use the URL provided by TLV
-        if (fp_dhcp!= NULL)
-        {
-               fread(url, sizeof(url), 1, fp_dhcp);
-               fclose(fp_dhcp);
-               objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(url);
-               // Free up all resources before exiting the function
-               if(object2)
-               {
-                       free(object2);
-               }
-               if (file)
-               {
-                       fclose(file);
-               }
-               updateInitalContact();
-               return;
-        }
-	/*RDKB-7333, CID-32939, free unused resources before exit */
-	if(object2)
-	{
-		free(object2);
-	}
-	if(file)
-	{
-		fclose(file);;
+		//Get the values from PSM DB in ETHWAN mode at process bootup
+		//If PSM values are not available the static variables are initiliased with null strings.
+		GetConfigFrom_bbhm(ManagementServerURLID);
+		GetConfigFrom_bbhm(ManagementServerUsernameID);
+		GetConfigFrom_bbhm(ManagementServerPasswordID);
+		GetConfigFrom_bbhm(ManagementServerConnectionRequestUsernameID);
+		GetConfigFrom_bbhm(ManagementServerConnectionRequestPasswordID);
 	}
         updateInitalContact();
 	//To be deleted after testing ConnectionRequest
@@ -996,6 +959,128 @@ void whiteListManagementServerURL()
   }
 }
 #endif 
+
+#ifdef DHCP_PROV_ENABLE
+static void* ethwanWaitForMngmntServerURL(void* retry)
+{
+    int fd = 0;
+    int retCode = 0;
+    fd_set rfds;
+    char msg[1024];
+
+    char dhcpv6_url[MAX_URL_LENGTH];
+    char dhcpv4_url[MAX_URL_LENGTH];
+    char status[64];
+
+    char* oldValue;
+    int psm_len = 0;
+
+    dhcpv6_url[0] = '0';
+    dhcpv4_url[0] = '0';
+
+    fd = open(DHCP_ACS_URL, O_RDWR);
+
+    if (fd < 0)
+    {
+        CcspTraceError(("!!!!!!Failed to open FIFO for DHCP Provisioning!!!!!!!\n"));
+        return NULL;
+    }
+
+    pthread_detach(ethwanURLThread);
+
+    if (*(int*)retry == 1)
+    {
+        goto RETRY;
+    }
+    while(1)
+    {
+        retCode = 0;
+
+        FD_ZERO(&rfds);
+        FD_SET(fd, &rfds);
+
+        memset(status,0,sizeof(status));
+        memset(msg,0,sizeof(msg));
+
+        retCode = select(fd+1, &rfds, NULL, NULL, NULL);
+
+        if (retCode < 0)
+        {
+             if (errno == EINTR)
+                 continue;
+             CcspTraceError(("!!!!!!Failed to select FIFO for DHCP Provisioning!!!!!!!\n"));
+             return NULL;
+        }
+        else if(retCode == 0)
+        {
+             continue;
+        }
+
+        read(fd, msg, sizeof(msg));
+
+        if (msg[0] == 0)
+        {
+            continue;
+        }
+
+        if (!memcmp(msg,"DHCPv6_ACS_URL",14))
+        {
+            sscanf(msg+15,"%s",dhcpv6_url);
+        }
+        else if (!memcmp(msg,"DHCPv4_ACS_URL",14))
+        {
+            sscanf(msg+15,"%s",dhcpv4_url);
+        }
+        else if(!memcmp(msg,"CONNECTION_STATUS",17))
+        {
+            sscanf(msg+18,"%s",status);
+        }
+
+RETRY:
+        if (strlen(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value) == 0 ||  !memcmp(status,"failed",6))
+        {
+            if ( dhcpv6_url[0] == '0' )
+            {
+                 if(sysevent_get(se_fd, se_token, "DHCPv6_ACS_URL", dhcpv6_url, sizeof(dhcpv6_url)))
+                 {
+                      dhcpv6_url[0] = '0';
+                 }
+            }
+
+            if ( dhcpv4_url[0] == '0' )
+            {
+                 if (sysevent_get(se_fd, se_token, "DHCPv4_ACS_URL", dhcpv4_url, sizeof(dhcpv4_url)))
+                 {
+                      dhcpv4_url[0] = '0';
+                 }
+            }
+
+            oldValue = objectInfo[ManagementServerID].parameters[ManagementServerURLID].value;
+            GetConfigFrom_bbhm(ManagementServerURLID);
+            psm_len = strlen(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value);
+
+            if (psm_len && memcmp(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value,oldValue,psm_len))
+            {
+                 SendValueChangeSignal(ManagementServerID, ManagementServerURLID, oldValue);
+                 CcspManagementServer_ValueChangeCB(CcspManagementServer_cbContext, CcspManagementServer_GetPAObjectID(ManagementServerID));
+            }
+            else if (dhcpv6_url[0] != '0' && memcmp(dhcpv6_url,oldValue,strlen(dhcpv6_url)))
+            {
+                 objectInfo[ManagementServerID].parameters[ManagementServerURLID].value =  AnscCloneString(dhcpv6_url);
+                 SendValueChangeSignal(ManagementServerID, ManagementServerURLID, oldValue);
+                 CcspManagementServer_ValueChangeCB(CcspManagementServer_cbContext, CcspManagementServer_GetPAObjectID(ManagementServerID));
+            }
+            else if ( dhcpv4_url[0] != '0' && memcmp(dhcpv4_url,oldValue,strlen(dhcpv4_url)))
+            {
+                 objectInfo[ManagementServerID].parameters[ManagementServerURLID].value =  AnscCloneString(dhcpv4_url);
+                 SendValueChangeSignal(ManagementServerID, ManagementServerURLID, oldValue);
+                 CcspManagementServer_ValueChangeCB(CcspManagementServer_cbContext, CcspManagementServer_GetPAObjectID(ManagementServerID));
+            }
+        }
+
+    }
+}
+#endif
 
 CCSP_VOID
 CcspManagementServer_Init
@@ -1112,6 +1197,18 @@ CcspManagementServer_Init
 
 	if (ethwan_enable) //RDKB-40531: URL updated for EWAN mode
 	{
+#ifdef DHCP_PROV_ENABLE
+		int file_exists = (access(DHCP_ACS_URL, F_OK) == 0) ? 1 : 0;
+		if (file_exists)
+		{
+			unlink(DHCP_ACS_URL);
+		}
+		// Start thread to receive ACS URL via DHCP Provisioning in ETHWAN Mode
+		if (!mkfifo(DHCP_ACS_URL, 0666))
+		{
+			pthread_create( &ethwanURLThread, NULL, ethwanWaitForMngmntServerURL,&file_exists);
+		}
+#endif
 		if(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value == NULL)
 		{
 			//We are here because, PSM DB doesnt have a valid ACS url, device in EWAN mode, setting value from partners_defaults.json to PSM DB

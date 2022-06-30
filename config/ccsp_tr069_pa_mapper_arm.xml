@@ -462,6 +462,9 @@
         <Param>
             <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadAndFactoryReset</Name>
         </Param>
+        <Param>
+            <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadStatus</Name>
+        </Param>
         <!-- Syndication Partner Information -->
         <Param>
             <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.PartnerId</Name>

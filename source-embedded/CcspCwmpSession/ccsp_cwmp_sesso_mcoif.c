@@ -2410,10 +2410,28 @@ CcspCwmpsoMcoDownload
     PCCSP_CWMP_SOAP_FAULT           pCwmpSoapFault     = (PCCSP_CWMP_SOAP_FAULT      )NULL;
     PANSC_UNIVERSAL_TIME            pStartTime         = (PANSC_UNIVERSAL_TIME       )NULL;
     PANSC_UNIVERSAL_TIME            pCompleteTime      = (PANSC_UNIVERSAL_TIME       )NULL;
+    SLAP_STRING_ARRAY*              pSlapNameArray    = NULL;
+    PCCSP_CWMP_PARAM_VALUE          pCwmpValArray     = NULL;
+    ULONG                           ulCwmpValArraySize= 0;
+    ULONG                           i;
     int                             iStatus            = 0;
     ULONG                           ulNoRPCMethodMask  = 0;
     errno_t rc  = -1;
     int ind = -1;
+
+#ifndef _LG_MV3_
+    pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+
+    if ( !pCwmpSoapFault )
+    {
+        returnStatus = ANSC_STATUS_RESOURCES;
+        goto  EXIT1;
+    }
+    else
+    {
+        CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_methodUnsupported);
+    }
+#else
     if ( pCcspCwmpCfgIf && pCcspCwmpCfgIf->NoRPCMethods )
     {
         ulNoRPCMethodMask = pCcspCwmpCfgIf->NoRPCMethods(pCcspCwmpCfgIf->hOwnerContext);
@@ -2434,7 +2452,7 @@ CcspCwmpsoMcoDownload
         }
         else
         {
-            CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_methodUnsupported);
+            CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_requestDenied);
         }
     }
     else 
@@ -2460,21 +2478,98 @@ CcspCwmpsoMcoDownload
 
         if ( !pParamValueArray )
         {
-            returnStatus = ANSC_STATUS_RESOURCES;
 
             pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
             
             if ( !pCwmpSoapFault )
             {
+                returnStatus = ANSC_STATUS_RESOURCES;
                 goto EXIT1;
             }
             else
             {
-                CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_resources);
+                if( returnStatus == ANSC_STATUS_RESOURCES )
+                {
+                    CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_resources);
+                }
+                else if (returnStatus == ANSC_STATUS_BAD_PARAMETER)
+                {
+                    CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_requestDenied);
+                }
+
             }
         }
         else
         {
+            int NumOfParams = 1;
+            char* pParamNames = "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadStatus";
+
+            SlapAllocStringArray2(NumOfParams, pSlapNameArray);
+            if ( !pSlapNameArray )
+            {
+                return  ANSC_STATUS_RESOURCES;
+            }
+
+            for ( i = 0; i < (ULONG)NumOfParams; i ++ )
+            {
+                pSlapNameArray->Array.arrayString[i] = pParamNames;
+            }
+
+            returnStatus =
+            pCcspCwmpMpaIf->GetParameterValues
+            (
+                pCcspCwmpMpaIf->hOwnerContext,
+                pSlapNameArray,
+                NumOfParams,
+                (void**)&pCwmpValArray,
+                &ulCwmpValArraySize,
+                (ANSC_HANDLE*)&pCwmpSoapFault,
+                FALSE
+            );
+
+            if ( returnStatus == ANSC_STATUS_SUCCESS )
+            {
+                if ( ulCwmpValArraySize != (ULONG)NumOfParams )
+                {
+                    CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_internalError);
+                    returnStatus = ANSC_STATUS_INTERNAL_ERROR;
+                    goto EXIT2;
+                }
+                else
+                {
+                    SLAP_VARIABLE*      pSlapVar = pCwmpValArray[0].Value;
+                    if ( pSlapVar->Syntax == SLAP_VAR_SYNTAX_string )
+                    {
+                        if (strstr(pSlapVar->Variant.varString,"Not Started") ==NULL)
+                        {
+                            CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_requestDenied);
+                            returnStatus = ANSC_STATUS_BAD_PARAMETER;
+                            goto EXIT2;
+                        }
+                        pSlapVar->Variant.varString = NULL;
+                    }
+                    else
+                    {  
+                        CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_internalError);
+                        returnStatus = ANSC_STATUS_INTERNAL_ERROR;
+                        goto EXIT2;
+                    }
+                }
+            }
+            else
+            {
+                returnStatus = ANSC_STATUS_INTERNAL_ERROR;
+                CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_internalError);
+                goto EXIT2;
+            }
+
+            if ( pCwmpSoapFault )
+            {
+                CcspCwmpFreeSoapFault(pCwmpSoapFault);
+                pCwmpSoapFault = NULL;
+            }
+
+		
             /* call SPV to start operations */
             returnStatus =
                 pCcspCwmpMpaIf->SetParameterValues
@@ -2529,7 +2624,7 @@ CcspCwmpsoMcoDownload
             if ( returnStatus != ANSC_STATUS_SUCCESS )
             {
                 CcspTr069PaTraceError(("Download - SPV failed, status = %d\n", (int)returnStatus));
-
+                CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_internalError);
                 if ( pCwmpSoapFault )
                 {
                     unsigned int             j;
@@ -2598,6 +2693,7 @@ CcspCwmpsoMcoDownload
         }
     }
 
+#endif
     /*
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
@@ -2703,6 +2799,21 @@ EXIT2:
         CcspCwmpFreeSoapFault(pCwmpSoapFault);
         pCwmpSoapFault = NULL;
     }
+
+    if ( pCwmpValArray )
+    {
+        for ( i = 0; i < ulCwmpValArraySize; i++ )
+        {
+            CcspCwmpCleanParamValue((&pCwmpValArray[i]));
+        }
+        AnscFreeMemory(pCwmpValArray);
+    }
+
+    if ( pSlapNameArray )
+    {
+        AnscFreeMemory(pSlapNameArray);
+    }
+
 
 EXIT1:
 

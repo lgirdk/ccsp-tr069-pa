@@ -457,6 +457,11 @@ CcspCwmppoGetAcsInfo
       /* we need to spawn a task and wait for the end of current session  */
       AnscSpawnTask(mgsrv_InformNowTask, (ANSC_HANDLE)pCcspCwmpCpeController, "InformNow");
     }
+    else
+    {
+        /* unset the flag, inform task with new URL will be spawned when CWMP starts */
+        pCcspCwmpCpeController->bIsACSURLChanged = FALSE;
+    }
 
     returnStatus = ANSC_STATUS_SUCCESS;
 

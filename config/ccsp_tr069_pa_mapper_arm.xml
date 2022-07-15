@@ -7861,17 +7861,17 @@
         <Param>
             <Name>Device.X_LGI-COM_General_Internal.TroubleshootWizardEnable</Name>
         </Param>
-     <Param>
+        <Param>
             <Name>Device.X_LGI-COM_General_Internal.CloudUITroubleshootPage.CAppName</Name>
         </Param>
-     <Param>
+        <Param>
             <Name>Device.X_LGI-COM_General_Internal.CloudUITroubleshootPage.WebsiteHelpURL</Name>
         </Param>
-     <Param>
+        <Param>
             <Name>Device.X_LGI-COM_General_Internal.FirstInstallWizardEnable</Name>
         </Param>
-    <Param>
-           <Name>Device.X_LGI-COM_General_Internal.CPE.DataModelVersion</Name>
+        <Param>
+            <Name>Device.X_LGI-COM_General_Internal.CPE.DataModelVersion</Name>
         </Param>
         <Param>
             <Name>Device.X_LGI-COM_General_Internal.UserBridgeModeAllowed</Name>
@@ -7884,6 +7884,9 @@
         </Param>
         <Param>
             <Name>Device.X_LGI-COM_General_Internal.DefaultAdminPassword</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_General.LocalUIonStaticIPEnable</Name>
         </Param>
   <!--  General Parameters under "Device.RemoteAccess." -->
         <Param>

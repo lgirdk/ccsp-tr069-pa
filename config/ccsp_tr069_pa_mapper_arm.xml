@@ -7974,6 +7974,46 @@
         <Param>
             <Name>Device.X_LGI-COM_EventLogging.EventLog.{i}.Message</Name>
         </Param>
+   <!--  Parameters under "Device.X_LGI-COM_ONT" -->
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.ConnectionMode</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.Status</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.NetworkStatus</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.EncryptionStatus</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.Mode</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.StandardCompliance</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.ServicesNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.Services.{i}.Name</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.Services.{i}.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.Services.{i}.Status</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.Services.{i}.Description</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.Services.{i}.Alias</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.Services.{i}.IPProvisioningMode</Name>
+        </Param>
     </ParamList>
 	<RpcMapper>
 		<Download>

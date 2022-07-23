@@ -1959,8 +1959,29 @@ ccspCwmppoLoadTransferCompleteTask
 
         if ( TRUE )
         {
+            char sysbuf[100] = { 0 };
+            errno_t rc = -1;
+            int ind = -1;
             Fault.FaultCode = 0;
+            Fault.FaultString = NULL;
 
+            syscfg_get( NULL, "FWDWLD_status", sysbuf, sizeof(sysbuf));
+            if((!strcmp("Flash Error",sysbuf)) ||(!strcmp("File Not Available",sysbuf)) || (!strcmp("Incorrect Signature",sysbuf))|| (!strcmp("Incorrect Signature",sysbuf))|| (!strcmp("Failed",sysbuf)))
+            {
+                Fault.FaultCode = 9002;
+            }
+
+            if(!strcmp("Retry",sysbuf))
+            {
+                Fault.FaultCode = 9010;
+            }
+
+            if(!strcmp("Request Denied",sysbuf))
+            {
+                Fault.FaultCode = 9001;
+            }
+
+/*
             _ansc_snprintf
                 (
                     psmTcName, 
@@ -2011,6 +2032,7 @@ ccspCwmppoLoadTransferCompleteTask
                         NULL,
                         &Fault.FaultString
                     );
+*/
         }
 
         CcspTr069PaTraceDebug(("ccspCwmppoLoadTransferCompleteTask - sending TransferComplete, command key <%s>.\n", pCommandKey));

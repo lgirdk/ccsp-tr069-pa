@@ -2532,7 +2532,6 @@ CcspCwmpsoMcoDownload
             {
                 if ( ulCwmpValArraySize != (ULONG)NumOfParams )
                 {
-                    CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_internalError);
                     returnStatus = ANSC_STATUS_INTERNAL_ERROR;
                     goto EXIT2;
                 }
@@ -2551,7 +2550,6 @@ CcspCwmpsoMcoDownload
                     }
                     else
                     {  
-                        CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_internalError);
                         returnStatus = ANSC_STATUS_INTERNAL_ERROR;
                         goto EXIT2;
                     }
@@ -2560,7 +2558,6 @@ CcspCwmpsoMcoDownload
             else
             {
                 returnStatus = ANSC_STATUS_INTERNAL_ERROR;
-                CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_internalError);
                 goto EXIT2;
             }
 

@@ -158,15 +158,15 @@ CcspCwmppoSysReadySignalProcTask
         }
     }
 #endif
-    /*returnStatus =
+    returnStatus =
         pCcspCwmpCpeController->MonitorOpState
             (
                 (ANSC_HANDLE)pCcspCwmpCpeController,
                 TRUE,
-                CCSP_NS_DOWNLOAD,
+                CCSP_FW_DOWNLOAD,
                 0,
                 NULL,
-                CCSP_NS_DOWNLOAD_STATE,
+                CCSP_FW_DOWNLOAD_STATUS,
                 &pCwmpSoapFault
             );
 
@@ -180,7 +180,7 @@ CcspCwmppoSysReadySignalProcTask
             ));
 
         CcspCwmpFreeSoapFault(pCwmpSoapFault);
-    }*/
+    }
 
 #ifndef CONFIG_CCSP_CWMP_SESSION_EVENT_WAIT_FOR_CONN_REQ_URL
     /* put Inform message sending on hold until ConnectionRequestURL is ready (non-empty) */
@@ -1611,11 +1611,6 @@ CcspCwmppoProcessPvcSignal
     ULONG                           Notification;
     ANSC_STATUS                     status;
 
-    if ( !s_ns_download_state[0] )
-    {
-        snprintf(s_ns_download_state, sizeof(s_ns_download_state), "%s%s", CCSP_NS_DOWNLOAD, CCSP_NS_DOWNLOAD_STATE);
-    }
-
     CcspTr069PaTraceInfo(("Processing queued parameterValueChangeSignal over message bus, size=%d.\n", size));
 
     if ( pCcspCwmpCpeController->bCpeRebooting )
@@ -1791,9 +1786,7 @@ CcspCwmppoProcessPvcSignal
                 }
             }
         }
-        else if ( _ansc_strstr(pVC->parameterName, s_ns_download_state) == pVC->parameterName &&
-                  val && val->newValue &&
-                  AnscEqualString((char *)(val->newValue), "Idle", TRUE) /* PA only cares the state changed back to 'Idle' */  )
+        else if ( _ansc_strstr(pVC->parameterName, "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadNow") == pVC->parameterName && val && val->newValue )
         {
             /* Download monitor state has changed */
             char*                   pCommandKey     = NULL;
@@ -1830,6 +1823,7 @@ CcspCwmppoProcessPvcSignal
                  * FU that it can safely remove finished firmware download
                  * session.
                  */
+#if 0
                 PCCSP_CWMP_MPA_INTERFACE 
                                         pCcspCwmpMpaIf = (PCCSP_CWMP_MPA_INTERFACE)pMyObject->hCcspCwmpMpaIf;
                 CCSP_CWMP_PARAM_VALUE   cwmpParamValue = {0};
@@ -1867,6 +1861,7 @@ CcspCwmppoProcessPvcSignal
                         );
 
                 if ( status != ANSC_STATUS_SUCCESS )
+#endif
                 {
                     /* save un-delivered TC into PSM */
                     pMyObject->SaveTransferComplete

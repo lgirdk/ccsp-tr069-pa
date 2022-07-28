@@ -1437,6 +1437,18 @@
             <Name>Device.WiFi.Radio.{i}.X_LGI-COM_EnhancedACS.Weight.Channel.{i}.ChannelWeight</Name>
         </Param>
         <Param>
+            <Name>Device.WiFi.Radio.{i}.X_LGI-COM_ZeroWaitDFS.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.X_LGI-COM_ZeroWaitDFS.DfsChannelsNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.X_LGI-COM_ZeroWaitDFS.DfsChannels.{i}.Channel</Name>
+        </Param>
+        <Param>
+            <Name>Device.WiFi.Radio.{i}.X_LGI-COM_ZeroWaitDFS.DfsChannels.{i}.Status</Name>
+        </Param>
+        <Param>
             <Name>Device.WiFi.Radio.{i}.CurrentOperatingChannelBandwidth</Name>
         </Param>
         <Param>

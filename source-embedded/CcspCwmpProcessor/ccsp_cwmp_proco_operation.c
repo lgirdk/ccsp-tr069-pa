@@ -1969,16 +1969,19 @@ ccspCwmppoLoadTransferCompleteTask
             if((!strcmp("Flash Error",sysbuf)) ||(!strcmp("File Not Available",sysbuf)) || (!strcmp("Incorrect Signature",sysbuf))|| (!strcmp("Incorrect Signature",sysbuf))|| (!strcmp("Failed",sysbuf)))
             {
                 Fault.FaultCode = 9002;
+                Fault.FaultString = AnscCloneString(CCSP_CWMP_CPE_CWMP_FaultText_internalError);
             }
 
             if(!strcmp("Retry",sysbuf))
             {
                 Fault.FaultCode = 9010;
+                Fault.FaultString = AnscCloneString(CCSP_CWMP_CPE_CWMP_FaultText_downloadFailure);
             }
 
             if(!strcmp("Request Denied",sysbuf))
             {
                 Fault.FaultCode = 9001;
+                Fault.FaultString = AnscCloneString(CCSP_CWMP_CPE_CWMP_FaultText_requestDenied);
             }
 
 /*

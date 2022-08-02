@@ -1615,10 +1615,10 @@
         </Param>
 	<!-- Add by LGI start -->
         <Param>
-            <Name>Device.WiFi.SSID.{i}.X_LGI-COM_WifiSupportedRates.WiFiDisableBasicRates</Name>
+            <Name>Device.WiFi.SSID.{i}.X_LGI-COM_WiFiSupportedRates.WiFiDisableBasicRates</Name>
         </Param>
         <Param>
-            <Name>Device.WiFi.SSID.{i}.X_LGI-COM_WifiSupportedRates.WiFiDisableSupportedRates</Name>
+            <Name>Device.WiFi.SSID.{i}.X_LGI-COM_WiFiSupportedRates.WiFiDisableSupportedRates</Name>
         </Param>
 	<!-- Add by LGI end -->
         <Param>
@@ -2166,7 +2166,7 @@
             <Name>Device.WiFi.X_LGI-COM_Radius.TransportInterface</Name>
         </Param>
         <Param>
-            <Name>Device.WiFi.X_LGI-COM_WifiSupportedRates.WiFiBitmapControlFeature</Name>
+            <Name>Device.WiFi.X_LGI-COM_WiFiSupportedRates.WiFiBitmapControlFeature</Name>
         </Param>
         <Param>
             <Name>Device.WiFi.X_LGI-COM_ReservedSSIDNames</Name>

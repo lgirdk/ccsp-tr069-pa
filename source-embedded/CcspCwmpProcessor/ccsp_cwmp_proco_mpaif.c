@@ -1814,7 +1814,7 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                     }
                     else if ((strncmp(ParamName[x], "Device.WiFi.X_LGI-COM_SoftBlock.", 32) == 0) ||
                              (strncmp(ParamName[x], "Device.WiFi.X_LGI-COM_BandSteering.SSID.", 40) == 0) ||
-                             (strncmp(ParamName[x], "Device.WiFi.X_LGI-COM_WifiSupportedRates.", 41) == 0))
+                             (strncmp(ParamName[x], "Device.WiFi.X_LGI-COM_WiFiSupportedRates.", 41) == 0))
                     {
                         bRestartRadio1 = TRUE;
                         bRestartRadio2 = TRUE;

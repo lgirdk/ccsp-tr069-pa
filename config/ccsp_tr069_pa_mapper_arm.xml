@@ -7671,6 +7671,18 @@
         <Param>
             <Name>Device.X_LGI-COM_Gateway.IPv6LANMode</Name>
         </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Gateway.DNSRebindProtection.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Gateway.DNSRebindProtection.WhitelistUrlNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Gateway.DNSRebindProtection.Whitelist.{i}.Url</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Gateway.DNSRebindProtection.Whitelist.{i}.Description</Name>
+        </Param>
 
         <!-- WoL configuration Parameters under "Device." -->
         <Param>

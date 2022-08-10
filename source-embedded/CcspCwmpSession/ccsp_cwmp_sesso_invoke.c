@@ -328,6 +328,8 @@ CcspCwmpsoInformPopulateTRInformationCustom
         BOOL                            bDevice20OrLater
     );
 
+extern BOOL bAcsRequestURLChanged;
+
 ANSC_STATUS
 CcspCwmpsoInform
     (
@@ -1092,6 +1094,41 @@ bFirstInform = 0;
 		 }
 
 		
+		if (bAcsRequestURLChanged && !bBootStrap)
+		{
+			int m;
+			BOOL bEventPresent = FALSE;
+
+			bAcsRequestURLChanged = FALSE;
+
+			for (m = 0; m < pMyObject->EventCount; m++)
+			{
+				if (strcmp(((PCCSP_CWMP_EVENT)pMyObject->EventArray[m])->EventCode, CCSP_CWMP_INFORM_EVENT_NAME_ValueChange) == 0 || strcmp(((PCCSP_CWMP_EVENT)pMyObject->EventArray[m])->EventCode, CCSP_CWMP_INFORM_EVENT_NAME_Boot) == 0)
+				{
+					CcspTr069PaTraceDebug(("Skip. Not adding " CCSP_CWMP_INFORM_EVENT_NAME_ValueChange "\n"));
+					bEventPresent = TRUE;
+					break;
+				}
+			}
+
+			if (!bEventPresent)
+			{
+				PCCSP_CWMP_EVENT pCcspCwmpEvent = AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+
+				if (!pCcspCwmpEvent)
+				{
+					return ANSC_STATUS_RESOURCES;
+				}
+
+				CcspTr069PaTraceDebug((CCSP_CWMP_INFORM_EVENT_NAME_ValueChange " not present. Add it\n"));
+
+				pCcspCwmpEvent->EventCode = AnscCloneString(CCSP_CWMP_INFORM_EVENT_NAME_ValueChange);
+				pCcspCwmpEvent->CommandKey = NULL;
+
+				pMyObject->EventArray[pMyObject->EventCount++] = (ANSC_HANDLE)pCcspCwmpEvent;
+			}
+		}
+
         pWmpsoAsyncReq->SoapEnvelope =
             pCcspCwmpSoapParser->BuildSoapReq_Inform
                 (

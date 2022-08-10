@@ -1302,6 +1302,8 @@ extern void CcspManagementServer_GenerateConnectionRequestURLCustom(
     char *ipAddr,
     msObjectInfo *objectInfo);
 
+BOOL bAcsRequestURLChanged = FALSE;
+
 ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
     BOOL fromValueChangeSignal,
     char *newValue)
@@ -1489,6 +1491,7 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
 
         SendValueChangeSignal(ManagementServerID, ManagementServerConnectionRequestURLID, oldValue);
         CcspManagementServer_ValueChangeCB(CcspManagementServer_cbContext, CcspManagementServer_GetPAObjectID(ManagementServerID));
+        bAcsRequestURLChanged = TRUE;
         if(oldValue) AnscFreeMemory(oldValue);
     }
     

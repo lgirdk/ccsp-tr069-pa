@@ -448,6 +448,9 @@
             <Name>Device.DeviceInfo.TemperatureStatus.TemperatureSensor.{i}.HighAlarmTime</Name>
         </Param>
         <Param>
+            <Name>Device.DeviceInfo.TemperatureStatus.TemperatureSensor.{i}.X_LGI-COM_CutOutTempExceeded</Name>
+        </Param>
+        <Param>
             <Name>Device.DeviceInfo.NetworkProperties.MaxTCPWindowSize</Name>
         </Param>
         <Param>

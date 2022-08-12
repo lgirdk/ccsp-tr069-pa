@@ -1440,6 +1440,9 @@
             <Name>Device.WiFi.Radio.{i}.X_LGI-COM_EnhancedACS.Weight.Channel.{i}.ChannelWeight</Name>
         </Param>
         <Param>
+            <Name>Device.WiFi.Radio.{i}.X_LGI-COM_EnhancedACS.Weight.ACSChannelsNumberOfEntries</Name>
+        </Param>
+        <Param>
             <Name>Device.WiFi.Radio.{i}.X_LGI-COM_ZeroWaitDFS.Enable</Name>
         </Param>
         <Param>

@@ -7730,6 +7730,9 @@
             <Name>Device.X_LGI-COM_CableModem.DownstreamPrimaryChannelID</Name>
         </Param>
         <Param>
+            <Name>Device.X_LGI-COM_CableModem.DownstreamPrimaryChannelType</Name>
+        </Param>
+        <Param>
             <Name>Device.X_LGI-COM_CableModem.QosServiceFlow.UpstreamNumberOfEntries</Name>
         </Param>
         <Param>

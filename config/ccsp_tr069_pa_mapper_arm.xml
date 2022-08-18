@@ -8149,6 +8149,9 @@
         <Param>
             <Name>Device.X_LGI-COM_ONT.Services.{i}.IPProvisioningMode</Name>
         </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.MgmtService.IPProvisioningMode</Name>
+        </Param>
     </ParamList>
 	<RpcMapper>
 		<Download>

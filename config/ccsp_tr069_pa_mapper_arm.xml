@@ -334,6 +334,9 @@
             <Name>Device.DeviceInfo.ProvisioningCode</Name>
         </Param>
         <Param>
+            <Name>Device.DeviceInfo.X_LGI-COM_ProvisioningCodeSource</Name>
+        </Param>
+        <Param>
             <Name>Device.DeviceInfo.UpTime</Name>
         </Param>
         <Param>

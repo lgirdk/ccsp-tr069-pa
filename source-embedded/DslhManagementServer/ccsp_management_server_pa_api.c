@@ -219,6 +219,50 @@ static void _get_shell_output2 (char *cmd, char *buf, size_t len)
     }
 }
 
+#ifdef DHCP_PROV_ENABLE
+
+static void SaveIntoPSMHelper (char *dhcp_acs_url)
+{
+    char psmKeyPrefixed[CCSP_TR069PA_PSM_NODE_NAME_MAX_LEN + 16];
+
+    CcspCwmpPrefixPsmKey(psmKeyPrefixed, CcspManagementServer_SubsystemPrefix, "cwmp.dhcpacsurl");
+
+    if (PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, psmKeyPrefixed, ccsp_string, dhcp_acs_url) != CCSP_SUCCESS)
+    {
+        CcspTraceInfo(("Failed to set cwmp.dhcpacsurl in PSM\n"));
+    }
+}
+
+static void GetFromPSMHelper (char *url, size_t url_size)
+{
+    char psmKeyPrefixed[CCSP_TR069PA_PSM_NODE_NAME_MAX_LEN + 16];
+    char *dhcp_acs_url = NULL;
+
+    *url = 0;
+
+    CcspCwmpPrefixPsmKey(psmKeyPrefixed, CcspManagementServer_SubsystemPrefix, "cwmp.dhcpacsurl");
+
+    if (PSM_Get_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, psmKeyPrefixed, ccsp_string, &dhcp_acs_url) != CCSP_SUCCESS)
+    {
+        CcspTraceInfo(("Failed to get cwmp.dhcpacsurl in PSM\n"));
+        return;
+    }
+
+    if (dhcp_acs_url)
+    {
+        size_t len = strlen(dhcp_acs_url);
+
+        if (len < url_size)
+        {
+            memcpy (url, dhcp_acs_url, len + 1);
+        }
+
+        AnscFreeMemory(dhcp_acs_url);
+    }
+}
+
+#endif
+
 static void updateInitalContact (void)
 {
     int nCcspError = 0;
@@ -229,11 +273,26 @@ static void updateInitalContact (void)
     CcspCwmpPrefixPsmKey(psmKeyPrefixed, CcspManagementServer_SubsystemPrefix, CCSP_TR069PA_PSM_KEY_InitialContact);
 
     lastContactUrl = ((PCCSP_CWMP_PROCESSOR_OBJECT)CcspManagementServer_cbContext)->GetLastContactUrl((ANSC_HANDLE)CcspManagementServer_cbContext);
+
+#ifdef DHCP_PROV_ENABLE
+    char lastSavedAcsURLFromDHCP[CCSP_CWMP_MAX_URL_SIZE];
+    GetFromPSMHelper(lastSavedAcsURLFromDHCP, sizeof(lastSavedAcsURLFromDHCP));
+    AnscTraceInfo(("Last ACS URL received from DHCP options is: %s and lastContactUrl is: %s\n", lastSavedAcsURLFromDHCP, lastContactUrl));
+
+    if ((!lastContactUrl) ||
+        (!AnscEqualString(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value, lastContactUrl, TRUE) &&
+         (lastSavedAcsURLFromDHCP[0] != '\0') &&
+         !AnscEqualString(lastSavedAcsURLFromDHCP, lastContactUrl, TRUE)))
+    {
+        bEnabled = TRUE;
+    }
+#else
     if ((!lastContactUrl) ||
         (!AnscEqualString(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value, lastContactUrl, TRUE)))
     {
         bEnabled = TRUE;
     }
+#endif
 
     nCcspError = PSM_Set_Record_Value2
              (
@@ -1067,12 +1126,14 @@ RETRY:
             else if (dhcpv6_url[0] != '0' && memcmp(dhcpv6_url,oldValue,strlen(dhcpv6_url)))
             {
                  objectInfo[ManagementServerID].parameters[ManagementServerURLID].value =  AnscCloneString(dhcpv6_url);
+                 SaveIntoPSMHelper(dhcpv6_url);
                  SendValueChangeSignal(ManagementServerID, ManagementServerURLID, oldValue);
                  CcspManagementServer_ValueChangeCB(CcspManagementServer_cbContext, CcspManagementServer_GetPAObjectID(ManagementServerID));
             }
             else if ( dhcpv4_url[0] != '0' && memcmp(dhcpv4_url,oldValue,strlen(dhcpv4_url)))
             {
                  objectInfo[ManagementServerID].parameters[ManagementServerURLID].value =  AnscCloneString(dhcpv4_url);
+                 SaveIntoPSMHelper(dhcpv4_url);
                  SendValueChangeSignal(ManagementServerID, ManagementServerURLID, oldValue);
                  CcspManagementServer_ValueChangeCB(CcspManagementServer_cbContext, CcspManagementServer_GetPAObjectID(ManagementServerID));
             }
@@ -1396,6 +1457,16 @@ CcspManagementServer_GetURL
         else
       //  #endif
         {
+#ifdef DHCP_PROV_ENABLE
+            char lastSavedAcsURLFromDHCP[CCSP_CWMP_MAX_URL_SIZE];
+            GetFromPSMHelper(lastSavedAcsURLFromDHCP, sizeof(lastSavedAcsURLFromDHCP));
+
+            if (lastSavedAcsURLFromDHCP[0] != '\0')
+            {
+                AnscTraceWarning(("Last ACS URL received from DHCP options is: %s\n", lastSavedAcsURLFromDHCP));
+                return AnscCloneString(lastSavedAcsURLFromDHCP);
+            }
+#endif
             return  AnscCloneString("");
         }
     }

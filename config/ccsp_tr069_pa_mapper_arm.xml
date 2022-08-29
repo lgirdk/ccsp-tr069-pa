@@ -8066,6 +8066,30 @@
         <Param>
     	    <Name>Device.X_LGI-COM_Multicast.SnoopingEnable</Name>
         </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Multicast.IGMPv3ProxyEnable</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Multicast.MLDv2ProxyEnable</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Multicast.SSMForwardingEnable</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Multicast.MaxSSMSessions</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Multicast.M2UMaxSessions</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Multicast.MaxThrottlingRate</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Multicast.MaxThrottlingHoldTime</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_Multicast.FastLeaveEnable</Name>
+        </Param>
   <!--  Parameters under "Device.X_LGI-COM_EventLogging" -->
         <Param>
             <Name>Device.X_LGI-COM_EventLogging.WiFiEventLogNumberOfEntries</Name>

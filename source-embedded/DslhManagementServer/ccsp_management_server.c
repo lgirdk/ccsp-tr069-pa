@@ -2405,19 +2405,6 @@ int CcspManagementServer_ValidateParameterValues(
 					{
 						parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString("1");
 					}
-					res = PSM_Set_Record_Value2
-                    (
-                        bus_handle,
-                        CcspManagementServer_SubsystemPrefix,
-                        "dmsb.ManagementServer.PeriodicInformEnable",
-                        ccsp_string,
-                        parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue
-                    );
-					if(res != CCSP_SUCCESS)
-					{
-						/* It seems that only chance to invoke roll back is PSM save error. */
-						CcspManagementServer_RollBackParameterValues();
-					}
 					break;
                 case ManagementServerURLID:
                 {
@@ -2520,93 +2507,20 @@ int CcspManagementServer_ValidateParameterValues(
                 case ManagementServerPeriodicInformIntervalID:
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, 1, FALSE, 0) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
                     else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
-					res = PSM_Set_Record_Value2
-                    (
-                        bus_handle,
-                        CcspManagementServer_SubsystemPrefix,
-                        "dmsb.ManagementServer.PeriodicInformInterval",
-                        ccsp_string,
-                        parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue
-                    );
-					if(res != CCSP_SUCCESS)
-					{
-						/* It seems that only chance to invoke roll back is PSM save error. */
-						CcspManagementServer_RollBackParameterValues();
-					}
                     break;
                 case ManagementServerCWMPRetryMinimumWaitIntervalID:
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, 1, TRUE, 65535) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
                     else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
-	
-					res = PSM_Set_Record_Value2
-                    (
-                        bus_handle,
-                        CcspManagementServer_SubsystemPrefix,
-                        "dmsb.ManagementServer.CWMPRetryMinimumWaitInterval",
-                        ccsp_string,
-                        parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue
-                    );
-					if(res != CCSP_SUCCESS)
-					{
-						/* It seems that only chance to invoke roll back is PSM save error. */
-						CcspManagementServer_RollBackParameterValues();
-					}
-                    if (res == CCSP_SUCCESS)
-                    {
-                        /*
-                         * Since ACS Discovery feature is supported for LAN side, the DUT have to update
-                         * config file dnsmasq.conf and restart dnsmasq after the related TR69 values
-                         * (ACS URL, CWMPRetryMinimumWaitInterval, CWMPRetryIntervalMultiplier) are changed.
-                         */
-                         system("sysevent set dhcp_server-restart");
-                    }
                     break;
                 case ManagementServerCWMPRetryIntervalMultiplierID:
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, 1000, TRUE, 65535) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
                     else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
-					
-					res = PSM_Set_Record_Value2
-                    (
-                        bus_handle,
-                        CcspManagementServer_SubsystemPrefix,
-                        "dmsb.ManagementServer.CWMPRetryIntervalMultiplier",
-                        ccsp_string,
-                        parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue
-                    );
-					if(res != CCSP_SUCCESS)
-					{
-
-						/* It seems that only chance to invoke roll back is PSM save error. */
-						CcspManagementServer_RollBackParameterValues();
-					}
-                    if (res == CCSP_SUCCESS)
-                    {
-                        /*
-                         * Since ACS Discovery feature is supported for LAN side, the DUT have to update
-                         * config file dnsmasq.conf and restart dnsmasq after the related TR69 values
-                         * (ACS URL, CWMPRetryMinimumWaitInterval, CWMPRetryIntervalMultiplier) are changed.
-                         */
-                         system("sysevent set dhcp_server-restart");
-                    }
                     break;
                 case ManagementServerSTUNMinimumKeepAlivePeriodID:
                 case ManagementServerDefaultActiveNotificationThrottleID:
                     if(CcspManagementServer_ValidateINT(val[i].parameterValue, TRUE, 10, FALSE, 0) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
                     else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
 															printf("<<< calling  PSM_Set_Record_Value2 >>>>>>\n");
-					res = PSM_Set_Record_Value2
-                    (
-                        bus_handle,
-                        CcspManagementServer_SubsystemPrefix,
-                        "dmsb.ManagementServer.DefaultActiveNotificationThrottle",
-                        ccsp_string,
-                        parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue
-                    );
-					if(res != CCSP_SUCCESS)
-					{
-						/* It seems that only chance to invoke roll back is PSM save error. */
-						CcspManagementServer_RollBackParameterValues();
-					}
                     break;
                 case ManagementServerUDPConnectionRequestAddressNotificationLimitID:
                     parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
@@ -2618,20 +2532,6 @@ int CcspManagementServer_ValidateParameterValues(
                 case ManagementServerPeriodicInformTimeID:
                     if(CcspManagementServer_ValidateDateTime(val[i].parameterValue) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
                     else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
-
-					res = PSM_Set_Record_Value2
-                    (
-                        bus_handle,
-                        CcspManagementServer_SubsystemPrefix,
-                        "dmsb.ManagementServer.PeriodicInformTime",
-                        ccsp_string,
-                        parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue
-                    );
-					if(res != CCSP_SUCCESS)
-					{
-						/* It seems that only chance to invoke roll back is PSM save error. */
-						CcspManagementServer_RollBackParameterValues();
-					}
                     break;
                 case ManagementServerParameterKeyID:
                     if(CcspManagementServer_ValidateStrLen(val[i].parameterValue, 32) != 0 && returnStatus == 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
@@ -3245,6 +3145,111 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
 		//}
 		/*----END-----PASSWORD ENCRYPTION CODE COMMENTED----END-----*/
 
+        if(objectID == ManagementServerID)
+        {
+            switch(parameterID)
+            {
+                case ManagementServerPeriodicInformEnableID:
+
+                    res = PSM_Set_Record_Value2
+                    (
+                        bus_handle,
+                        CcspManagementServer_SubsystemPrefix,
+                        "dmsb.ManagementServer.PeriodicInformEnable",
+                        ccsp_string,
+                        slapVar.Variant.varString
+                    );
+                    break;
+
+                case ManagementServerPeriodicInformIntervalID:
+
+                    res = PSM_Set_Record_Value2
+                    (
+                        bus_handle,
+                        CcspManagementServer_SubsystemPrefix,
+                        "dmsb.ManagementServer.PeriodicInformInterval",
+                        ccsp_string,
+                        slapVar.Variant.varString
+                    );
+                    break;
+
+                case ManagementServerCWMPRetryMinimumWaitIntervalID:
+
+                    res = PSM_Set_Record_Value2
+                    (
+                        bus_handle,
+                        CcspManagementServer_SubsystemPrefix,
+                        "dmsb.ManagementServer.CWMPRetryMinimumWaitInterval",
+                        ccsp_string,
+                        slapVar.Variant.varString
+                    );
+
+                    if (res == CCSP_SUCCESS)
+                    {
+                        /*
+                        * Since ACS Discovery feature is supported for LAN side, the DUT have to update
+                        * config file dnsmasq.conf and restart dnsmasq after the related TR69 values
+                        * (ACS URL, CWMPRetryMinimumWaitInterval, CWMPRetryIntervalMultiplier) are changed.
+                        */
+                        system("sysevent set dhcp_server-restart");
+                    }
+                    break;
+
+                case ManagementServerCWMPRetryIntervalMultiplierID:
+
+                    res = PSM_Set_Record_Value2
+                    (
+                        bus_handle,
+                        CcspManagementServer_SubsystemPrefix,
+                        "dmsb.ManagementServer.CWMPRetryIntervalMultiplier",
+                        ccsp_string,
+                        slapVar.Variant.varString
+                    );
+
+                    if (res == CCSP_SUCCESS)
+                    {
+                        /*
+                        * Since ACS Discovery feature is supported for LAN side, the DUT have to update
+                        * config file dnsmasq.conf and restart dnsmasq after the related TR69 values
+                        * (ACS URL, CWMPRetryMinimumWaitInterval, CWMPRetryIntervalMultiplier) are changed.
+                        */
+                        system("sysevent set dhcp_server-restart");
+                    }
+                    break;
+
+                case ManagementServerDefaultActiveNotificationThrottleID:
+
+                    res = PSM_Set_Record_Value2
+                    (
+                        bus_handle,
+                        CcspManagementServer_SubsystemPrefix,
+                        "dmsb.ManagementServer.DefaultActiveNotificationThrottle",
+                        ccsp_string,
+                        slapVar.Variant.varString
+                    );
+                    break;
+
+                case ManagementServerPeriodicInformTimeID:
+
+                    res = PSM_Set_Record_Value2
+                    (
+                        bus_handle,
+                        CcspManagementServer_SubsystemPrefix,
+                        "dmsb.ManagementServer.PeriodicInformTime",
+                        ccsp_string,
+                        slapVar.Variant.varString
+                    );
+                    break;
+            }
+
+            if(res != CCSP_SUCCESS)
+            {
+                /* Rollback to old value since PSM_Set_Record_Value2 is not success */
+                CcspManagementServer_RollBackParameterValues();
+                goto EXIT1;
+            }
+        }
+
         if ( objectID == ManagementServerID && parameterID == ManagementServerURLID && g_ACSChangedURL == 1)
         {
             res = PSM_Set_Record_Value2
@@ -3394,6 +3399,85 @@ int CcspManagementServer_RollBackParameterValues()
 				pRecordName,
 				ccsp_string,
 				slapVar.Variant.varString);
+            
+            if(objectID == ManagementServerID)
+            {
+                switch(parameterID)
+                {
+                    case ManagementServerPeriodicInformEnableID:
+
+                        res = PSM_Set_Record_Value2
+                        (
+                            bus_handle,
+                            CcspManagementServer_SubsystemPrefix,
+                            "dmsb.ManagementServer.PeriodicInformEnable",
+                            ccsp_string,
+                            slapVar.Variant.varString
+                        );
+                        break;
+
+                    case ManagementServerPeriodicInformIntervalID:
+
+                        res = PSM_Set_Record_Value2
+                        (
+                            bus_handle,
+                            CcspManagementServer_SubsystemPrefix,
+                            "dmsb.ManagementServer.PeriodicInformInterval",
+                            ccsp_string,
+                            slapVar.Variant.varString
+                        );
+                        break;
+
+                    case ManagementServerCWMPRetryMinimumWaitIntervalID:
+
+                        res = PSM_Set_Record_Value2
+                        (
+                            bus_handle,
+                            CcspManagementServer_SubsystemPrefix,
+                            "dmsb.ManagementServer.CWMPRetryMinimumWaitInterval",
+                            ccsp_string,
+                            slapVar.Variant.varString
+                        );
+                        break;
+
+                    case ManagementServerCWMPRetryIntervalMultiplierID:
+
+                        res = PSM_Set_Record_Value2
+                        (
+                            bus_handle,
+                            CcspManagementServer_SubsystemPrefix,
+                            "dmsb.ManagementServer.CWMPRetryIntervalMultiplier",
+                            ccsp_string,
+                            slapVar.Variant.varString
+                        );
+                        break;
+
+                    case ManagementServerDefaultActiveNotificationThrottleID:
+
+                        res = PSM_Set_Record_Value2
+                        (
+                            bus_handle,
+                            CcspManagementServer_SubsystemPrefix,
+                            "dmsb.ManagementServer.DefaultActiveNotificationThrottle",
+                            ccsp_string,
+                            slapVar.Variant.varString
+                        );
+                        break;
+
+                    case ManagementServerPeriodicInformTimeID:
+
+                        res = PSM_Set_Record_Value2
+                        (
+                            bus_handle,
+                            CcspManagementServer_SubsystemPrefix,
+                            "dmsb.ManagementServer.PeriodicInformTime",
+                            ccsp_string,
+                            slapVar.Variant.varString
+                        );
+                        break;
+                }
+            }
+
 			if(res != CCSP_SUCCESS){
 				/* It seems that only chance to invoke roll back is PSM save error.
 				 * Nothing can be done if another PSM save error happens again during roll back.

@@ -2687,6 +2687,10 @@ CcspCwmpsoMcoDownload
 
                 }
             }
+            else
+            {
+                pCcspCwmpCpeController->SaveCfgToPsm( (ANSC_HANDLE)pCcspCwmpCpeController,"CommandKey",pMcoDownloadReq->CommandKey);
+            }
         }
     }
 

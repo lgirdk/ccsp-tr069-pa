@@ -1815,6 +1815,9 @@ CcspCwmppoProcessPvcSignal
                         &pCommandKey
                     );
             }
+
+            pCommandKey = pCcspCwmpCpeController->LoadCfgFromPsm((ANSC_HANDLE)pCcspCwmpCpeController, "CommandKey");
+
             /* signal TransferComplete */
             if ( !bAtc )
             {
@@ -1876,6 +1879,7 @@ CcspCwmppoProcessPvcSignal
                 }
 
                 if ( pCommandKey ) AnscFreeMemory(pCommandKey);
+                PSM_Del_Record( pCcspCwmpCpeController->hMsgBusHandle, pCcspCwmpCpeController->SubsysName, "CommandKey");
             }
             /*else
             {

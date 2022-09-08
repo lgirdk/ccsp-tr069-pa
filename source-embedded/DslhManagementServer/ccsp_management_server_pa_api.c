@@ -148,21 +148,21 @@ CcspManagementServer_GenerateDefaultPassword
 #if defined (INTEL_PUMA7)
 //Intel Proposed RDKB Generic Bug Fix from XB6 SDK
 //Used to obtain the output from the shell for the given cmd
-void _get_shell_output(FILE *fp, char * out, int len)
-{    
+static void _get_shell_output (FILE *fp, char *out, int len)
+{
     char * p;
     if (fp)
     {
         fgets(out, len, fp);
-        if ((p = strchr(out, '\n'))) 
+        if ((p = strchr(out, '\n')))
         {
            *p = '\0';
         }
-    }     
+    }
 }
 #endif
 
-void ReadTr69TlvData()
+static void ReadTr69TlvData (void)
 {
 	int                             res;
 	char                            recordName[MAX_BUF_SIZE];

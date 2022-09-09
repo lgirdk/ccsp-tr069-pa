@@ -7961,6 +7961,12 @@
         <Param>
             <Name>Device.X_LGI-COM_MTA.SpeedUpMTA-RFLossDetection</Name>
         </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_MTA.LineInfoNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_MTA.LineTableNumberOfEntries</Name>
+        </Param>
 
   <!--  General Parameters under "Device.X_LGI-COM_General_Internal." -->
         <Param>

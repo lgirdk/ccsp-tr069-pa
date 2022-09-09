@@ -172,42 +172,43 @@ static void ReadTr69TlvData (int ethwan_enable)
 	errno_t                         rc               = -1;
     	int                             ind              = -1;
 
-#if defined (INTEL_PUMA7)
-	//Intel Proposed RDKB Generic Bug Fix from XB6 SDK
-	char out[16];
-	int watchdog = NO_OF_RETRY;
-        FILE *fp = NULL;
-	int ret = 0;
-	do
-	{
-		fp = v_secure_popen("r", "sysevent get TLV202-status");
-		if(!fp)
-		{
-		    AnscTraceWarning(("%s Error in opening pipe! \n",__FUNCTION__));
-		}
-                else
-                {
-		   _get_shell_output(fp, out, sizeof(out));
-		   ret = v_secure_pclose(fp);
-		   if(ret !=0) {
-                       AnscTraceWarning(("%s Error in closing command pipe! [%d] \n",__FUNCTION__,ret));
-		   }
-                }
-		sleep(1);
-		watchdog--;
-	}while ((!strstr(out,"success")) && (watchdog != 0));
-
-	if ( watchdog == 0 )
-	{
-		fprintf(stderr, "\n%s(): Ccsp_GwProvApp haven't been able to initialize TLV Data.\n", __FUNCTION__);
-	}
-#endif
-
 	FILE *file = NULL;
 	Tr69TlvData *object2 = NULL;
 
 	if (!ethwan_enable) //RDKB-40531: As T69_TLVDATA_FILE should not be considered for ETHWAN mode
 	{
+#if defined (INTEL_PUMA7)
+		//Intel Proposed RDKB Generic Bug Fix from XB6 SDK
+		char out[16];
+		int watchdog = NO_OF_RETRY;
+		FILE *fp = NULL;
+		int ret = 0;
+
+		do
+		{
+			fp = v_secure_popen("r", "sysevent get TLV202-status");
+			if (!fp)
+			{
+				AnscTraceWarning(("%s Error in opening pipe! \n",__FUNCTION__));
+			}
+			else
+			{
+				_get_shell_output(fp, out, sizeof(out));
+				ret = v_secure_pclose(fp);
+				if (ret !=0) {
+					AnscTraceWarning(("%s Error in closing command pipe! [%d] \n",__FUNCTION__,ret));
+				}
+			}
+			sleep(1);
+			watchdog--;
+		} while ((!strstr(out,"success")) && (watchdog != 0));
+
+		if ( watchdog == 0 )
+		{
+			fprintf(stderr, "\n%s(): Ccsp_GwProvApp haven't been able to initialize TLV Data.\n", __FUNCTION__);
+		}
+#endif
+
 		if ((file = fopen(TR69_TLVDATA_FILE, "rb")) != NULL)
 		{
 			object2 = malloc(sizeof(Tr69TlvData));

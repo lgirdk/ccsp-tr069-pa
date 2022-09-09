@@ -148,67 +148,74 @@ CcspManagementServer_GenerateDefaultPassword
 #if defined (INTEL_PUMA7)
 //Intel Proposed RDKB Generic Bug Fix from XB6 SDK
 //Used to obtain the output from the shell for the given cmd
-static void _get_shell_output (FILE *fp, char *out, int len)
+static void _get_shell_output (FILE *fp, char *out, size_t len)
 {
-    char * p;
+    if (len <= 0)
+        return;
+
+    *out = 0;
+
     if (fp)
     {
         fgets(out, len, fp);
-        if ((p = strchr(out, '\n')))
-        {
-           *p = '\0';
-        }
+        len = strlen(out);
+        if ((len > 0) && (out[len - 1] == '\n'))
+            out[len - 1] = 0;
     }
 }
 #endif
 
-static void ReadTr69TlvData (void)
+static void ReadTr69TlvData (int ethwan_enable)
 {
 	int                             res;
 	char                            recordName[MAX_BUF_SIZE];
 	errno_t                         rc               = -1;
     	int                             ind              = -1;
 
-#if defined (INTEL_PUMA7)
-	//Intel Proposed RDKB Generic Bug Fix from XB6 SDK
-	char out[MAX_BUF_SIZE] = {0};
-#endif
-	Tr69TlvData *object2=malloc(sizeof(Tr69TlvData));
-#if !defined (INTEL_PUMA7)
-	FILE * file= fopen(TR69_TLVDATA_FILE, "rb");
-#else
-	//Intel Proposed RDKB Generic Bug Fix from XB6 SDK
 	FILE *file = NULL;
-	int watchdog = NO_OF_RETRY;
-        FILE *fp = NULL;
-	int ret = 0;
-	do
-	{
-		fp = v_secure_popen("r", "sysevent get TLV202-status");
-		if(!fp)
-		{
-		    AnscTraceWarning(("%s Error in opening pipe! \n",__FUNCTION__));
-		}
-                else
-                {
-		   _get_shell_output(fp, out, MAX_BUF_SIZE);
-		   ret = v_secure_pclose(fp);
-		   if(ret !=0) {
-                       AnscTraceWarning(("%s Error in closing command pipe! [%d] \n",__FUNCTION__,ret));
-		   }
-                }
-		sleep(1);
-		watchdog--;
-	}while ((!strstr(out,"success")) && (watchdog != 0));
+	Tr69TlvData *object2 = NULL;
 
-	if ( watchdog == 0 )
+	if (!ethwan_enable) //RDKB-40531: As T69_TLVDATA_FILE should not be considered for ETHWAN mode
 	{
-		AnscTraceVerbose(("%s(): Ccsp_GwProvApp haven't been able to initialize TLV Data.\n", __FUNCTION__));
+#if defined (INTEL_PUMA7)
+		//Intel Proposed RDKB Generic Bug Fix from XB6 SDK
+		char out[16];
+		int watchdog = NO_OF_RETRY;
+		FILE *fp = NULL;
+		int ret = 0;
+
+		do
+		{
+			fp = v_secure_popen("r", "sysevent get TLV202-status");
+			if (!fp)
+			{
+				AnscTraceWarning(("%s Error in opening pipe! \n",__FUNCTION__));
+			}
+			else
+			{
+				_get_shell_output(fp, out, sizeof(out));
+				ret = v_secure_pclose(fp);
+				if (ret !=0) {
+					AnscTraceWarning(("%s Error in closing command pipe! [%d] \n",__FUNCTION__,ret));
+				}
+			}
+			sleep(1);
+			watchdog--;
+		} while ((!strstr(out,"success")) && (watchdog != 0));
+
+		if ( watchdog == 0 )
+		{
+			AnscTraceVerbose(("%s(): Ccsp_GwProvApp haven't been able to initialize TLV Data.\n", __FUNCTION__));
+		}
+#endif
+
+		if ((file = fopen(TR69_TLVDATA_FILE, "rb")) != NULL)
+		{
+			object2 = malloc(sizeof(Tr69TlvData));
+		}
 	}
 
-	file = fopen(TR69_TLVDATA_FILE, "rb");
-#endif
-	if ((file != NULL) && (object2) && (access(ETHWAN_FILE, F_OK) != 0)) //RDKB-40531: As T69_TLVDATA_FILE should not be considered for ETHWAN mode
+	if ((file != NULL) && (object2))
 	{
 		size_t nm = fread(object2, sizeof(Tr69TlvData), 1, file);
 		fclose(file);
@@ -495,6 +502,7 @@ CcspManagementServer_Init
     errno_t rc = -1;
     int res;
     char recordName[MAX_BUF_SIZE];
+    int ethwan_enable;
 
     if ( s_MS_Init_Done ) return;
 
@@ -583,9 +591,13 @@ CcspManagementServer_Init
     }
 
     s_MS_Init_Done = TRUE;
+
+	ethwan_enable = (access(ETHWAN_FILE, F_OK) == 0) ? 1 : 0;
+
 	// Function has to be called if TLV_DATA_FILE is present or not
-	ReadTr69TlvData();
-	if (access(ETHWAN_FILE, F_OK) != -1) //RDKB-40531: URL updated for EWAN mode
+	ReadTr69TlvData(ethwan_enable);
+
+	if (ethwan_enable) //RDKB-40531: URL updated for EWAN mode
 	{
 		if(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value == NULL)
 		{

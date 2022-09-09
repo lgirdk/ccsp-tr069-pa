@@ -148,16 +148,19 @@ CcspManagementServer_GenerateDefaultPassword
 #if defined (INTEL_PUMA7)
 //Intel Proposed RDKB Generic Bug Fix from XB6 SDK
 //Used to obtain the output from the shell for the given cmd
-static void _get_shell_output (FILE *fp, char *out, int len)
+static void _get_shell_output (FILE *fp, char *out, size_t len)
 {
-    char * p;
+    if (len <= 0)
+        return;
+
+    *out = 0;
+
     if (fp)
     {
         fgets(out, len, fp);
-        if ((p = strchr(out, '\n')))
-        {
-           *p = '\0';
-        }
+        len = strlen(out);
+        if ((len > 0) && (out[len - 1] == '\n'))
+            out[len - 1] = 0;
     }
 }
 #endif
@@ -171,7 +174,7 @@ static void ReadTr69TlvData (int ethwan_enable)
 
 #if defined (INTEL_PUMA7)
 	//Intel Proposed RDKB Generic Bug Fix from XB6 SDK
-	char out[MAX_BUF_SIZE] = {0};
+	char out[16];
 #endif
 	Tr69TlvData *object2=malloc(sizeof(Tr69TlvData));
 #if !defined (INTEL_PUMA7)
@@ -191,7 +194,7 @@ static void ReadTr69TlvData (int ethwan_enable)
 		}
                 else
                 {
-		   _get_shell_output(fp, out, MAX_BUF_SIZE);
+		   _get_shell_output(fp, out, sizeof(out));
 		   ret = v_secure_pclose(fp);
 		   if(ret !=0) {
                        AnscTraceWarning(("%s Error in closing command pipe! [%d] \n",__FUNCTION__,ret));

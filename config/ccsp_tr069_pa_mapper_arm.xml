@@ -8098,7 +8098,7 @@
         </Param>
   <!--  Parameters under "Device.X_LGI-COM_EventLogging" -->
         <Param>
-            <Name>Device.X_LGI-COM_EventLogging.EventLogNumberOfEntries</Name>
+            <Name>Device.X_LGI-COM_EventLogging.WiFiEventLogNumberOfEntries</Name>
         </Param>
         <Param>
             <Name>Device.X_LGI-COM_EventLogging.EventLog.{i}.Tag</Name>

@@ -2543,7 +2543,7 @@ CcspCwmpsoMcoDownload
                         {
                             CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_requestDenied);
                             returnStatus = ANSC_STATUS_BAD_PARAMETER;
-                            goto EXIT2;
+                            goto EXIT4;
                         }
                         pSlapVar->Variant.varString = NULL;
                     }
@@ -2556,8 +2556,9 @@ CcspCwmpsoMcoDownload
             }
             else
             {
+                CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_internalError);
                 returnStatus = ANSC_STATUS_INTERNAL_ERROR;
-                goto EXIT2;
+                goto EXIT4;
             }
 
             if ( pCwmpSoapFault )
@@ -2699,6 +2700,9 @@ CcspCwmpsoMcoDownload
      * Instead of sending back the response SOAP envelope right away in the same context, we create
      * an Asynchronous Response structure and let another dedicated task manage the message flow.
      */
+
+EXIT4:
+
     pWmpsoAsyncRep = (PCCSP_CWMPSO_ASYNC_RESPONSE)AnscAllocateMemory(sizeof(CCSP_CWMPSO_ASYNC_RESPONSE));
 
     if ( !pWmpsoAsyncRep )

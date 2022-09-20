@@ -3301,13 +3301,11 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
     }
 
     if(valueChangeSize > 0){
-        res = CcspBaseIf_SendparameterValueChangeSignal (
-            bus_handle,
-            val,
-            valueChangeSize);
-        if(res != CCSP_SUCCESS){
-            CcspTraceWarning2("ms", ( "CcspManagementServer_CommitParameterValues send value change signal failure %d.\n", res)); 
-        }
+        CcspTr069PaTraceDebug(("Invoking value change CB\n"));
+        /* RBUS core doesn't yet support asynchronous requests (similar to DBUS' dbus_connection_send()).
+         * So calling the ValueChange callback from here itself, instead going via message bus.
+         */
+        CcspCwmppoParamValueChangedCB(val, valueChangeSize, g_pCcspCwmpCpeController->hCcspCwmpProcessor);
     }
 
 EXIT1:

@@ -2622,7 +2622,7 @@ CcspCwmpsoMcoDownload
             if ( returnStatus != ANSC_STATUS_SUCCESS )
             {
                 CcspTr069PaTraceError(("Download - SPV failed, status = %d\n", (int)returnStatus));
-                CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_internalError);
+                CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_requestDenied);
                 if ( pCwmpSoapFault )
                 {
                     unsigned int             j;
@@ -2630,61 +2630,10 @@ CcspCwmpsoMcoDownload
 
                     for ( j = 0; j < pCwmpSoapFault->SetParamValuesFaultCount; j ++ )
                     {
-                        /* temporary solution code starts */
-                        bErrorOnCmdKey = (NULL != _ansc_strstr(pCwmpSoapFault->SetParamValuesFaultArray[j].ParameterName, CCSP_NS_DOWNLOAD_COMMAND_KEY));
-                        /* temporary solution code ends */
-
                         CcspTr069PaTraceError(("Download - Download failed to set parameter %s\n", pCwmpSoapFault->SetParamValuesFaultArray[j].ParameterName));
                         CcspCwmpCleanSetParamFault((&pCwmpSoapFault->SetParamValuesFaultArray[j]));
                     }
                     pCwmpSoapFault->SetParamValuesFaultCount = 0;
-
-/* the following code is a temporary solution because SPV D-Bus call
- * won't return expected error code, only CWMP SPV specific error 
- * code may be returned. It must be removed in future if COSA library
- * has improved to let backend returns proper error code to PA.
- */
-
-/* temporary code starts here */
-
-                    if ( bErrorOnCmdKey )
-                    {
-                        /* if SPV sets fault on CommandKey, means there's a FW upgrade ongoing */
-                        CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_resources);
-                    }
-                    else
-                    {
-                        char        fuError[256];
-                        char*       pValue = NULL;
-                        ULONG       ulCwmpError = CCSP_CWMP_CPE_CWMP_FaultCode_resources;
-
-                        snprintf
-                            (
-                                fuError, sizeof(fuError),
-                                "%s%s",
-                                CCSP_NS_DOWNLOAD,
-                                CCSP_NS_DOWNLOAD_ERROR
-                            );
-
-                        pCcspCwmpCpeController->GetParamStringValue
-                            (
-                                (ANSC_HANDLE)pCcspCwmpCpeController,
-                                fuError,
-                                &pValue
-                            );                            
-
-                        if ( pValue ) ulCwmpError = (ULONG)_ansc_atoi(pValue);
-
-                        if ( ulCwmpError < CCSP_ERR_CWMP_BEGINNING ||
-                             ulCwmpError > CCSP_ERR_CWMP_ENDING )
-                        {
-                            ulCwmpError = CCSP_CWMP_CPE_CWMP_FaultCode_resources;
-                        }
-                        
-                        CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, ulCwmpError);
-                    }
-
-/* temporary solution ends here */
 
                 }
             }

@@ -5273,6 +5273,9 @@
 		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Status</Name>
 	</Param>
 	<Param>
+		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Alias</Name>
+	</Param>
+	<Param>
 		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.LastChange</Name>
 	</Param>
 	<Param>
@@ -5307,6 +5310,9 @@
         </Param>
 	<Param>
 		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.KeepAlivePolicy</Name>
+	</Param>
+	<Param>
+		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.DeliveryHeaderProtocol</Name>
 	</Param>
 	<Param>
 		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.RemoteEndpointHealthCheckPingCount</Name>

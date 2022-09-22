@@ -2170,8 +2170,8 @@ static int CcspManagementServer_ValidateBoolean(
 
     if(*boolStr == '1') return 1;
     if(*boolStr == '0') return 0;
-    if(AnscEqualString((char *)boolStr, "true", FALSE)) return 1;
-    if(AnscEqualString((char *)boolStr, "false", FALSE)) return 0;
+    if (strcasecmp((char *)boolStr, "true") == 0) return 1;
+    if (strcasecmp((char *)boolStr, "false") == 0) return 0;
     return -1;
 }
 

@@ -545,6 +545,12 @@
         <Param>
             <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareToDownload</Name>
         </Param>
+        <Param>
+            <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadNow</Name>
+        </Param>
+        <Param>
+            <Name>Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadProtocol</Name>
+        </Param>
 	    <Param>
             <Name>Device.X_CISCO_COM_MTA.Dect.SoftwareVersion</Name>
         </Param>
@@ -7734,6 +7740,9 @@
 
         <!--  Gateway Parameters under "Device.X_LGI-COM_Gateway." -->
 
+        <Param>
+            <Name>Device.X_LGI-COM_Gateway.DNS_ForceStatic</Name>
+        </Param>
         <Param>
             <Name>Device.X_LGI-COM_Gateway.DNS_Override</Name>
         </Param>

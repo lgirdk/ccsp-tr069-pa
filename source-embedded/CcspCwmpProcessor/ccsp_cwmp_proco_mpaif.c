@@ -2377,7 +2377,7 @@ CcspCwmppoMpaGetParameterValues
 #if !defined (_CWMP_ALLOW_INTERNAL_INDEXES_)
                     // if the parameter name doesn't match the requested name
                     // it's a side effect from aliasing, should not be returned
-                    if (!bParamNameArrayEmpty && !CcspTr069PaMatchRequestQuery(pParamValues[k]->parameterName, pParamNameArray) )
+                    if (!bParamNameArrayEmpty && !CcspTr069PaMatchRequestQuery(pParamValues[k]->parameterName, pParamNameArray) && (bDataModelReq != TRUE))
                     {
                         bNsInvisibleToCloudServer = TRUE;
                     }

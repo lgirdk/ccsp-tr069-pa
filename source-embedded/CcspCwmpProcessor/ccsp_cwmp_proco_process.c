@@ -308,14 +308,13 @@ CcspCwmppoScheduleInform
     PCCSP_CWMP_PROCESSOR_OBJECT      pMyObject         = (PCCSP_CWMP_PROCESSOR_OBJECT   )hThisObject;
     PANSC_TIMER_DESCRIPTOR_OBJECT   pScheduleTimerObj = (PANSC_TIMER_DESCRIPTOR_OBJECT)pMyObject->hScheduleTimerObj;
 
-    if ( pMyObject->SecheduledCommandKey )
+    // If an already schedule inform is in progress
+    // keep the old command key as per MVXREQ-3357
+    if ( pMyObject->SecheduledCommandKey == NULL )
     {
-        AnscFreeMemory(pMyObject->SecheduledCommandKey);
-
-        pMyObject->SecheduledCommandKey = NULL;
+        CcspTr069PaTraceDebug(("Save the command key only when no pending schedule inform is waiting to be delivered.\n"));
+        pMyObject->SecheduledCommandKey = AnscCloneString(pCommandKey);
     }
-
-    pMyObject->SecheduledCommandKey = AnscCloneString(pCommandKey);
 
     pScheduleTimerObj->SetInterval((ANSC_HANDLE)pScheduleTimerObj, ulDelaySeconds * 1000);
     pScheduleTimerObj->Start      ((ANSC_HANDLE)pScheduleTimerObj);

@@ -1482,6 +1482,10 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
         }
 
         bAcsRequestURLChanged = TRUE;
+        CcspTraceInfo(("Send Value Change Signal.\n"));
+        SendValueChangeSignal(ManagementServerID, ManagementServerConnectionRequestURLID, oldValue);
+        CcspManagementServer_ValueChangeCB(CcspManagementServer_cbContext, CcspManagementServer_GetPAObjectID(ManagementServerID));
+
         if(oldValue) AnscFreeMemory(oldValue);
     }
     

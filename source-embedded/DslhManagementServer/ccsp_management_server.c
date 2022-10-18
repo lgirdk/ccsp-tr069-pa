@@ -2754,7 +2754,6 @@ void Send_TR069_Notification(int parameterID, char* pString)
 		param.writeID = write_id;
 
 		//ccspWebPaValueChangedCB(&param,0,NULL);
-		CcspCwmppoParamValueChangedCB(&param,1, g_pCcspCwmpCpeController->hCcspCwmpProcessor);
 
 	}
 	else if( parameterID == TR069Notify_Connected_ClientID )

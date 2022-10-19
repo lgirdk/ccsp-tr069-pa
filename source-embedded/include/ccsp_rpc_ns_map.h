@@ -125,9 +125,9 @@
 #define  CCSP_NS_DOWNLOAD_ARG_MAX_COUNT             10
 #define  CCSP_NS_DOWNLOAD_RESULT_ARG_COUNT          4
 
-#define  CCSP_FW_DOWNLOAD_STATE                     "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadNow"
+#define  CCSP_FW_DOWNLOAD_STATE                     "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadStatus"
 #define  CCSP_FW_DOWNLOAD                           "Device.DeviceInfo."
-#define  CCSP_FW_DOWNLOAD_STATUS                    "X_RDKCENTRAL-COM_FirmwareDownloadNow"
+#define  CCSP_FW_DOWNLOAD_STATUS                    "X_RDKCENTRAL-COM_FirmwareDownloadStatus"
 /**********************************************************************
     RPC 'Upload'
 **********************************************************************/

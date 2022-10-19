@@ -1590,6 +1590,77 @@ CcspCwmppoDelayUdpConnReqAddrTask
 
 
 static char                         s_ns_download_state[256] = {0};
+static int iRetrycount = 0;
+static pthread_t TCEvtHandle_tid;
+
+extern char *CcspManagementServer_SubsystemPrefix;
+
+static void SaveTCintoPSM()
+{
+    char *pKey = NULL;
+    int res = 0;
+    res = PSM_Get_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix,"CommandKey", NULL, &pKey);
+    if (res == CCSP_SUCCESS)
+    {
+        PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, "eRT.com.cisco.spvtg.ccsp.tr069pa.Undelivered_TC.1.CommandKey", ccsp_string, pKey);
+        if ( pKey )
+        {
+            AnscFreeMemory(pKey);
+        }
+        PSM_Del_Record( bus_handle, CcspManagementServer_SubsystemPrefix, "CommandKey");
+    }
+    else
+    {
+        PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, "eRT.com.cisco.spvtg.ccsp.tr069pa.Undelivered_TC.1.CommandKey", ccsp_string,  "" );
+    }
+    PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, "eRT.com.cisco.spvtg.ccsp.tr069pa.Undelivered_TC.1.IsDownload", ccsp_boolean,  "1" );
+    PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, "eRT.com.cisco.spvtg.ccsp.tr069pa.Undelivered_TC.1.FaultCode", ccsp_string,  "9010" );
+}
+
+static void *FWDWLD_retry_thrd(void *data)
+{
+    UNREFERENCED_PARAMETER(data);
+    char* faultParam = NULL;
+    int ret = 0;
+    char sysbuf[100] = { 0 };
+    CCSP_MESSAGE_BUS_INFO *bus_info = (CCSP_MESSAGE_BUS_INFO *)bus_handle;
+    parameterValStruct_t param_val[] = {  { "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadNow", "true", ccsp_boolean}};
+
+    while(1)
+    {
+        memset(sysbuf, 0, 100);
+        CcspTr069PaTraceInfo(("%s - Firmware Download Retry count %d\n",__FUNCTION__, iRetrycount));
+        if(60 == iRetrycount)
+        {
+            CcspTraceWarning(("%s - Reached 1hr of retry & going for reboot \n",__FUNCTION__));
+            SaveTCintoPSM();
+            system("reboot");
+            break;
+        }
+        sleep(60);
+        syscfg_get( NULL, "FWDWLD_status", sysbuf, sizeof(sysbuf));
+        if(!strcmp("Retry",sysbuf))
+        {
+            ret = CcspBaseIf_setParameterValues(bus_handle,
+                    "eRT.com.cisco.spvtg.ccsp.fwupgrademanager",
+                    "/com/cisco/spvtg/ccsp/fwupgrademanager",
+                    0,
+                    0,
+                    param_val,
+                    1,
+                    TRUE,
+                    &faultParam
+                    );
+            if(ret != CCSP_SUCCESS )
+            {
+                CcspTraceError(("%s: Failed to SetValue for param Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadNow '\n",__FUNCTION__));
+                bus_info->freefunc(faultParam);
+            }
+        }
+        iRetrycount++;
+    }
+}
+
 
 
 void 
@@ -1786,7 +1857,7 @@ CcspCwmppoProcessPvcSignal
                 }
             }
         }
-        else if ( _ansc_strstr(pVC->parameterName, "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadNow") == pVC->parameterName && val && val->newValue )
+        else if ( _ansc_strstr(pVC->parameterName, "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadStatus") == pVC->parameterName && val && val->newValue )
         {
             /* Download monitor state has changed */
             char*                   pCommandKey     = NULL;
@@ -1801,6 +1872,14 @@ CcspCwmppoProcessPvcSignal
             unsigned int            FileSize        = 0;
             char*                   pTargetFileName = NULL;
         */
+
+            CcspTr069PaTraceInfo
+            ((
+                 " Processing transfer complete on the status change of the parameter %s, new value - %s\n",
+                 pVC->parameterName,
+                 val->newValue
+            ));
+
             /* 
              * Retrieve firmware download result
              */
@@ -1815,8 +1894,6 @@ CcspCwmppoProcessPvcSignal
                         &pCommandKey
                     );
             }
-
-            pCommandKey = pCcspCwmpCpeController->LoadCfgFromPsm((ANSC_HANDLE)pCcspCwmpCpeController, "CommandKey");
 
             /* signal TransferComplete */
             if ( !bAtc )
@@ -1865,8 +1942,19 @@ CcspCwmppoProcessPvcSignal
 
                 if ( status != ANSC_STATUS_SUCCESS )
 #endif
+                if ( _ansc_strstr(val->newValue, "Retry" ) )
                 {
-                    /* save un-delivered TC into PSM */
+                    if(iRetrycount == 0 )
+                    {
+                        CcspTr069PaTraceInfo(( "Triggering retry thread on 1st time retry\n"));
+                        pthread_create(&TCEvtHandle_tid, NULL, FWDWLD_retry_thrd, NULL);
+                        pthread_detach(TCEvtHandle_tid);
+                    }
+                }
+                else
+                {
+                    iRetrycount = 0;
+                    pCommandKey = pCcspCwmpCpeController->LoadCfgFromPsm((ANSC_HANDLE)pCcspCwmpCpeController, "CommandKey");
                     pMyObject->SaveTransferComplete
                         (
                             (ANSC_HANDLE)pMyObject,
@@ -1876,10 +1964,10 @@ CcspCwmppoProcessPvcSignal
                             TRUE,
                             pCwmpFault
                         );
+                    if ( pCommandKey ) AnscFreeMemory(pCommandKey);
+                    PSM_Del_Record( pCcspCwmpCpeController->hMsgBusHandle, pCcspCwmpCpeController->SubsysName, "CommandKey");
                 }
 
-                if ( pCommandKey ) AnscFreeMemory(pCommandKey);
-                PSM_Del_Record( pCcspCwmpCpeController->hMsgBusHandle, pCcspCwmpCpeController->SubsysName, "CommandKey");
             }
             /*else
             {

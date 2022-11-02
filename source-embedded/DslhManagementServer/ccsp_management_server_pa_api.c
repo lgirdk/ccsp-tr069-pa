@@ -1124,6 +1124,10 @@ RETRY:
                  SendValueChangeSignal(ManagementServerID, ManagementServerURLID, oldValue);
                  CcspManagementServer_ValueChangeCB(CcspManagementServer_cbContext, CcspManagementServer_GetPAObjectID(ManagementServerID));
             }
+            else
+            {
+                 objectInfo[ManagementServerID].parameters[ManagementServerURLID].value =  AnscCloneString(oldValue);
+            }
         }
 
     }

@@ -88,7 +88,8 @@
 #include <telemetry_busmessage_sender.h>
 
 #include <pthread.h>
-
+#include "ccsp_cwmp_cpeco_interface.h"
+#include "ccsp_tr069pa_wrapper_api.h"
 #define TEMP_SIZE 23
 #define MAX_SIZE_TMPPWD_VALUE 512
 
@@ -102,6 +103,9 @@ extern PFN_CCSPMS_VALUECHANGE CcspManagementServer_ValueChangeCB;
 extern CCSP_HANDLE            CcspManagementServer_cbContext;
 extern int                    sdmObjectNumber;
 extern INT                    g_iTraceLevel;
+
+
+extern  PCCSP_CWMP_CPE_CONTROLLER_OBJECT                 g_pCcspCwmpCpeController;
 
 /* for ManagementServer. ManagementServer.AutonomousTransferCompletePolicy.
  * ManagementServer.DUStateChangeComplPolicy.
@@ -1539,16 +1543,21 @@ int SendValueChangeSignal(
     val.subsystem_prefix = AnscCloneString(CcspManagementServer_SubsystemPrefix);
     /* CID 281892 Uninitialized scalar variable  */
     val.writeID = 0;
-    int res = CcspBaseIf_SendparameterValueChangeSignal (
+    /*int res = CcspBaseIf_SendparameterValueChangeSignal (
         bus_handle,
         &val,
-        1);
+        1);*/
+    /* rtConnection_SendRequest TIMEOUT error was seen with CcspBaseIf_SendparameterValueChangeSignal.
+     * RBUS core doesn't yet support asynchronous requests (similar to DBUS' dbus_connection_send()).
+     * So calling the ValueChange callback from here itself, instead going via message bus.
+     */
+    CcspCwmppoParamValueChangedCB(&val, 1, g_pCcspCwmpCpeController->hCcspCwmpProcessor);
     CcspTraceDebug(("send value change signal %s %s \n", val.parameterName, val.newValue));
     if(val.parameterName) AnscFreeMemory((void*)val.parameterName);
     if(val.oldValue) AnscFreeMemory((void*)val.oldValue);
     if(val.newValue) AnscFreeMemory((void*)val.newValue);
     if(val.subsystem_prefix) AnscFreeMemory((void*)val.subsystem_prefix);
-    return res;
+    return 0;
 }
 
 // Recevie value change signal from pPAMComponentName
@@ -2717,9 +2726,6 @@ extern int CcspManagementServer_CommitParameterValuesCustom(int parameterID);
 /* Commit the parameter setting stored in parameterSetting.
  */
  #ifdef USE_NOTIFY_COMPONENT
- #include "ccsp_cwmp_cpeco_interface.h"
- #include "ccsp_tr069pa_wrapper_api.h"
-extern  PCCSP_CWMP_CPE_CONTROLLER_OBJECT                 g_pCcspCwmpCpeController;
 void Send_TR069_Notification(int parameterID, char* pString)
 {
 

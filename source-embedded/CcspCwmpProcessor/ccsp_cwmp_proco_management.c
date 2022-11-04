@@ -1281,7 +1281,7 @@ CcspCwmppoCheckParamAttrCache
     char*                           pCurName        = AnscCloneString(pParamName);
     char*                           pParentName     = NULL;
 
-    while ( pCurName )
+    while ( pCurName && pParamAttrCache)
     {
         pAtomDescriptor = (PANSC_ATOM_DESCRIPTOR)pParamAttrCache->GetAtomByName((ANSC_HANDLE)pParamAttrCache, pCurName);
 

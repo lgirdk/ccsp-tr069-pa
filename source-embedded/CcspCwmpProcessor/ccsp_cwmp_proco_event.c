@@ -364,6 +364,14 @@ CcspCwmppoDiagCompleteSignalCB
     PCCSP_CWMP_ACS_BROKER_OBJECT    pCcspCwmpAcsBroker      = (PCCSP_CWMP_ACS_BROKER_OBJECT)pCcspCwmpCpeController->hCcspCwmpAcsBroker;
     PCCSP_CWMP_MSO_INTERFACE        pCcspCwmpMsoIf          = (PCCSP_CWMP_MSO_INTERFACE    )pCcspCwmpAcsBroker->hCcspCwmpMsoIf;
            
+    if (pCcspCwmpCpeController->bRequestedDiagByACS == FALSE)
+    {
+        CcspTr069PaTraceWarning(("This diagnostic was not initiated by ACS, skip it\n"));
+        return;
+    }
+
+    pCcspCwmpCpeController->bRequestedDiagByACS = FALSE;
+
     pCcspCwmpMsoIf->Inform
         (
             (ANSC_HANDLE)pCcspCwmpMsoIf->hOwnerContext,

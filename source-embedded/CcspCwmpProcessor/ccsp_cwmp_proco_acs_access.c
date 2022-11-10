@@ -189,6 +189,7 @@ CcspCwmppoGetAcsInfo
     BOOL                            bCwmpStarted            = pCcspCwmpCpeController->bCWMPStarted;
     BOOL                            bCwmpEnabled            = FALSE;
     BOOL                            bPiChanged              = FALSE;
+    BOOL                            bRequestedDiagByACS     = FALSE;
   
     /*If callback is called again when ACS URL change is in progress, return SUCCESS*/
     if (pCcspCwmpCpeController->bIsACSURLChanged)

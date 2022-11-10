@@ -1372,6 +1372,7 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                 if (strstr(pNsList->Args.paramValueInfo.parameterName, "DiagnosticsState") != NULL)
                 {
                     pDiagnosticsStateParamValues[kDiag++] = pNsList->Args.paramValueInfo;
+                    pCcspCwmpCpeController->bRequestedDiagByACS = TRUE;
                     CcspTr069PaTraceDebug(("iDiag = %d, kDiag = %d, parameterName = %s\n", iDiag, kDiag, pNsList->Args.paramValueInfo.parameterName));
                     continue;
                 }

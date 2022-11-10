@@ -458,6 +458,7 @@ typedef  ANSC_STATUS
     BOOL                            bCWMPStopping;                                          \
     BOOL                            bBootInformSent;                                        \
     BOOL                            bRestartCWMP;                                           \
+    BOOL                            bRequestedDiagByACS;                                    \
                                                                                             \
     ANSC_HANDLE                     hStartCwmpTimerObj;                                     \
     ANSC_HANDLE                     hStartCwmpTimerIf;                                      \

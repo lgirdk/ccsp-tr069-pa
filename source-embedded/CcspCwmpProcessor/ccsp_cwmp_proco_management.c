@@ -621,7 +621,7 @@ CcspCwmppoInitParamAttrCache
     PANSC_ATOM_TABLE_OBJECT         pParamAttrCache     = (PANSC_ATOM_TABLE_OBJECT    )pMyObject->hParamAttrCache;
     PCCSP_CWMP_CPE_CONTROLLER_OBJECT pCcspCwmpCpeController  = (PCCSP_CWMP_CPE_CONTROLLER_OBJECT)pMyObject->hCcspCwmpCpeController;
     void*                           hMBusHandle         = (void*                      )pCcspCwmpCpeController->hMsgBusHandle;
-    PANSC_ATOM_DESCRIPTOR           pAtomDescriptor;
+    PANSC_ATOM_DESCRIPTOR           pAtomDescriptor = NULL;
     ULONG                           i;
     char                            keyPrefix[CCSP_BASE_PARAM_LENGTH];
     char                            key[CCSP_BASE_PARAM_LENGTH*2];
@@ -630,6 +630,7 @@ CcspCwmppoInitParamAttrCache
     CCSP_BASE_RECORD*               pRecords            = NULL;
     char*                           pParamName;
 
+    if ( pParamAttrCache )
     pParamAttrCache->DelAllStrAtoms((ANSC_HANDLE)pParamAttrCache);
 
     /* assumption: PA name is supposed to be the same over reboot */
@@ -706,6 +707,8 @@ CcspCwmppoInitParamAttrCache
                 pValue = NULL;
             }
 
+            if ( pParamAttrCache )
+            {
             /* create a cache entry */
             pAtomDescriptor = 
                 (PANSC_ATOM_DESCRIPTOR)pParamAttrCache->AddAtomByName
@@ -715,7 +718,7 @@ CcspCwmppoInitParamAttrCache
                         0,
                         (ANSC_HANDLE)ulNotification
                     );
-
+            }
             if ( ! pAtomDescriptor )
             {
                 CcspTr069PaTraceWarning
@@ -956,7 +959,7 @@ CcspCwmppoPushAllVcToBackend
     PCCSP_CWMP_PROCESSOR_OBJECT     pMyObject       = (PCCSP_CWMP_PROCESSOR_OBJECT)hThisObject;
     PANSC_ATOM_TABLE_OBJECT         pParamAttrCache = (PANSC_ATOM_TABLE_OBJECT   )pMyObject->hParamAttrCache;
     PANSC_ATOM_DESCRIPTOR           pAtomDescriptor = NULL;
-    ULONG                           ulCount, i;
+    ULONG                           ulCount = 0, i;
 
     s_bPushingAllVcToBackend = TRUE;
 
@@ -964,6 +967,7 @@ CcspCwmppoPushAllVcToBackend
      * as CCSP specifications define, as an alternative, CCSP TR-069 PA will
      * push the subscription into back-end, at least this won't upset ACS */
 
+    if ( pParamAttrCache )
     ulCount = pParamAttrCache->GetAtomCount2((ANSC_HANDLE)pParamAttrCache);
 
     for ( i = 0; i < ulCount; i ++ )
@@ -1054,7 +1058,7 @@ CcspCwmppoUpdateSingleParamAttr
     PANSC_ATOM_TABLE_OBJECT         pParamAttrCache     = (PANSC_ATOM_TABLE_OBJECT    )pMyObject->hParamAttrCache;
     PCCSP_CWMP_CPE_CONTROLLER_OBJECT pCcspCwmpCpeController  = (PCCSP_CWMP_CPE_CONTROLLER_OBJECT)pMyObject->hCcspCwmpCpeController;
     void*                           hMBusHandle         = (void*                      )pCcspCwmpCpeController->hMsgBusHandle;
-    PANSC_ATOM_DESCRIPTOR           pAtomDescriptor;
+    PANSC_ATOM_DESCRIPTOR           pAtomDescriptor = NULL;
     char                            key[CCSP_BASE_PARAM_LENGTH*2];
     int                             nCcspError = CCSP_SUCCESS;
 
@@ -1070,11 +1074,14 @@ CcspCwmppoUpdateSingleParamAttr
         );
 
     /* remove parameter notification attribute from PSM */
-    pParamAttrCache->DelAtomByName
+    if ( pParamAttrCache )
+    {
+        pParamAttrCache->DelAtomByName
         (
             (ANSC_HANDLE)pParamAttrCache,
             pParamName
         );
+    }
 
     PSM_Del_Record
         (
@@ -1095,7 +1102,7 @@ CcspCwmppoUpdateSingleParamAttr
         returnStatus = ANSC_STATUS_INTERNAL_ERROR;
     }
     
-    if ( Notification != CCSP_CWMP_NOTIFICATION_off )
+    if ( Notification != CCSP_CWMP_NOTIFICATION_off &&  pParamAttrCache )
     {
         pAtomDescriptor = 
             (PANSC_ATOM_DESCRIPTOR)pParamAttrCache->AddAtomByName

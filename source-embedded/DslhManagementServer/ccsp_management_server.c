@@ -1291,6 +1291,11 @@ void CcspManagementServer_IPv4Fallback_ProcessRequestStatus(ANSC_STATUS status)
         if (fallbackCount == 2)
         {
             bIPv4FallbackActive = !bIPv4FallbackActive;
+            if (bIPv4FallbackActive)
+            {
+                 sysinfo(&si);
+                 lIPv4FallbackActiveTime = si.uptime;
+            }
         }
 
         if (--fallbackCount == 0)

@@ -760,6 +760,12 @@
             <Name>Device.Time.LocalTimeZone</Name>
         </Param>
         <Param>
+            <Name>Device.Time.X_LGI-COM_MinPollInterval</Name>
+        </Param>
+        <Param>
+            <Name>Device.Time.X_LGI-COM_MaxPollInterval</Name>
+        </Param>
+        <Param>
             <Name>Device.UserInterface.X_CISCO_COM_RemoteAccess.SSHEnable</Name>
         </Param>
         <Param>

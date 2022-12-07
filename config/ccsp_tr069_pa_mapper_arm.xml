@@ -8179,6 +8179,40 @@
         <Param>
             <Name>Device.X_LGI-COM_ONT.MgmtService.IPProvisioningMode</Name>
         </Param>
+  <!--  Parameters under "Device.X_LGI-COM_TunneledStaticIPService" -->
+        <Param>
+            <Name>Device.X_LGI-COM_TunneledStaticIPService.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_TunneledStaticIPService.Username</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_TunneledStaticIPService.Password</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_TunneledStaticIPService.RadiusInterface</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_TunneledStaticIPService.RadiusAuthServerIPAddr</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_TunneledStaticIPService.RadiusAuthSecret</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_TunneledStaticIPService.RadiusAuthServerPort</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_TunneledStaticIPService.NAS-Identifier</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_TunneledStaticIPService.RadiusAccServerIPAddr</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_TunneledStaticIPService.RadiusAccSecret</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_TunneledStaticIPService.RadiusAccServerPort</Name>
+        </Param>
     </ParamList>
 	<RpcMapper>
 		<Download>

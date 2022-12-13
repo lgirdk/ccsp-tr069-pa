@@ -1263,6 +1263,23 @@ CcspManagementServer_Init
 	if (ethwan_enable) //RDKB-40531: URL updated for EWAN mode
 	{
 #ifdef DHCP_PROV_ENABLE
+
+        PCCSP_CWMP_PROCESSOR_OBJECT      pMyObject               = (PCCSP_CWMP_PROCESSOR_OBJECT  )cbContext;
+        if(pMyObject)
+        {
+            PCCSP_CWMP_PROCESSOR_PROPERTY    pProperty               = (PCCSP_CWMP_PROCESSOR_PROPERTY)&pMyObject->Property;
+            char * pAcsUrl                           = pMyObject->GetAcsUrl((ANSC_HANDLE)pMyObject);
+            if ( pAcsUrl )
+            {
+                size_t len = strlen (pAcsUrl);
+                if (len < sizeof(pProperty->AcsUrl))
+                {
+                    memcpy (pProperty->AcsUrl, pAcsUrl, len + 1);
+                }
+                AnscFreeMemory(pAcsUrl);
+            }
+        }
+
 		int file_exists = (access(DHCP_ACS_URL, F_OK) == 0) ? 1 : 0;
 		if (file_exists)
 		{

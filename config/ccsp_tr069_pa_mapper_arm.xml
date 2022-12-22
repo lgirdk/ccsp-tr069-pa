@@ -476,6 +476,18 @@
         <Param>
             <Name>Device.DeviceInfo.X_COMCAST-COM_xfinitywifiCapableCPE</Name>
         </Param>
+        <Param>
+            <Name>Device.DeviceInfo.X_LGI-COM_DeviceMgmt.ReverseSSH.TunnelStatus</Name>
+        </Param>
+        <Param>
+            <Name>Device.DeviceInfo.X_LGI-COM_DeviceMgmt.ReverseSSH.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.DeviceInfo.X_LGI-COM_DeviceMgmt.ReverseSSH.Arguments</Name>
+        </Param>
+        <Param>
+            <Name>Device.DeviceInfo.X_LGI-COM_DeviceMgmt.ReverseSSH.SessionTimeout</Name>
+        </Param>
 	<Param>
             <Name>Device.DeviceInfo.X_COMCAST_COM_xfinitywifiEnable</Name>
         </Param>

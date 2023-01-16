@@ -1490,8 +1490,8 @@ CcspCwmpSoappoProcessRequest_Reboot
     PANSC_XML_DOM_NODE_OBJECT       pXmlNode     = (PANSC_XML_DOM_NODE_OBJECT)hXmlHandle;
     PANSC_XML_DOM_NODE_OBJECT       pChildNode   = (PANSC_XML_DOM_NODE_OBJECT)NULL;
     ANSC_STATUS                     returnStatus = ANSC_STATUS_SUCCESS;
-    CHAR                            pValueBuf[64]= { 0 };
-    ULONG                           length       = 64;
+    CHAR                            pValueBuf[32 + 1]= { 0 };
+    ULONG                           length       = 32;
 
     /***************************************************************************
     * Argument     | Type         | Description                               *
@@ -2679,8 +2679,8 @@ CcspCwmpSoappoProcessRequest_ScheduleInform
     PANSC_XML_DOM_NODE_OBJECT       pDelayNode   = (PANSC_XML_DOM_NODE_OBJECT)NULL;
     PANSC_XML_DOM_NODE_OBJECT       pKeyNode     = (PANSC_XML_DOM_NODE_OBJECT)NULL;
     ANSC_STATUS                     returnStatus = ANSC_STATUS_SUCCESS;
-    CHAR                            pValueBuf[64]= { 0 };
-    ULONG                           length       = 64;
+    CHAR                            pValueBuf[32 + 1]= { 0 };
+    ULONG                           length       = 32;
     ULONG                           uLongValue   = 0;
 
     /***************************************************************************

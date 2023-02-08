@@ -2420,6 +2420,18 @@ CcspCwmpsoMcoDownload
     errno_t rc  = -1;
     int ind = -1;
 
+    if(!pCcspCwmpProcessor->bDownLoadInProgress)
+    {
+        pCcspCwmpProcessor->bDownLoadInProgress = TRUE;
+    }
+    else
+    {
+        returnStatus = ANSC_STATUS_PENDING;
+        CcspTr069PaTraceError(("%s %d Previous Download operation is pending\n",__func__,__LINE__));
+        return returnStatus;
+    }
+
+
 #ifndef _LG_MV3_
     pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
 
@@ -2431,6 +2443,7 @@ CcspCwmpsoMcoDownload
     else
     {
         CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_methodUnsupported);
+        pCcspCwmpProcessor->bDownLoadInProgress = FALSE;
     }
 #else
     if ( pCcspCwmpCfgIf && pCcspCwmpCfgIf->NoRPCMethods )
@@ -2454,6 +2467,7 @@ CcspCwmpsoMcoDownload
         else
         {
             CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_requestDenied);
+            pCcspCwmpProcessor->bDownLoadInProgress = FALSE;
         }
     }
     else 
@@ -2508,6 +2522,7 @@ CcspCwmpsoMcoDownload
             SlapAllocStringArray2(NumOfParams, pSlapNameArray);
             if ( !pSlapNameArray )
             {
+                pCcspCwmpProcessor->bDownLoadInProgress = FALSE;
                 return  ANSC_STATUS_RESOURCES;
             }
 
@@ -2544,6 +2559,7 @@ CcspCwmpsoMcoDownload
                         {
                             CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_requestDenied);
                             returnStatus = ANSC_STATUS_BAD_PARAMETER;
+                            pCcspCwmpProcessor->bDownLoadInProgress = FALSE;
                             goto EXIT4;
                         }
                         pSlapVar->Variant.varString = NULL;
@@ -2559,6 +2575,7 @@ CcspCwmpsoMcoDownload
             {
                 CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_internalError);
                 returnStatus = ANSC_STATUS_INTERNAL_ERROR;
+                pCcspCwmpProcessor->bDownLoadInProgress = FALSE;
                 goto EXIT4;
             }
 
@@ -2622,6 +2639,7 @@ CcspCwmpsoMcoDownload
 
             if ( returnStatus != ANSC_STATUS_SUCCESS )
             {
+                pCcspCwmpProcessor->bDownLoadInProgress = FALSE;
                 CcspTr069PaTraceError(("Download - SPV failed, status = %d\n", (int)returnStatus));
                 CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_requestDenied);
                 if ( pCwmpSoapFault )
@@ -2774,6 +2792,7 @@ EXIT1:
 
     if ( returnStatus != ANSC_STATUS_SUCCESS )
     {
+        pCcspCwmpProcessor->bDownLoadInProgress = FALSE;
         pMyObject->SessionState = CCSP_CWMPSO_SESSION_STATE_abort;
         pCcspCwmpProcessor->SignalSession
             (

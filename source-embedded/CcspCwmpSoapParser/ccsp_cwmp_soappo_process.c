@@ -1974,6 +1974,16 @@ CcspCwmpSoappoProcessRequest_Download
                     pDownReq
                 );
     }
+    if(returnStatus == ANSC_STATUS_PENDING)
+    {
+        returnStatus =
+        CcspCwmpSoappoUtilProcessRequestDenied
+            (
+               hCcspCwmpMcoIf,
+               pRequestID,
+               "Download"
+            );
+    }
 
     goto EXIT;
 

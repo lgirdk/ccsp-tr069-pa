@@ -615,4 +615,11 @@ CcspCwmpSoappoUtilProcessTooManyEnvelopes
         ANSC_HANDLE                 hCcspCwmpMcoIf
     );
 
+ANSC_STATUS
+CcspCwmpSoappoUtilProcessRequestDenied
+    (
+        ANSC_HANDLE                 hCcspCwmpMcoIf,
+        char*                       pRequestID,
+        char*                       pMethodName
+    );
 #endif

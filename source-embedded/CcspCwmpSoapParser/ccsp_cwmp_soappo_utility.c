@@ -1425,6 +1425,82 @@ CcspCwmpSoappoUtilProcessInvalidArgumentRequest
     return returnStatus;
 }
 
+/**********************************************************************
+
+    prototype:
+
+        ANSC_STATUS
+        CcspCwmpSoappoUtilProcessRequestDenied
+            (
+                ANSC_HANDLE                 hCcspCwmpMcoIf,
+                char*                       pRequestID,
+                char*                       pMethodName
+            )
+
+    description:
+
+        This function is called to process request denied error.
+
+    argument:
+                ANSC_HANDLE                 hCcspCwmpMcoIf,
+                The CCSP CWMP MCO interface handle;
+
+                char*                       pRequestID,
+                The request id;
+
+                char*                       pMethodName,
+                The request method name;
+
+    return:     The status of the operation;
+
+**********************************************************************/
+ANSC_STATUS
+CcspCwmpSoappoUtilProcessRequestDenied
+    (
+        ANSC_HANDLE                 hCcspCwmpMcoIf,
+        char*                       pRequestID,
+        char*                       pMethodName
+    )
+{
+    ANSC_STATUS                     returnStatus     = ANSC_STATUS_SUCCESS;
+    PCCSP_CWMP_SOAP_FAULT           pCwmpSoapFault   = (PCCSP_CWMP_SOAP_FAULT)NULL;
+    PCCSP_CWMP_MCO_INTERFACE             pCcspCwmpMcoIf       = (PCCSP_CWMP_MCO_INTERFACE)hCcspCwmpMcoIf;
+
+    pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
+
+    if ( !pCwmpSoapFault )
+    {
+        return returnStatus;
+    }
+    else
+    {
+        pCwmpSoapFault->soap_faultcode           = AnscCloneString(CCSP_CWMP_CPE_SOAP_faultcode_requestDenied);
+        pCwmpSoapFault->soap_faultstring         = AnscCloneString(CCSP_CWMP_CPE_SOAP_faulttext_requestDenied);
+        pCwmpSoapFault->Fault.FaultCode          = CCSP_CWMP_CPE_CWMP_FaultCode_requestDenied;
+        pCwmpSoapFault->Fault.FaultString        = AnscCloneString(CCSP_CWMP_CPE_CWMP_FaultText_requestDenied);
+        pCwmpSoapFault->SetParamValuesFaultCount = 0;
+    }
+
+    if( pCcspCwmpMcoIf != NULL)
+    {
+        returnStatus =
+            pCcspCwmpMcoIf->ProcessSoapError
+                (
+                    pCcspCwmpMcoIf->hOwnerContext,
+                    pRequestID,
+                    pMethodName,
+                    (ANSC_HANDLE)pCwmpSoapFault
+                );
+    }
+
+    if ( pCwmpSoapFault )
+    {
+        CcspCwmpFreeSoapFault(pCwmpSoapFault);
+        pCwmpSoapFault = NULL;
+    }
+
+    return returnStatus;
+}
 
 ANSC_STATUS
 CcspCwmpSoappoUtilProcessInvalidArgumentSPVRequest

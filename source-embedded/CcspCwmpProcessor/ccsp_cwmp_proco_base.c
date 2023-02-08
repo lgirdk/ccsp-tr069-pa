@@ -537,6 +537,7 @@ CcspCwmppoInitialize
     
     pMyObject->MsFcInitDone              = FALSE;
     pMyObject->bAcsInfoRetrieved         = FALSE;
+    pMyObject->bDownLoadInProgress       = FALSE;
 
     pMyObject->GetCcspCwmpCpeController  = CcspCwmppoGetCcspCwmpCpeController;
     pMyObject->SetCcspCwmpCpeController  = CcspCwmppoSetCcspCwmpCpeController;

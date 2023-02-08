@@ -508,6 +508,7 @@ typedef  ULONG
     BOOL                            bActive;                                                \
     BOOL                            MsFcInitDone;                                           \
     BOOL                            bAcsInfoRetrieved;                                      \
+    BOOL                            bDownLoadInProgress;                                    \
                                                                                             \
     QUEUE_HEADER                    WmpsoQueue;                                             \
     ANSC_LOCK                       WmpsoQueueLock;                                         \

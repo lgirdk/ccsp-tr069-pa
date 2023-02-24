@@ -324,7 +324,6 @@ ccspCwmpCpeFirstInformTask
             pMyObject->bBootInformSent = TRUE;
         }
 
-        pCcspCwmpProcessor->LoadTransferComplete((ANSC_HANDLE)pCcspCwmpProcessor); //Loading Transfer complete events as long with first inform message
         pCcspCwmpProcessor->ConfigPeriodicInform((ANSC_HANDLE)pCcspCwmpProcessor);
     }
 

@@ -76,6 +76,7 @@
 #include <unistd.h>
 #include "print_uptime.h"
 #include <sys/stat.h>
+#include <syscfg/syscfg.h>
 extern ANSC_HANDLE bus_handle;
 
 #define BUF_LENGTH 512
@@ -1601,29 +1602,6 @@ static char                         s_ns_download_state[256] = {0};
 static int iRetrycount = 0;
 static pthread_t TCEvtHandle_tid;
 
-extern char *CcspManagementServer_SubsystemPrefix;
-
-static void SaveTCintoPSM()
-{
-    char *pKey = NULL;
-    int res = 0;
-    res = PSM_Get_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix,"CommandKey", NULL, &pKey);
-    if (res == CCSP_SUCCESS)
-    {
-        PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, "eRT.com.cisco.spvtg.ccsp.tr069pa.Undelivered_TC.1.CommandKey", ccsp_string, pKey);
-        if ( pKey )
-        {
-            AnscFreeMemory(pKey);
-        }
-        PSM_Del_Record( bus_handle, CcspManagementServer_SubsystemPrefix, "CommandKey");
-    }
-    else
-    {
-        PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, "eRT.com.cisco.spvtg.ccsp.tr069pa.Undelivered_TC.1.CommandKey", ccsp_string,  "" );
-    }
-    PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, "eRT.com.cisco.spvtg.ccsp.tr069pa.Undelivered_TC.1.IsDownload", ccsp_boolean,  "1" );
-    PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, "eRT.com.cisco.spvtg.ccsp.tr069pa.Undelivered_TC.1.FaultCode", ccsp_string,  "9010" );
-}
 
 static void *FWDWLD_retry_thrd(void *data)
 {
@@ -1640,9 +1618,7 @@ static void *FWDWLD_retry_thrd(void *data)
         CcspTr069PaTraceInfo(("%s - Firmware Download Retry count %d\n",__FUNCTION__, iRetrycount));
         if(60 == iRetrycount)
         {
-            CcspTraceWarning(("%s - Reached 1hr of retry & going for reboot \n",__FUNCTION__));
-            SaveTCintoPSM();
-            system("reboot");
+            CcspTraceWarning(("%s - Reached 1hr of retry\n",__FUNCTION__));
             break;
         }
         sleep(60);
@@ -1935,8 +1911,42 @@ CcspCwmppoProcessPvcSignal
                         (ANSC_HANDLE*)&pCwmpSoapFault,
                         FALSE
                     );
+#endif
 
-                status =
+                if (!strcmp(val->newValue, "Retry"))
+                {
+                    if(iRetrycount == 0 )
+                    {
+                        CcspTr069PaTraceInfo(( "Triggering retry thread on 1st time retry\n"));
+                        pthread_create(&TCEvtHandle_tid, NULL, FWDWLD_retry_thrd, NULL);
+                        pthread_detach(TCEvtHandle_tid);
+                    }
+                }
+
+                if(!((!strcmp("Not Started",val->newValue)) || (!strcmp("In Progress",val->newValue)) || (!strcmp("Completed",val->newValue))))
+                {			
+                    pCommandKey = pCcspCwmpCpeController->LoadCfgFromPsm((ANSC_HANDLE)pCcspCwmpCpeController, "CommandKey");             
+
+                    pCwmpFault->FaultCode = 0;
+                    pCwmpFault->FaultString = NULL;
+
+                    if(!strcmp("Request Denied",val->newValue))
+                    {
+                        pCwmpFault->FaultCode = 9001;
+                        pCwmpFault->FaultString = AnscCloneString(CCSP_CWMP_CPE_CWMP_FaultText_requestDenied);
+                    }
+                    else if(!strcmp("Retry",val->newValue))
+                    {
+                        pCwmpFault->FaultCode = 9010;
+                        pCwmpFault->FaultString = AnscCloneString(CCSP_CWMP_CPE_CWMP_FaultText_downloadFailure);
+                    }
+                    else
+                    {
+                        pCwmpFault->FaultCode = 9002;
+                        pCwmpFault->FaultString = AnscCloneString(CCSP_CWMP_CPE_CWMP_FaultText_internalError);
+                    }
+
+                    status =
                     pCcspCwmpMsoIf->TransferComplete
                         (
                             pCcspCwmpMsoIf->hOwnerContext,
@@ -1948,22 +1958,12 @@ CcspCwmppoProcessPvcSignal
                             TRUE                /* start a new session to deliver this */
                         );
 
-                if ( status != ANSC_STATUS_SUCCESS )
-#endif
-                if ( _ansc_strstr(val->newValue, "Retry" ) )
-                {
-                    if(iRetrycount == 0 )
+                    if ( status != ANSC_STATUS_SUCCESS )
                     {
-                        CcspTr069PaTraceInfo(( "Triggering retry thread on 1st time retry\n"));
-                        pthread_create(&TCEvtHandle_tid, NULL, FWDWLD_retry_thrd, NULL);
-                        pthread_detach(TCEvtHandle_tid);
-                    }
-                }
-                else
-                {
-                    iRetrycount = 0;
-                    pCommandKey = pCcspCwmpCpeController->LoadCfgFromPsm((ANSC_HANDLE)pCcspCwmpCpeController, "CommandKey");
-                    pMyObject->SaveTransferComplete
+                        CcspTr069PaTraceWarning(("Failed to send out 'TransferComplete' whose command key is '%s'\n", pCommandKey));
+                            
+                        /* save un-delivered TC into PSM */
+                        pMyObject->SaveTransferComplete
                         (
                             (ANSC_HANDLE)pMyObject,
                             pCommandKey,
@@ -1972,8 +1972,14 @@ CcspCwmppoProcessPvcSignal
                             TRUE,
                             pCwmpFault
                         );
+                    }
+
                     if ( pCommandKey ) AnscFreeMemory(pCommandKey);
                     PSM_Del_Record( pCcspCwmpCpeController->hMsgBusHandle, pCcspCwmpCpeController->SubsysName, "CommandKey");
+                    iRetrycount = 0;
+                    pMyObject->bDownLoadInProgress = FALSE;
+                    /*Updating the FWDWLD_status to default(Not Started) incase of image upgrade failure*/
+                    syscfg_set_commit(NULL, "FWDWLD_status", "Not Started");			
                 }
 
             }

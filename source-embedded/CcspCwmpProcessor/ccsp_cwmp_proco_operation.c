@@ -770,8 +770,8 @@ CcspCwmppoRedeliverEvents
     ANSC_STATUS                     returnStatus            = ANSC_STATUS_SUCCESS;
     PCCSP_CWMP_PROCESSOR_OBJECT      pMyObject               = (PCCSP_CWMP_PROCESSOR_OBJECT  )hThisObject;
 
-        /* Transfer complete events should be added only after reboot */
-    // returnStatus = pMyObject->LoadTransferComplete((ANSC_HANDLE)pMyObject);
+        /* re-deliver TransferComplete events if any */
+    returnStatus = pMyObject->LoadTransferComplete((ANSC_HANDLE)pMyObject);
 
         /* re-deliver AutonomousTransferComplete event if any */
     returnStatus = pMyObject->LoadAutonomousTransferComplete((ANSC_HANDLE)pMyObject);

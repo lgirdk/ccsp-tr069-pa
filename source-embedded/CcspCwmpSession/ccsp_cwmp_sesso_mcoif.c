@@ -2549,26 +2549,6 @@ CcspCwmpsoMcoDownload
                     returnStatus = ANSC_STATUS_INTERNAL_ERROR;
                     goto EXIT2;
                 }
-                else
-                {
-                    SLAP_VARIABLE*      pSlapVar = pCwmpValArray[0].Value;
-                    if ( pSlapVar->Syntax == SLAP_VAR_SYNTAX_string )
-                    {
-                        if (strstr(pSlapVar->Variant.varString,"Not Started") ==NULL)
-                        {
-                            CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_requestDenied);
-                            returnStatus = ANSC_STATUS_BAD_PARAMETER;
-                            pCcspCwmpProcessor->bDownLoadInProgress = FALSE;
-                            goto EXIT4;
-                        }
-                        pSlapVar->Variant.varString = NULL;
-                    }
-                    else
-                    {  
-                        returnStatus = ANSC_STATUS_INTERNAL_ERROR;
-                        goto EXIT2;
-                    }
-                }
             }
             else
             {

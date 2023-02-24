@@ -356,11 +356,11 @@ CcspCwmpAcsboMsoTransferComplete
     ULONG                            ulErrorCode            = (ULONG                      )0;
 
     /*
-     * The target WmpSession is either active or idle...
+     * The target WmpSession is either active (first available session) or inactive session...
      */
     if ( bNewSession )
     {
-        pCcspCwmpSession = (PCCSP_CWMP_SESSION_OBJECT)pCcspCwmpProcessor->AcqWmpSession3((ANSC_HANDLE)pCcspCwmpProcessor);
+        pCcspCwmpSession = (PCCSP_CWMP_SESSION_OBJECT)pCcspCwmpProcessor->AcqWmpSession2((ANSC_HANDLE)pCcspCwmpProcessor);
     }
     else
     {

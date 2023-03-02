@@ -67,10 +67,6 @@
 #include "telemetry_busmessage_sender.h"
 static cap_user appcaps;
 
-#ifndef DISABLE_LOGAGENT
-extern int GetLogInfo(ANSC_HANDLE bus_handle, char *Subsytem, char *pParameterName);
-#endif
-
 PCCSP_CWMP_CPE_CONTROLLER_OBJECT    g_pCcspCwmpCpeController    = NULL;
 BOOL                                bEngaged                = FALSE;
 

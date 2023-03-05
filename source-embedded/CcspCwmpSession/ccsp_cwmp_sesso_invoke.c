@@ -1243,6 +1243,14 @@ bFirstInform = 0;
                 }
 
                 pMyObject->SessionState = CCSP_CWMPSO_SESSION_STATE_informed;
+                //SignalSession to  updated state change after BootInform was sent
+                pCcspCwmpCpeController->bBootInformSent = TRUE;
+                pCcspCwmpProcessor->SignalSession
+                    (
+                        (ANSC_HANDLE)pCcspCwmpProcessor,
+                        (ANSC_HANDLE)pMyObject
+                    );
+
                 /*OFW-87 Engage TCP server after informResponse for new ACS*/
                 if(pCcspCwmpCpeController->bIsACSURLChanged && pCcspCwmpCpeController->bInformAfterACSChange)
                 {
@@ -1271,6 +1279,9 @@ bFirstInform = 0;
                 }
                 else
                 {
+	                //"4 VALUE CHANGE" event is suppressed during "0 BOOTSTRAP" and "1 BOOT", so no need to check and discard value change events.
+                    if(!bBoot && !bBootStrap)
+                    {
                     /* Check for any value changed parameters sent as part of current INFORM,discard those
                        value change parameter entries from  the PSM
                     */
@@ -1298,9 +1309,8 @@ bFirstInform = 0;
                             pCcspCwmpProcessor->DiscardValueChanged((ANSC_HANDLE)pCcspCwmpProcessor, pCwmpParamValueArray[x].Name);
                         }
                     }
+                    }
                 }
-
-                pCcspCwmpCpeController->bBootInformSent = TRUE;
 
                 for( i = 0; i < pMyObject->EventCount; i ++)
                 {
@@ -1311,11 +1321,7 @@ bFirstInform = 0;
                     }
                 }
 
-                pCcspCwmpProcessor->SignalSession
-                    (
-                        (ANSC_HANDLE)pCcspCwmpProcessor,
-                        (ANSC_HANDLE)pMyObject
-                    );
+
 
                 /*
                  *  Record the time of InformResponse 

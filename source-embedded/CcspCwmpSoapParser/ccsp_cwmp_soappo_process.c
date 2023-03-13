@@ -2357,7 +2357,7 @@ CcspCwmpSoappoParse_ChangeDUState_Req_Operations
     while ( pOpNode )
     {
         pNodeName = AnscXmlDomNodeGetName((ANSC_HANDLE)pOpNode);
-        if ( AnscEqualString(pNodeName, "InstallOpStruct", FALSE) )
+        if (strcasecmp(pNodeName, "InstallOpStruct") == 0)
         {
             PCCSP_TR069_CDS_Install pOpInstall = &pCdsReq->Operations[ulOpCount].op.Install;
 
@@ -2423,7 +2423,7 @@ CcspCwmpSoappoParse_ChangeDUState_Req_Operations
                 pOpInstall->ExecEnvRef = AnscCloneString(buffer);
             }
         }
-        else if ( AnscEqualString(pNodeName, "UpdateOpStruct", FALSE) )
+        else if (strcasecmp(pNodeName, "UpdateOpStruct") == 0)
         {
             PCCSP_TR069_CDS_Update  pOpUpdate = &pCdsReq->Operations[ulOpCount].op.Update;
 
@@ -2489,7 +2489,7 @@ CcspCwmpSoappoParse_ChangeDUState_Req_Operations
                 pOpUpdate->Password = AnscCloneString(buffer);
             }
         }
-        else if ( AnscEqualString(pNodeName, "UninstallOpStruct", FALSE) )
+        else if (strcasecmp(pNodeName, "UninstallOpStruct") == 0)
         {
             PCCSP_TR069_CDS_Uninstall   pOpUninstall = &pCdsReq->Operations[ulOpCount].op.Uninstall;
 

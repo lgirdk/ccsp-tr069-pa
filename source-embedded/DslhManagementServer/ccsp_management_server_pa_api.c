@@ -1346,67 +1346,23 @@ CcspManagementServer_Init
     return;
 }
 
-static CCSP_STRING
-CcspManagementServer_GetBooleanValue
-(
-    CCSP_STRING                 ParameterValue,
-    CCSP_STRING                 DefaultValue
-)
+static CCSP_BOOL CcspManagementServer_GetBooleanValue (char *ParameterValue, CCSP_BOOL DefaultValue)
 {
-    errno_t rc  = -1;
-    int     ind  = -1;
-    if(ParameterValue){
-       rc = strcasecmp_s("0",strlen("0"),ParameterValue,&ind);
-       if ( rc != EOK || ind )
-       {
-           rc = strcasecmp_s("false",strlen("false"),ParameterValue,&ind);
-       }
-       if ( rc == EOK && !ind )
-       {
-          return AnscCloneString("false");
-       }
-       else
-       {
-           rc = strcasecmp_s("1",strlen("1"),ParameterValue,&ind);
-           if ( rc != EOK || ind )
-           {
-               rc = strcasecmp_s("true",strlen("true"),ParameterValue,&ind);
-           }
-           if ( rc == EOK && !ind )
-           {
-              return AnscCloneString("true");
-           }
-        }
-     }
+    if (ParameterValue == NULL)
+        return DefaultValue;
 
-    if(DefaultValue){
-       rc = strcasecmp_s("0",strlen("0"), DefaultValue, &ind);
-       if ( rc != EOK || ind )
-       {
-           rc = strcasecmp_s("false",strlen("false"), DefaultValue, &ind);
-       }
-       if ( rc == EOK && !ind )
-       {
-          return AnscCloneString("false");
-       }
-       else
-       {
-           rc = strcasecmp_s("1",strlen("1"), DefaultValue, &ind);
-           if ( rc != EOK || ind )
-           {
-               rc = strcasecmp_s("true",strlen("true"), DefaultValue, &ind);
-           }
-           if ( rc == EOK && !ind )
-           {
-               return AnscCloneString("true");
-           }
-       }
-    }
+    if ((strcmp(ParameterValue, "0") == 0) || (strcasecmp(ParameterValue, "false") == 0))
+        return FALSE;
 
-    CcspTraceWarning(("Neither Parameter '%s' nor Default '%s' is valid.  Returning "" for BooleanStr!!!\n", 
-                      (ParameterValue)?(ParameterValue):"",
-                      (DefaultValue)?(DefaultValue):""));    
-    return AnscCloneString("");
+    if ((strcmp(ParameterValue, "1") == 0) || (strcasecmp(ParameterValue, "true") == 0))
+        return TRUE;
+
+    return DefaultValue;
+}
+
+static CCSP_STRING CcspManagementServer_GetBooleanValueStr (char *ParameterValue, CCSP_BOOL DefaultValue)
+{
+    return AnscCloneString((CcspManagementServer_GetBooleanValue(ParameterValue, DefaultValue) == FALSE) ? "false" : "true");
 }
 
 /* CcspManagementServer_GetEnableCWMP is called to get
@@ -1420,20 +1376,10 @@ CcspManagementServer_GetEnableCWMP
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    errno_t rc  = -1;
-    int ind = -1;
 
-    rc = strcasecmp_s("0",strlen("0"),objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value,&ind);
-    if ( rc != EOK || ind )
-    {
-        rc = strcasecmp_s("false",strlen("false"),objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value,&ind);
-    }
-    if ( rc == EOK && !ind ) 
-    {
-        return FALSE;
-    }
-    else return TRUE;
+    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value, TRUE);
 }
+
 CCSP_STRING
 CcspManagementServer_GetEnableCWMPStr
     (
@@ -1441,7 +1387,8 @@ CcspManagementServer_GetEnableCWMPStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value, "0");
+
+    return CcspManagementServer_GetBooleanValueStr(objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value, FALSE);
 }
 
 /* CcspManagementServer_GetURL is called to get
@@ -1606,20 +1553,10 @@ CcspManagementServer_GetPeriodicInformEnable
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    errno_t rc = -1;
-    int ind = -1;
-    
-    rc = strcasecmp_s("0",strlen("0"),objectInfo[ManagementServerID].parameters[ManagementServerPeriodicInformEnableID].value,&ind);
-    if ( rc != EOK || ind )
-    {
-        rc = strcasecmp_s("false",strlen("false"),objectInfo[ManagementServerID].parameters[ManagementServerPeriodicInformEnableID].value,&ind);
-    }
-    if ( rc == EOK && !ind )
-    {
-       return FALSE;
-    }
-    else return TRUE; 
+
+    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerPeriodicInformEnableID].value, TRUE);
 }
+
 CCSP_STRING
 CcspManagementServer_GetPeriodicInformEnableStr
     (
@@ -1627,7 +1564,8 @@ CcspManagementServer_GetPeriodicInformEnableStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerPeriodicInformEnableID].value, "0");
+
+    return CcspManagementServer_GetBooleanValueStr(objectInfo[ManagementServerID].parameters[ManagementServerPeriodicInformEnableID].value, FALSE);
 }
 
 /* CcspManagementServer_GetPeriodicInformTime is called to get
@@ -2040,16 +1978,9 @@ CcspManagementServer_GetHTTPConnectionRequestEnable
         CCSP_STRING                 ComponentName
     )
 {
-    if(AnscEqualString(objectInfo[ManagementServerID].parameters[ManagementServerHTTPConnectionRequestEnableID].value, "0", FALSE) ||
-       AnscEqualString(objectInfo[ManagementServerID].parameters[ManagementServerHTTPConnectionRequestEnableID].value, "false", FALSE))
-    {
-        return FALSE;
-    }
-    else
-    {
-        return TRUE;
-    }
+    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerHTTPConnectionRequestEnableID].value, TRUE);
 }
+
 CCSP_STRING
 CcspManagementServer_GetHTTPConnectionRequestEnableStr
 
@@ -2057,7 +1988,7 @@ CcspManagementServer_GetHTTPConnectionRequestEnableStr
         CCSP_STRING                 ComponentName
     )
 {
-    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerHTTPConnectionRequestEnableID].value, "0");
+    return CcspManagementServer_GetBooleanValueStr(objectInfo[ManagementServerID].parameters[ManagementServerHTTPConnectionRequestEnableID].value, FALSE);
 }
 
 #ifdef _ANSC_USE_OPENSSL_
@@ -2082,15 +2013,7 @@ CcspManagementServer_GetX_LGI_COM_ValidateManagementServerCertificate
         CCSP_STRING                 ComponentName
     )
 {
-    if(AnscEqualString(objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ValidateManagementServerCertificateID].value, "0", FALSE) ||
-       AnscEqualString(objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ValidateManagementServerCertificateID].value, "false", FALSE))
-    {
-        return FALSE;
-    }
-    else
-    {
-        return TRUE;
-    }
+    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ValidateManagementServerCertificateID].value, TRUE);
 }
 
 CCSP_STRING
@@ -2100,7 +2023,7 @@ CcspManagementServer_GetX_LGI_COM_ValidateManagementServerCertificateStr
         CCSP_STRING                 ComponentName
     )
 {
-    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ValidateManagementServerCertificateID].value, "0");
+    return CcspManagementServer_GetBooleanValueStr(objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ValidateManagementServerCertificateID].value, FALSE);
 }
 
 /* CcspManagementServer_GetConnectionRequestUsername is called to get
@@ -2176,28 +2099,8 @@ CcspManagementServer_GetACSOverride
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    errno_t rc  = -1;
-    int ind = -1;
-   
-    if(objectInfo[ManagementServerID].parameters[ManagementServerACSOverrideID].value != NULL)
-    {
-        rc = strcasecmp_s("0",strlen("0"),objectInfo[ManagementServerID].parameters[ManagementServerACSOverrideID].value,&ind);
-        ERR_CHK(rc);
-        if ( rc != EOK || ind )
-        {
-            rc = strcasecmp_s("false",strlen("false"),objectInfo[ManagementServerID].parameters[ManagementServerACSOverrideID].value,&ind);
-            ERR_CHK(rc);
-        }
-        if ( rc == EOK && !ind )
-        {
-            return FALSE;
-        }
-    }
-    else
-    {
-       CcspTr069PaTraceWarning(("WARNING : ManagementServerID - %d, ACSOverride == NULL %s:%d\n", ManagementServerID, __FUNCTION__, __LINE__));
-    }
-    return TRUE;
+
+    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerACSOverrideID].value, TRUE);
 }
 
 CCSP_STRING
@@ -2207,7 +2110,8 @@ CcspManagementServer_GetACSOverrideStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerACSOverrideID].value, "0");
+
+    return CcspManagementServer_GetBooleanValueStr(objectInfo[ManagementServerID].parameters[ManagementServerACSOverrideID].value, FALSE);
 }
 
 /* CcspManagementServer_GetUpgradesManaged is called to get
@@ -2221,22 +2125,10 @@ CcspManagementServer_GetUpgradesManaged
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    /* Set as read only and only return TRUE. */
-    //    return TRUE;
-    errno_t rc  = -1;
-    int ind = -1;
-   
-    rc = strcasecmp_s("0",strlen("0"),objectInfo[ManagementServerID].parameters[ManagementServerUpgradesManagedID].value,&ind);
-    if ( rc != EOK || ind )
-    {
-        rc = strcasecmp_s("false",strlen("false"),objectInfo[ManagementServerID].parameters[ManagementServerUpgradesManagedID].value,&ind);
-    }
-    if ( rc == EOK && !ind )
-    {
-       return FALSE;
-    }
-    else return TRUE;
+
+    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerUpgradesManagedID].value, TRUE);
 }
+
 CCSP_STRING
 CcspManagementServer_GetUpgradesManagedStr
     (
@@ -2244,10 +2136,8 @@ CcspManagementServer_GetUpgradesManagedStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    /* Set as read only and only return TRUE. */
-    //    return AnscCloneString("true"); 
 
-    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerUpgradesManagedID].value, "0");
+    return CcspManagementServer_GetBooleanValueStr(objectInfo[ManagementServerID].parameters[ManagementServerUpgradesManagedID].value, FALSE);
 }
 /* CcspManagementServer_GetKickURL is called to get
  * Device.ManagementServer.KickURL.
@@ -2390,19 +2280,10 @@ CcspManagementServer_GetSTUNEnable
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    errno_t rc  = -1;
-    int ind = -1;
-    rc = strcasecmp_s("0",strlen("0"),objectInfo[ManagementServerID].parameters[ManagementServerSTUNEnableID].value,&ind);
-    if ( rc != EOK || ind )
-    {
-        rc = strcasecmp_s("false",strlen("false"),objectInfo[ManagementServerID].parameters[ManagementServerSTUNEnableID].value,&ind);
-    }
-    if ( rc == EOK && !ind )
-    {
-       return FALSE;
-    }
-    else return TRUE;
+
+    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerSTUNEnableID].value, TRUE);
 }
+
 CCSP_STRING
 CcspManagementServer_GetSTUNEnableStr
     (
@@ -2410,7 +2291,8 @@ CcspManagementServer_GetSTUNEnableStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerSTUNEnableID].value, "0");
+
+    return CcspManagementServer_GetBooleanValueStr(objectInfo[ManagementServerID].parameters[ManagementServerSTUNEnableID].value, FALSE);
 }
 /* CcspManagementServer_GetSTUNServerAddress is called to get
  * Device.ManagementServer.STUNServerAddress.
@@ -2535,25 +2417,10 @@ CcspManagementServer_GetNATDetected
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    errno_t rc  = -1;
-    int ind = -1;
-     
-    if(objectInfo[ManagementServerID].parameters[ManagementServerNATDetectedID].value == NULL)
-    {
-        return TRUE;
-    }
-    
-    rc = strcasecmp_s("0", strlen("0"), objectInfo[ManagementServerID].parameters[ManagementServerNATDetectedID].value, &ind);
-    if ( rc != EOK || ind )
-    {
-        rc = strcasecmp_s("false", strlen("false"), objectInfo[ManagementServerID].parameters[ManagementServerNATDetectedID].value, &ind);
-    }
-    if ( rc == EOK && !ind )
-    {
-        return FALSE;
-    }
-    else return TRUE;
+
+    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerNATDetectedID].value, TRUE);
 }
+
 CCSP_STRING
 CcspManagementServer_GetNATDetectedStr
     (
@@ -2561,7 +2428,8 @@ CcspManagementServer_GetNATDetectedStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerNATDetectedID].value, "0");
+
+    return CcspManagementServer_GetBooleanValueStr(objectInfo[ManagementServerID].parameters[ManagementServerNATDetectedID].value, FALSE);
 }
 
 /* CcspManagementServer_GetAliasBasedAddressing is called to get
@@ -2576,20 +2444,10 @@ CcspManagementServer_GetAliasBasedAddressing
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    errno_t rc  = -1;
-    int ind = -1;
-    
-    rc = strcasecmp_s("0",strlen("0"),objectInfo[ManagementServerID].parameters[ManagementServerAliasBasedAddressingID].value,&ind);
-    if ( rc != EOK || ind )
-    {
-        rc = strcasecmp_s("false",strlen("false"),objectInfo[ManagementServerID].parameters[ManagementServerAliasBasedAddressingID].value,&ind);
-    }
-    if ( rc == EOK && !ind )
-    {
-       return FALSE;
-    }
-    else return TRUE;
+
+    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerAliasBasedAddressingID].value, TRUE);
 }
+
 CCSP_STRING
 CcspManagementServer_GetAliasBasedAddressingStr
     (
@@ -2597,7 +2455,8 @@ CcspManagementServer_GetAliasBasedAddressingStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_GetBooleanValue(objectInfo[ManagementServerID].parameters[ManagementServerAliasBasedAddressingID].value, "0");
+
+    return CcspManagementServer_GetBooleanValueStr(objectInfo[ManagementServerID].parameters[ManagementServerAliasBasedAddressingID].value, FALSE);
 }
 
 /* 
@@ -2618,20 +2477,10 @@ CcspManagementServer_GetAutonomousTransferCompletePolicy_Enable
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    errno_t rc  = -1;
-    int ind = -1;
-    
-    rc =strcasecmp_s("0",strlen("0"),objectInfo[AutonomousTransferCompletePolicyID].parameters[AutonomousTransferCompletePolicyEnableID].value,&ind);
-    if ( rc != EOK || ind )
-    {
-        rc =strcasecmp_s("false",strlen("false"),objectInfo[AutonomousTransferCompletePolicyID].parameters[AutonomousTransferCompletePolicyEnableID].value,&ind);
-    }
-    if ( rc == EOK && !ind )
-    {
-       return FALSE;
-    }
-    else return TRUE;
+
+    return CcspManagementServer_GetBooleanValue(objectInfo[AutonomousTransferCompletePolicyID].parameters[AutonomousTransferCompletePolicyEnableID].value, TRUE);
 }
+
 CCSP_STRING
 CcspManagementServer_GetAutonomousTransferCompletePolicy_EnableStr
     (
@@ -2639,7 +2488,8 @@ CcspManagementServer_GetAutonomousTransferCompletePolicy_EnableStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_GetBooleanValue(objectInfo[AutonomousTransferCompletePolicyID].parameters[AutonomousTransferCompletePolicyEnableID].value, "0");
+
+    return CcspManagementServer_GetBooleanValueStr(objectInfo[AutonomousTransferCompletePolicyID].parameters[AutonomousTransferCompletePolicyEnableID].value, FALSE);
 }
 
 /* CcspManagementServer_GetAutonomousTransferCompletePolicy_TransferTypeFilter is called to get
@@ -2695,19 +2545,8 @@ CcspManagementServer_GetDUStateChangeComplPolicy_Enable
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    errno_t rc  = -1;
-    int ind = -1;
 
-    rc = strcasecmp_s("0",strlen("0"),objectInfo[DUStateChangeComplPolicyID].parameters[DUStateChangeComplPolicyEnableID].value,&ind);
-    if ( rc != EOK || ind )
-    {
-        rc = strcasecmp_s("false",strlen("false"),objectInfo[DUStateChangeComplPolicyID].parameters[DUStateChangeComplPolicyEnableID].value,&ind);
-    }
-    if ( rc == EOK && !ind )
-    {
-       return FALSE;
-    }
-    else return TRUE;
+    return CcspManagementServer_GetBooleanValue(objectInfo[DUStateChangeComplPolicyID].parameters[DUStateChangeComplPolicyEnableID].value, TRUE);
 }
 
 CCSP_STRING
@@ -2717,7 +2556,8 @@ CcspManagementServer_GetDUStateChangeComplPolicy_EnableStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_GetBooleanValue(objectInfo[DUStateChangeComplPolicyID].parameters[DUStateChangeComplPolicyEnableID].value, "0");
+
+    return CcspManagementServer_GetBooleanValueStr(objectInfo[DUStateChangeComplPolicyID].parameters[DUStateChangeComplPolicyEnableID].value, FALSE);
 }
 
 /* CcspManagementServer_GetDUStateChangeComplPolicy_OperationTypeFilter is called to get
@@ -2932,7 +2772,8 @@ CcspManagementServer_GetLogging_EnableStr
     )
 {
     UNREFERENCED_PARAMETER(ComponentName);
-    return CcspManagementServer_GetBooleanValue(objectInfo[LoggingID].parameters[LoggingEnableID].value, "0");
+
+    return CcspManagementServer_GetBooleanValueStr(objectInfo[LoggingID].parameters[LoggingEnableID].value, FALSE);
 }
 
 /* CcspManagementServer_SetLogging_EnableStr is called to set

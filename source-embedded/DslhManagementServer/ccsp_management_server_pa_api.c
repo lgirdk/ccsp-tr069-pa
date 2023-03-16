@@ -383,7 +383,7 @@ void GetConfigFrom_bbhm (int parameterID)
 
     if(pValue)
     {
-        objectInfo[ManagementServerID].parameters[parameterID].value = AnscCloneString(pValue);
+        objectInfo[ManagementServerID].parameters[parameterID].value = pValue;
     }
     else
     {

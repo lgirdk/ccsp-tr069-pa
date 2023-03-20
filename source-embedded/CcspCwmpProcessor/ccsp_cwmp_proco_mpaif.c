@@ -2539,11 +2539,16 @@ CcspCwmppoMpaGetParameterValues
             }
             
             free_parameterValStruct_t(pCcspCwmpCpeController->hMsgBusHandle, nParamCount, pParamValues);
-
+            pParamValues = NULL;
             if ( returnStatus != ANSC_STATUS_SUCCESS )
             {
                 break;
             }
+        }
+
+        if ( pParamValues )
+        {
+             free_parameterValStruct_t(pCcspCwmpCpeController->hMsgBusHandle, nParamCount, pParamValues);
         }
 
         if ( returnStatus != ANSC_STATUS_SUCCESS )
@@ -3139,12 +3144,17 @@ CcspCwmppoMpaGetParameterNames
         }
 
         free_parameterInfoStruct_t(pCcspCwmpCpeController->hMsgBusHandle, ParamInfoArraySize, ParamInfoArray);
-
+        ParamInfoArray = NULL;
         if ( returnStatus != ANSC_STATUS_SUCCESS )
         {
             break;
         }
     }
+
+        if ( ParamInfoArray )
+        {
+            free_parameterInfoStruct_t(pCcspCwmpCpeController->hMsgBusHandle, ParamInfoArraySize, ParamInfoArray);
+        }
 
         if ( ppFcNameArray )
         {
@@ -4154,12 +4164,18 @@ CcspCwmppoMpaGetParameterAttributes
                 }
 
                 free_parameterAttributeStruct_t(pCcspCwmpCpeController->hMsgBusHandle, nCcspAttrArraySize, ppCcspAttrArray);
+                ppCcspAttrArray = NULL;
             }
 
             if ( returnStatus != ANSC_STATUS_SUCCESS )
             {
                 break;
             }
+        }
+
+        if ( ppCcspAttrArray )
+        {
+            free_parameterAttributeStruct_t(pCcspCwmpCpeController->hMsgBusHandle, nCcspAttrArraySize, ppCcspAttrArray);
         }
 
         if ( returnStatus != ANSC_STATUS_SUCCESS )

@@ -593,68 +593,7 @@ CcspManagementServer_FillInObjectInfo()
 
                 objectInfo[i].parameters[j].value = pValue;
 				pValue = NULL;
-				/*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
-				/*
-				// Needs to be encrypt on NVMEM files during migration case
-				if ( 	  ( ManagementServerID == i ) && \
-					  ( ( ManagementServerPasswordID == j ) || \
-						( ManagementServerConnectionRequestPasswordID == j ) || \
-						( ManagementServerSTUNPasswordID == j )
-					  ) 
-					)
-				{
-					int IsEncryptFileAvailable = 0;
-
-					// Check whether already encrypted file is available or not
-					if ( 0 == CcspManagementServer_IsEncryptedFileInDB( j, &IsEncryptFileAvailable 	) )
-					{
-						// if encrypted file is not available then only we have to encrypt
-						if( 0 == IsEncryptFileAvailable )
-						{
-							CcspManagementServer_StoreMGMTServerPasswordValuesintoDB( objectInfo[i].parameters[j].value,
-																					  j );
-						}
-					}
-
-					//Delete old existing entries from PSM DB
-					PSM_Del_Record( bus_handle, CcspManagementServer_SubsystemPrefix, pRecordName );
-				}*/
-				/*----END-----PASSWORD ENCRYPTION CODE COMMENTED----END-----*/
             }
-			/*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
-			/*
-			else
-			{
-				// Needs to be decrypt from NVMEM files
-			    /*
-				if ( 	  ( ManagementServerID == i ) && \
-					  ( ( ManagementServerPasswordID == j ) || \
-						( ManagementServerConnectionRequestPasswordID == j ) || \
-						( ManagementServerSTUNPasswordID == j )
-					  ) 
-					)
-				{
-					char tmpPWDValue[MAX_SIZE_TMPPWD_VALUE]  = { 0 };
-
-					// If  return success then process otherwise leave it as it is
-					if ( 0 == CcspManagementServer_GetMGMTServerPasswordValuesFromDB( j, tmpPWDValue ))
-					{
-						if( '\0' != tmpPWDValue[ 0 ] )
-						{
-							// free default value 
-							if ( objectInfo[i].parameters[j].value )
-							{
-								AnscFreeMemory(objectInfo[i].parameters[j].value);
-							}
-						
-							objectInfo[i].parameters[j].value = AnscAllocateMemory( strlen( tmpPWDValue ) + 1 );
-                                                        rc = strncpy_s(objectInfo[i].parameters[j].value, strlen(tmpPWDValue) + 1, tmpPWDValue, strlen( tmpPWDValue ) ) ;
-                                                        ERR_CHK(rc);
-						}
-					}
-				}
-			}*/
-		      /*----END-----PASSWORD ENCRYPTION CODE COMMENTED----END-----*/
 
             rc = strncpy_s(&pRecordName[len1+len2+len3+1], sizeof(pRecordName)-len1-len2-len3, ".Notification", 13);
             ERR_CHK(rc);
@@ -2782,236 +2721,6 @@ void Send_TR069_Notification(int parameterID, char* pString)
 }
 #endif
 
-
-/*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
-#if 0
-/* CcspManagementServer_IsEncryptedFileInDB() */
-int CcspManagementServer_IsEncryptedFileInDB( int parameterID, int *pIsEncryptFileAvailable )
-{
-	int returnStatus  = 0;
-
-	//Validate passed arguments
-	if( NULL == pIsEncryptFileAvailable )
-	{
-		return TR69_INVALID_ARGUMENTS;
-	}
-
-	*pIsEncryptFileAvailable = 0;
-	
-	if( ManagementServerPasswordID == parameterID )
-	{
-		FILE	*fp 			  = NULL;
-		
-		//	Check whether input file is existing or not
-		if ( ( fp = fopen ( "/nvram/.keys/MgmtPwdID", "r" ) ) != NULL ) 
-		{
-			fclose( fp );
-			fp = NULL;
-			*pIsEncryptFileAvailable = 1;
-			AnscTraceWarning((" TR069 %s %d : MgmtPwdID file available\n", __FUNCTION__, __LINE__));
-		}
-		else
-		{
-			AnscTraceWarning((" TR069 %s %d : MgmtPwdID file not available\n", __FUNCTION__, __LINE__));
-		}
-	}
-	else if ( ManagementServerConnectionRequestPasswordID == parameterID )
-	{
-		FILE	*fp 			  = NULL;
-		
-		//	Check whether input file is existing or not
-		if ( ( fp = fopen ( "/nvram/.keys/MgmtCRPwdID", "r" ) ) != NULL ) 
-		{
-			fclose( fp );
-			fp = NULL;
-			*pIsEncryptFileAvailable = 1;
-			AnscTraceWarning((" TR069 %s %d : MgmtCRPwdID file available\n", __FUNCTION__, __LINE__));
-		}
-		else
-		{
-			AnscTraceWarning((" TR069 %s %d : MgmtCRPwdID file not available\n", __FUNCTION__, __LINE__));
-		}
-	}
-	else if ( ManagementServerSTUNPasswordID == parameterID )
-	{
-		FILE	*fp 			  = NULL;
-		
-		//	Check whether input file is existing or not
-		if ( ( fp = fopen ( "/nvram/.keys/MgmtCRSTUNPwdID", "r" ) ) != NULL ) 
-		{
-			fclose( fp );
-			fp = NULL;
-			*pIsEncryptFileAvailable = 1;
-			AnscTraceWarning((" TR069 %s %d : MgmtCRSTUNPwdID file available\n", __FUNCTION__, __LINE__));
-		}
-		else
-		{
-			AnscTraceWarning((" TR069 %s %d : MgmtCRSTUNPwdID file not available\n", __FUNCTION__, __LINE__));
-		}
-	}
-	else
-	{
-		return TR69_INVALID_ARGUMENTS;
-	}
-
-	return returnStatus;
-}
-
-
-/* CcspManagementServer_RetrievePassword() */
-int CcspManagementServer_RetrievePassword( int parameterID, char *pInputFile, char *pOutputString )
-{
-
-	FILE 	*fp 		  	  = NULL;
-	int 	 returnstatus 	  = 0,
-			 isInputFileExist = 0;
-
-    //Since the TEMP_MGMT_SERV_PWD_PATH is same for all parameterID.
-    //We use this method to identify each one
-    char TEMP_MGMT_SERV_PWD_PATH[30]={ 0 };
-    errno_t rc = -1;
-
-    if( ManagementServerPasswordID == parameterID )
-    {
-        rc = strncpy_s(TEMP_MGMT_SERV_PWD_PATH, sizeof(TEMP_MGMT_SERV_PWD_PATH), "/tmp/tmpMgmtPWDFile1", strlen("/tmp/tmpMgmtPWDFile1"));
-        ERR_CHK(rc);
-    }
-    else if ( ManagementServerConnectionRequestPasswordID == parameterID )
-    {
-        rc = strncpy_s(TEMP_MGMT_SERV_PWD_PATH, sizeof(TEMP_MGMT_SERV_PWD_PATH), "/tmp/tmpMgmtPWDFile2", strlen("/tmp/tmpMgmtPWDFile2"));
-        ERR_CHK(rc);
-    }
-    else if ( ManagementServerSTUNPasswordID == parameterID )
-    {
-        rc = strncpy_s(TEMP_MGMT_SERV_PWD_PATH, sizeof(TEMP_MGMT_SERV_PWD_PATH),  "/tmp/tmpMgmtPWDFile3", strlen("/tmp/tmpMgmtPWDFile3"));
-        ERR_CHK(rc);
-    }
-
-    //  Check whether input file is existing or not
-    if ( ( fp = fopen ( pInputFile, "r" ) ) != NULL ) 
-    {
-        fclose( fp );
-        fp = NULL;
-        isInputFileExist = 1;
-    }
-    else
-    {
-        returnstatus = TR69_INTERNAL_ERROR;
-    }
-
-    //  if  input file is there then decrypt and return string
-    if( isInputFileExist )
-    {
-        v_secure_system( "GetConfigFile %s", TEMP_MGMT_SERV_PWD_PATH );
-
-        if ( ( fp = fopen ( TEMP_MGMT_SERV_PWD_PATH, "r" ) ) != NULL ) 
-        {
-            char password [ 512 ]	 = { 0 },
-                 retPassword [ 512 ] = { 0 };
-            int length  = 0;
-
-            if ( fgets ( password, sizeof( password ), fp ) != NULL ) 
-            {
-                sscanf( password, "%511s" ,retPassword );
-                length = strlen( retPassword );
-                rc = strncpy_s( pOutputString, MAX_SIZE_TMPPWD_VALUE, retPassword, length );
-                ERR_CHK(rc);
-
-                rc = memset_s(retPassword, sizeof(retPassword), 0, sizeof(retPassword));
-                ERR_CHK(rc);
-                rc = memset_s(password, sizeof(password), 0, sizeof(password));
-                ERR_CHK(rc);
-            }
-            else
-            {
-                AnscTraceWarning(( "%s -- fgets() failed\n", __FUNCTION__ ));
-                fclose( fp );
-                unlink (TEMP_MGMT_SERV_PWD_PATH);
-                return TR69_INTERNAL_ERROR;
-            }
-        
-            fclose( fp );
-            unlink (TEMP_MGMT_SERV_PWD_PATH);
-
-        }
-        else
-        {
-            AnscTraceWarning(( "%s -- fopen() failed\n", __FUNCTION__ ));
-            return TR69_INTERNAL_ERROR;
-        }
-    }
-
-    return returnstatus;
-}
-
-/* CcspManagementServer_GetMGMTServerPasswordValuesFromDB() */
-int CcspManagementServer_GetMGMTServerPasswordValuesFromDB( int parameterID, char *pOutputString )
-{
-	int returnStatus  = 0;
-
-	//Validate passed arguments
-	if( NULL == pOutputString )
-	{
-		return TR69_INVALID_ARGUMENTS;
-	}
-	
-	if( ManagementServerPasswordID == parameterID )
-	{
-		returnStatus = CcspManagementServer_RetrievePassword( parameterID,"/nvram/.keys/MgmtPwdID", pOutputString );
-	}
-	else if ( ManagementServerConnectionRequestPasswordID == parameterID )
-	{
-		returnStatus = CcspManagementServer_RetrievePassword( parameterID, "/nvram/.keys/MgmtCRPwdID", pOutputString );
-	}
-	else if ( ManagementServerSTUNPasswordID == parameterID )
-	{
-		returnStatus = CcspManagementServer_RetrievePassword( parameterID,"/nvram/.keys/MgmtCRSTUNPwdID", pOutputString );
-	}
-
-	return returnStatus;
-}
-
-/* CcspManagementServer_StoreMGMTServerPasswordValuesintoDB() */
-int CcspManagementServer_StoreMGMTServerPasswordValuesintoDB( char *pString, int parameterID )
-{
-	int returnStatus  = 0;
-
-	//Validate passed arguments
-	if( NULL == pString )
-	{
-		return TR69_INVALID_ARGUMENTS;
-	}
-	
-	if( ManagementServerPasswordID == parameterID )
-	{
-		v_secure_system("echo %s > /tmp/tempMSPwdFile; mkdir -p /nvram/.keys; SaveConfigFile /tmp/tempMSPwdFile ; rm -rf /tmp/tempMSPwdFile", 
-				 pString );
-		AnscTraceWarning((" TR069 %s %d : ManagementServerPasswordID Changed\n", __FUNCTION__, __LINE__));
-	}
-	else if ( ManagementServerConnectionRequestPasswordID == parameterID )
-	{
-		v_secure_system( "echo %s > /tmp/tempMSCRPwdFile; mkdir -p /nvram/.keys; SaveConfigFile /tmp/tempMSCRPwdFile; rm -rf /tmp/tempMSCRPwdFile", 
-				 pString );
-		AnscTraceWarning((" TR069 %s %d : ManagementServerConnectionRequestPasswordID Changed\n", __FUNCTION__, __LINE__));
-		if (access(CCSP_MGMT_CRPWD_FILE,F_OK)!=0)
-			{
-			AnscTraceWarning((" TR069 %s %d : %s file is not generated\n", __FUNCTION__, __LINE__,CCSP_MGMT_CRPWD_FILE));
-			t2_event_d("SYS_ERROR_NotGenMgmtCRPwdID", 1);
-			}
-	}
-	else if ( ManagementServerSTUNPasswordID == parameterID )
-	{
-		v_secure_system("echo %s > /tmp/tempMSSTUNPwdFile; mkdir -p /nvram/.keys; SaveConfigFile /tmp/tempMSSTUNPwdFile; rm -rf /tmp/tempMSSTUNPwdFile", 
-				 pString );
-		AnscTraceWarning((" TR069 %s %d : ManagementServerSTUNPasswordID Changed\n", __FUNCTION__, __LINE__));
-	}
-
-	return returnStatus;
-}
-
-#endif 
-/*----END-----PASSWORD ENCRYPTION CODE COMMENTED----END-----*/
-
 //Custom
 extern int CcspManagementServer_CommitParameterValuesCustom(int parameterID);
 /* Commit the parameter setting stored in parameterSetting.
@@ -3102,22 +2811,6 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
             continue;
         }
 
-	/*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
-		// Needs to be encrypt on NVMEM files
-	/*
-        if ( ( ManagementServerID == objectID ) && \
-			  ( ( ManagementServerPasswordID == parameterID ) || \
-			    ( ManagementServerConnectionRequestPasswordID == parameterID ) || \
-			    ( ManagementServerSTUNPasswordID == parameterID )
-			  ) 
-			)
-		{
-			CcspManagementServer_StoreMGMTServerPasswordValuesintoDB( objectInfo[objectID].parameters[parameterID].value,
-																  	  parameterID );
-		}
-		else
-		{*/
-	/*----END-----PASSWORD ENCRYPTION CODE COMMENTED----END-----*/
 			/* PSM write */
 			len2 = strlen(objectInfo[objectID].name);
                         rc = strncat_s(pRecordName, sizeof(pRecordName), objectInfo[objectID].name, len2);
@@ -3141,9 +2834,6 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
 				CcspManagementServer_RollBackParameterValues();
 				goto EXIT1;
 			}
-		/*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
-		//}
-		/*----END-----PASSWORD ENCRYPTION CODE COMMENTED----END-----*/
 
         if(objectID == ManagementServerID)
         {
@@ -3365,22 +3055,7 @@ int CcspManagementServer_RollBackParameterValues()
         if(objectInfo[objectID].parameters[parameterID].value) AnscFreeMemory(objectInfo[objectID].parameters[parameterID].value);
         objectInfo[objectID].parameters[parameterID].value = AnscCloneString(parameterSetting.msParameterValSettings[i].parameterValue);
         parameterSetting.msParameterValSettings[i].backupStatus = NoBackup;
-	/*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
-/*
-		// Needs to be encrypt on NVMEM files
-        if ( ( ManagementServerID == objectID ) && \
-			  ( ( ManagementServerPasswordID == parameterID ) || \
-			    ( ManagementServerConnectionRequestPasswordID == parameterID ) || \
-			    ( ManagementServerSTUNPasswordID == parameterID )
-			  ) 
-			)
-		{
-			CcspManagementServer_StoreMGMTServerPasswordValuesintoDB( objectInfo[objectID].parameters[parameterID].value,
-																  	  parameterID );
-		}
-		else
-		{*/
-	/*----END-----PASSWORD ENCRYPTION CODE COMMENTED----END-----*/
+
 			/* PSM write */
 			len2 = strlen(objectInfo[objectID].name);
                         rc = strncat_s(pRecordName, sizeof(pRecordName), objectInfo[objectID].name, len2);
@@ -3482,9 +3157,6 @@ int CcspManagementServer_RollBackParameterValues()
 				 */
 				CcspTraceError2("ms", ( "CcspManagementServer_RollBackParameterValues PSM write failure %d!=%d: %s----%s.\n", res, CCSP_SUCCESS, pRecordName, slapVar.Variant.varString)); 
 			}
-	  /*----BEGIN-----PASSWORD ENCRYPTION CODE COMMENTED----BEGIN-----*/
-		//}
-	  /*----END-----PASSWORD ENCRYPTION CODE COMMENTED----END-----*/
    }
 
     return 0;

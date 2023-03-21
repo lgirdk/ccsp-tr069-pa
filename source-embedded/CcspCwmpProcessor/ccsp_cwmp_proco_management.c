@@ -1288,24 +1288,26 @@ CcspCwmppoCheckParamAttrCache
     PCCSP_CWMP_PROCESSOR_OBJECT      pMyObject       = (PCCSP_CWMP_PROCESSOR_OBJECT)hThisObject;
     PANSC_ATOM_TABLE_OBJECT         pParamAttrCache = (PANSC_ATOM_TABLE_OBJECT   )pMyObject->hParamAttrCache;
     PANSC_ATOM_DESCRIPTOR           pAtomDescriptor = NULL;
-    char*                           pCurName        = AnscCloneString(pParamName);
+    char*                           pCurName        = NULL;
     char*                           pParentName     = NULL;
-
-    while ( pCurName && pParamAttrCache)
+    if ( pParamAttrCache )
     {
-        pAtomDescriptor = (PANSC_ATOM_DESCRIPTOR)pParamAttrCache->GetAtomByName((ANSC_HANDLE)pParamAttrCache, pCurName);
-
-        if ( pAtomDescriptor )
+        pCurName = AnscCloneString(pParamName);
+        while ( pCurName )
         {
+            pAtomDescriptor = (PANSC_ATOM_DESCRIPTOR)pParamAttrCache->GetAtomByName((ANSC_HANDLE)pParamAttrCache, pCurName);
+
+            if ( pAtomDescriptor )
+            {
+                 AnscFreeMemory(pCurName);
+                 return  (ULONG)pAtomDescriptor->hContext;
+            }
+
+            pParentName = CcspCwmppoGetParentParamName(pCurName);
             AnscFreeMemory(pCurName);
-            return  (ULONG)pAtomDescriptor->hContext;
+            pCurName = pParentName;
         }
-
-        pParentName = CcspCwmppoGetParentParamName(pCurName);
-        AnscFreeMemory(pCurName);
-        pCurName = pParentName;
     }
-
     return  CCSP_CWMP_NOTIFICATION_off;
 }
 

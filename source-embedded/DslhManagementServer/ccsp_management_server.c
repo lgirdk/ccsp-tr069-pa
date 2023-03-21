@@ -2876,27 +2876,26 @@ char * CcspManagementServer_MergeString
     const char * src2
     )
 {
-    size_t len1 = 0, len2 = 0;
-    errno_t rc = -1;
-    if(src1 != NULL) len1 = strlen(src1);
-    if(src2 != NULL) len2 = strlen(src2);
-    size_t len = len1 + len2 + 1;
-    if(len <= 1) return NULL;
-    char * dest = AnscAllocateMemory(len);
-    if ( dest )
-    {
-        *dest = 0;
-        if ( src1 )
-        {
-            rc = strcpy_s(dest, len, src1);
-            ERR_CHK(rc);
-        }
-        if ( src2 )
-        {
-            rc = strcat_s(dest, len, src2);
-            ERR_CHK(rc);
-        }
-    }
+    char *dest;
+    size_t len1, len2;
+
+    len1 = src1 ? strlen(src1) : 0;
+    len2 = src2 ? strlen(src2) : 0;
+
+    if ((len1 + len2) == 0)
+        return NULL;
+
+    if ((dest = malloc(len1 + len2 + 1)) == NULL)
+        return NULL;
+
+    if (len1)
+        memcpy(dest, src1, len1);
+
+    if (len2)
+        memcpy(dest + len1, src2, len2);
+
+    dest[len1 + len2] = 0;
+
     return dest;
 }
 

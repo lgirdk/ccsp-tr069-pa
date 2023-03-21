@@ -113,19 +113,20 @@ extern  PCCSP_CWMP_CPE_CONTROLLER_OBJECT                 g_pCcspCwmpCpeControlle
 msObjectInfo *objectInfo;
 //char * objectManagementServerName = _ManagementServerObjectName;
 void *bus_handle = NULL;
-char * CCSP_DBUS_PATH_MS = "/com/cisco/spvtg/ccsp/MS";
-char * CCSP_DBUS_PATH_PA = "/com/cisco/stbservice/protocolagent";
 char *pPAMComponentName = NULL;
 char *pPAMComponentPath = NULL;
+
+#define CCSP_DBUS_PATH_MS "/com/cisco/spvtg/ccsp/MS"
+
 #define FirstUpstreamIpInterfaceParameterName "com.cisco.spvtg.ccsp.pam.Helper.FirstUpstreamIpInterface"
 
-char *pFirstUpstreamIpInterface = NULL;
+static char *pFirstUpstreamIpInterface = NULL;
 char *pFirstUpstreamIpAddress = NULL;
 
-int g_ACSChangedURL = 0;
+static int g_ACSChangedURL = 0;
 
 
-char * pDTXml = "<?xml version=\"1.0\"  encoding=\"UTF-8\" ?>\
+static char * pDTXml = "<?xml version=\"1.0\"  encoding=\"UTF-8\" ?>\
 <DT>\
   <object ref=\""DM_ROOTNAME"ManagementServer.\" access=\"readOnly\" minEntries=\"1\" maxEntries=\"1\">\
     <parameter ref=\"EnableCWMP\" access=\"readWrite\" activeNotify=\"normal\">\
@@ -231,7 +232,7 @@ char * pDTXml = "<?xml version=\"1.0\"  encoding=\"UTF-8\" ?>\
 </DT>";
 
 /* The program will crash if try to free the parameter values directly initialized here. */
-msParameterInfo managementServerParameters[] = 
+static msParameterInfo managementServerParameters[] = 
 {
     { "EnableCWMP", NULL, ccsp_boolean, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "URL", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
@@ -274,7 +275,7 @@ msParameterInfo managementServerParameters[] =
     { "ManageableDeviceNotificationLimit", NULL, ccsp_unsignedInt, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
 };
 
-msParameterInfo autonomousTransferCompletePolicyParameters[] = 
+static msParameterInfo autonomousTransferCompletePolicyParameters[] = 
 {
     { "Enable", NULL, ccsp_boolean, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "TransferTypeFilter", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
@@ -282,7 +283,7 @@ msParameterInfo autonomousTransferCompletePolicyParameters[] =
     { "FileTypeFilter", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0), (unsigned int)0 }
 };
 
-msParameterInfo duStateChangeComplPolicyParameters[] = 
+static msParameterInfo duStateChangeComplPolicyParameters[] = 
 {
     { "Enable", NULL, ccsp_boolean, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "OperationTypeFilter", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
@@ -290,7 +291,7 @@ msParameterInfo duStateChangeComplPolicyParameters[] =
     { "FaultCodeFilter", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0), (unsigned int)0 }
 };
 
-msParameterInfo tr069paParameters[] = 
+static msParameterInfo tr069paParameters[] = 
 {
     { "Name", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
     { "Version", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
@@ -300,31 +301,31 @@ msParameterInfo tr069paParameters[] =
     { "DTXml", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0), (unsigned int)0 }
 };
 
-msParameterInfo memoryParameters[] = 
+static msParameterInfo memoryParameters[] = 
 {
     { "MinUsage", NULL, ccsp_unsignedInt, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
     { "MaxUsage", NULL, ccsp_unsignedInt, CCSP_RO, ~((unsigned int)0), (unsigned int)0 },
     { "Consumed", NULL, ccsp_unsignedInt, CCSP_RO, ~((unsigned int)0), (unsigned int)0 }
 };
 
-msParameterInfo loggingParameters[] = 
+static msParameterInfo loggingParameters[] = 
 {
     { "Enable", NULL, ccsp_boolean, CCSP_RW, ~((unsigned int)0), (unsigned int)0 },
     { "LogLevel", NULL, ccsp_unsignedInt, CCSP_RW, ~((unsigned int)0), (unsigned int)0 }
 };
 
-msParameterInfo notifyParameters[] =
+static msParameterInfo notifyParameters[] =
 {
     { "X_RDKCENTRAL-COM_TR069_Notification", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0) },
     { "X_RDKCENTRAL-COM_Connected-Client", NULL, ccsp_string, CCSP_RW, ~((unsigned int)0) }
 };
 
-msParameterInfo deviceParameters[] =
+static msParameterInfo deviceParameters[] =
 {
     { "RootDataModelVersion", NULL, ccsp_string, CCSP_RO, ~((unsigned int)0) }
 };
 
-msParameterInfo supportedDMNumberOfEntriesParameters[] =
+static msParameterInfo supportedDMNumberOfEntriesParameters[] =
 {
     { "SupportedDataModelNumberOfEntries", NULL, ccsp_unsignedInt, CCSP_RO, ~((unsigned int)0) }
 };
@@ -371,7 +372,9 @@ CcspManagementServer_FillInObjectInfoCustom(msObjectInfo *objectInfo);
 CCSP_VOID
 CcspManagementServer_FillInObjectInfo()
 {
+    char buf[16];
     errno_t rc = -1;
+
     //CcspTraceWarning("ms", ( "CcspManagementServer_FillObjectInfo 0\n"));
     CcspManagementServer_FillInSDMObjectInfo();
     /* First setup default object array. */
@@ -476,10 +479,8 @@ CcspManagementServer_FillInObjectInfo()
     objectInfo[NotifyID].numberOfParameters = TR069NotifyNumOfParameters;
     objectInfo[NotifyID].parameters = notifyParameters;
 
-    char str[100] = {0};
-    //_ansc_itoa(g_iTraceLevel, str, 10);
-    _ansc_sprintf(str, "%d", g_iTraceLevel);
-    objectInfo[LoggingID].parameters[LoggingLogLevelID].value = AnscCloneString(str);
+    snprintf(buf, sizeof(buf), "%d", g_iTraceLevel);
+    objectInfo[LoggingID].parameters[LoggingLogLevelID].value = AnscCloneString(buf);
 
     /* set up default values of Management Server settings, another way to do this is
        through PSM, however on different sub-system, the record names must be
@@ -489,15 +490,10 @@ CcspManagementServer_FillInObjectInfo()
      */
     if ( TRUE )
     {
-        char    buf[16];
-   
         objectInfo[ManagementServerID].parameters[ManagementServerEnableCWMPID].value
             = AnscCloneString("0");
 
-        // _ansc_sprintf(buf, "%d", 51005);
-        
-        _ansc_sprintf(buf, "%d", CWMP_PORT);      
-
+        snprintf(buf, sizeof(buf), "%d", CWMP_PORT);      
         objectInfo[ManagementServerID].parameters[ManagementServerX_LGI_COM_ConnectionRequestPortID].value
             = AnscCloneString(buf);
 
@@ -520,7 +516,7 @@ CcspManagementServer_FillInObjectInfo()
 
         objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].notification = 1;
             
-        _ansc_sprintf(buf, "%d", STUN_PORT);
+        snprintf(buf, sizeof(buf), "%d", STUN_PORT);
         objectInfo[ManagementServerID].parameters[ManagementServerSTUNServerPortID].value 
             = AnscCloneString(buf);
 
@@ -2078,9 +2074,11 @@ int CcspManagementServer_SetSingleParameterAttributes(
         ERR_CHK(rc);
         rc = strncat_s(pRecordName, sizeof(pRecordName), ".Notification", 13);
         ERR_CHK(rc);
-        char pValue[50] = {0};
-        //        _ansc_itoa(objectInfo[objectID].parameters[parameterID].notification, pValue, 10);
-        _ansc_sprintf(pValue, "%d", objectInfo[objectID].parameters[parameterID].notification);
+
+        char pValue[16];
+
+        snprintf(pValue, sizeof(pValue), "%d", objectInfo[objectID].parameters[parameterID].notification);
+
         int res = PSM_Set_Record_Value2(
             bus_handle,
             CcspManagementServer_SubsystemPrefix,

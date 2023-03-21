@@ -7792,7 +7792,7 @@
             <Name>Device.X_LGI-COM_Gateway.DNSRebindProtection.Enable</Name>
         </Param>
         <Param>
-            <Name>Device.X_LGI-COM_Gateway.DNSRebindProtection.WhitelistUrlNumberOfEntries</Name>
+            <Name>Device.X_LGI-COM_Gateway.DNSRebindProtection.WhitelistNumberOfEntries</Name>
         </Param>
         <Param>
             <Name>Device.X_LGI-COM_Gateway.DNSRebindProtection.Whitelist.{i}.Url</Name>

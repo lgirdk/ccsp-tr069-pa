@@ -117,7 +117,8 @@ static ULONG delayRebootTime = 0;
 static pthread_t delayRebootThreadPID = 0;
 
 //Intel Proposed RDKB Generic Bug Fix from XB6 SDK
-#define NO_OF_RETRY 90                 /* No of times the management server will wait before giving up*/
+//fix me: Need to revisit to check why we need a timer and if TLV processing can be optimized
+#define NO_OF_RETRY 120
 
 #define MAX_URL_LEN 1024 
 #define HTTP_STR "http://"
@@ -455,6 +456,13 @@ static void ReadTr69TlvData (int ethwan_enable)
 			AnscTraceVerbose(("%s(): Ccsp_GwProvApp haven't been able to initialize TLV Data.\n", __FUNCTION__));
 		}
 
+		char sysbuf[8];
+		syscfg_get(NULL, "last_erouter_mode", sysbuf, sizeof(sysbuf));
+		if (atoi(sysbuf) == 0)
+		{
+			AnscTraceInfo(("%s In bridge mode. Exiting TR069PA \n\n", __FUNCTION__));
+			exit(0);
+		}
 		if ((file = fopen(TR69_TLVDATA_FILE, "rb")) != NULL)
 		{
 			object2 = malloc(sizeof(Tr69TlvData));

@@ -2285,6 +2285,8 @@ CcspCwmppoMpaGetParameterValues
         PCCSP_TR069PA_NSLIST        pNsList;
         int                         nResult         = CCSP_SUCCESS;
         char                        sysbuf[8]          = { 0 };
+        int                         m;
+        char*                       pParamN         = NULL;
 
         CcspTr069PaTraceDebug(("GPV involves %d Functional Component(s), sessionID = %u.\n", nNumFCs, (unsigned int)ulSessionID));
         
@@ -2319,9 +2321,13 @@ CcspCwmppoMpaGetParameterValues
                 pSLinkEntryNs = AnscQueueGetNextEntry(pSLinkEntryNs);
 
                 /*CWMP_2_DM_INT_INSTANCE_NUMBER_MAPPING*/
-                CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramValueInfo.parameterName);
-
-                pParamNames[k++] = pNsList->Args.paramValueInfo.parameterName;
+                pParamN = pNsList->Args.paramValueInfo.parameterName;
+                CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pParamN);
+                if (pParamN == pNsList->Args.paramValueInfo.parameterName)
+                {
+                    pParamN = AnscCloneString (pNsList->Args.paramValueInfo.parameterName);
+                }
+                pParamNames[k++] = pParamN;
                 pNsList->Args.paramValueInfo.parameterName = NULL;
             }
 
@@ -2342,8 +2348,16 @@ CcspCwmppoMpaGetParameterValues
 
                     if(pParamNames)
                     {
-                       AnscFreeMemory(pParamNames);
-                       pParamNames = NULL;
+                        for ( m = 0; m < k; m++ )
+                        {
+                            if ( pParamNames[m] )
+                            {
+                                 AnscFreeMemory(pParamNames[m]);
+                                 pParamNames[m] = NULL;
+                            }
+                        }
+                        AnscFreeMemory(pParamNames);
+                        pParamNames = NULL;
                     }
 
 

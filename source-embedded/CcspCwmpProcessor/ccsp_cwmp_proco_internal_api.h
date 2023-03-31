@@ -533,6 +533,12 @@ CcspCwmppoHasPendingInform
         ANSC_HANDLE                 hThisObject
     );
 
+CCSP_STRING
+CcspCwmppoMpaMapParamInstNumCwmpToDmInt
+    (
+        CCSP_STRING                 pParam
+    );
+
 /***********************************************************
         FUNCTIONS IMPLEMENTED IN CCSP_CWMPPO_PROCESS.C
 ***********************************************************/

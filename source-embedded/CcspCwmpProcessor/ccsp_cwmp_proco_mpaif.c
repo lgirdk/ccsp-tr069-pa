@@ -92,26 +92,6 @@
                                   MACROS
 **********************************************************************/
 #define COSA_CURRENT_SUPPORT_VERSION              "1"
-#define  CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pParam)                        \
-            /*CWMP_2_DM_INT_INSTANCE_NUMBER_MAPPING*/                           \
-            {                                                                   \
-                CCSP_STRING     pReturnStr  = NULL;                             \
-                                                                                \
-                CcspTr069PaTraceDebug(("%s - Param CWMP to DmInt\n", __FUNCTION__));\
-                                                                                \
-                pReturnStr =                                                    \
-                    CcspTr069PA_MapInstNumCwmpToDmInt                           \
-                        (                                                       \
-                            pParam                                              \
-                        );                                                      \
-                                                                                \
-                if ( pReturnStr )                                               \
-                {                                                               \
-                    /* Entries in pParamNameArray cannot be freed */            \
-                    /* AnscFreeMemory(pParam); */                               \
-                    pParam = pReturnStr;                                        \
-                }                                                               \
-            }
 
 #define  CcspCwmppoMpaMapInvalidParamInstNumDmIntToCwmp(pParamName)                 \
             /*CWMP_2_DM_INT_INSTANCE_NUMBER_MAPPING*/                               \
@@ -1279,19 +1259,7 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                 bRadioRestartEn = TRUE;
                 if(i<MAX_NO_WIFI_PARAM)
                 {
-                    /*
-                       If CcspCwmppoMpaMapParamInstNumCwmpToDmInt() allocates a new
-                       buffer (ie it updates pParamN) then use it. Otherwise allocate
-                       a new buffer here and copy the original parameter name into it.
-                    */
-                    char *pParamN = pValueInfo->parameterName;
-                    CcspCwmppoMpaMapParamInstNumCwmpToDmInt (pParamN);
-                    if (pParamN == pValueInfo->parameterName)
-                    {
-                        pParamN = AnscCloneString (pValueInfo->parameterName);
-                    }
-
-                    ParamName[i] = pParamN;
+                    ParamName[i] = CcspCwmppoMpaMapParamInstNumCwmpToDmInt (pValueInfo->parameterName);
                     noOfParam = i;
                 }
             }
@@ -1325,6 +1293,7 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
         char*                       pInvalidParam   = NULL;
         char                        sysbuf[8]          = { 0 };
         BOOL                        flag_pInvalidParam = FALSE;
+        int                         m;
 
         CcspTr069PaTraceDebug(("SPV involves %d Functional Component(s), sessionID = %u.\n", nNumFCs, (unsigned int)ulSessionID));
 
@@ -1368,8 +1337,9 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                 pSLinkEntryNs = AnscQueueGetNextEntry(pSLinkEntryNs);
 
                 /*CWMP_2_DM_INT_INSTANCE_NUMBER_MAPPING*/
-                CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramValueInfo.parameterName);
-                CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramValueInfo.parameterValue);
+                pNsList->Args.paramValueInfo.parameterName = CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramValueInfo.parameterName);
+                pNsList->Args.paramValueInfo.parameterValue = CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramValueInfo.parameterValue);
+
 
                 // if parameterName is DiagnosticsState, store it into pDiagnosticsStateParamValues
                 if (strstr(pNsList->Args.paramValueInfo.parameterName, "DiagnosticsState") != NULL)
@@ -1585,18 +1555,6 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                 }
             }
 
-            if (pParamValues)
-            {
-                AnscFreeMemory(pParamValues);
-                pParamValues = NULL;
-            }
-
-            if (pDiagnosticsStateParamValues)
-            {
-                AnscFreeMemory(pDiagnosticsStateParamValues);
-                pDiagnosticsStateParamValues = NULL;
-            }
-
             rc = strcmp_s("Device.X_CISCO_COM_DeviceControl.ReinitCmMac",strlen("Device.X_CISCO_COM_DeviceControl.ReinitCmMac"),pNsList->Args.paramValueInfo.parameterName,&ind);
             ERR_CHK(rc);
             if((rc == EOK) && (!ind))
@@ -1696,6 +1654,44 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
             {
                 AnscFreeMemory(pInvalidParam);
                 pInvalidParam = NULL;
+            }
+
+            if ( pParamValues )
+            {
+                 for( m = 0; m < k; m++ )
+                 {
+                     if ( pParamValues[m].parameterName )
+                     {
+                         AnscFreeMemory(pParamValues[m].parameterName);
+                         pParamValues[m].parameterName = NULL;
+                     }
+                     if ( pParamValues[m].parameterValue )
+                     {
+                         AnscFreeMemory(pParamValues[m].parameterValue);
+                         pParamValues[m].parameterValue = NULL;
+                     }
+                 }
+                 AnscFreeMemory(pParamValues);
+                 pParamValues = NULL;
+            }
+ 
+            if ( pDiagnosticsStateParamValues )
+            {
+                 for( m = 0 ; m < kDiag; m++)
+                 {
+                      if ( pDiagnosticsStateParamValues[m].parameterName )
+                      {
+                          AnscFreeMemory(pDiagnosticsStateParamValues[m].parameterName);
+                          pDiagnosticsStateParamValues[m].parameterName = NULL;
+                      }
+                      if ( pDiagnosticsStateParamValues[m].parameterValue )
+                      {
+                          AnscFreeMemory(pDiagnosticsStateParamValues[m].parameterValue);
+                          pDiagnosticsStateParamValues[m].parameterValue = NULL;
+                      }
+                 }
+                 AnscFreeMemory(pDiagnosticsStateParamValues);
+                 pDiagnosticsStateParamValues = NULL;
             }
 
         }
@@ -2289,7 +2285,6 @@ CcspCwmppoMpaGetParameterValues
         int                         nResult         = CCSP_SUCCESS;
         char                        sysbuf[8]          = { 0 };
         int                         m;
-        char*                       pParamN         = NULL;
 
         CcspTr069PaTraceDebug(("GPV involves %d Functional Component(s), sessionID = %u.\n", nNumFCs, (unsigned int)ulSessionID));
         
@@ -2324,13 +2319,7 @@ CcspCwmppoMpaGetParameterValues
                 pSLinkEntryNs = AnscQueueGetNextEntry(pSLinkEntryNs);
 
                 /*CWMP_2_DM_INT_INSTANCE_NUMBER_MAPPING*/
-                pParamN = pNsList->Args.paramValueInfo.parameterName;
-                CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pParamN);
-                if (pParamN == pNsList->Args.paramValueInfo.parameterName)
-                {
-                    pParamN = AnscCloneString (pNsList->Args.paramValueInfo.parameterName);
-                }
-                pParamNames[k++] = pParamN;
+                pParamNames[k++] = CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramValueInfo.parameterName);
                 pNsList->Args.paramValueInfo.parameterName = NULL;
             }
 
@@ -3610,6 +3599,7 @@ CcspCwmppoMpaSetParameterAttributes
         int                         nNsCount;
         PCCSP_TR069PA_NSLIST        pNsList;
         int                         nResult         = CCSP_SUCCESS;
+        int                         m;
 
 
         CcspTr069PaTraceDebug(("SPA involves %d Functional Component(s), sessionID = %u.\n", nNumFCs, (unsigned int)ulSessionID));
@@ -3641,7 +3631,7 @@ CcspCwmppoMpaSetParameterAttributes
                 pNsList       = (PCCSP_TR069PA_NSLIST)ACCESS_CCSP_TR069PA_FC_NSLIST(pSLinkEntryNs);
                 pSLinkEntryNs = AnscQueueGetNextEntry(pSLinkEntryNs);
 				 /*CWMP_2_DM_INT_INSTANCE_NUMBER_MAPPING*/ // fix RDKB-405
-                CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramAttrInfo.parameterName);
+                pNsList->Args.paramAttrInfo.parameterName = CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramAttrInfo.parameterName);
                 //CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramValueInfo.parameterValue);
                 pParamAttributes[k++] = pNsList->Args.paramAttrInfo;
 
@@ -3664,6 +3654,14 @@ CcspCwmppoMpaSetParameterAttributes
 
             if(pParamAttributes)
             {
+                for ( m = 0; m < k; m++ )
+                {
+                    if ( pParamAttributes[m].parameterName )
+                    {
+                        AnscFreeMemory(pParamAttributes[m].parameterName);
+                        pParamAttributes[m].parameterName = NULL;
+                    }
+                }
                 AnscFreeMemory(pParamAttributes);
                 pParamAttributes = NULL;
             }
@@ -3995,7 +3993,7 @@ CcspCwmppoMpaGetParameterAttributes
                 pNsList->NaType = CCSP_NORMALIZED_ACTION_TYPE_GPA;
                 pAttrInfo       = &pNsList->Args.paramAttrInfo;
 
-                pAttrInfo->parameterName = AnscCloneString(pParamName);
+                pAttrInfo->parameterName = pParamName;
 
                 AnscQueuePushEntry(&pFcNsList->NsList, &pNsList->Linkage);
             }
@@ -4043,6 +4041,7 @@ CcspCwmppoMpaGetParameterAttributes
         int                         nNsCount;
         PCCSP_TR069PA_NSLIST        pNsList;
         int                         nResult         = CCSP_SUCCESS;
+        int                         m;
 
         CcspTr069PaTraceDebug(("GPA involves %d Functional Component(s), sessionID = %u.\n", nNumFCs, (unsigned int)ulSessionID));
         
@@ -4076,9 +4075,8 @@ CcspCwmppoMpaGetParameterAttributes
                 pNsList       = (PCCSP_TR069PA_NSLIST)ACCESS_CCSP_TR069PA_FC_NSLIST(pSLinkEntryNs);
                 pSLinkEntryNs = AnscQueueGetNextEntry(pSLinkEntryNs);
                 /*CWMP_2_DM_INT_INSTANCE_NUMBER_MAPPING*/ //fix RDKB-405
-                CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramAttrInfo.parameterName);
+                pParamNames[k++] = CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramAttrInfo.parameterName);
                // pParamNames[k++] = pNsList->Args.paramValueInfo.parameterName;
-			   pParamNames[k++] = pNsList->Args.paramAttrInfo.parameterName;
                 pNsList->Args.paramValueInfo.parameterName = NULL;
 				 pNsList->Args.paramAttrInfo.parameterName = NULL;
             }
@@ -4099,6 +4097,14 @@ CcspCwmppoMpaGetParameterAttributes
 
             if(pParamNames)
             {
+                for ( m = 0; m < k; m++ )
+                {
+                    if (pParamNames[m])
+                    {
+                         AnscFreeMemory(pParamNames[m]);
+                         pParamNames[m] = NULL;
+                    }
+                }
                 AnscFreeMemory(pParamNames);
                 pParamNames = NULL;
             }
@@ -4240,11 +4246,8 @@ CcspCwmppoMpaGetParameterAttributes
                 );
 
                 /*CWMP_2_DM_INT_INSTANCE_NUMBER_MAPPING*/ //fix RDKB-405
-                CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramAttrInfo.parameterName);
-                CcspTr069PaTraceDebug(("GPA %s\n", pNsList->Args.paramAttrInfo.parameterName));
-
-                pCwmpPA->Name = pNsList->Args.paramAttrInfo.parameterName;
-                pNsList->Args.paramAttrInfo.parameterName = NULL;
+                pCwmpPA->Name = CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pNsList->Args.paramAttrInfo.parameterName);
+                CcspTr069PaTraceDebug(("GPA %s\n", pCwmpPA->Name));
 
                 pCwmpPA->Notification = CCSP_CWMP_NOTIFICATION_off;
 
@@ -4281,6 +4284,11 @@ CcspCwmppoMpaGetParameterAttributes
                     AnscFreeMemory(pCwmpPA->Name);
                 }
                 pCwmpPA->Name = pOrigName;
+                if ( pNsList->Args.paramAttrInfo.parameterName )
+                {
+                    AnscFreeMemory(pNsList->Args.paramAttrInfo.parameterName);
+                    pNsList->Args.paramAttrInfo.parameterName = NULL;
+                }
 
                 pCwmpPA->AccessList = NULL;
                 if ( pNsList->Args.paramAttrInfo.accessControlBitmask == CCSP_NS_ACCESS_SUBSCRIBER )
@@ -4566,9 +4574,7 @@ CcspCwmppoMpaAddObject
 
         goto EXIT2;
     }
-
-
-    CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pObjName);
+    pObjName = CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pObjName);
 
     /* query namespace manager for the namespace on identified sub-system */
     CCSP_TR069PA_DISCOVER_FC
@@ -4696,6 +4702,8 @@ EXIT1:
     {
         AnscFreeMemory(MappedInternalName);
     }
+
+    AnscFreeMemory(pObjName);
 
     return  returnStatus;
 }
@@ -4855,7 +4863,7 @@ CcspCwmppoMpaDeleteObject
 
         goto EXIT2;
     }
-    CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pObjName);
+    pObjName = CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pObjName);
     /* query namespace manager for the namespace on identified sub-system */
     CCSP_TR069PA_DISCOVER_FC
         (
@@ -4987,6 +4995,8 @@ EXIT1:
     {
         AnscFreeMemory(MappedInternalName);
     }
+
+    AnscFreeMemory(pObjName);
 
     return  returnStatus;
 }

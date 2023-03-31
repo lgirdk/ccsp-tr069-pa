@@ -88,26 +88,42 @@
 
 #include "ccsp_cwmp_proco_global.h"
 #include "ccsp_tr069pa_mapper_api.h"
-#define  CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pParam)                        \
-            /*CWMP_2_DM_INT_INSTANCE_NUMBER_MAPPING*/                           \
-            {                                                                   \
-                CCSP_STRING     pReturnStr  = NULL;                             \
-                                                                                \
-                CcspTr069PaTraceWarning(("%s - Param CWMP to DmInt\n", __FUNCTION__));\
-                                                                                \
-                pReturnStr =                                                    \
-                    CcspTr069PA_MapInstNumCwmpToDmInt                           \
-                        (                                                       \
-                            pParam                                              \
-                        );                                                      \
-                                                                                \
-                if ( pReturnStr )                                               \
-                {                                                               \
-                    /* Entries in pParamNameArray cannot be freed */            \
-                    /* AnscFreeMemory(pParam); */                               \
-                    pParam = pReturnStr;                                        \
-                }                                                               \
-            }
+
+/**********************************************************************
+    prototype:
+
+        CCSP_STRING
+        CcspCwmppoMpaMapParamInstNumCwmpToDmInt
+            (
+                CCSP_STRING                 pParam
+            );
+
+    description:
+
+        This function is called to get parameter instance mapping 
+
+    argument:   CCSP_STRING                 pParam
+                The original parameter
+
+    return:     new string pointer, to be handled by the caller
+
+**********************************************************************/
+CCSP_STRING
+CcspCwmppoMpaMapParamInstNumCwmpToDmInt
+    (
+        CCSP_STRING                 pParam
+    )
+{
+    CCSP_STRING     pReturnStr  = NULL;
+    CcspTr069PaTraceDebug(("%s - Param CWMP to DmInt\n", __FUNCTION__));
+    pReturnStr = CcspTr069PA_MapInstNumCwmpToDmInt(pParam); 
+    if ( pReturnStr == NULL)
+    {
+         pReturnStr = AnscCloneString(pParam);
+    }
+    return pReturnStr;
+}
+
 extern int g_flagToStartCWMP;
 /**********************************************************************
 
@@ -1062,7 +1078,7 @@ CcspCwmppoUpdateSingleParamAttr
     char                            key[CCSP_BASE_PARAM_LENGTH*2];
     int                             nCcspError = CCSP_SUCCESS;
 
-	CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pParamName);
+	pParamName = CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pParamName);
     snprintf
         (
             key, sizeof(key), 
@@ -1148,6 +1164,8 @@ CcspCwmppoUpdateSingleParamAttr
             }
         }
     }
+
+    AnscFreeMemory(pParamName);
 
     return  returnStatus;
 }

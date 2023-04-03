@@ -603,6 +603,11 @@ CcspCwmpsoDelAllParameters
 
             pMyObject->ModifiedParamArray[i] = NULL;
         }
+        if ( pMyObject->ModifiedParamValueArray[i] )
+        {
+            AnscFreeMemory(pMyObject->ModifiedParamValueArray[i]);
+            pMyObject->ModifiedParamValueArray[i] = NULL;
+        }
     }
 
     pMyObject->ModifiedParamCount = 0;

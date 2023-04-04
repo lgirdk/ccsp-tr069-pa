@@ -861,6 +861,12 @@ CcspCwmppoClearParamAttrCache
             CcspCwmpCleanSetParamAttrib((pParamAttrs + i));
         }
         AnscFreeMemory(pParamAttrs);
+
+        if (pCwmpFault)
+        {
+            CcspCwmpFreeSoapFault(pCwmpFault);
+            pCwmpFault = NULL;
+        }
   
     /*"Device.ManagementServer.ConnectionRequestURL" parameter is set to ACTIVE notifications by default */
     if(!isConnReqURLAttrSet)
@@ -894,6 +900,11 @@ CcspCwmppoClearParamAttrCache
         AnscFreeMemory(pParamAttrs);
     }        
     
+    if (pCwmpFault)
+    {
+        CcspCwmpFreeSoapFault(pCwmpFault);
+        pCwmpFault = NULL;
+    } 
     return returnStatus;
 }
 

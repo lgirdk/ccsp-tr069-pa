@@ -1081,13 +1081,17 @@ CcspCwmppoUpdateSingleParamAttr
     )
 {
     ANSC_STATUS                     returnStatus        = ANSC_STATUS_SUCCESS;
-    PCCSP_CWMP_PROCESSOR_OBJECT     pMyObject           = (PCCSP_CWMP_PROCESSOR_OBJECT )hThisObject;
-    PANSC_ATOM_TABLE_OBJECT         pParamAttrCache     = (PANSC_ATOM_TABLE_OBJECT    )pMyObject->hParamAttrCache;
-    PCCSP_CWMP_CPE_CONTROLLER_OBJECT pCcspCwmpCpeController  = (PCCSP_CWMP_CPE_CONTROLLER_OBJECT)pMyObject->hCcspCwmpCpeController;
+    PCCSP_CWMP_PROCESSOR_OBJECT     pCcspCwmpProcessor  = (PCCSP_CWMP_PROCESSOR_OBJECT )hThisObject;
+    PANSC_ATOM_TABLE_OBJECT         pParamAttrCache     = (PANSC_ATOM_TABLE_OBJECT    )pCcspCwmpProcessor->hParamAttrCache;
+    PCCSP_CWMP_CPE_CONTROLLER_OBJECT pCcspCwmpCpeController  = (PCCSP_CWMP_CPE_CONTROLLER_OBJECT)pCcspCwmpProcessor->hCcspCwmpCpeController;
     void*                           hMBusHandle         = (void*                      )pCcspCwmpCpeController->hMsgBusHandle;
+    PCCSP_CWMP_MPA_INTERFACE        pCcspCwmpMpaIf         = (PCCSP_CWMP_MPA_INTERFACE)pCcspCwmpProcessor->hCcspCwmpMpaIf;
     PANSC_ATOM_DESCRIPTOR           pAtomDescriptor = NULL;
     char                            key[CCSP_BASE_PARAM_LENGTH*2];
     int                             nCcspError = CCSP_SUCCESS;
+    PCCSP_CWMP_PARAM_INFO           pParamInfoArray    = (PCCSP_CWMP_PARAM_INFO      )NULL;
+    PCCSP_CWMP_SOAP_FAULT           pCwmpSoapFault     = (PCCSP_CWMP_SOAP_FAULT      )NULL;
+    ULONG                           ulArraySize        = (ULONG                      )0;
 
 	pParamName = CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pParamName);
     snprintf
@@ -1103,11 +1107,51 @@ CcspCwmppoUpdateSingleParamAttr
     /* remove parameter notification attribute from PSM */
     if ( pParamAttrCache )
     {
-        pParamAttrCache->DelAtomByName
-        (
-            (ANSC_HANDLE)pParamAttrCache,
-            pParamName
-        );
+        /* When SPA is called for a parent object, delete all previous set values for the child objects from the local cache.
+          (If multiple entries in the ParameterList would result in modifying the same attribute of a given Parameter, the attribute value
+          specified later in the ParameterList array MUST overwrite the attribute value specified earlier in the array.) MVXREQ-189 (scenario#4) */
+         if(pParamName[strlen(pParamName) -1] == '.')
+         {
+            returnStatus = pCcspCwmpMpaIf->GetParameterNames(
+                pCcspCwmpMpaIf->hOwnerContext,
+                pParamName,
+                true,
+                (void**)&pParamInfoArray,
+                &ulArraySize,
+                (ANSC_HANDLE*)&pCwmpSoapFault,
+                TRUE
+            );
+
+            if(returnStatus == ANSC_STATUS_SUCCESS)
+            {
+              for ( int i = 0; i < ulArraySize; i++ )
+              {
+                 pParamAttrCache->DelAtomByName
+                 (
+                  (ANSC_HANDLE)pParamAttrCache,
+                  pParamInfoArray[i].Name
+                 );
+              }
+            }
+            if ( pParamInfoArray )
+            {
+                for ( int i = 0; i < ulArraySize; i++ )
+                {
+                    CcspCwmpCleanParamInfo((&pParamInfoArray[i]));
+                }
+                AnscFreeMemory(pParamInfoArray);
+            }
+            if ( pCwmpSoapFault )
+            {
+                CcspCwmpFreeSoapFault(pCwmpSoapFault);
+            }
+         }
+
+         pParamAttrCache->DelAtomByName
+         (
+             (ANSC_HANDLE)pParamAttrCache,
+              pParamName
+         );
     }
 
     PSM_Del_Record

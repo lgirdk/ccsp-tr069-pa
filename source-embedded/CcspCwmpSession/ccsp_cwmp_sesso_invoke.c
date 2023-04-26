@@ -505,6 +505,8 @@ if(bFirstInform)
              !pCwmpDeviceId->SerialNumber )
 	{
 		CcspTr069PaTraceWarning(("WARNING: failed to get Manufacturer/OUI/ProductClass/SerialNumber! 'informed' may be rejected by ACS!\n"));
+		returnStatus = ANSC_STATUS_FAILURE;
+		goto EXIT1;
 	}
 }
 else

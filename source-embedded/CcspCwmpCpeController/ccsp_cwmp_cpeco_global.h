@@ -77,12 +77,6 @@
 #ifndef  _CCSP_CWMP_CPECO_GLOBAL_
 #define  _CCSP_CWMP_CPECO_GLOBAL_
 
-/*
-   Define CCSP_ALIAS_MGR to use the original RDKB Alias Manager APIs.
-   Leave undefined to use the (experimental) new replacements.
-*/
-//#define CCSP_ALIAS_MGR 1
-
 #include "ansc_platform.h"
 
 #include "ansc_tso_interface.h"
@@ -143,9 +137,6 @@
 #include "ansc_xml_dom_parser_external_api.h"
 #include "ansc_xml_dom_parser_status.h"
 
-#ifdef CCSP_ALIAS_MGR
-#include "ccsp_alias_mgr.h"
-#endif
 
 #endif
 

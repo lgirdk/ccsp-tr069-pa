@@ -114,10 +114,6 @@ static PCCSP_TR069_PARAM_INFO                       CcspTr069InvPiTree          
 static CCSP_STRING                                  CcspTr069Subsystems[CCSP_SUBSYSTEM_MAX_COUNT] = {0};
 static CCSP_INT                                     CcspTr069SubsystemsCount    = 0;
 
-#ifdef CCSP_ALIAS_MGR
-static CCSP_HANDLE                                  CcspTr069AliasManager       = NULL;
-#endif
-
 enum dataType_e
 CcspTr069PA_Cwmp2CcspType
     (
@@ -1065,22 +1061,6 @@ CcspTr069PA_LoadFromXMLFile(void*  pXMLHandle)
                 pListNode = (PANSC_XML_DOM_NODE_OBJECT)pChildNode->GetNextChild(pChildNode, pListNode);
             }
         }
-#ifdef CCSP_ALIAS_MGR
-        else if (strcmp(pChildNode->Name, "AliasList") == 0)
-        {
-            pListNode = (PANSC_XML_DOM_NODE_OBJECT)pChildNode->GetHeadChild(pChildNode);
-            while (pListNode != NULL)
-            {
-                if (CcspTr069AliasManager == NULL)
-                {
-                    CcspTr069AliasManager = CcspAliasMgrInitialize();
-                }
-
-                CcspAliasMgrLoadAliasInfo(CcspTr069AliasManager, pListNode);
-                pListNode = (PANSC_XML_DOM_NODE_OBJECT)pChildNode->GetNextChild(pChildNode, pListNode);
-            }
-        }
-#endif
     }
     while ((pChildNode = (PANSC_XML_DOM_NODE_OBJECT)pHandle->GetNextChild(pHandle, pChildNode)) != NULL);
 
@@ -1246,12 +1226,6 @@ CcspTr069PA_UnloadMappingFile
     }
     AnscZeroMemory(CcspTr069Subsystems, sizeof(CCSP_STRING) * CCSP_SUBSYSTEM_MAX_COUNT);
     CcspTr069SubsystemsCount = 0;
-#ifdef CCSP_ALIAS_MGR
-    if ( CcspTr069AliasManager )
-    {
-        CcspAliasMgrFree(CcspTr069AliasManager);
-    }
-#endif
 
     return 0;
 }
@@ -2096,157 +2070,6 @@ CcspTr069PA_GetPiTreeRoot
 #endif
 
 
-#ifdef CCSP_ALIAS_MGR
-/* CcspTr069PA_GetParamInternalNames is called to get a list of internal alias names
- * for TR-069 object or parameter full name (path) if alias(-es) exists.
- * If the names list was returned it is the caller responsibility to free
- * memory for both names.
- * CcspTr069PA_GetNextInternalName() should be used to access individual entries
- * in the returned list.
- *
- * return value:
- *   PSLIST_HEADER - internal names list if aliases have been found
- *   NULL          - if no aliases were found
- */
-PSLIST_HEADER
-CcspTr069PA_GetParamInternalNames
-    (
-        CCSP_HANDLE                MapperHandle,
-        CCSP_STRING                ParamName
-    )
-{
-    UNREFERENCED_PARAMETER (MapperHandle);
-
-    if ( CcspTr069AliasManager == NULL )
-    {
-        return NULL;
-    }
-
-    if (!ParamName || ParamName[0] == 0)
-    {
-        CcspTr069PaTraceDebug(("TR-069 PA alias mapping empty parameter name requested\n"));
-        return NULL;
-    }
-
-    return CcspAliasMgrGetInternalNames(CcspTr069AliasManager, ParamName);
-}
-
-/* CcspTr069PA_GetNextInternalName is called to pop next name from the list returned from
- * CcspTr069PA_GetParamInternalNames.
- * This funtion can be called until it returns NULL to pop all entries,
- * otherwise CcspTr069PA_FreeInternalNamesList shall be called to release remaining memory.
- *
- * return value:
- *   const char* - next name
- *   NULL        - if the list is empty
- */
-const char *
-CcspTr069PA_GetNextInternalName
-    (
-        PSLIST_HEADER              pListHeader
-    )
-{
-
-
-    if ( CcspTr069AliasManager == NULL )
-    {
-        return NULL;
-    }
-
-    if (!pListHeader)
-    {
-        CcspTr069PaTraceWarning(("TR-069 PA alias mapping parameter name list is NULL\n"));
-        return NULL;
-    }
-
-    return CcspAliasMgrGetNextName(pListHeader);
-}
-
-/* CcspTr069PA_FreeInternalNamesList is called to release memory allocated for aliases list
- * returned from CcspTr069PA_GetParamInternalNames.
- */
-VOID
-CcspTr069PA_FreeInternalNamesList
-    (
-        PSLIST_HEADER             pListHeader
-    )
-{
-
-
-    if ( CcspTr069AliasManager == NULL )
-    {
-        return;
-    }
-
-    if (!pListHeader)
-    {
-        CcspTr069PaTraceWarning(("TR-069 PA alias mapping parameter name list is NULL\n"));
-        return;
-    }
-
-    return CcspAliasMgrFreeNamesList(pListHeader);
-}
-
-/* CcspTr069PA_GetParamFirstInternalName is called to only get a first alias name.
- *
- * return value:
- *   const char* - first alias name
- *   NULL        - if no alias is found
- */
-const char *
-CcspTr069PA_GetParamFirstInternalName
-    (
-        CCSP_HANDLE                MapperHandle,
-        CCSP_STRING                ParamName
-    )
-{
-    UNREFERENCED_PARAMETER (MapperHandle);
-
-    if ( CcspTr069AliasManager == NULL )
-    {
-        return NULL;
-    }
-
-    if (!ParamName || ParamName[0] == 0)
-    {
-        CcspTr069PaTraceWarning(("TR-069 PA alias mapping empty parameter name requested\n"));
-        return NULL;
-    }
-    return CcspAliasMgrGetFirstInternalName(CcspTr069AliasManager, ParamName);
-}
-
-/* CcspTr069PA_GetParamExternalName is called to get external alias name
- * for TR-069 object or parameter full name (path) if alias exists.
- * If the name was returned it is the caller responsibility to free
- * memory for both names.
- *
- * return value:
- *   CCSP_STRING  - external name if alias has been found
- *   NULL         - if no alias has been found
- */
-CCSP_STRING
-CcspTr069PA_GetParamExternalName
-    (
-        CCSP_HANDLE              MapperHandle,
-        CCSP_STRING              ParamName
-    )
-{
-    UNREFERENCED_PARAMETER (MapperHandle);
-
-    if ( CcspTr069AliasManager == NULL )
-    {
-        return NULL;
-    }
-
-    if (!ParamName || ParamName[0] == 0)
-    {
-        CcspTr069PaTraceWarning(("TR-069 PA alias mapping empty parameter name requested\n"));
-        return NULL;
-    }
-
-    return (char*)CcspAliasMgrGetExternalName(CcspTr069AliasManager, ParamName);
-}
-#else
 /* CcspTr069PA_LgiGetParamInternalNames is called to get a list of internal alias names
  * for TR-069 object or parameter full name (path) if alias(-es) exists.
  * If the names list was returned it is the caller responsibility to free
@@ -2359,4 +2182,3 @@ CcspTr069PA_GetParamExternalName
     }
     return (char*)lgiAliasGetExternalName (ParamName);
 }
-#endif

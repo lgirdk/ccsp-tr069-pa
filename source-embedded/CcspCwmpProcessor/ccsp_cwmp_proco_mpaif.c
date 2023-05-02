@@ -4396,6 +4396,7 @@ CcspCwmppoMpaAddObject
     *pulObjInsNumber = 0;
     *piStatus        = 0;
     *phSoapFault     = (ANSC_HANDLE)NULL;
+    BOOL bFreeObjectName = true;
 
     /*
      * A fault response MUST make use of the SOAP Fault element using the following conventions:
@@ -4412,6 +4413,7 @@ CcspCwmppoMpaAddObject
     if ( !pCwmpSoapFault )
     {
         returnStatus = ANSC_STATUS_RESOURCES;
+        bFreeObjectName = false;
         goto  EXIT2;
     }
     pCwmpSoapFault->SetParamValuesFaultCount = 0;
@@ -4419,6 +4421,7 @@ CcspCwmppoMpaAddObject
     if ( !pObjName || (AnscSizeOfString(pObjName) == 0) || !CcspCwmpIsPartialName(pObjName) )
     {
         returnStatus = ANSC_STATUS_BAD_PARAMETER;
+        bFreeObjectName = false;
         goto  EXIT2;
     }
 
@@ -4448,6 +4451,7 @@ CcspCwmppoMpaAddObject
     else
     {
         MappedInternalName = NULL;
+        bFreeObjectName = false;
         goto EXIT2;    
     }
 
@@ -4609,8 +4613,10 @@ EXIT1:
         AnscFreeMemory(MappedInternalName);
     }
 
-    AnscFreeMemory(pObjName);
-
+    if(pObjName && bFreeObjectName)
+    {
+        AnscFreeMemory(pObjName);
+    }
     return  returnStatus;
 }
 
@@ -4685,6 +4691,7 @@ CcspCwmppoMpaDeleteObject
 
     *piStatus    = 0;
     *phSoapFault = (ANSC_HANDLE)NULL;
+    BOOL bFreeObjectName = true;
 
     /*
      * A fault response MUST make use of the SOAP Fault element using the following conventions:
@@ -4702,6 +4709,7 @@ CcspCwmppoMpaDeleteObject
     if ( !pCwmpSoapFault )
     {
         returnStatus = ANSC_STATUS_RESOURCES;
+        bFreeObjectName = false;
         goto  EXIT2;
     }
     pCwmpSoapFault->SetParamValuesFaultCount = 0;
@@ -4709,6 +4717,7 @@ CcspCwmppoMpaDeleteObject
     if ( !pObjName || (AnscSizeOfString(pObjName) == 0) || !CcspCwmpIsPartialName(pObjName) )
     {
         returnStatus = ANSC_STATUS_BAD_NAME;
+        bFreeObjectName = false;
         goto  EXIT2;
     }
 
@@ -4738,6 +4747,7 @@ CcspCwmppoMpaDeleteObject
     else
     {
         MappedInternalName = NULL;
+        bFreeObjectName = false;
         goto EXIT2;
     }
 
@@ -4902,7 +4912,9 @@ EXIT1:
         AnscFreeMemory(MappedInternalName);
     }
 
-    AnscFreeMemory(pObjName);
-
+    if(pObjName && bFreeObjectName)
+    {
+        AnscFreeMemory(pObjName);
+    }
     return  returnStatus;
 }

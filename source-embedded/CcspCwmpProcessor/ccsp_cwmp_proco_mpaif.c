@@ -1263,6 +1263,7 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
 
             if ( !pDiagnosticsStateParamValues )
             {
+                AnscFreeMemory(pParamValues);
                 returnStatus = ANSC_STATUS_RESOURCES;
                 goto EXIT2;
             }
@@ -1296,6 +1297,7 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
             CcspTr069PaTraceDebug(("Calling SPV to FC <%s>, DBus path <%s>.\n", pFcNsList->FCName, pFcNsList->DBusPath));
 
             pInvalidParam = NULL;
+            bSucc = TRUE;
             rc = strcmp_s("Device.X_CISCO_COM_DeviceControl.RebootDevice",strlen("Device.X_CISCO_COM_DeviceControl.RebootDevice"),pNsList->Args.paramValueInfo.parameterName,&ind);
             ERR_CHK(rc);
             if((rc == EOK) && (!ind))
@@ -1585,8 +1587,6 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                 CcspTr069PaTraceDebug(("SPV failure on FC %s, error = %d\n", pFcNsList->FCName, nResult));
                 bSucc = FALSE;
                 nCcspError = nResult;
-
-                break;
             }
 
             if ( pInvalidParam )
@@ -1632,7 +1632,10 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                  AnscFreeMemory(pDiagnosticsStateParamValues);
                  pDiagnosticsStateParamValues = NULL;
             }
-
+            if ( !bSucc )
+            {
+                break;
+            }
         }
         if ( nResult == CCSP_SUCCESS )
         {

@@ -994,7 +994,6 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
         {
             bFaultEncountered = TRUE;
 
-            CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_invalidArgs);
 
             pCwmpSoapFault->SetParamValuesFaultArray[pCwmpSoapFault->SetParamValuesFaultCount].ParameterName = AnscCloneString(pParameterValueArray[i].Name);
             pCwmpSoapFault->SetParamValuesFaultArray[pCwmpSoapFault->SetParamValuesFaultCount].FaultCode     = CCSP_CWMP_CPE_CWMP_FaultCode_invalidParamName;
@@ -1024,7 +1023,6 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
         {
             bFaultEncountered = TRUE;
 
-            CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_invalidParamName);
 
             pCwmpSoapFault->SetParamValuesFaultArray[pCwmpSoapFault->SetParamValuesFaultCount].ParameterName = AnscCloneString(pParameterValueArray[i].Name);
             pCwmpSoapFault->SetParamValuesFaultArray[pCwmpSoapFault->SetParamValuesFaultCount].FaultCode     = CCSP_CWMP_CPE_CWMP_FaultCode_invalidParamName;
@@ -4833,7 +4831,6 @@ CcspCwmppoMpaDeleteObject
 
             if ( nRet != CCSP_CWMP_CPE_CWMP_FaultCode_noError )
             {
-                CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, nRet);
 
                 returnStatus = ANSC_STATUS_INTERNAL_ERROR;
                 nCcspError = nRet;

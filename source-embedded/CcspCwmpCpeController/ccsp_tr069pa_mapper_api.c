@@ -1101,14 +1101,13 @@ CcspTr069PA_LoadMappingFile
         else
         {
             char * pFileContent = AnscAllocateMemory(iContentSize + 1);
-            
             if ( pFileContent )
             {
                 if ( read((int)fileHandle, pFileContent, iContentSize) > 0)
                 {
                     /* Some Unicode file may have hidden content at the beginning. So search for the first '<' to begin the XML parse. */
                     PCHAR pBack = pFileContent;
-                    while(pBack && *pBack != '<') pBack++;
+                    while(*pBack != '\0' && *pBack != '<') pBack++;
                     pRootNode = (PANSC_XML_DOM_NODE_OBJECT)
                     AnscXmlDomParseString((ANSC_HANDLE)NULL, (PCHAR*)&pBack, iContentSize);
                 }
@@ -1137,7 +1136,6 @@ CcspTr069PA_LoadMappingFile
 
     return NULL;
 }
-
 /* CcspTr069PA_LoadCustomMappingFile is called to load additional mapping file for TR-069 PA.
  * Resource clean up happens in CcspTr069PA_UnloadMappingFile().
  * Accepts CCSP_HANDLE returned from CcspTr069PA_LoadMappingFile() as an input.

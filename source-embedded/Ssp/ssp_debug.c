@@ -325,7 +325,7 @@ void ssp_testGPN()
     ULONG                           i                  = 0;
     ANSC_STATUS                     returnStatus;
     char                            ns[256];
-    char                            nextLevel;
+    int                             nextLevel          = 0;
     BOOL                            bNextLevel         = TRUE;
     errno_t rc       = -1;
 

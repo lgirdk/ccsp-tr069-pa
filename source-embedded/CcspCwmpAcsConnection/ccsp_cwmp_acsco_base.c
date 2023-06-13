@@ -284,7 +284,7 @@ char **getHostNames()
 		fp = fopen(TR069_HOSTS_CFG, "r");
 		if(fp != NULL)
 		{
-			char ch;
+			int ch = 0;
 			char tempHost[128] = {'\0'};
 			while(!feof(fp))
 			{

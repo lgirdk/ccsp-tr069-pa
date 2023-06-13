@@ -702,7 +702,7 @@ void ssp_testSPA()
     PCCSP_CWMP_SOAP_FAULT           pCwmpSoapFault     = (PCCSP_CWMP_SOAP_FAULT      )NULL;
     ANSC_STATUS                     returnStatus;
     char                            ns[MAX_NS_AL_LEN];
-    char                            c;
+    int                             c                  = 0;
     BOOL                            bChangeNotif       = FALSE;
     BOOL                            bChangeAL          = FALSE;
     char                            al[MAX_NS_AL_LEN]; /*RDKB-7336, CID-33191, increasing the memory to avoid out of bound access*/

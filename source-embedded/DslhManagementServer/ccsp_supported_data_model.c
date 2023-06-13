@@ -259,38 +259,40 @@ CcspManagementServer_FillInSDMObjectInfo()
         /*RDKB-7334, CID-33035, validate file open*/
         if(fileHandle != -1)
         {
-            fstat(fileHandle,&statBuf);
-            iContentSize = statBuf.st_size;
-
-            if( iContentSize < 500000)
+            if (fstat(fileHandle, &statBuf) != -1)
             {
-                char * pOrigFileContent = AnscAllocateMemory(iContentSize + 1);
-                /*RDKB-7334, CID-33035, null check and use*/
-                if(pOrigFileContent)
+                iContentSize = statBuf.st_size;
+
+                if( iContentSize < 500000)
                 {
-                    char * pFileContent = pOrigFileContent;  /*Duplicate the pointer, to prevant leak*/
-                    memset(pFileContent, 0, iContentSize + 1);
-
-                    if( read((int)fileHandle, pFileContent, iContentSize) > 0)
+                    char * pOrigFileContent = AnscAllocateMemory(iContentSize + 1);
+                    /*RDKB-7334, CID-33035, null check and use*/
+                    if(pOrigFileContent)
                     {
-                        pRootNode = (PANSC_XML_DOM_NODE_OBJECT)
-                            AnscXmlDomParseString((ANSC_HANDLE)NULL, (PCHAR*)&pFileContent, iContentSize); /*"pFileContent" may get udpated*/
+                        char * pFileContent = pOrigFileContent;  /*Duplicate the pointer, to prevant leak*/
+                        memset(pFileContent, 0, iContentSize + 1);
+
+                        ssize_t bytesRead = read(fileHandle, pFileContent, iContentSize);
+                        if( bytesRead > 0)
+                        {
+                            pRootNode = (PANSC_XML_DOM_NODE_OBJECT)
+                                AnscXmlDomParseString((ANSC_HANDLE)NULL, (PCHAR*)&pFileContent, bytesRead); /*"pFileContent" may get udpated*/
+                        }
+
+                        /* loca from the node */
+                        if( pRootNode != NULL)
+                        {
+    //                        bSucc = 
+                            LoadFromXMLFile((void*)pRootNode);
+                            pRootNode->Remove(pRootNode);
+                        }
+                        /*RDKB-7334, CID-33035, free memory after use*/
+                        AnscFreeMemory(pOrigFileContent);
+                        pOrigFileContent = pFileContent = NULL;
                     }
 
-                    /* loca from the node */
-                    if( pRootNode != NULL)
-                    {
-//                        bSucc = 
-                        LoadFromXMLFile((void*)pRootNode);
-                        pRootNode->Remove(pRootNode);
-                    }
-                    /*RDKB-7334, CID-33035, free memory after use*/
-                    AnscFreeMemory(pOrigFileContent);
-                    pOrigFileContent = pFileContent = NULL;
                 }
-
             }
-
             close(fileHandle);
         }
     }

@@ -231,12 +231,19 @@ CcspCwmppoSysReadySignalCB
 	{
 		print_uptime("boot_to_tr069_uptime",NULL, NULL);
 	}
-	creat("/var/tmp/tr069paready",S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-	CcspTr069PaTraceInfo(("Received system ready signal, created /var/tmp/tr069paready file\n"));
-
-	CcspTr069PaTraceInfo(("%s, user_data - 0x%p\n",
-								__FUNCTION__, 
-								(user_data != NULL) ? user_data : 0 ));
+	int fd = creat("/var/tmp/tr069paready",S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+    if (fd != -1)
+    {
+        CcspTr069PaTraceInfo(("Received system ready signal, created /var/tmp/tr069paready file\n"));
+        close(fd);
+    }
+    else
+    {
+        CcspTr069PaTraceInfo(("Failed to create /var/tmp/tr069paready file\n"));
+    }
+    CcspTr069PaTraceInfo(("%s, user_data - 0x%p\n",
+                            __FUNCTION__, 
+                            (user_data != NULL) ? user_data : 0 ));
 
 /* 
 * This callback process mechanism moved into CcspCwmppoProcessSysReadySignal() 

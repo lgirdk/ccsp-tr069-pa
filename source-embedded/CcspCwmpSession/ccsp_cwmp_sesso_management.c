@@ -506,7 +506,7 @@ CcspCwmpsoAddModifiedParameter
     {
         if ( pMyObject->ModifiedParamArray[i] )
         {
-            rc = strcmp_s(pMyObject->ModifiedParamArray[i],sizeof(pMyObject->ModifiedParamArray[i]),pParamName,&ind);
+            rc = strcmp_s(pMyObject->ModifiedParamArray[i],strlen(pMyObject->ModifiedParamArray[i]),pParamName,&ind);
             ERR_CHK(rc);
             if((!ind) && (rc == EOK))
             {

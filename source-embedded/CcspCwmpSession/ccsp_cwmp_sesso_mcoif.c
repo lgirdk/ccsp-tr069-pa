@@ -286,6 +286,11 @@ CcspCwmpsoMcoProcessSoapResponse
     errno_t rc  = -1;
     int ind = -1;
 
+    if (pSoapResponse == NULL)
+    {
+        return ANSC_STATUS_FAILURE;
+    }
+
     AnscAcquireLock(&pMyObject->SavedReqQueueLock);
 
     if ( pSoapResponse->Header.ID )
@@ -318,11 +323,9 @@ CcspCwmpsoMcoProcessSoapResponse
 
         if ( !bIDMatched )
         {
-            if( pSoapResponse )
-            {   
-                CcspCwmpFreeSoapResponse(pSoapResponse);
-                pSoapResponse = NULL;
-            }
+  
+            CcspCwmpFreeSoapResponse(pSoapResponse);
+            pSoapResponse = NULL;
 
             AnscReleaseLock(&pMyObject->SavedReqQueueLock);
 
@@ -335,11 +338,9 @@ CcspCwmpsoMcoProcessSoapResponse
 
         if ( !pSLinkEntry )
         {
-            if( pSoapResponse )
-            {   
-                CcspCwmpFreeSoapResponse(pSoapResponse);
-                pSoapResponse = NULL;
-            }
+   
+            CcspCwmpFreeSoapResponse(pSoapResponse);
+            pSoapResponse = NULL;
 
             AnscReleaseLock(&pMyObject->SavedReqQueueLock);
 
@@ -365,11 +366,9 @@ CcspCwmpsoMcoProcessSoapResponse
     {
         faultCode = pSoapResponse->Fault->Fault.FaultCode;
 
-        if( pSoapResponse )
-        {
-            CcspCwmpFreeSoapResponse(pSoapResponse);
-            pSoapResponse = NULL;
-        }
+        CcspCwmpFreeSoapResponse(pSoapResponse);
+        pSoapResponse = NULL;
+
 
         if( faultCode != 8005)
         {

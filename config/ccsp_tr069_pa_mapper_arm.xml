@@ -748,6 +748,18 @@
             <Name>Device.GatewayInfo.SerialNumber</Name>
         </Param>
         <Param>
+            <Name>Device.X_LGI-COM_IPoEHealthCheck.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_IPoEHealthCheck.RegularInterval</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_IPoEHealthCheck.Limit</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_IPoEHealthCheck.RetryInterval</Name>
+        </Param>
+        <Param>
             <Name>Device.Time.Enable</Name>
         </Param>
         <Param>

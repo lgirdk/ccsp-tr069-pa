@@ -445,7 +445,7 @@ CcspCwmpTcpcrhoReset
         pMyObject->MagicID = (ULONG)hThisObject;
     }
 
-    AnscZeroMemory(pWebAuthInfo, sizeof(WEB_AUTH_SESSION_INFO));
+    AnscZeroMemory(pWebAuthInfo, sizeof(CCSP_CWMP_TCPCR_HANDLER_SESSINFO));
 
     return  ANSC_STATUS_SUCCESS;
 }

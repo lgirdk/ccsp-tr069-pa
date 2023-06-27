@@ -241,6 +241,7 @@ ANSC_STATUS CcspTr069PaSsp_JSON_GetItemByName    (
 		if ( fread(data, 1, len, fileRead) != len )
 		{
 			fclose(fileRead);
+            free(data);
 			return ANSC_STATUS_FAILURE;
 		}
 	}
@@ -253,6 +254,7 @@ ANSC_STATUS CcspTr069PaSsp_JSON_GetItemByName    (
 
         fclose( fileRead );
 
+    data[len] = '\0';
 	if ( data == NULL )
 	{
 		CcspTr069PaTraceWarning(("%s-%d : fileRead failed \n", __FUNCTION__, __LINE__));
@@ -296,6 +298,7 @@ ANSC_STATUS CcspTr069PaSsp_JSON_GetItemByName    (
 	else
 	{
 		CcspTr069PaTraceWarning(("BOOTSTRAP_INFO_FILE %s is empty\n", BOOTSTRAP_INFO_FILE));
+        free(data);
 		return ANSC_STATUS_FAILURE;
 	}
 

@@ -1619,12 +1619,16 @@ static void *FWDWLD_retry_thrd(void *data)
         if(60 == iRetrycount)
         {
             CcspTraceWarning(("%s - Reached 1hr of retry\n",__FUNCTION__));
+            iRetrycount = 0;
             break;
         }
-        sleep(60);
+        sleep(50);
         syscfg_get( NULL, "FWDWLD_status", sysbuf, sizeof(sysbuf));
         if(!strcmp("Retry",sysbuf))
         {
+             /* Transfer complete event will be triggered only if status value has changed. Reseting the FWDWLD_status to default(Not Started) will help to invoke Transfer complete signal in case it fall again into Retry case on next try */
+            syscfg_set(NULL, "FWDWLD_status", "Not Started");
+            sleep(10);
             ret = CcspBaseIf_setParameterValues(bus_handle,
                     "eRT.com.cisco.spvtg.ccsp.fwupgrademanager",
                     "/com/cisco/spvtg/ccsp/fwupgrademanager",
@@ -1923,7 +1927,7 @@ CcspCwmppoProcessPvcSignal
                     }
                 }
 
-                if(!((!strcmp("Not Started",val->newValue)) || (!strcmp("In Progress",val->newValue)) || (!strcmp("Completed",val->newValue))))
+                if(!((!strcmp("Not Started",val->newValue)) || (!strcmp("In Progress",val->newValue)) || (!strcmp("Completed",val->newValue)) || !(iRetrycount == 60)))
                 {			
                     pCommandKey = pCcspCwmpCpeController->LoadCfgFromPsm((ANSC_HANDLE)pCcspCwmpCpeController, "CommandKey");             
 

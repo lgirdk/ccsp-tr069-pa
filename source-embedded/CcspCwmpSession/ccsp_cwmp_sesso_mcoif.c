@@ -2434,7 +2434,7 @@ EXIT1:
     {
         int                         k = 0;
 
-        for ( k = 0; k < i; i ++ )
+        for ( k = 0; k < i; k ++ )
         {
             CcspCwmpCleanParamValue((&pParamValueArray[k]));
         }

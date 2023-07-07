@@ -1007,7 +1007,7 @@ CcspCwmpCpecoMonitorOpState
     {
         if ( !pStateParamName || pStateParamName[0] == 0 )
         {
-            AnscCopyString(buf, pObjectName);   
+            strncpy(buf, pObjectName, sizeof(buf) - 1);   
         }
         else if ( bUnderTable )
         {

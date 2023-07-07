@@ -1523,7 +1523,7 @@ CcspCwmpSoappoBuildSoapReq_Kicked
         AnscXmlDomNodeSetName(pChildNode, "Next");
         AnscXmlDomNodeAddChild(pParentNode,pChildNode);
 
-        if( pCommand != NULL)
+        if( pNext != NULL)
         {
         	AnscXmlDomNodeSetDataString
                 (

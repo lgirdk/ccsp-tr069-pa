@@ -224,7 +224,7 @@ CcspCwmppoGetAcsInfo
 
 			server_ip4_addr.Value = 0;
 
-            if ( pCcspCwmpStunInfo->STUNServerAddress )
+            if ( strlen(pCcspCwmpStunInfo->STUNServerAddress) )
             {
                 AnscResolveHostName(pCcspCwmpStunInfo->STUNServerAddress, server_ip4_addr.Dot);
             }

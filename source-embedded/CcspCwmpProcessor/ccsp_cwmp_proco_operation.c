@@ -3983,7 +3983,7 @@ ccspCwmppoLoadDUStateChangeCompleteTask
                 if ( psmStatus == CCSP_SUCCESS && pValue )
                 {
                     uEndTime = (ULONG)_ansc_atoi(pValue);
-                    AnscZeroMemory(&timeStart, sizeof(ANSC_UNIVERSAL_TIME));
+                    AnscZeroMemory(&timeEnd, sizeof(ANSC_UNIVERSAL_TIME));
                     AnscSecondToCalendar(uEndTime, &timeEnd);
 
                     AnscFreeMemory(pValue);

@@ -863,7 +863,7 @@ CcspManagementServer_UtilGetParameterValues
                     pval_size,
                     pppval
                 );
-        if( (res==CCSP_SUCCESS) && ((intptr_t)pval_size > 0) ) // This needs to be checked
+        if( (res==CCSP_SUCCESS) && (*pval_size > 0) ) // This needs to be checked
             ret= ANSC_STATUS_SUCCESS;
         else {
             CcspTraceWarning(("CcspManagementServer_UtilGetParameterValues -- getParameterValues failed!\n"));

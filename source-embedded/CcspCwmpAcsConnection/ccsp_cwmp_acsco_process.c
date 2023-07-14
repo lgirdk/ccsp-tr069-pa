@@ -303,6 +303,10 @@ CcspCwmpAcscoRequest
     PCCSP_CWMP_ACS_CONNECTION_OBJECT pMyObject      = (PCCSP_CWMP_ACS_CONNECTION_OBJECT)hThisObject;
     PHTTP_SIMPLE_CLIENT_OBJECT      pHttpClient     = (PHTTP_SIMPLE_CLIENT_OBJECT)pMyObject->hHttpSimpleClient;
     PCCSP_CWMP_SESSION_OBJECT       pWmpSession     = (PCCSP_CWMP_SESSION_OBJECT   )pMyObject->hCcspCwmpSession;
+    if (!pWmpSession)
+    {
+        return ANSC_STATUS_FAILURE;
+    }
     PCCSP_CWMP_CPE_CONTROLLER_OBJECT pCcspCwmpCpeController = (PCCSP_CWMP_CPE_CONTROLLER_OBJECT)pWmpSession->hCcspCwmpCpeController;
     PCCSP_CWMP_STAT_INTERFACE       pCcspCwmpStatIf = (PCCSP_CWMP_STAT_INTERFACE)pCcspCwmpCpeController->hCcspCwmpStaIf;
 	PCCSP_CWMP_CFG_INTERFACE		pCcspCwmpCfgIf	= (PCCSP_CWMP_CFG_INTERFACE)pCcspCwmpCpeController->hCcspCwmpCfgIf;

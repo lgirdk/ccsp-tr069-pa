@@ -1473,6 +1473,12 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
             ERR_CHK(rc);
             if((rc == EOK) && (!ind))
             {
+                /* CID 54414 Resource leak */
+                if(pInvalidParam != NULL)
+                {
+                    AnscFreeMemory(pInvalidParam);
+                    pInvalidParam = NULL;
+                }
                 /* If not success send appropriate parameter name*/
                 pInvalidParam=AnscCloneString("Device.X_COMCAST_COM_CM.ReinitCmMac");
             }

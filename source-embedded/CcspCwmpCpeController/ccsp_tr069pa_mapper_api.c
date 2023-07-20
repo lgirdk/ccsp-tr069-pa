@@ -1103,8 +1103,12 @@ CcspTr069PA_LoadMappingFile
             char * pFileContent = AnscAllocateMemory(iContentSize + 1);
             if ( pFileContent )
             {
-                if ( read((int)fileHandle, pFileContent, iContentSize) > 0)
+                int read_bufsize = 0;
+
+                if ( (read_bufsize = read((int)fileHandle, pFileContent, iContentSize)) > 0)
                 {
+                    /* CID 162940 String not null terminated fix */
+                    pFileContent[read_bufsize] = '\0';
                     /* Some Unicode file may have hidden content at the beginning. So search for the first '<' to begin the XML parse. */
                     PCHAR pBack = pFileContent;
                     while(*pBack != '\0' && *pBack != '<') pBack++;

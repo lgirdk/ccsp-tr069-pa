@@ -289,7 +289,7 @@ static void updateInitalContact (void)
     }
 #else
     if ((!lastContactUrl) ||
-        (!AnscEqualString(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value, lastContactUrl, TRUE)))
+        (strcmp(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value, lastContactUrl) != 0))
     {
         bEnabled = TRUE;
     }

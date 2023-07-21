@@ -617,7 +617,7 @@ CcspTr069PA_PiTreeAddNamespace
         /* find if any child node's name matches the token */
         while ( pChildNode )
         {
-            if ( AnscEqualString(pNodeName, pChildNode->Name, TRUE) )
+            if (strcmp(pNodeName, pChildNode->Name) == 0)
             {
                 pNode        = pChildNode;
                 break;
@@ -770,7 +770,7 @@ CcspTr069PA_PiTreeRemoveNamespace
         /* find if any child node's name matches the token */
         while ( pChildNode )
         {
-            if ( AnscEqualString(pStringToken->Name, pChildNode->Name, TRUE) )
+            if (strcmp(pStringToken->Name, pChildNode->Name) == 0)
             {
                 pNode        = pChildNode;
                 break;
@@ -854,27 +854,27 @@ CcspTr069PA_LoadParamInfo
     if ( pChildNode )
     {
         pChildNode->GetDataString(pChildNode, NULL, buf, &ulSize);
-        if (AnscEqualString(buf, CCSP_CLOUD_DATA_TYPE_NAME_STRING, FALSE))
+        if (strcasecmp(buf, CCSP_CLOUD_DATA_TYPE_NAME_STRING) == 0)
         {
             dataType = CCSP_CLOUD_DATA_TYPE_STRING;
         }
-        else if (AnscEqualString(buf, CCSP_CLOUD_DATA_TYPE_NAME_INT, FALSE))
+        else if (strcasecmp(buf, CCSP_CLOUD_DATA_TYPE_NAME_INT) == 0)
         {
             dataType = CCSP_CLOUD_DATA_TYPE_INT;
         }
-        else if (AnscEqualString(buf, CCSP_CLOUD_DATA_TYPE_NAME_UINT, FALSE))
+        else if (strcasecmp(buf, CCSP_CLOUD_DATA_TYPE_NAME_UINT) == 0)
         {
             dataType = CCSP_CLOUD_DATA_TYPE_UINT;
         }
-        else if (AnscEqualString(buf, CCSP_CLOUD_DATA_TYPE_NAME_BOOL, FALSE))
+        else if (strcasecmp(buf, CCSP_CLOUD_DATA_TYPE_NAME_BOOL) == 0)
         {
             dataType = CCSP_CLOUD_DATA_TYPE_BOOL;
         }
-        else if (AnscEqualString(buf, CCSP_CLOUD_DATA_TYPE_NAME_DATETIME, FALSE))
+        else if (strcasecmp(buf, CCSP_CLOUD_DATA_TYPE_NAME_DATETIME) == 0)
         {
             dataType = CCSP_CLOUD_DATA_TYPE_DATETIME;
         }
-        else if (AnscEqualString(buf, CCSP_CLOUD_DATA_TYPE_NAME_BASE64, FALSE))
+        else if (strcasecmp(buf, CCSP_CLOUD_DATA_TYPE_NAME_BASE64) == 0)
         {
             dataType = CCSP_CLOUD_DATA_TYPE_BASE64;
         }
@@ -1565,7 +1565,7 @@ CcspTr069PA_GetRpcNamespace
         {
             for(j=0; j<CcspTr069RpcMaps[i].NumOfArgs; j++)
             {
-                if(AnscEqualString(CcspTr069RpcMaps[i].ArgMaps[j].Name, ArgName, TRUE))
+                if (strcmp(CcspTr069RpcMaps[i].ArgMaps[j].Name, ArgName) == 0)
                     return CcspTr069RpcMaps[i].ArgMaps[j].MappedNS;
             }
             return NULL;
@@ -1653,7 +1653,7 @@ CcspTr069PA_FindNamespace
         /* find if any child node's name matches the token */
         while ( pChildNode )
         {
-            if ( AnscEqualString(pStringToken->Name, pChildNode->Name, TRUE) )
+            if (strcmp(pStringToken->Name, pChildNode->Name) == 0)
             {
                 pNode        = pChildNode;
                 break;

@@ -1263,7 +1263,7 @@ bFirstInform = 0;
 
                 for( i = 0; i < pMyObject->EventCount; i ++)
                 {
-                    if ( AnscEqualString(((PCCSP_CWMP_EVENT)pMyObject->EventArray[i])->EventCode, CCSP_CWMP_INFORM_EVENT_NAME_Boot, TRUE) )
+                    if (strcmp(((PCCSP_CWMP_EVENT)pMyObject->EventArray[i])->EventCode, CCSP_CWMP_INFORM_EVENT_NAME_Boot) == 0)
                     {
                         bHasBoot = TRUE;
                         break;

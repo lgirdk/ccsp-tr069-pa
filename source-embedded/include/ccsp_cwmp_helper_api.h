@@ -587,7 +587,7 @@ CcspTr069PaIsGpnNsInQueue
 
         pParamInfo = &pNsList->Args.paramInfo;
 
-        if ( AnscEqualString(pParamName, pParamInfo->parameterName, TRUE) )
+        if (strcmp(pParamName, pParamInfo->parameterName) == 0)
         {
             return TRUE;
         }
@@ -760,7 +760,7 @@ CcspTr069PaFindFcNsList
         pFcNsList = ACCESS_CCSP_TR069PA_FC_NSLIST(pSLinkEntry);
         pSLinkEntry = AnscQueueGetNextEntry(pSLinkEntry);
 
-        if ( AnscEqualString(pFcNsList->FCName, pFcName, TRUE) )
+        if (strcmp(pFcNsList->FCName, pFcName) == 0)
         {
             if (((pSubSystem == NULL) && (pFcNsList->Subsystem == NULL)) ||
                 ((pSubSystem != NULL) && (pFcNsList->Subsystem != NULL) &&

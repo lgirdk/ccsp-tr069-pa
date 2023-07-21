@@ -1502,11 +1502,11 @@ CcspManagementServer_paramValueChanged
 {
     int i = 0;
     for(; i < size; i++){
-        if(AnscEqualString((char *)(val[i].parameterName), pFirstUpstreamIpAddress, TRUE)){
+        if (strcmp((char *)(val[i].parameterName), pFirstUpstreamIpAddress) == 0){
             CcspManagementServer_GenerateConnectionRequestURL(TRUE, (char *)(val[i].newValue));
             CcspTraceDebug(("CcspManagementServer_paramValueChanged %s %s\n", pFirstUpstreamIpAddress, val[i].newValue));
         }
-        else if(AnscEqualString((char *)(val[i].parameterName), FirstUpstreamIpInterfaceParameterName, TRUE)){
+        else if (strcmp((char *)(val[i].parameterName), FirstUpstreamIpInterfaceParameterName) == 0){
             RegisterWanInterfaceDone = FALSE;
             CcspManagementServer_RegisterWanInterface();
             CcspTraceDebug(("CcspManagementServer_paramValueChanged %s %s\n", FirstUpstreamIpInterfaceParameterName, val[i].newValue));
@@ -1523,7 +1523,7 @@ int CcspManagementServer_GetParameterID(
     if(objectID >= SupportedDataModelID + sdmObjectNumber + 1) return -1;
     int i = 0;
     for(; i<objectInfo[objectID].numberOfParameters; i++){
-        if(AnscEqualString(objectInfo[objectID].parameters[i].name, paraName, TRUE)) 
+        if (strcmp(objectInfo[objectID].parameters[i].name, paraName) == 0) 
             return i;
     }
     return -1;

@@ -184,7 +184,7 @@ CcspCwmpSoappoProcessSoapHeader
                     &uLongValue
                 );
 
-        if( AnscEqualString(pNodeName, CCSP_CWMP_ID, TRUE))
+        if (strcmp(pNodeName, CCSP_CWMP_ID) == 0)
         {
             /*
              * The "mustUnderstand" attribute MUST be set to "1"
@@ -212,7 +212,7 @@ CcspCwmpSoappoProcessSoapHeader
             pCwmpHeader->ID             = AnscCloneString(pValueBuf);
             ulValueSize                 = 128;
         }
-        else if( AnscEqualString(pNodeName, CCSP_CWMP_HOLDREQUESTS, TRUE))
+        else if (strcmp(pNodeName, CCSP_CWMP_HOLDREQUESTS) == 0)
         {
             /*
              * The "mustUnderstand" attribute MUST be set to "1"
@@ -247,7 +247,7 @@ CcspCwmpSoappoProcessSoapHeader
                 pCwmpHeader->bHoldRequests = FALSE;
             }
         }
-        else if( AnscEqualString(pNodeName, CCSP_CWMP_NOMOREREQUESTS, TRUE))
+        else if (strcmp(pNodeName, CCSP_CWMP_NOMOREREQUESTS) == 0)
         {
 			/*
 			 * According to WT151, "NoMoreRequests" field is deprecated, it will be
@@ -4244,7 +4244,7 @@ CcspCwmpSoappoProcessFault
             	AnscXmlDomNodeGetName(pXmlNode)
             );
 
-     if( !AnscEqualString(pNodeName, CCSP_CWMP_FAULT_NODE, TRUE))
+     if(strcmp(pNodeName, CCSP_CWMP_FAULT_NODE) != 0)
      {
         CcspTr069PaTraceError(("Unknown node name '%s' in CWMP Fault message.\n", pNodeName));
 
@@ -4323,7 +4323,7 @@ CcspCwmpSoappoProcessFault
                 	AnscXmlDomNodeGetName(pChildNode)
                 );
 
-         if( AnscEqualString(pNodeName, CCSP_CWMP_SETFAULT, TRUE))
+         if (strcmp(pNodeName, CCSP_CWMP_SETFAULT) == 0)
          {
             pCwmpParamFault = &pCwmpFault->SetParamValuesFaultArray[pCwmpFault->SetParamValuesFaultCount++];
 
@@ -4542,7 +4542,7 @@ CcspCwmpSoappoProcessSingleEnvelope
 
     pNodeName = AnscXmlDomNodeGetName(pRootNode);
 
-    if( !AnscEqualString(pNodeName, pNameBuf, TRUE))
+    if(strcmp(pNodeName, pNameBuf) != 0)
     {
         returnStatus = ANSC_STATUS_FAILURE;
 
@@ -4648,7 +4648,7 @@ CcspCwmpSoappoProcessSingleEnvelope
     pNodeName =
         CcspCwmpSoappoUtilGetNodeNameWithoutNS(AnscXmlDomNodeGetName(pChildNode));
 
-    if( AnscEqualString(pNodeName, SOAP_FAULT, TRUE))
+    if (strcmp(pNodeName, SOAP_FAULT) == 0)
     {
         returnStatus =
             CcspCwmpSoappoProcessFault

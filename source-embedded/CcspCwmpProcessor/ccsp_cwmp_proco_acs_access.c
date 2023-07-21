@@ -236,11 +236,11 @@ CcspCwmppoGetAcsInfo
         {
             bStunSettingsChanged = TRUE;
         }
-        else if ( !AnscEqualString(pCcspCwmpStunInfo->STUNUsername, pUsername, TRUE) )
+        else if (strcmp(pCcspCwmpStunInfo->STUNUsername, pUsername) != 0)
         {
             bStunSettingsChanged = TRUE;
         }
-        else if ( !AnscEqualString(pCcspCwmpStunInfo->STUNPassword, pPassword, TRUE) )
+        else if (strcmp(pCcspCwmpStunInfo->STUNPassword, pPassword) != 0)
         {
             bStunSettingsChanged = TRUE;
         }

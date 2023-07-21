@@ -801,31 +801,31 @@ CcspCwmpSoappoUtilGetParamValue
                 pDataType ++;
             }
 
-            if ( AnscEqualString(pDataType, CCSP_CWMP_DATA_NAME_string, TRUE) )
+            if (strcmp(pDataType, CCSP_CWMP_DATA_NAME_string) == 0)
             {
                 pCwmpParam->Tr069DataType = CCSP_CWMP_TR069_DATA_TYPE_String;
             }
-            else if ( AnscEqualString(pDataType, CCSP_CWMP_DATA_NAME_int, TRUE) )
+            else if (strcmp(pDataType, CCSP_CWMP_DATA_NAME_int) == 0)
             {
                 pCwmpParam->Tr069DataType = CCSP_CWMP_TR069_DATA_TYPE_Int;
             }
-            else if ( AnscEqualString(pDataType, CCSP_CWMP_DATA_NAME_unsignedInt, TRUE) )
+            else if (strcmp(pDataType, CCSP_CWMP_DATA_NAME_unsignedInt) == 0)
             {
                 pCwmpParam->Tr069DataType = CCSP_CWMP_TR069_DATA_TYPE_UnsignedInt;
             }
-            else if ( AnscEqualString(pDataType, CCSP_CWMP_DATA_NAME_boolean, TRUE) )
+            else if (strcmp(pDataType, CCSP_CWMP_DATA_NAME_boolean) == 0)
             {
                 pCwmpParam->Tr069DataType = CCSP_CWMP_TR069_DATA_TYPE_Boolean;
             }
-            else if ( AnscEqualString(pDataType, CCSP_CWMP_DATA_NAME_dateTime, TRUE) )
+            else if (strcmp(pDataType, CCSP_CWMP_DATA_NAME_dateTime) == 0)
             {
                 pCwmpParam->Tr069DataType = CCSP_CWMP_TR069_DATA_TYPE_DateTime;
             }
-            else if ( AnscEqualString(pDataType, CCSP_CWMP_DATA_NAME_base64, TRUE) )
+            else if (strcmp(pDataType, CCSP_CWMP_DATA_NAME_base64) == 0)
             {
                 pCwmpParam->Tr069DataType = CCSP_CWMP_TR069_DATA_TYPE_Base64;
             }
-            else if ( AnscEqualString(pDataType, CCSP_CWMP_DATA_NAME_hexBinary, TRUE) )
+            else if (strcmp(pDataType, CCSP_CWMP_DATA_NAME_hexBinary) == 0)
             {
                 pCwmpParam->Tr069DataType = CCSP_CWMP_TR069_DATA_TYPE_HexBinary;
             }

@@ -1148,11 +1148,11 @@ CcspCwmppoCheckAutonomousCdsResults
             CcspCwmpCleanSoapFault((&cwmpFault));
         }
 
-        if ( AnscEqualString(pParamValues[base], CCSP_NS_CDS_OPERATION_Install, TRUE) )
+        if (strcmp(pParamValues[base], CCSP_NS_CDS_OPERATION_Install) == 0)
         {
             pAdsccReq->Results[i].OperationPerformed = AnscCloneString("Install");
         }
-        else if ( AnscEqualString(pParamValues[base], CCSP_NS_CDS_OPERATION_Update, TRUE) )
+        else if (strcmp(pParamValues[base], CCSP_NS_CDS_OPERATION_Update) == 0)
         {
             pAdsccReq->Results[i].OperationPerformed = AnscCloneString("Update");
         }

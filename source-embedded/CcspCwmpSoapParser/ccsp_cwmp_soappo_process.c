@@ -185,7 +185,7 @@ CcspCwmpSoappoProcessSoapHeader
                     &uLongValue
                 );
 
-        if( AnscEqualString(pNodeName, CCSP_CWMP_ID, TRUE))
+        if (strcmp(pNodeName, CCSP_CWMP_ID) == 0)
         {
             /*
              * The "mustUnderstand" attribute MUST be set to "1"
@@ -213,7 +213,7 @@ CcspCwmpSoappoProcessSoapHeader
             pCwmpHeader->ID             = AnscCloneString(ValueBuf);
             ulValueSize                 = 128;
         }
-        else if( AnscEqualString(pNodeName, CCSP_CWMP_HOLDREQUESTS, TRUE))
+        else if (strcmp(pNodeName, CCSP_CWMP_HOLDREQUESTS) == 0)
         {
             /*
              * The "mustUnderstand" attribute MUST be set to "1"
@@ -248,7 +248,7 @@ CcspCwmpSoappoProcessSoapHeader
                 pCwmpHeader->bHoldRequests = FALSE;
             }
         }
-        else if( AnscEqualString(pNodeName, CCSP_CWMP_NOMOREREQUESTS, TRUE))
+        else if (strcmp(pNodeName, CCSP_CWMP_NOMOREREQUESTS) == 0)
         {
 			/*
 			 * According to WT151, "NoMoreRequests" field is deprecated, it will be
@@ -4231,7 +4231,7 @@ CcspCwmpSoappoProcessFault
             	AnscXmlDomNodeGetName(pXmlNode)
             );
 
-     if( !AnscEqualString(pNodeName, CCSP_CWMP_FAULT_NODE, TRUE))
+     if (strcmp(pNodeName, CCSP_CWMP_FAULT_NODE) != 0)
      {
         CcspTr069PaTraceError(("Unknown node name '%s' in CWMP Fault message.\n", pNodeName));
 
@@ -4310,7 +4310,7 @@ CcspCwmpSoappoProcessFault
                 	AnscXmlDomNodeGetName(pChildNode)
                 );
 
-         if( AnscEqualString(pNodeName, CCSP_CWMP_SETFAULT, TRUE))
+         if (strcmp(pNodeName, CCSP_CWMP_SETFAULT) == 0)
          {
             pCwmpParamFault = &pCwmpFault->SetParamValuesFaultArray[pCwmpFault->SetParamValuesFaultCount++];
 
@@ -4530,7 +4530,7 @@ CcspCwmpSoappoProcessSingleEnvelope
 
     pNodeName = AnscXmlDomNodeGetName(pRootNode);
 
-    if( !AnscEqualString(pNodeName, NameBuf, TRUE))
+    if (strcmp(pNodeName, NameBuf) != 0)
     {
         returnStatus = ANSC_STATUS_FAILURE;
 
@@ -4551,7 +4551,7 @@ CcspCwmpSoappoProcessSingleEnvelope
     	AnscXmlDomNodeGetAttrString(pRootNode, NameBuf, ValueBuf, &ulValueSize);
 
     if( returnStatus != ANSC_STATUS_SUCCESS ||
-        !AnscEqualString(ValueBuf, DEFAULT_SOAP_NAMESPACE, TRUE))
+        (strcmp(ValueBuf, DEFAULT_SOAP_NAMESPACE) != 0))
     {
         CcspTr069PaTraceError(("Invalid Envelope name space url .\n"));
 
@@ -4578,7 +4578,7 @@ CcspCwmpSoappoProcessSingleEnvelope
     	AnscXmlDomNodeGetAttrString(pRootNode, NameBuf, ValueBuf, &ulValueSize);
 
     if( returnStatus != ANSC_STATUS_SUCCESS ||
-        !AnscEqualString(ValueBuf, DEFAULT_SOAP_ENCODING_STYLE, TRUE))
+        (strcmp(ValueBuf, DEFAULT_SOAP_ENCODING_STYLE) != 0))
     {
         CcspTr069PaTraceError
             ((
@@ -4639,7 +4639,7 @@ CcspCwmpSoappoProcessSingleEnvelope
     pNodeName =
         CcspCwmpSoappoUtilGetNodeNameWithoutNS(AnscXmlDomNodeGetName(pChildNode));
 
-    if( AnscEqualString(pNodeName, SOAP_FAULT, TRUE))
+    if (strcmp(pNodeName, SOAP_FAULT) == 0)
     {
         returnStatus =
             CcspCwmpSoappoProcessFault

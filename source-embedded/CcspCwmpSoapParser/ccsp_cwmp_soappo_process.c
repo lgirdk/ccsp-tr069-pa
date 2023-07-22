@@ -4562,7 +4562,7 @@ CcspCwmpSoappoProcessSingleEnvelope
     	AnscXmlDomNodeGetAttrString(pRootNode, pNameBuf, pValueBuf, &ulValueSize);
 
     if( returnStatus != ANSC_STATUS_SUCCESS ||
-        !AnscEqualString(pValueBuf, DEFAULT_SOAP_NAMESPACE, TRUE))
+        (strcmp(pValueBuf, DEFAULT_SOAP_NAMESPACE) != 0))
     {
         CcspTr069PaTraceError(("Invalid Envelope name space url .\n"));
 
@@ -4588,7 +4588,7 @@ CcspCwmpSoappoProcessSingleEnvelope
     	AnscXmlDomNodeGetAttrString(pRootNode, pNameBuf, pValueBuf, &ulValueSize);
 
     if( returnStatus != ANSC_STATUS_SUCCESS ||
-        !AnscEqualString(pValueBuf, DEFAULT_SOAP_ENCODING_STYLE, TRUE))
+        (strcmp(pValueBuf, DEFAULT_SOAP_ENCODING_STYLE) != 0))
     {
         CcspTr069PaTraceError
             ((

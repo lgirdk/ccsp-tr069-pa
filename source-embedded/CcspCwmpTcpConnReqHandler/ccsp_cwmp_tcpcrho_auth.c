@@ -720,7 +720,7 @@ CcspCwmpTcpcrhoCalcDigestHA1
 
         AnscCryptoMd5Digest((PVOID)pBuf, AnscSizeOfString(pBuf), &MD5Hash);
 
-        if ( pAlgorithm && AnscEqualString(pAlgorithm, HTTP_AUTH_NAME_md5_sess, FALSE) )
+        if ( pAlgorithm && (strcasecmp(pAlgorithm, HTTP_AUTH_NAME_md5_sess) == 0))
         {
             ULONG                   ulMsgSize = ANSC_MD5_OUTPUT_SIZE;
 

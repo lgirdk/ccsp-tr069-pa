@@ -755,7 +755,7 @@ if ( bInformAcs )
         {
 			/*
             char*                           pRootObjName       = pMyObject->GetRootObject((ANSC_HANDLE)pMyObject);
-            BOOL                            bRootDevice        = AnscEqualString(pRootObjName, DM_ROOTNAME, FALSE);
+            BOOL                            bRootDevice        = (strcasecmp(pRootObjName, DM_ROOTNAME) == 0) ? TRUE : FALSE;
             char*                       pParamNameSE = bRootDevice ? CCSP_CWMP_CFG_HPN_Device_SavedEvents : CCSP_CWMP_CFG_HPN_IGD_SavedEvents;
 
             if ( pCcspCwmpCfgIf && pCcspCwmpCfgIf->GetHiddenCwmpParamName )

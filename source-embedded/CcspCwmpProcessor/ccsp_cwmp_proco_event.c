@@ -498,7 +498,7 @@ CcspCwmppoCheckCdsResults
 
             if ( ( !pCK && pCommandKey )    || 
                  ( pCK && !pCommandKey )    ||
-                 ( pCK && pCommandKey && !AnscEqualString(pCK, pCommandKey, TRUE) ) )
+                 ( pCK && pCommandKey && (strcmp(pCK, pCommandKey) != 0)) )
             {
                 if ( pCK )
                 {
@@ -708,8 +708,8 @@ CcspCwmppoCheckCdsResults
                     pDsccReq->Results[i].CurrentState = pParamValues[base];
                     pParamValues[base++] = NULL;
 
-                    if ( AnscEqualString(pParamValues[base], "0", TRUE) ||
-                         AnscEqualString(pParamValues[base], "false", FALSE) )
+                    if ((strcmp(pParamValues[base], "0") == 0) ||
+                        (strcasecmp(pParamValues[base], "false") == 0))
                     {
                         pDsccReq->Results[i].Resolved = 0;
                     }
@@ -909,18 +909,18 @@ CcspCwmppoCheckAdsccAgainstPolicy
                 {
                     pToken = AnscTcUnlinkToken(pOpTokens);
 
-                    if ( AnscEqualString(pToken->Name, CCSP_CWMP_DSC_OP_NAME_Install, FALSE) &&
-                         AnscEqualString(pResult->OperationPerformed, CCSP_CWMP_DSC_OP_NAME_Install, TRUE) )
+                    if ((strcasecmp(pToken->Name, CCSP_CWMP_DSC_OP_NAME_Install) == 0) &&
+                        (strcmp(pResult->OperationPerformed, CCSP_CWMP_DSC_OP_NAME_Install) == 0))
                     {
                         bMatched = TRUE;
                     }
-                    else if ( AnscEqualString(pToken->Name, CCSP_CWMP_DSC_OP_NAME_Uninstall, FALSE) &&
-                         AnscEqualString(pResult->OperationPerformed, CCSP_CWMP_DSC_OP_NAME_Uninstall, TRUE) )
+                    else if ((strcasecmp(pToken->Name, CCSP_CWMP_DSC_OP_NAME_Uninstall) == 0) &&
+                             (strcmp(pResult->OperationPerformed, CCSP_CWMP_DSC_OP_NAME_Uninstall) == 0))
                     {
                         bMatched = TRUE;
                     }
-                    else if ( AnscEqualString(pToken->Name, CCSP_CWMP_DSC_OP_NAME_Update, FALSE) &&
-                         AnscEqualString(pResult->OperationPerformed, CCSP_CWMP_DSC_OP_NAME_Update, TRUE) )
+                    else if ((strcasecmp(pToken->Name, CCSP_CWMP_DSC_OP_NAME_Update) == 0) &&
+                             (strcmp(pResult->OperationPerformed, CCSP_CWMP_DSC_OP_NAME_Update) == 0))
                     {
                         bMatched = TRUE;
                     }
@@ -944,15 +944,15 @@ CcspCwmppoCheckAdsccAgainstPolicy
         }
 
         if ( pResultTypeFilter &&
-             ( ( AnscEqualString(pResultTypeFilter, "Success", FALSE) && pResult->FaultCode != 0 ) ||
-               ( AnscEqualString(pResultTypeFilter, "Failure", FALSE) && pResult->FaultCode == 0 ) ) )
+             ( ((strcasecmp(pResultTypeFilter, "Success") == 0) && pResult->FaultCode != 0 ) ||
+               ((strcasecmp(pResultTypeFilter, "Failure") == 0) && pResult->FaultCode == 0 ) ) )
         {
             pResult->bFilteredOut = TRUE;
             continue;
         }
 
         if ( pFaultCodeFilter && pResult->FaultCode != 0 &&
-            !AnscEqualString(pResultTypeFilter, "Success", FALSE) )
+             (strcasecmp(pResultTypeFilter, "Success") != 0))
         {
             _ansc_sprintf(strFaultCode, "%u", pResult->FaultCode);
 
@@ -1112,8 +1112,8 @@ CcspCwmppoCheckAutonomousCdsResults
         pAdsccReq->Results[i].CurrentState = pParamValues[base];
         pParamValues[base++] = NULL;
 
-        if ( AnscEqualString(pParamValues[base], "0", TRUE) ||
-             AnscEqualString(pParamValues[base], "false", FALSE) )
+        if ((strcmp(pParamValues[base], "0") == 0) ||
+            (strcasecmp(pParamValues[base], "false") == 0))
         {
             pAdsccReq->Results[i].Resolved = 0;
         }
@@ -1291,16 +1291,16 @@ CcspCwmppoCheckAtcAgainstPolicy
             );
 
     if ( pTransferTypeFilter &&
-         ( ( AnscEqualString(pTransferTypeFilter, "Upload", FALSE) && bIsDownload ) ||
-           ( AnscEqualString(pTransferTypeFilter, "Download", FALSE) && !bIsDownload ) ) )
+         ( ((strcasecmp(pTransferTypeFilter, "Upload") == 0) && bIsDownload ) ||
+           ((strcasecmp(pTransferTypeFilter, "Download") == 0) && !bIsDownload ) ) )
     {
         bFilteredOut = TRUE;
         goto EXIT;
     }
 
     if ( pResultTypeFilter &&
-         ( ( AnscEqualString(pResultTypeFilter, "Success", FALSE) && FaultCode != 0 ) ||
-           ( AnscEqualString(pResultTypeFilter, "Failure", FALSE) && FaultCode == 0 ) ) )
+         ( ((strcasecmp(pResultTypeFilter, "Success") == 0) && FaultCode != 0 ) ||
+           ((strcasecmp(pResultTypeFilter, "Failure") == 0) && FaultCode == 0 ) ) )
     {
         bFilteredOut = TRUE;
         goto EXIT;
@@ -1785,8 +1785,8 @@ CcspCwmppoProcessPvcSignal
             AnscCopyMemory((char*)buf + len, (char*)pVC->parameterName, pSep - pVC->parameterName + 1);
             buf[len + pSep - pVC->parameterName + 1] = 0;
 
-            if ( AnscEqualString((char*)pVC->newValue, CCSP_NS_CDS_OPERATION_STATE_Complete, FALSE) ||
-                 AnscEqualString((char*)pVC->newValue, CCSP_NS_CDS_OPERATION_STATE_Error, FALSE) )
+            if ((strcasecmp((char*)pVC->newValue, CCSP_NS_CDS_OPERATION_STATE_Complete) == 0) ||
+                (strcasecmp((char*)pVC->newValue, CCSP_NS_CDS_OPERATION_STATE_Error) == 0))
             {
                 /* a ChangeDUState operation has finished successfully or failed */
                 int                 psmStatus;

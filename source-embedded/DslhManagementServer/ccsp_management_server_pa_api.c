@@ -281,9 +281,9 @@ static void updateInitalContact (void)
     AnscTraceInfo(("Last ACS URL received from DHCP options is: %s and lastContactUrl is: %s\n", lastSavedAcsURLFromDHCP, lastContactUrl));
 
     if ((!lastContactUrl) ||
-        (!AnscEqualString(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value, lastContactUrl, TRUE) &&
+        ((strcmp(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value, lastContactUrl) != 0) &&
          (lastSavedAcsURLFromDHCP[0] != '\0') &&
-         !AnscEqualString(lastSavedAcsURLFromDHCP, lastContactUrl, TRUE)))
+         (strcmp(lastSavedAcsURLFromDHCP, lastContactUrl) != 0)))
     {
         bEnabled = TRUE;
     }
@@ -331,7 +331,7 @@ static CCSP_BOOL isACSChangedURL (void)
                 &pValue);
     if (res == CCSP_SUCCESS)
     {
-        if (AnscEqualString(pValue, "0", FALSE) == TRUE)
+        if (strcasecmp(pValue, "0") == 0)
         {
             bACSChangedURL = FALSE;
         }

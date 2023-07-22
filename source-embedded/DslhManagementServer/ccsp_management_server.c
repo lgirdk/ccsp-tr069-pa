@@ -1309,7 +1309,7 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
 
             if(strlen(ipAddrV6) > 0)
             {
-                if(strlen(ipAddr) <= 0  || AnscEqualString(ipAddr, "0.0.0.0", TRUE))
+                if(strlen(ipAddr) <= 0  || (strcmp(ipAddr, "0.0.0.0") == 0))
                 {
                     sprintf(ipAddr, "[%s]", ipAddrV6);  //erouter0 is IPv6 only
                 }
@@ -1363,7 +1363,7 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
          ERR_CHK(rc);
     }
     /* If no IP Address, keep the previous value. */
-    if(strlen(ipAddr) <= 0  || AnscEqualString(ipAddr, "0.0.0.0", TRUE)) {
+    if(strlen(ipAddr) <= 0  || (strcmp(ipAddr, "0.0.0.0") == 0)) {
         return ANSC_STATUS_SUCCESS;
     }
     rc = strcat_s(result, sizeof(result), ipAddr);
@@ -2354,7 +2354,7 @@ int CcspManagementServer_ValidateParameterValues(
                     if ( res == CCSP_SUCCESS)
                     {
                         // printf("<RT> ACSChangedURL from PSM_Get = '%s'\n", pValue ? pValue : "NULL");
-                        if (AnscEqualString(pValue, "0", FALSE) == TRUE)  ACSChangedURL = 0;
+                        if (strcasecmp(pValue, "0") == 0) ACSChangedURL = 0;
                         else ACSChangedURL = 1;
                     }
                     else 
@@ -2381,7 +2381,7 @@ int CcspManagementServer_ValidateParameterValues(
                                 if ( !ACSChangedURL ) 
                                 {
                                     url = CcspManagementServer_GetURL(NULL);
-                                    if (AnscEqualString(val[i].parameterValue, url, TRUE) == FALSE) g_ACSChangedURL = 1; 
+                                    if (strcmp(val[i].parameterValue, url) != 0) g_ACSChangedURL = 1; 
                                     if (url) AnscFreeMemory(url);
                                 }
                             }

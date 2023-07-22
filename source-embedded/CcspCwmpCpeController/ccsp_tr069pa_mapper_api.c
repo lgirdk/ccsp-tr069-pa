@@ -1601,7 +1601,7 @@ CcspTr069PA_IsNameInsNumber
 
     _ansc_sprintf(buf, "%u", InsNumber);
 
-    return AnscEqualString(buf, Namespace, TRUE);
+    return (strcmp(buf, Namespace) == 0) ? TRUE : FALSE;
 }
 
 
@@ -1660,7 +1660,7 @@ CcspTr069PA_FindNamespace
             }
             else
             {
-                if ( bInsNumber && AnscEqualString(pChildNode->Name, "{i}", TRUE) )
+                if ( bInsNumber && (strcmp(pChildNode->Name, "{i}") == 0))
                 {
                     /* we found wild match - continue searching (no need in most cases), just in case 
                      * exact instance number and wild format may co-exist, sounds crazy?

@@ -179,7 +179,7 @@ CcspCwmpSoappoUtilFindChildNode
                 	AnscXmlDomNodeGetName(pChildNode)
                 );
 
-        if( pNodeName != NULL && AnscEqualString(pNodeName, pInputName, TRUE))
+        if( pNodeName != NULL && (strcmp(pNodeName, pInputName) == 0))
         {
             return pChildNode;
         }

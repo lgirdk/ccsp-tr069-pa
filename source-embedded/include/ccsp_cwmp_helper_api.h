@@ -442,35 +442,6 @@ CcspTr069FreeStringArray
     }
 }
 
-
-__inline static
-int
-CcspTr069SearchStringArray
-    (
-        char**                      pStringArray,
-        ULONG                       ulArraySize,
-        char*                       pSearchString,
-        BOOL                        bCaseSensitive
-    )
-{
-    ULONG                           i;
-
-    if ( !pStringArray )
-    {
-        return -1;
-    }
-
-    for ( i = 0; i < ulArraySize; i ++ )
-    {
-        if ( pStringArray[i] && AnscEqualString(pSearchString, pStringArray[i], bCaseSensitive) )
-        {
-            return  i;
-        }
-    }
-
-    return -1;
-}
-
 // String list/queue definitions
 typedef
 struct

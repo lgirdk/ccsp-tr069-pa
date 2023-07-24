@@ -506,8 +506,10 @@ CcspCwmpSoappoProcessRequest_SetParameterValues
     goto EXIT;
 
 EXIT2:
-
-    returnStatus =
+    
+    if(pParamValue != NULL)
+    {
+     returnStatus =
         CcspCwmpSoappoUtilProcessInvalidArgumentSPVRequest
             (
                hCcspCwmpMcoIf,
@@ -515,6 +517,7 @@ EXIT2:
                pParamValue->Name,
                ulSubError
             );
+    }
 
 EXIT:
 

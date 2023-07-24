@@ -1292,11 +1292,16 @@ CcspCwmpTcpcrhoGetDigestAuthInfo
         {
             break;
         }
-
+        
         pNext       = _ansc_strchr(pChal, ',');
         ulLen       = pNext ? (ULONG)(pNext - pChal) : AnscSizeOfString(pChal);
 
         pValue      = _ansc_memchr(pChal, '=', ulLen);
+        if(pValue == NULL)
+        {
+            pChal   = pNext ? pNext + 1 : NULL;
+            continue;
+        }
         ulNameLen   = pValue ? (ULONG)(pValue - pChal) : AnscSizeOfString(pChal);
         pValue ++;
         pValueLast  = pNext ? pNext - 1 : pChal + AnscSizeOfString(pChal) - 1;
@@ -1373,6 +1378,7 @@ CcspCwmpTcpcrhoGetDigestAuthInfo
             HttpAuthCloneMemory(pAuthInfo->pUserName, pValue, pValueLast - pValue + 1);
         }
 
+        
         pChal   = pNext ? pNext + 1 : NULL;
     }
 

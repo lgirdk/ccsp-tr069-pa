@@ -3928,7 +3928,7 @@ CcspCwmpsoMcoGetQueuedTransfers
         }
     }
 
-    if ( (returnStatus != ANSC_STATUS_SUCCESS) && !pCwmpSoapFault )
+    if ( !pCwmpSoapFault )
     {
         /*
          * Something serious has screwed up (e.g. we have run out of system memory), abort!

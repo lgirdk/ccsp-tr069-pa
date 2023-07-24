@@ -593,7 +593,7 @@ EXIT:
 
         *ppUrlPath = AnscAllocateMemory(nPathLen + 1);
 
-        if ( *ppUrlPath )
+        if ( *ppUrlPath && pPath)
         {
             AnscCopyMemory(*ppUrlPath, pPath, nPathLen);
             (*ppUrlPath)[nPathLen] = 0;

@@ -402,7 +402,10 @@ CcspCwmpsoAsyncProcessTask
                 {
                     pWmpsoAsyncRep = ACCESS_CCSP_CWMPSO_ASYNC_RESPONSE(pSLinkEntry);
                 }
-
+                if (!pWmpsoAsyncRep)
+                {
+                    continue;
+                }
                 if ( pMyObject->AcsMaxEnvelopes <= 1 )
                 {
                     pSoapMessage = pWmpsoAsyncRep->SoapEnvelope; 

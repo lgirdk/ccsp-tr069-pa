@@ -93,8 +93,11 @@ CcspCwmppoStopCwmpTask
 
     AnscSleep(2000);
 
-    if ( pCcspCwmpCpeController )
-        pCcspCwmpCpeController->StopCWMP((ANSC_HANDLE)pCcspCwmpCpeController);
+    if(!pCcspCwmpCpeController)
+    {
+        return ANSC_STATUS_FAILURE;
+    }
+    pCcspCwmpCpeController->StopCWMP((ANSC_HANDLE)pCcspCwmpCpeController);
 
     pCcspCwmpCpeController->bCWMPStopping = FALSE;
 

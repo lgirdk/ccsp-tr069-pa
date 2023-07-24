@@ -1625,30 +1625,21 @@ CcspCwmpCpecoSetCRBusPath
         char*                       pBusPath
     )
 {
-    ANSC_STATUS                     returnStatus   = ANSC_STATUS_SUCCESS;
-    PCCSP_CWMP_CPE_CONTROLLER_OBJECT     pMyObject      = (PCCSP_CWMP_CPE_CONTROLLER_OBJECT  )hThisObject;
-    int                             i;
+    PCCSP_CWMP_CPE_CONTROLLER_OBJECT pMyObject = (PCCSP_CWMP_CPE_CONTROLLER_OBJECT) hThisObject;
 
-    if ( pMyObject->NumSubsystems >= CCSP_SUBSYSTEM_MAX_COUNT )
+    if (pMyObject->NumSubsystems >= CCSP_SUBSYSTEM_MAX_COUNT)
     {
-        return  ANSC_STATUS_RESOURCES;
+        return ANSC_STATUS_RESOURCES;
     }
 
-    for ( i = 0; i < pMyObject->NumSubsystems; i ++ )
+    if (CcspCwmpCpecoGetCRBusPath(hThisObject, pSubsystem) == NULL)
     {
-        if ( AnscEqualString(pSubsystem, pMyObject->Subsystem[i], TRUE) )
-        {
-            break;
-        }
+        pMyObject->Subsystem[pMyObject->NumSubsystems] = pSubsystem ? AnscCloneString(pSubsystem) : NULL;
+        pMyObject->MBusPath[pMyObject->NumSubsystems] = AnscCloneString(pBusPath);
+        pMyObject->NumSubsystems++;
     }
 
-    if ( i >= pMyObject->NumSubsystems )
-    {
-        pMyObject->Subsystem[pMyObject->NumSubsystems  ] = pSubsystem ? AnscCloneString(pSubsystem) : NULL;
-        pMyObject->MBusPath  [pMyObject->NumSubsystems++] = AnscCloneString(pBusPath);
-    }
-
-    return  returnStatus;
+    return ANSC_STATUS_SUCCESS;
 }
 
 
@@ -1684,18 +1675,24 @@ CcspCwmpCpecoGetCRBusPath
         char*                       pSubsystem
     )
 {
-    PCCSP_CWMP_CPE_CONTROLLER_OBJECT     pMyObject      = (PCCSP_CWMP_CPE_CONTROLLER_OBJECT  )hThisObject;
-    int                             i;
+    PCCSP_CWMP_CPE_CONTROLLER_OBJECT pMyObject = (PCCSP_CWMP_CPE_CONTROLLER_OBJECT) hThisObject;
+    int i;
 
-    for ( i = 0; i < pMyObject->NumSubsystems; i ++ )
+    /*
+       If pSubsystem is NULL then search for NULL in pMyObject->Subsystem array.
+       Else search for matching string value.
+    */
+    for (i = 0; i < pMyObject->NumSubsystems; i++)
     {
-        if ( AnscEqualString(pSubsystem, pMyObject->Subsystem[i], TRUE) )
+        if (((pSubsystem == NULL) && (pMyObject->Subsystem[i] == NULL)) ||
+            ((pSubsystem != NULL) && (pMyObject->Subsystem[i] != NULL) &&
+             (strcmp(pSubsystem, pMyObject->Subsystem[i]) == 0)))
         {
             return pMyObject->MBusPath[i];
         }
     }
 
-    return  NULL;
+    return NULL;
 }
 
 

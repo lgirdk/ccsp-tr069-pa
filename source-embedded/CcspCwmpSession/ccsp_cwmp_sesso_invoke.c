@@ -375,6 +375,11 @@ CcspCwmpsoInform
     errno_t     rc =  -1;
     int         ind = -1;
 
+    if (pCcspCwmpCfgIf == NULL)
+    {
+        CcspTr069PaTraceWarning(("WARNING: failed to get pCcspCwmpCfgIf \n"));
+        return ANSC_STATUS_FAILURE;
+    }
     if ( pCcspCwmpCfgIf && pCcspCwmpCfgIf->GetCwmpRpcTimeout )
     {
         ulRpcCallTimeout = pCcspCwmpCfgIf->GetCwmpRpcTimeout(pCcspCwmpCfgIf->hOwnerContext);
@@ -777,17 +782,17 @@ else
 				if(!strcmp("Device.DeviceInfo.HardwareVersion",pCwmpParamValueArray[i].Name))
 				{
                                         if(pValue != NULL)
-					strcpy(HardwareVersion,pValue);
+					strncpy(HardwareVersion,pValue,sizeof(HardwareVersion) - 1);
 				}
 				else if(!strcmp("Device.DeviceInfo.SoftwareVersion",pCwmpParamValueArray[i].Name))
 				{
                                         if(pValue != NULL)
-					strcpy(SoftwareVersion,pValue);
+					strncpy(SoftwareVersion,pValue,sizeof(SoftwareVersion) - 1);
 				}
                                 else if(!strcmp("Device.DeviceInfo.ProvisioningCode",pCwmpParamValueArray[i].Name))
                                 {
                                         if(pValue != NULL)
-                                        strcpy(ProvisioningCode,pValue);
+                                        strncpy(ProvisioningCode,pValue,sizeof(ProvisioningCode) - 1);
                                 }
 					
 			}

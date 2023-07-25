@@ -1685,9 +1685,7 @@ CcspCwmpSoappoProcessRequest_Download
     {
         CcspTr069PaTraceError(("Invalid arguments in method 'Download'\n"));
 
-        returnStatus = ANSC_STATUS_FAILURE;
-
-        goto EXIT2;
+         goto EXIT2;
     }
 
     length = 256;
@@ -1721,8 +1719,6 @@ CcspCwmpSoappoProcessRequest_Download
     if( pChildNode == NULL)
     {
         CcspTr069PaTraceError(("Invalid arguments in method 'Download'\n"));
-
-        returnStatus = ANSC_STATUS_FAILURE;
 
         goto EXIT2;
     }
@@ -1758,8 +1754,6 @@ CcspCwmpSoappoProcessRequest_Download
     {
         CcspTr069PaTraceError(("Invalid arguments in method 'Download'\n"));
 
-        returnStatus = ANSC_STATUS_FAILURE;
-
         goto EXIT2;
     }
 
@@ -1794,9 +1788,7 @@ CcspCwmpSoappoProcessRequest_Download
     {
         CcspTr069PaTraceError(("Invalid arguments in method 'Download'\n"));
 
-        returnStatus = ANSC_STATUS_FAILURE;
-
-        goto EXIT2;
+         goto EXIT2;
     }
 
     returnStatus =
@@ -1824,9 +1816,7 @@ CcspCwmpSoappoProcessRequest_Download
     {
         CcspTr069PaTraceError(("Invalid arguments in method 'Download'\n"));
 
-        returnStatus = ANSC_STATUS_FAILURE;
-
-        goto EXIT2;
+         goto EXIT2;
     }
 
     length = 256;
@@ -1860,8 +1850,6 @@ CcspCwmpSoappoProcessRequest_Download
     {
         CcspTr069PaTraceError(("Invalid arguments in method 'Download'\n"));
 
-        returnStatus = ANSC_STATUS_FAILURE;
-
         goto EXIT2;
     }
 
@@ -1889,8 +1877,6 @@ CcspCwmpSoappoProcessRequest_Download
     if( pChildNode == NULL)
     {
         CcspTr069PaTraceError(("Invalid arguments in method 'Download'\n"));
-
-        returnStatus = ANSC_STATUS_FAILURE;
 
         goto EXIT2;
     }
@@ -1926,9 +1912,7 @@ CcspCwmpSoappoProcessRequest_Download
     {
         CcspTr069PaTraceError(("Invalid arguments in method 'Download'\n"));
 
-        returnStatus = ANSC_STATUS_FAILURE;
-
-        goto EXIT2;
+          goto EXIT2;
     }
 
     length = 256;

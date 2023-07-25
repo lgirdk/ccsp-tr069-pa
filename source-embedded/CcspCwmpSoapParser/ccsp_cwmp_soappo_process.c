@@ -2055,9 +2055,7 @@ CcspCwmpSoappoProcessRequest_Upload
     {
         CcspTr069PaTraceError(("Invalid arguments in method 'Upload'\n"));
 
-        returnStatus = ANSC_STATUS_FAILURE;
-
-        goto EXIT2;
+         goto EXIT2;
     }
 
     length = 32;
@@ -2090,9 +2088,7 @@ CcspCwmpSoappoProcessRequest_Upload
     {
         CcspTr069PaTraceError(("Invalid arguments in method 'Upload'\n"));
 
-        returnStatus = ANSC_STATUS_FAILURE;
-
-        goto EXIT2;
+         goto EXIT2;
     }
 
     length = 64;
@@ -2126,9 +2122,7 @@ CcspCwmpSoappoProcessRequest_Upload
     {
         CcspTr069PaTraceError(("Invalid arguments in method 'Upload'\n"));
 
-        returnStatus = ANSC_STATUS_FAILURE;
-
-        goto EXIT2;
+         goto EXIT2;
     }
 
     length = 256;
@@ -2162,9 +2156,7 @@ CcspCwmpSoappoProcessRequest_Upload
     {
         CcspTr069PaTraceError(("Invalid arguments in method 'Upload'\n"));
 
-        returnStatus = ANSC_STATUS_FAILURE;
-
-        goto EXIT2;
+          goto EXIT2;
     }
 
     length = 256;
@@ -2197,8 +2189,6 @@ CcspCwmpSoappoProcessRequest_Upload
     if( pChildNode == NULL)
     {
         CcspTr069PaTraceError(("Invalid arguments in method 'Upload'\n"));
-
-        returnStatus = ANSC_STATUS_FAILURE;
 
         goto EXIT2;
     }
@@ -2234,9 +2224,7 @@ CcspCwmpSoappoProcessRequest_Upload
     {
         CcspTr069PaTraceError(("Invalid arguments in method 'Upload'\n"));
 
-        returnStatus = ANSC_STATUS_FAILURE;
-
-        goto EXIT2;
+         goto EXIT2;
     }
 
     returnStatus =

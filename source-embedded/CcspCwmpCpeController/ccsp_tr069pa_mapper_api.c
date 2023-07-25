@@ -523,8 +523,9 @@ CcspTr069PA_AddSubsystem
 
     for ( i = 0; i < CcspTr069SubsystemsCount; i ++ )
     {
-        if ( (!Subsys && !CcspTr069Subsystems[i]) || 
-             AnscEqualString(CcspTr069Subsystems[i], Subsys, TRUE) )    /* empty sub-system is allowed to indicate 'local' sub-system */
+        if (((Subsys == NULL) && (CcspTr069Subsystems[i] == NULL)) || /* empty sub-system is allowed to indicate 'local' sub-system */
+            ((Subsys != NULL) && (CcspTr069Subsystems[i] != NULL) &&
+             (strcmp(Subsys, CcspTr069Subsystems[i]) == 0)))
         {
             return  CCSP_TRUE;
         }
@@ -1702,8 +1703,9 @@ CcspTr069PA_GetNsSubsystemCB
     
     for ( i = 0; i < *pCount; i ++ )
     {
-        if ( (!pParamInfo->Subsystem && !pEnumNs->pSubsystemArray[i]) || 
-             AnscEqualString(pParamInfo->Subsystem, pEnumNs->pSubsystemArray[i], TRUE) )
+        if (((pParamInfo->Subsystem == NULL) && (pEnumNs->pSubsystemArray[i] == NULL)) || /* empty sub-system is allowed to indicate 'local' sub-system */
+            ((pParamInfo->Subsystem != NULL) && (pEnumNs->pSubsystemArray[i] != NULL) &&
+             (strcmp(pParamInfo->Subsystem, pEnumNs->pSubsystemArray[i]) == 0)))
         {
             return CCSP_TRUE;
         }
@@ -1842,10 +1844,11 @@ CcspTr069PA_IsNamespaceSupported
     }
     else
     {
-        BOOL                        bSubsysMatched = FALSE;
+        BOOL bSubsysMatched = FALSE;
 
-        if ( ( !Subsystem && !pParamInfo->Subsystem ) ||
-             (Subsystem && pParamInfo->Subsystem && AnscEqualString(Subsystem, pParamInfo->Subsystem, TRUE) ))
+        if (((Subsystem == NULL) && (pParamInfo->Subsystem == NULL)) || /* empty sub-system is allowed to indicate 'local' sub-system */
+            ((Subsystem != NULL) && (pParamInfo->Subsystem != NULL) &&
+             (strcmp(Subsystem, pParamInfo->Subsystem) == 0)))
         {
             bSubsysMatched = TRUE;
         }
@@ -1937,7 +1940,7 @@ CcspTr069PA_TraversePiTree
             bMatched = CCSP_FALSE;
         }
         
-        if ( bMatched && Subsystem && !AnscEqualString(Subsystem, pNode->Subsystem, TRUE) )
+        if ( bMatched && Subsystem && ((pNode->Subsystem == NULL) || (strcmp(Subsystem, pNode->Subsystem) != 0)) )
         {
             bMatched = CCSP_FALSE;
         }

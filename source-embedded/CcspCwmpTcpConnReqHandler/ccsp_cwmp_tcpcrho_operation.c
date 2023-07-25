@@ -263,11 +263,11 @@ CcspCwmpTcpcrhoCancel
 
     if ( pTcpServer )
     {
-        returnStatus = pTcpServer->Cancel((ANSC_HANDLE)pTcpServer);
+        pTcpServer->Cancel((ANSC_HANDLE)pTcpServer);
     }
-
+    
     returnStatus = pMyObject->RemoveTcpServers((ANSC_HANDLE)pMyObject);
-
+    
     return  returnStatus;
 }
 

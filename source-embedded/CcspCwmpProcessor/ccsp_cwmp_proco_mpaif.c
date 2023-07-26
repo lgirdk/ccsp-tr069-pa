@@ -414,8 +414,8 @@ CcspCwmppoDiscoverFunctionalComponent
     do {                                                                                                \
         bNsInvisibleToCloudServer = TRUE;                                                               \
         /* filter out namespace that is not supported by this PA */                                     \
-        if ( pCcspCwmpCpeController->SubsysName &&                                                          \
-             AnscEqualString(pNsSubsystem, pCcspCwmpCpeController->SubsysName, TRUE) )                      \
+        if ( pNsSubsystem && pCcspCwmpCpeController->SubsysName &&                                      \
+             (strcmp(pNsSubsystem, pCcspCwmpCpeController->SubsysName) == 0) )                          \
         {                                                                                               \
             /* assumption: local namespace is always supported */                                       \
             bNsInvisibleToCloudServer = FALSE;                                                          \

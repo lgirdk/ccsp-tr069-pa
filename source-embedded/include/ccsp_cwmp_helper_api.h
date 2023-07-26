@@ -744,35 +744,34 @@ CCSP_TR069PA_FC_NSLIST, *PCCSP_TR069PA_FC_NSLIST;
 __inline static PCCSP_TR069PA_FC_NSLIST
 CcspTr069PaFindFcNsList
     (
-        PQUEUE_HEADER               pFcNsListQueue, 
-        char*                       pSubSystem, 
+        PQUEUE_HEADER               pFcNsListQueue,
+        char*                       pSubSystem,
         char*                       pFcName
-    )                  
+    )
 {
-    PSINGLE_LINK_ENTRY          pSLinkEntry;                            
-    PCCSP_TR069PA_FC_NSLIST     pFcNsList, pFcNsListFound;                             
-                                                                          
-    pFcNsListFound = NULL;                                           
-                                                                        
-    pSLinkEntry = AnscQueueGetFirstEntry(pFcNsListQueue);          
-    while ( pSLinkEntry )                                         
-    {                                                            
-        pFcNsList = ACCESS_CCSP_TR069PA_FC_NSLIST(pSLinkEntry); 
-        pSLinkEntry = AnscQueueGetNextEntry(pSLinkEntry);      
-                                                               
-        if ( AnscEqualString(pFcNsList->FCName, pFcName, TRUE) )            
-        {   
-            if ( (pSubSystem && !pFcNsList->Subsystem) ||
-                 (!pSubSystem && pFcNsList->Subsystem) ||
-                 (pSubSystem && !AnscEqualString(pFcNsList->Subsystem, pSubSystem, TRUE)) )
-            {                                                             
-                continue;                                                
-            }                                                           
-            pFcNsListFound = pFcNsList;                                
-            break;                                                    
-        }                                                            
-    }                                                               
-    
+    PSINGLE_LINK_ENTRY          pSLinkEntry;
+    PCCSP_TR069PA_FC_NSLIST     pFcNsList, pFcNsListFound;
+
+    pFcNsListFound = NULL;
+
+    pSLinkEntry = AnscQueueGetFirstEntry(pFcNsListQueue);
+    while ( pSLinkEntry )
+    {
+        pFcNsList = ACCESS_CCSP_TR069PA_FC_NSLIST(pSLinkEntry);
+        pSLinkEntry = AnscQueueGetNextEntry(pSLinkEntry);
+
+        if ( AnscEqualString(pFcNsList->FCName, pFcName, TRUE) )
+        {
+            if (((pSubSystem == NULL) && (pFcNsList->Subsystem == NULL)) ||
+                ((pSubSystem != NULL) && (pFcNsList->Subsystem != NULL) &&
+                 (strcmp(pSubSystem, pFcNsList->Subsystem) == 0)))
+            {
+                pFcNsListFound = pFcNsList;
+                break;
+            }
+        }
+    }
+
     return pFcNsListFound;
 }
 

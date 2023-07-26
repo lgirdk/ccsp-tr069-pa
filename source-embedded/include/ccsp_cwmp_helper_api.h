@@ -761,7 +761,9 @@ CcspTr069PaFindFcNsList
         pFcNsList = ACCESS_CCSP_TR069PA_FC_NSLIST(pSLinkEntry);
         pSLinkEntry = AnscQueueGetNextEntry(pSLinkEntry);
 
-        if ( AnscEqualString(pFcNsList->FCName, pFcName, TRUE) )
+        if (((pFcName == NULL) && (pFcNsList->FCName == NULL)) ||
+            ((pFcName != NULL) && (pFcNsList->FCName != NULL) &&
+             (strcmp(pFcName, pFcNsList->FCName) == 0)))
         {
             if (((pSubSystem == NULL) && (pFcNsList->Subsystem == NULL)) ||
                 ((pSubSystem != NULL) && (pFcNsList->Subsystem != NULL) &&

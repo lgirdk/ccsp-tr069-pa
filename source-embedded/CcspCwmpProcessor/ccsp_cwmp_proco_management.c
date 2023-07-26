@@ -1613,18 +1613,15 @@ CcspCwmppoSyncNamespacesWithCR
             continue;
         }
 
-/*
-        if ( (!pCcspCwmpCpeController->SubsysName && pSubsystem) ||
-             (pCcspCwmpCpeController->SubsysName && !pSubsystem) )
-*/
-        if ( !pCcspCwmpCpeController->SubsysName && pSubsystem )
+        if ((pSubsystem != NULL) && (pCcspCwmpCpeController->SubsysName == NULL))
         {
             continue;
         }
 
-        if ( (!pSubsystem && !pCcspCwmpCpeController->SubsysName) ||
-             (pCcspCwmpCpeController->SubsysName && !pSubsystem)  ||
-             AnscEqualString(pCcspCwmpCpeController->SubsysName, pSubsystem, TRUE) )
+        if (((pSubsystem == NULL) && (pCcspCwmpCpeController->SubsysName == NULL)) ||
+            ((pSubsystem == NULL) && (pCcspCwmpCpeController->SubsysName != NULL)) ||
+            ((pSubsystem != NULL) && (pCcspCwmpCpeController->SubsysName != NULL) &&
+             (strcmp(pSubsystem, pCcspCwmpCpeController->SubsysName) == 0)))
         {
             BOOL                    bNoSubsys         = !pCcspCwmpCpeController->SubsysName;
             char*                   pCrNameWithPrefix = (char*)pCrName;

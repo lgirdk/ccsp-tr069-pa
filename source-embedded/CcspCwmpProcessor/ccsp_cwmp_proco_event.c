@@ -1709,8 +1709,12 @@ CcspCwmppoProcessPvcSignal
 
         for ( i = 0; i < NumSubsystems; i ++ )
         {
-			if ( !Subsystems[i] && (!val->subsystem_prefix || *(val->subsystem_prefix) == 0) ) break;
-            if ( AnscEqualString((char*)Subsystems[i], (char*)val->subsystem_prefix, TRUE) ) break;
+            if (((Subsystems[i] == NULL) && ((val->subsystem_prefix == NULL) || (val->subsystem_prefix[0] == 0))) ||
+                ((Subsystems[i] != NULL) && (val->subsystem_prefix != NULL) &&
+                 (strcmp(Subsystems[i], val->subsystem_prefix) == 0)))
+            {
+                break;
+            }
         }
 
         if ( i >= NumSubsystems )

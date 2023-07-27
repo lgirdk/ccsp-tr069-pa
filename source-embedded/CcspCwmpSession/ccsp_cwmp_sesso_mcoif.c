@@ -3570,25 +3570,7 @@ CcspCwmpsoMcoChangeDUState
     }
     else
     {
-        BOOL                        bCdsSupported = TRUE;
-
-        if ( !bCdsSupported )
-        {
-            pCwmpSoapFault = (PCCSP_CWMP_SOAP_FAULT)AnscAllocateMemory(sizeof(CCSP_CWMP_SOAP_FAULT));
-
-            if ( !pCwmpSoapFault )
-            {
-                returnStatus = ANSC_STATUS_RESOURCES;
-
-                goto  EXIT1;
-            }
-            else
-            {
-                CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_methodUnsupported);
-            }
-        }
-        else
-        {
+             
             /* 
              * map RPC arguments to namespaces and make SPV call to the FC
              * that handles 'ChangeDUState'.
@@ -3752,7 +3734,7 @@ CcspCwmpsoMcoChangeDUState
                     }
                 }
             }
-        }
+        
     }
 
     /*

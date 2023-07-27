@@ -366,7 +366,7 @@ ccspCwmpCpeBootstrapInformTask
 
     pMyObject->bBootstrapInformScheduled = TRUE;
 
-    while ( pMyObject->bActive && !pMyObject->bDelayedInformCancelled && bInitialContact )
+    while ( pMyObject->bActive && !pMyObject->bDelayedInformCancelled  )
     {
         AnscSleep(5000);
 
@@ -386,6 +386,10 @@ ccspCwmpCpeBootstrapInformTask
         else
         {
             bInitialContact = pCcspCwmpProcessor->GetInitialContact((ANSC_HANDLE)pCcspCwmpProcessor);
+        }
+        if(!bInitialContact)
+        {
+            break;
         }
     }
 

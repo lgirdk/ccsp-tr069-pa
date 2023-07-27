@@ -110,7 +110,7 @@ static CCSP_INT                                     CcspTr069SubsystemsCount    
 /* Alias Manager handle */
 static CCSP_HANDLE                                  CcspTr069AliasManager       = NULL;
 
-const enum dataType_e
+enum dataType_e
 CcspTr069PA_Cwmp2CcspType
     (
         int                         cwmpType
@@ -155,7 +155,7 @@ CcspTr069PA_Cwmp2CcspType
 }
 
 
-const int
+int
 CcspTr069PA_Ccsp2CwmpType
     (
         enum dataType_e             ccspType
@@ -215,7 +215,7 @@ CcspTr069PA_Ccsp2CwmpType
 /* CcspTr069PA_GetSubsystemCount is called to return the number
  * of sub-systems of namespaces TR-069 PA manages.
  */
-const CCSP_INT
+CCSP_INT
 CcspTr069PA_GetSubsystemCount
     (
         CCSP_HANDLE                 MapperHandle
@@ -229,7 +229,7 @@ CcspTr069PA_GetSubsystemCount
 /* CcspTr069PA_GetSubsystemCount is called to return 
  * sub-system related to PA by index.
  */
-const CCSP_STRING
+CCSP_STRING
 CcspTr069PA_GetSubsystemByIndex
     (
         CCSP_HANDLE                 MapperHandle,
@@ -1479,7 +1479,7 @@ CcspTr069PA_MapInstNumDmIntToCwmp
  * name/argument to CCSP namespace.
  * Return value - namespace, NULL indicates no mapping found.
  */
-const CCSP_STRING
+CCSP_STRING
 CcspTr069PA_GetRpcNamespace
     (
         CCSP_HANDLE                 MapperHandle,
@@ -1543,7 +1543,7 @@ CcspTr069PA_IsNameInsNumber
  *
  */
 static 
-const PCCSP_TR069_PARAM_INFO
+PCCSP_TR069_PARAM_INFO
 CcspTr069PA_FindNamespace
     (
         PCCSP_TR069_PARAM_INFO      pRoot,
@@ -1769,7 +1769,7 @@ CcspTr069PA_GetNamespaceSubsystems
 /* CcspTr069PA_IsNamespaceSupported is called to check if the given
  * namespace is supported on given sub-system.
  */
-const CCSP_BOOL
+CCSP_BOOL
 CcspTr069PA_IsNamespaceSupported
     (
         CCSP_HANDLE                 MapperHandle,
@@ -1821,7 +1821,7 @@ CcspTr069PA_IsNamespaceSupported
 /* CcspTr069PA_IsNamespaceVisible is called to check if the given
  * namespace is visible to cloud server.
  */
-const CCSP_BOOL
+CCSP_BOOL
 CcspTr069PA_IsNamespaceVisible
     (
         CCSP_HANDLE                 MapperHandle,
@@ -1840,7 +1840,7 @@ CcspTr069PA_IsNamespaceVisible
 /* CcspTr069PA_IsNamespaceInvisible is called to check if the given
  * namespace is invisible to cloud server.
  */
-const CCSP_BOOL
+CCSP_BOOL
 CcspTr069PA_IsNamespaceInvisible
     (
         CCSP_HANDLE                 MapperHandle,

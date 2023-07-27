@@ -3450,7 +3450,7 @@ CcspCwmppoMpaSetParameterAttributes
                 pAttrInfo->accessControlBitmask = CCSP_NS_ACCESS_ACSONLY;
 
                 if (pParamAttr->bAccessListChange &&
-                    AnscEqualString(pParamAttr->AccessList, "Subscriber", FALSE) )
+                    pParamAttr->AccessList && (strcasecmp(pParamAttr->AccessList, "Subscriber") == 0))
                 {
                     pAttrInfo->accessControlBitmask = CCSP_NS_ACCESS_SUBSCRIBER;
                 }

@@ -1398,7 +1398,10 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
         rc = strcat_s(result, sizeof(result), objectInfo[ManagementServerID].parameters[ManagementServerX_CISCO_COM_ConnectionRequestURLPathID].value);
         ERR_CHK(rc);
      }
-    if(!AnscEqualString(objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value, result, TRUE)){
+
+    if ((objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value == NULL) ||
+        (strcmp(objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value, result) != 0))
+    {
         // Send Value change signal.
         char *oldValue = objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value;
         objectInfo[ManagementServerID].parameters[ManagementServerConnectionRequestURLID].value = AnscCloneString(result);

@@ -363,7 +363,7 @@ CcspCwmpCpecoSetupEnv
         {
             pSubsysName = CcspTr069PA_GetSubsystemByIndex(pMyObject->hTr069PaMapper, i);
 
-            returnStatus = 
+            
                 pMyObject->SetCRBusPath
                     (
                         (ANSC_HANDLE)pMyObject, 

@@ -1023,7 +1023,7 @@ CcspCwmpTcpcrhoGetRequestHostUri
 
             /* absolute URI */
             pUri    += 7;
-            ulLen   -= 7;
+            
 
             pPort   = _ansc_memchr((char*)pUri, ':', pUriEnd - pUri + 1);
             pPath   = _ansc_memchr((char*)pUri, '/', pUriEnd - pUri + 1);

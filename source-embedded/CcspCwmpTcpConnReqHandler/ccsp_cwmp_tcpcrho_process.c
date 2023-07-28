@@ -259,7 +259,7 @@ CcspCwmpTcpcrhoProcessRequest
                 }
 
                 /* generate a new Nonce */
-                status = 
+                 
                     CcspCwmpTcpcrhoGenNonce
                         (
                             (ANSC_HANDLE)pMyObject,
@@ -279,7 +279,7 @@ CcspCwmpTcpcrhoProcessRequest
 
             if ( pAuthProperty->AuthType == HTTP_AUTH_TYPE_BASIC )
             {
-                status = 
+                
                     CcspCwmpTcpcrhoGenBasicResponse
                         (
                             (ANSC_HANDLE)pMyObject,
@@ -290,7 +290,7 @@ CcspCwmpTcpcrhoProcessRequest
             }
             else
             {
-                status = 
+                
                     CcspCwmpTcpcrhoGenDigestResponse
                         (
                             (ANSC_HANDLE)pMyObject,

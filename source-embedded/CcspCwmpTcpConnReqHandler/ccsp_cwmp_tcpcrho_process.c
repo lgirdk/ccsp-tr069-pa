@@ -122,7 +122,7 @@ CcspCwmpTcpcrhoProcessRequest
     PCCSP_CWMP_TCPCR_HANDLER_OBJECT      pMyObject           = (PCCSP_CWMP_TCPCR_HANDLER_OBJECT    )hThisObject;
     PCCSP_CWMP_TCPCR_HANDLER_PROPERTY    pProperty           = (PCCSP_CWMP_TCPCR_HANDLER_PROPERTY  )&pMyObject->Property;
     PWEB_ACM_INTERFACE              pAcmIf              = (PWEB_ACM_INTERFACE            )pMyObject->hWebAcmIf;
-    PCCSP_CWMP_MWS_INTERFACE             pCcspCwmpMwsIf          = (PCCSP_CWMP_MWS_INTERFACE           )NULL;
+  //  PCCSP_CWMP_MWS_INTERFACE             pCcspCwmpMwsIf          = (PCCSP_CWMP_MWS_INTERFACE           )NULL;
     PANSC_DAEMON_SOCKET_TCP_OBJECT  pWebSocket          = (PANSC_DAEMON_SOCKET_TCP_OBJECT)hSocket;
     PWEB_AUTH_SERVER_PROPERTY       pAuthProperty       = &pProperty->AuthProperty;
     PCCSP_CWMP_TCPCR_HANDLER_SESSINFO    pSessAuthInfo       = &pMyObject->AuthSessionInfo;
@@ -364,7 +364,9 @@ CcspCwmpTcpcrhoProcessRequest
         pSessAuthInfo->RemoteAddr = pWebSocket->PeerAddress.Value;
 #endif
     }
-    else if ( pCcspCwmpMwsIf && pUrlPath )
+   /*  
+       Turn this off, since pCcspCwmpMwsIf is not used.
+       else if ( pCcspCwmpMwsIf && pUrlPath )
     {
         char                        mediaType[256];
         ULONG                       ulMediaTypeLen      = 255;
@@ -412,7 +414,7 @@ CcspCwmpTcpcrhoProcessRequest
 
                 if ( status == ANSC_STATUS_SUCCESS )
                 {
-                    /* send the response back to client */
+                    // send the response back to client 
                     status =
                         pWebSocket->Send
                             (
@@ -434,7 +436,7 @@ CcspCwmpTcpcrhoProcessRequest
         {
             AnscFreeMemory(pResBuf);
         }
-    }
+    } */
     else
     {
         status = ANSC_STATUS_FAILURE;

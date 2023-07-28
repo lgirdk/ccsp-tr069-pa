@@ -1089,7 +1089,7 @@ bFirstInform = 0;
         if ( ulRetryTimes == 0 )
         {
             pMyObject->AsyncTaskCount++;
-            returnStatus =
+            
                 AnscSpawnTask3
                     (
                         (void*)pMyObject->AsyncProcessTask,
@@ -1133,7 +1133,7 @@ bFirstInform = 0;
              * Retry the connection...
              */
             pMyObject->SessionState = CCSP_CWMPSO_SESSION_STATE_reconnect;
-            returnStatus            =
+            
                 pCcspCwmpProcessor->SignalSession
                     (
                         (ANSC_HANDLE)pCcspCwmpProcessor,
@@ -1787,7 +1787,7 @@ CcspCwmpsoAutonomousTransferComplete
             bConnectNow = TRUE;
         }
 
-        returnStatus =
+        
             pMyObject->AddCwmpEvent
                 (
                     (ANSC_HANDLE)pMyObject,
@@ -2020,7 +2020,7 @@ CcspCwmpsoKicked
             pCcspCwmpEvent->CommandKey = NULL;
         }
 
-        returnStatus =
+        
             pMyObject->AddCwmpEvent
                 (
                     (ANSC_HANDLE)pMyObject,
@@ -2655,7 +2655,7 @@ CcspCwmpsoAutonomousDUStateChangeComplete
             bConnectNow = TRUE;
         }
 
-        returnStatus =
+        
             pMyObject->AddCwmpEvent
                 (
                     (ANSC_HANDLE)pMyObject,

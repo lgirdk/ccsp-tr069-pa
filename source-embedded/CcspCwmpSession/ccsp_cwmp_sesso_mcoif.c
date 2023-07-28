@@ -999,7 +999,7 @@ CcspCwmpsoMcoSetParameterValues
     {
         _ansc_sprintf(paramName, "%s%s", pRootObjName, "ManagementServer.ParameterKey");
 
-        returnStatus =
+        
             pCcspCwmpCpeController->SetParameterKey
                 (
                     (ANSC_HANDLE)pCcspCwmpCpeController,
@@ -1924,7 +1924,7 @@ CcspCwmpsoMcoAddObject
     {
         _ansc_sprintf(paramName, "%s%s", pRootObjName, "ManagementServer.ParameterKey");
 
-        returnStatus =
+        
             pCcspCwmpCpeController->SetParameterKey
                 (
                     (ANSC_HANDLE)pCcspCwmpCpeController,
@@ -2122,7 +2122,7 @@ CcspCwmpsoMcoDeleteObject
     {
         _ansc_sprintf(paramName, "%s%s", pRootObjName, "ManagementServer.ParameterKey");
 
-        returnStatus =
+        
             pCcspCwmpCpeController->SetParameterKey
                 (
                     (ANSC_HANDLE)pCcspCwmpCpeController,
@@ -3739,7 +3739,7 @@ CcspCwmpsoMcoChangeDUState
                             /* save requests (object instances, CommandKey, complete etc for 
                              * monitoring operation status) into PSM 
                              */
-                            returnStatus =
+                            
                                 CcspCwmpsoMcoChangeDUState_SaveStateMonitors
                                     (
                                         pCcspCwmpCpeController,

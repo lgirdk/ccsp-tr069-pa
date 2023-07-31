@@ -2769,7 +2769,9 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
         {
             continue;
         }
-        if(AnscEqualString(objectInfo[objectID].parameters[parameterID].value, parameterSetting.msParameterValSettings[i].parameterValue, TRUE))
+        if (((objectInfo[objectID].parameters[parameterID].value == NULL) && (parameterSetting.msParameterValSettings[i].parameterValue == NULL)) ||
+            ((objectInfo[objectID].parameters[parameterID].value != NULL) && (parameterSetting.msParameterValSettings[i].parameterValue != NULL) &&
+             (strcmp(objectInfo[objectID].parameters[parameterID].value, parameterSetting.msParameterValSettings[i].parameterValue) == 0)))
         {
             continue;
         }
@@ -3031,7 +3033,9 @@ int CcspManagementServer_RollBackParameterValues()
         {
             continue;
         }
-        if(AnscEqualString(objectInfo[objectID].parameters[parameterID].value, parameterSetting.msParameterValSettings[i].parameterValue, TRUE))
+        if (((objectInfo[objectID].parameters[parameterID].value == NULL) && (parameterSetting.msParameterValSettings[i].parameterValue == NULL)) ||
+            ((objectInfo[objectID].parameters[parameterID].value != NULL) && (parameterSetting.msParameterValSettings[i].parameterValue != NULL) &&
+             (strcmp(objectInfo[objectID].parameters[parameterID].value, parameterSetting.msParameterValSettings[i].parameterValue) == 0)))
         {
             continue;
         }

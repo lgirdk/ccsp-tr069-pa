@@ -218,8 +218,8 @@ ANSC_STATUS CcspTr069PaSsp_JSON_GetItemByName    (
         cJSON *json = NULL;
         cJSON *partnerObj = NULL;
         FILE *fileRead = NULL;
-        unsigned int len;
-	char* buffer = NULL;
+        int len;
+        char* buffer = NULL;
 
 	if(*retVal) { AnscFreeMemory(*retVal); *retVal=NULL; }
 	
@@ -233,12 +233,19 @@ ANSC_STATUS CcspTr069PaSsp_JSON_GetItemByName    (
 
 	fseek( fileRead, 0, SEEK_END );
 	len = ftell( fileRead );
+        if (len < 0)
+        {
+            CcspTr069PaTraceWarning(("%s-%d : Error finding the size of JSON file\n" , __FUNCTION__, __LINE__ ));
+            fclose(fileRead);
+            return ANSC_STATUS_FAILURE;
+        }
 	fseek( fileRead, 0, SEEK_SET );
 	data = ( char* )malloc( sizeof(char) * (len + 1) );
 	if ( data )
 	{
-		data[len] = '\0';  // add terminating NUL character
-		if ( fread(data, 1, len, fileRead) != len )
+		//data[len] = '\0';  // add terminating NUL character
+        	memset(data, 0, (sizeof(char) * (len + 1)));
+		if ( fread( data, sizeof(char), len, fileRead) < (len * sizeof(char)) )
 		{
 			fclose(fileRead);
             free(data);

@@ -1876,6 +1876,7 @@ CcspCwmpTcpcrhoGenDigestResponse
          if(rc != EOK)
          { 
              ERR_CHK(rc);
+             AnscFreeMemory(pHfoWwwAuth);
               return ANSC_STATUS_FAILURE;
          }
 

@@ -1211,8 +1211,8 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
             if((rc == EOK) && (!ind))
             {
                 printf("---- SPV for WiFi ---\n");
-                AnscCopyString(wifiFcName,pFcNsList->FCName);
-                AnscCopyString(wifiDbusPath,pFcNsList->DBusPath);
+                strncpy(wifiFcName,pFcNsList->FCName, sizeof(wifiFcName) - 1);
+                strncpy(wifiDbusPath,pFcNsList->DBusPath, sizeof(wifiDbusPath) - 1);
                 bRadioRestartEn = TRUE;
                 if(i<MAX_NO_WIFI_PARAM)
                 {

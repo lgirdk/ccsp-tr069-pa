@@ -1619,7 +1619,6 @@ static void *FWDWLD_retry_thrd(void *data)
         if(60 == iRetrycount)
         {
             CcspTraceWarning(("%s - Reached 1hr of retry\n",__FUNCTION__));
-            iRetrycount = 0;
             break;
         }
         sleep(50);
@@ -1918,7 +1917,7 @@ CcspCwmppoProcessPvcSignal
                     );
 #endif
 
-                if (!strcmp(val->newValue, "Retry"))
+                if ((!strcmp(val->newValue, "Retry")) && iRetrycount != 60)
                 {
                     if(iRetrycount == 0 )
                     {
@@ -1927,8 +1926,7 @@ CcspCwmppoProcessPvcSignal
                         pthread_detach(TCEvtHandle_tid);
                     }
                 }
-
-                if(!((!strcmp("Not Started",val->newValue)) || (!strcmp("In Progress",val->newValue)) || (!strcmp("Completed",val->newValue)) || !(iRetrycount == 60)))
+                else if(!((!strcmp("Not Started",val->newValue)) || (!strcmp("In Progress",val->newValue)) || (!strcmp("Completed",val->newValue))))
                 {			
                     pCommandKey = pCcspCwmpCpeController->LoadCfgFromPsm((ANSC_HANDLE)pCcspCwmpCpeController, "CommandKey");             
 

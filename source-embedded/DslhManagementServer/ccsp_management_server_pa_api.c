@@ -449,7 +449,7 @@ static void ReadTr69TlvData (int ethwan_enable)
 			}
 			sleep(1);
 			watchdog--;
-		} while ((!strstr(out,"success")) && (!strstr(buf,"started")) && (watchdog != 0));
+		} while (!(strstr(out,"success") && strstr(buf,"started")) && (watchdog != 0));
 
 		if ( watchdog == 0 )
 		{

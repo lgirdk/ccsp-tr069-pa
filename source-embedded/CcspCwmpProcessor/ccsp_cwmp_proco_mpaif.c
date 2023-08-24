@@ -90,7 +90,7 @@
 /**********************************************************************
                                   MACROS
 **********************************************************************/
-#define COSA_CURRENT_SUPPORT_VERSION              "1"
+#define COSA_CURRENT_SUPPORT_VERSION              "2.13"
 
 #define  CcspCwmppoMpaMapInvalidParamInstNumDmIntToCwmp(pParamName)                 \
             /*CWMP_2_DM_INT_INSTANCE_NUMBER_MAPPING*/                               \

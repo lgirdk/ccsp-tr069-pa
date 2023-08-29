@@ -396,8 +396,7 @@ CcspCwmpSoappoProcessRequest_SetParameterValues
 
 		if( pParamArray == NULL)
 		{
-			returnStatus = ANSC_STATUS_RESOURCES;
-
+			
 			goto EXIT2;
 		}
 

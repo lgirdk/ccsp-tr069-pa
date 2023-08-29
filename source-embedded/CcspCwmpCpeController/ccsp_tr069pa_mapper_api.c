@@ -314,7 +314,6 @@ CcspTr069Pa_run_test_map()
     {
         CcspTr069PaTraceDebug(("%s - CwmpToDmInt %s -> %s", __FUNCTION__, pCwmpString, pReturnStr));
         AnscFreeMemory(pReturnStr);
-        pReturnStr = NULL;
     }
 
     pReturnStr = CcspTr069PA_MapInstNumDmIntToCwmp(pDmIntString);

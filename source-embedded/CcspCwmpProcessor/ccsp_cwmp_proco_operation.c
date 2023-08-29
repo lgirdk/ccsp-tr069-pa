@@ -1513,7 +1513,7 @@ CcspCwmppoSaveTransferComplete
     
     if ( hCompleteTime && pCompleteTime->Year >=1970 )
     {
-        _ansc_sprintf(buffer, "%u", (pCompleteTime->Year < 1970)?0:(unsigned int)AnscCalendarToSecondFromEpoch(hCompleteTime));
+        _ansc_sprintf(buffer, "%u",(unsigned int)AnscCalendarToSecondFromEpoch(hCompleteTime));
 
         _ansc_snprintf
             (

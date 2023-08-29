@@ -508,6 +508,7 @@ CcspCwmpStunmoStunBsmRecvMsg1
        if(rc!=EOK)
        {
           ERR_CHK(rc);
+          AnscFreeMemory(pConnReqPassword);
           return  ANSC_STATUS_FAILURE;
        }
     }

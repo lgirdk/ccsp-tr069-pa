@@ -1964,7 +1964,7 @@ ccspCwmppoLoadTransferCompleteTask
                     CCSP_CWMPPO_PARAM_NAME_FaultString
                 );
 
-            psmStatus = 
+             
                 PSM_Get_Record_Value2
                     (
                         pCcspCwmpCpeController->hMsgBusHandle,
@@ -2861,7 +2861,7 @@ ccspCwmppoLoadAutonomousTransferCompleteTask
                     CCSP_CWMPPO_PARAM_NAME_FaultString
                 );
 
-            psmStatus = 
+            
                 PSM_Get_Record_Value2
                     (
                         pCcspCwmpCpeController->hMsgBusHandle,
@@ -3764,7 +3764,7 @@ ccspCwmppoLoadDUStateChangeCompleteTask
                         CCSP_CWMPPO_PARAM_NAME_FaultString
                     );
 
-                psmStatus = 
+                 
                     PSM_Get_Record_Value2
                         (
                             pCcspCwmpCpeController->hMsgBusHandle,
@@ -4792,7 +4792,7 @@ ccspCwmppoLoadAutonomousDUStateChangeCompleteTask
                         CCSP_CWMPPO_PARAM_NAME_FaultString
                     );
 
-                psmStatus = 
+                
                     PSM_Get_Record_Value2
                         (
                             pCcspCwmpCpeController->hMsgBusHandle,

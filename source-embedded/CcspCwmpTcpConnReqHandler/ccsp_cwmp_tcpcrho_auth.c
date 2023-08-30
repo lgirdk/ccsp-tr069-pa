@@ -1745,7 +1745,15 @@ CcspCwmpTcpcrhoGenBasicResponse
         if(rc!=EOK)
         {
            ERR_CHK(rc);
+           /*CID 128104 Resource leak */
            AnscFreeMemory(pHfoWwwAuth);
+           pHfoWwwAuth = NULL;
+           /* CID 128105 Resource leak  */
+           if ( pChalReq )
+           {
+               AnscFreeMemory(pChalReq);
+               pChalReq = NULL;
+           }
            return  ANSC_STATUS_FAILURE;
         }
         status = CcspCwmpTcpcrhoGenResponse((ANSC_HANDLE)pMyObject, buffer, pulSize, (ANSC_HANDLE)pHfoWwwAuth);
@@ -1877,8 +1885,13 @@ CcspCwmpTcpcrhoGenDigestResponse
          if(rc != EOK)
          { 
              ERR_CHK(rc);
+             /*CID 128097 Resource leak fix */
              AnscFreeMemory(pHfoWwwAuth);
-              return ANSC_STATUS_FAILURE;
+             pHfoWwwAuth = NULL;
+             /*CID 128098 Resource leak fix */
+             AnscFreeMemory(pChalReq);
+             pChalReq = NULL;
+             return ANSC_STATUS_FAILURE;
          }
 
         status = CcspCwmpTcpcrhoGenResponse((ANSC_HANDLE)pMyObject, buffer, pulSize, (ANSC_HANDLE)pHfoWwwAuth);

@@ -202,7 +202,15 @@ CcspCwmppoConfigPeriodicInform
 
             AnscCopyMemory(&temp_time, (ANSC_HANDLE)&pProperty->PeriodicInformTime, sizeof(ANSC_UNIVERSAL_TIME));
             temp_time.Year           -= 1;
-            temp_time.Month          -= 1;
+            /* CID 125240 Out-of-bounds access array value [2][13] */
+            if( (temp_time.Month  > 1) && (temp_time.Month  < 15) )
+            {
+                temp_time.Month          -= 1;
+            }
+            else
+            {
+                CcspTr069PaTraceWarning(("Month g_usDaysOfYearInMonth[][] array value out of bound access error!\n"));
+            }
             temp_time.DayOfMonth     -= 1;
             ulTimeReferenceSec = AnscCalendarToSecondFromEpoch((ANSC_HANDLE)&temp_time);
         }

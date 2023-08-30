@@ -78,6 +78,8 @@
 #include <sys/stat.h>
 extern ANSC_HANDLE bus_handle;
 
+#define BUF_LENGTH 512
+
 static
 ANSC_STATUS
 CcspCwmppoSysReadySignalProcTask
@@ -1701,7 +1703,7 @@ CcspCwmppoProcessPvcSignal
         if ( _ansc_strstr(pVC->parameterName, CCSP_NS_CHANGEDUSTATE) == pVC->parameterName )
         {
             /* ChangeDUState monitor state has changed */
-            char                    buf[512];
+            char                    buf[BUF_LENGTH] = {'\0'};
             char*                   pSep        = (char*)pVC->parameterName + AnscSizeOfString(CCSP_NS_CHANGEDUSTATE);
             char*                   pCommandKey = NULL;
             int                     len         = 0;
@@ -1741,7 +1743,15 @@ CcspCwmppoProcessPvcSignal
                             &pCommandKey
                         );
 
-                snprintf(buf + strlen(buf), sizeof(buf),"%s", CCSP_NS_CDS_PSM_NODE_COMPLETE);
+                /* CID 190450 Out-of-bounds access fix */
+                if ( strlen(buf) < (BUF_LENGTH - strlen(CCSP_NS_CDS_PSM_NODE_COMPLETE)) )
+                {
+                    snprintf(buf + strlen(buf), sizeof(buf),"%s", CCSP_NS_CDS_PSM_NODE_COMPLETE);
+                }
+                else
+                {
+                    CcspTr069PaTraceInfo(("Error in copying  CCSP_NS_CDS_PSM_NODE_COMPLETE to buf \n"));
+                }
 
                 if ( psmStatus != CCSP_SUCCESS )
                 {

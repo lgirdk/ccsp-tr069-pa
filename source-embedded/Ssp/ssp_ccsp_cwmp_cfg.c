@@ -358,7 +358,10 @@ CcspTr069PaSsp_LoadCfgFile
     {
         PANSC_XML_DOM_NODE_OBJECT       pChildNode         = (PANSC_XML_DOM_NODE_OBJECT)NULL;
         char*                           pXMLIterator       = pXMLContent;
-        
+
+        /* CID 137582 String not null terminated fix */
+        pXMLIterator[uBufferSize-1] = '\0';
+
         pRootNode   = (PANSC_XML_DOM_NODE_OBJECT)
             AnscXmlDomParseString((ANSC_HANDLE)NULL, (PCHAR*)&pXMLIterator, uBufferSize);
         if ( pRootNode == NULL )

@@ -217,7 +217,10 @@ static void ReadTr69TlvData (int ethwan_enable)
 
 	if ((file != NULL) && (object2))
 	{
+                /* CID 135272 String not null terminated fix */
+                memset(object2->URL , '\0', sizeof(object2->URL));
 		size_t nm = fread(object2, sizeof(Tr69TlvData), 1, file);
+                object2->URL[255] = '\0';
 		fclose(file);
 		file = NULL;
 
@@ -256,7 +259,8 @@ static void ReadTr69TlvData (int ethwan_enable)
 		{
 			AnscTraceWarning(("%s -#- Inside FreshBootUp=1 OR Tr69Enable=0 \n", __FUNCTION__));
 			AnscTraceWarning(("%s -#- ACS URL from PSM DB- %s\n", __FUNCTION__, objectInfo[ManagementServerID].parameters[ManagementServerURLID].value));
-			AnscTraceWarning(("%s -#- ACS URL from cmconfig - %s\n", __FUNCTION__, AnscCloneString(object2->URL)));
+                        /* CID 335592 Resource leak fix */
+                        AnscTraceWarning(("%s -#- ACS URL from cmconfig - %s\n", __FUNCTION__, object2->URL));
 			object2->FreshBootUp = 0;
 			objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(object2->URL);
 			//on Fresh bootup / boot after factory reset, if the URL is empty, set default URL value

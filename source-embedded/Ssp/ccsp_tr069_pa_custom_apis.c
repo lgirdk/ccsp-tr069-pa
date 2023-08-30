@@ -670,8 +670,10 @@ CcspTr069PaSsp_DeviceDefaultPasswordGenerate
 
 	//strcpy(SharedKey, SHAREDKEY);
         if(NULL== CcspTr069PaSsp_retrieveSharedKey())
-	{
-		return ANSC_STATUS_FAILURE;
+        {
+            /* CID 265739 Variable pctx going out of scope fix */
+            HMAC_CTX_free (pctx);
+            return ANSC_STATUS_FAILURE;
         }
 	sharedKey_len = strlen(SharedKey);
 

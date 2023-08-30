@@ -1025,6 +1025,8 @@ CcspManagementServer_RegisterWanInterface()
     val[0].notificationChanged = 1;
     val[0].notification = 1;
     val[0].accessControlChanged = 0;
+    /* CID 281922 Uninitialized scalar variable fix */
+    val[0].accessControlBitmask = 0;
    // val[1].parameterName = FirstUpstreamIpInterfaceParameterName;
    // val[1].notificationChanged = 1;
    // val[1].notification = 1;
@@ -1217,6 +1219,8 @@ int SendValueChangeSignal(
     val.oldValue = AnscCloneString((char *)oldValue);
     val.type = objectInfo[objectID].parameters[parameterID].type;
     val.subsystem_prefix = AnscCloneString(CcspManagementServer_SubsystemPrefix);
+    /* CID 281892 Uninitialized scalar variable  */
+    val.writeID = 0;
     int res = CcspBaseIf_SendparameterValueChangeSignal (
         bus_handle,
         &val,

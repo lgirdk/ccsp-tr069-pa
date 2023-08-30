@@ -588,7 +588,7 @@ CcspCwmppoAsyncConnectTask
 
                         CcspTr069PaTraceDebug(("SessionState == connected.\n"));
 
-                        returnStatus =
+                        
                             pCcspCwmpSession->Inform
                                 (
                                     (ANSC_HANDLE)pCcspCwmpSession,

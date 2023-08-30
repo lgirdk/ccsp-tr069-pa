@@ -766,13 +766,25 @@ int  engage_tr069pa()
         if ( g_Subsystem[0] != 0 )
         {
             status = g_pCcspCwmpCpeController->SetSubsysName((ANSC_HANDLE)g_pCcspCwmpCpeController, g_Subsystem);
+            if ( status != ANSC_STATUS_SUCCESS )
+            {
+                CcspTr069PaTraceError(("Failed to SetSubsysName CCSP CWMP CPE Controller object!\n"));
+            }
         }
 
         status = g_pCcspCwmpCpeController->SetPAMapperFile((ANSC_HANDLE)g_pCcspCwmpCpeController, g_PaMapperXmlFile);
+        if ( status != ANSC_STATUS_SUCCESS )
+        {
+          CcspTr069PaTraceError(("Failed to SetPAMapperFile CCSP CWMP CPE Controller object!\n"));
+        }
 
         if ( g_PaCustMapperFile[0] != 0 )
         {
             status = g_pCcspCwmpCpeController->SetPACustomMapperFile((ANSC_HANDLE)g_pCcspCwmpCpeController, g_PaCustMapperFile);
+            if ( status != ANSC_STATUS_SUCCESS )
+            {
+                CcspTr069PaTraceError(("Failed to SetPACustomMapperFile CCSP CWMP CPE Controller object!\n"));
+            }
         }
 
         if ( g_SdmXmlFile[0] )
@@ -789,6 +801,10 @@ int  engage_tr069pa()
         if ( g_Tr069PaOutboundIfName && g_Tr069PaOutboundIfName[0])
         {
             status = g_pCcspCwmpCpeController->SetOutboundIfName((ANSC_HANDLE)g_pCcspCwmpCpeController, g_Tr069PaOutboundIfName);
+            if ( status != ANSC_STATUS_SUCCESS )
+            {
+                CcspTr069PaTraceError(("Failed to SetOutboundIfName CCSP CWMP CPE Controller object!\n"));
+            }          
         }
 
         status = g_pCcspCwmpCpeController->Engage((ANSC_HANDLE)g_pCcspCwmpCpeController);

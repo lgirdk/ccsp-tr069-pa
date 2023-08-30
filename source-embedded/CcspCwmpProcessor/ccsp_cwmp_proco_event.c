@@ -1617,7 +1617,7 @@ CcspCwmppoProcessPvcSignal
 
     if ( !s_ns_download_state[0] )
     {
-        _ansc_sprintf(s_ns_download_state, "%s%s", CCSP_NS_DOWNLOAD, CCSP_NS_DOWNLOAD_STATE);
+        snprintf(s_ns_download_state, sizeof(s_ns_download_state), "%s%s", CCSP_NS_DOWNLOAD, CCSP_NS_DOWNLOAD_STATE);
     }
 
     CcspTr069PaTraceInfo(("Processing queued parameterValueChangeSignal over message bus, size=%d.\n", size));

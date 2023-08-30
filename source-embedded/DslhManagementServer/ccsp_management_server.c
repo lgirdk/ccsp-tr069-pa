@@ -688,7 +688,7 @@ ANSC_STATUS CcspManagementServer_RegisterNameSpace()
 
     if ( CcspManagementServer_SubsystemPrefix)
     {
-        _ansc_sprintf(CrName, "%s%s", CcspManagementServer_SubsystemPrefix, CCSP_DBUS_INTERFACE_CR);
+         snprintf(CrName, sizeof(CrName), "%s%s", CcspManagementServer_SubsystemPrefix, CCSP_DBUS_INTERFACE_CR);
     }
     else
     {
@@ -754,7 +754,7 @@ CcspManagementServer_DiscoverComponent
     char CrName[256] = {0};
     if ( CcspManagementServer_SubsystemPrefix)
     {
-        _ansc_sprintf(CrName, "%s%s", CcspManagementServer_SubsystemPrefix, CCSP_DBUS_INTERFACE_CR);
+        snprintf(CrName, sizeof(CrName), "%s%s", CcspManagementServer_SubsystemPrefix, CCSP_DBUS_INTERFACE_CR);
     }
     else
     {
@@ -815,7 +815,7 @@ CcspManagementServer_UtilGetParameterValues
     ANSC_STATUS                     ret             = ANSC_STATUS_FAILURE;
     if ( CcspManagementServer_SubsystemPrefix)
     {
-        _ansc_sprintf(CrName, "%s%s", CcspManagementServer_SubsystemPrefix, CCSP_DBUS_INTERFACE_CR);
+        snprintf(CrName, sizeof(CrName), "%s%s", CcspManagementServer_SubsystemPrefix, CCSP_DBUS_INTERFACE_CR);
     }
     else
     {
@@ -905,7 +905,7 @@ CcspManagementServer_RegisterWanInterface()
     return ANSC_STATUS_SUCCESS;
 #endif
 
-    if(RegisterWanInterfaceDone) return ANSC_STATUS_SUCCESS;
+    if (RegisterWanInterfaceDone) return ANSC_STATUS_SUCCESS;
 
     if(!pPAMComponentName || !pPAMComponentPath) CcspManagementServer_DiscoverComponent();
     if(!pPAMComponentName || !pPAMComponentPath) return ANSC_STATUS_FAILURE;
@@ -913,7 +913,7 @@ CcspManagementServer_RegisterWanInterface()
     char CrName[256] = {0};
     if ( CcspManagementServer_SubsystemPrefix)
     {
-        _ansc_sprintf(CrName, "%s%s", CcspManagementServer_SubsystemPrefix, CCSP_DBUS_INTERFACE_CR);
+        snprintf(CrName, sizeof(CrName), "%s%s", CcspManagementServer_SubsystemPrefix, CCSP_DBUS_INTERFACE_CR);
     }
     else
     {
@@ -2480,7 +2480,7 @@ int CcspManagementServer_RetrievePassword( int parameterID, char *pInputFile, ch
 
             if ( fgets ( password, sizeof( password ), fp ) != NULL ) 
             {
-                sscanf( password, "%s" ,retPassword );
+                sscanf( password, "%511s" ,retPassword );
                 length = strlen( retPassword );
                 rc = strncpy_s( pOutputString, MAX_SIZE_TMPPWD_VALUE, retPassword, length );
                 ERR_CHK(rc);

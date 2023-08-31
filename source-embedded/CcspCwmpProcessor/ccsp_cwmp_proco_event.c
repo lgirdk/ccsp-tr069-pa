@@ -1239,7 +1239,7 @@ EXIT:
 }
 
 
-static
+/*static
 BOOL
 CcspCwmppoCheckAtcAgainstPolicy
     (
@@ -1325,7 +1325,7 @@ EXIT:
     }
 
     return  bFilteredOut;
-}
+}*/
 
 
 static
@@ -1640,6 +1640,10 @@ CcspCwmppoProcessPvcSignal
     /*
      * Determine if value changes are intended for this PA
      */
+    if (!val)
+    {
+        return;
+    }
     if ( val->writeID == CCSP_TR069PA_WRITE_ID )        /* the value change is caused by a TR-069 PA */
     {
         /* 
@@ -1798,24 +1802,26 @@ CcspCwmppoProcessPvcSignal
             CCSP_CWMP_FAULT         cwmpFault       = { 0 };
             PCCSP_CWMP_FAULT        pCwmpFault      = &cwmpFault;
             BOOL                    bAtc            = FALSE;
-            char*                   pAnnounceURL    = NULL;
+        /*  char*                   pAnnounceURL    = NULL;
             char*                   pTransferURL    = NULL;
             char*                   pFileType       = NULL;
             unsigned int            FileSize        = 0;
             char*                   pTargetFileName = NULL;
-
+        */
             /* 
              * Retrieve firmware download result
              */
-            CcspCwmppoRetrieveFirmwareDownloadResults
-                (
-                    pCcspCwmpCpeController,
-                    &pCwmpFault->FaultCode,
-                    &timeStart,
-                    &timeEnd,
-                    &pCommandKey
-                );
-
+            if (pCwmpFault != NULL)
+            {
+                CcspCwmppoRetrieveFirmwareDownloadResults
+                    (
+                        pCcspCwmpCpeController,
+                        &pCwmpFault->FaultCode,
+                        &timeStart,
+                        &timeEnd,
+                        &pCommandKey
+                    );
+            }
             /* signal TransferComplete */
             if ( !bAtc )
             {
@@ -1876,7 +1882,7 @@ CcspCwmppoProcessPvcSignal
 
                 if ( pCommandKey ) AnscFreeMemory(pCommandKey);
             }
-            else
+            /*else
             {
                 CCSP_BOOL           bFilteredOut = FALSE;
 
@@ -1904,12 +1910,12 @@ CcspCwmppoProcessPvcSignal
                                 (ANSC_HANDLE)pCwmpFault,
                                 (ANSC_HANDLE)&timeStart,
                                 (ANSC_HANDLE)&timeEnd,
-                                TRUE                /* start a new session to deliver this */
+                                TRUE                // start a new session to deliver this 
                             );
 
                     if ( status != ANSC_STATUS_SUCCESS )
                     {
-                        /* save un-delivered ATC into PSM */
+                        // save un-delivered ATC into PSM 
                         status = 
                             pMyObject->SaveAutonomousTransferComplete
                                 (
@@ -1965,7 +1971,7 @@ CcspCwmppoProcessPvcSignal
                         AnscFreeMemory(pTargetFileName);
                     }
                 }
-            }
+            } */
         }
         else if ( _ansc_strstr(pVC->parameterName, CCSP_NS_UPLOAD) == pVC->parameterName )
         {
@@ -1976,12 +1982,12 @@ CcspCwmppoProcessPvcSignal
             CCSP_CWMP_FAULT         cwmpFault       = { 0 };
             PCCSP_CWMP_FAULT        pCwmpFault      = &cwmpFault;
             BOOL                    bAtc            = FALSE;
-            char*                   pAnnounceURL    = NULL;
+        /*  char*                   pAnnounceURL    = NULL;
             char*                   pTransferURL    = NULL;
             char*                   pFileType       = NULL;
             unsigned int            FileSize        = 0;
             char*                   pTargetFileName = NULL;
-
+        */
             /* TODO:
              *   Read upload result
              */
@@ -2000,7 +2006,7 @@ CcspCwmppoProcessPvcSignal
                         TRUE        /* start a new session to deliver this */
                     );
             }
-            else
+            /*else
             {
                 CCSP_BOOL           bFilteredOut = FALSE;
 
@@ -2027,7 +2033,7 @@ CcspCwmppoProcessPvcSignal
                             (ANSC_HANDLE)pCwmpFault,
                             (ANSC_HANDLE)&timeStart,
                             (ANSC_HANDLE)&timeEnd,
-                            TRUE                /* to start a new session to deliver this */
+                            TRUE                // to start a new session to deliver this 
                         );
 
                     if ( pAnnounceURL )
@@ -2050,7 +2056,7 @@ CcspCwmppoProcessPvcSignal
                         AnscFreeMemory(pTargetFileName);
                     }
                 }
-            }
+            }*/
         }
         else
         {

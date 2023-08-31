@@ -236,7 +236,7 @@ CcspManagementServer_GetPeriodicInformTimeStrCustom
       time_t t = time(NULL);
 		struct tm tm = *localtime(&t);
 		char p[45];
-		sprintf(p, "%d-%02d-%02d%s", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, "T00:00:00Z");
+		snprintf(p,sizeof(p), "%d-%02d-%02d%s", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, "T00:00:00Z");
 		objectInfo[ManagementServerID].parameters[ManagementServerPeriodicInformTimeID].value = AnscCloneString(p);
     }
 
@@ -530,7 +530,7 @@ CcspTr069PaSsp_DeviceDefaultUsernameGenerate
         }
     }
 
-    _ansc_sprintf(DefaultUsername, "%s-%s-%s",  
+    snprintf(DefaultUsername,sizeof(DefaultUsername), "%s-%s-%s",  
                   DeviceManufacturerOUI, DeviceProductClass, DeviceSerialNumber); 
         
     AnscTraceWarning(("%s -- default username is '%s'\n", __FUNCTION__, DefaultUsername));
@@ -578,7 +578,7 @@ char * CcspTr069PaSsp_retrieveSharedKey( void )
 		
 			if ( fgets ( key, sizeof(key), fp ) != NULL ) 
 			{					
-				sscanf( key, "%s", retKey );
+				sscanf( key, "%255s", retKey );
 				len = strlen( retKey );
                                 rc = strncpy_s(SharedKey, sizeof(SharedKey), retKey, len );
                                 ERR_CHK(rc);
@@ -665,7 +665,7 @@ CcspTr069PaSsp_DeviceDefaultPasswordGenerate
 	HMAC_CTX *pctx = HMAC_CTX_new();
 #endif
         
-	_ansc_sprintf(sharedText, "%s-%s", 
+	snprintf(sharedText,sizeof(sharedText), "%s-%s", 
                       DeviceManufacturerOUI, DeviceProductClass);
 
 	//strcpy(SharedKey, SHAREDKEY);

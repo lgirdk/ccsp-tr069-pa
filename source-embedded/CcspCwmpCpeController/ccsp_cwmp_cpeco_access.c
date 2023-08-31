@@ -876,7 +876,7 @@ CcspCwmpCpecoDeleteObjects
 
             if ( !CcspCwmpIsPartialName(pObjectName) )
             {
-                _ansc_sprintf(buf, "%s.%u.", pObjectName, (unsigned int)pInsNumbers[i]);
+                snprintf(buf, sizeof(buf), "%s.%u.", pObjectName, (unsigned int)pInsNumbers[i]);
             }
             else
             {
@@ -1011,14 +1011,7 @@ CcspCwmpCpecoMonitorOpState
         }
         else if ( bUnderTable )
         {
-            _ansc_sprintf
-                (
-                    buf, 
-                    "%s%u.%s", 
-                    pObjectName,
-                    (unsigned int)pInsNumbers[i],
-                    pStateParamName
-                );
+            snprintf(buf, sizeof(buf), "%s%u.%s", pObjectName, (unsigned int)pInsNumbers[i], pStateParamName);
         }
         else
         {
@@ -1253,13 +1246,7 @@ CcspCwmpCpecoSetPAName
 
     if ( pMyObject->SubsysName )
     {
-        _ansc_sprintf
-            (
-                pMyObject->PANameWithPrefix, 
-                "%s%s", 
-                pMyObject->SubsysName,
-                pMyObject->PAName
-            );
+       snprintf(pMyObject->PANameWithPrefix, nLen, "%s%s", pMyObject->SubsysName, pMyObject->PAName);
     }
     else
     {
@@ -1379,13 +1366,7 @@ CcspCwmpCpecoSetSubsysName
 
     if ( pMyObject->SubsysName )
     {
-        _ansc_sprintf
-            (
-                pMyObject->PANameWithPrefix, 
-                "%s%s", 
-                pMyObject->SubsysName,
-                pMyObject->PAName
-            );
+        snprintf(pMyObject->PANameWithPrefix, nLen, "%s%s", pMyObject->SubsysName, pMyObject->PAName);
     }
     else
     {
@@ -1531,13 +1512,7 @@ CcspCwmpCpecoSetCRName
 
         if ( pMyObject->SubsysName )
         {
-            _ansc_sprintf
-                (
-                    pMyObject->CRNameWithPrefix, 
-                    "%s%s", 
-                    pMyObject->SubsysName,
-                    pMyObject->CRName
-                );
+            snprintf(pMyObject->CRNameWithPrefix, nLen, "%s%s", pMyObject->SubsysName, pMyObject->CRName);
         }
         else
         {

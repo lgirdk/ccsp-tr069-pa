@@ -356,9 +356,9 @@ static void CcspManagementServer_AcsResolveIPv6(char *acsURL)
     }
 
     //wait 5 seconds for resolve
-    for(i=0; i<10000; i++)
+    for(i=0; i<5000; i++)
     {
-        usleep(500);
+        usleep(1000);
         if(!isResolveAcsActive)
             break;
     }

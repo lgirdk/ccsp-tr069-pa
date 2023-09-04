@@ -560,7 +560,7 @@ CcspCwmpTcpcrhoCalcDigResponse
     }
     else
     {
-        _ansc_sprintf(pBuf, "%s:%s:", pHA1, pNonce);
+        snprintf(pBuf,(ulSize + 16) - 1, "%s:%s:", pHA1, pNonce);
 
         if ( pQop )
         {
@@ -740,7 +740,7 @@ CcspCwmpTcpcrhoCalcDigestHA1
     */
     else
     {
-        _ansc_sprintf(pBuf, "%s:%s:%s", (char*)pUserName, (char*)pRealm, pPassword?(char*)pPassword:"");
+        snprintf(pBuf,(ulSize + 16) - 1, "%s:%s:%s", (char*)pUserName, (char*)pRealm, pPassword?(char*)pPassword:"");
 
         AnscCryptoMd5Digest((PVOID)pBuf, AnscSizeOfString(pBuf), &MD5Hash);
         CcspCwmpTcpcrhoBinToHex(MD5Hash.Value, ANSC_MD5_OUTPUT_SIZE, pHA1);
@@ -852,7 +852,7 @@ CcspCwmpTcpcrhoCalcDigestHA2
     }
     else
     {
-        _ansc_sprintf(pBuf, "%s:%s", pMethodName, pUriPath);
+        snprintf(pBuf,(ulSize + 16) - 1, "%s:%s", pMethodName, pUriPath);
 
         if ( bAuthInt )
         {

@@ -633,9 +633,9 @@ CcspCwmppoInitParamAttrCache
     pParamAttrCache->DelAllStrAtoms((ANSC_HANDLE)pParamAttrCache);
 
     /* assumption: PA name is supposed to be the same over reboot */
-    _ansc_sprintf
+    snprintf
         (
-            keyPrefix, 
+            keyPrefix, sizeof(keyPrefix), 
             "%s%s.%s.", 
             pCcspCwmpCpeController->SubsysName?pCcspCwmpCpeController->SubsysName:"",
             pCcspCwmpCpeController->PAName,
@@ -918,9 +918,9 @@ CcspCwmppoUpdateSingleParamAttr
     int                             nCcspError = CCSP_SUCCESS;
 
 	CcspCwmppoMpaMapParamInstNumCwmpToDmInt(pParamName);
-    _ansc_sprintf
+    snprintf
         (
-            key, 
+            key, sizeof(key), 
             "%s%s.%s.%s", 
             pCcspCwmpCpeController->SubsysName?pCcspCwmpCpeController->SubsysName:"",
             pCcspCwmpCpeController->PAName,
@@ -1217,7 +1217,7 @@ CcspCwmppoSyncRemoteNamespace
         return  CCSP_FALSE;
     }
 
-    _ansc_sprintf(pCrNameWithPrefix, "%s%s", pCcspCwmpCpeController->SubsysName ? pCcspCwmpCpeController->SubsysName:"", pCrName);
+    snprintf(pCrNameWithPrefix, nLen, "%s%s", pCcspCwmpCpeController->SubsysName ? pCcspCwmpCpeController->SubsysName:"", pCrName);
 
     ret = CcspTr069PA_GetPiFullName(pParamInfo, paramFullName, CCSP_TR069_RPC_Namespace_Length);
     if ( ret < 0 )
@@ -1423,7 +1423,7 @@ CcspCwmppoSyncNamespacesWithCR
                     continue;
                 }
             
-                _ansc_sprintf(pCrNameWithPrefix, "%s%s", pCcspCwmpCpeController->SubsysName ? pCcspCwmpCpeController->SubsysName:"", pCrName);
+                snprintf(pCrNameWithPrefix, nLen, "%s%s", pCcspCwmpCpeController->SubsysName ? pCcspCwmpCpeController->SubsysName:"", pCrName);
             }
 
             /* this CR is on the same sub-system as PA is running on - full synchronization */

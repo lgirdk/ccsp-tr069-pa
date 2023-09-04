@@ -378,27 +378,27 @@ int main(int argc, char* argv[])
 	{
 		if ( (strcmp(argv[idx], "-pa") == 0) )
 		{
-            AnscCopyString(g_Tr069PaName, argv[idx+1]);
+            strncpy(g_Tr069PaName, argv[idx+1], sizeof(g_Tr069PaName) - 1);
 		}
         else if ( (strcmp(argv[idx], "-cr") == 0) )
         {
-            AnscCopyString(g_CrName, argv[idx+1]);
+            strncpy(g_CrName, argv[idx+1], sizeof(g_CrName) - 1);
         }
         else if ( (strcmp(argv[idx], "-subsys") == 0) )
         {
-            AnscCopyString(g_Subsystem, argv[idx+1]);
+            strncpy(g_Subsystem, argv[idx+1], sizeof(g_Subsystem) - 1);
         }
         else if ( (strcmp(argv[idx], "-mapper") == 0) )
         {
-            AnscCopyString(g_PaMapperXmlFile, argv[idx+1]);
+            strncpy(g_PaMapperXmlFile, argv[idx+1], sizeof(g_PaMapperXmlFile) - 1);
         }
         else if ( (strcmp(argv[idx], "-custom_mapper") == 0) )
         {
-            AnscCopyString(g_PaCustMapperFile, argv[idx+1]);
+            strncpy(g_PaCustMapperFile, argv[idx+1], sizeof(g_PaCustMapperFile) - 1);
         }
         else if ( (strcmp(argv[idx], "-sdm") == 0) )
         {
-            AnscCopyString(g_SdmXmlFile, argv[idx+1]);
+            strncpy(g_SdmXmlFile, argv[idx+1], sizeof(g_SdmXmlFile) - 1);
         }
         else if ( strcmp(argv[idx], "-c") == 0 )
         {

@@ -337,8 +337,14 @@ static void ReadTr69TlvData (int ethwan_enable)
                          * Removing CCSP_MGMT_CRPWD_FILE and marking object2->Tr69Enable=0 to mimic fresh boot scenario
                          */
                         object2->Tr69Enable=0;
-                        remove(CCSP_MGMT_CRPWD_FILE);
-                        remove(CCSP_MGMT_PWD_FILE);
+                        if (remove(CCSP_MGMT_CRPWD_FILE))
+                        {
+                            AnscTraceWarning(("%s -#- Failed to remove CCSP_MGMT_CRPWD_FILE file <%s>\n", __FUNCTION__, CCSP_MGMT_CRPWD_FILE));
+                        }
+                        if (remove(CCSP_MGMT_PWD_FILE))
+                        {
+                            AnscTraceWarning(("%s -#- Failed to remove CCSP_MGMT_PWD_FILE file <%s>\n", __FUNCTION__, CCSP_MGMT_PWD_FILE));
+                        }
                     }
                 }
             }
@@ -406,10 +412,13 @@ static void ReadTr69TlvData (int ethwan_enable)
 	{
         char *pValue 								 = NULL;
 		int   IsNeed2ApplySyndicationPartnerCFGValue = 1;
-		
+		int fd                                       = 0;
 		AnscTraceWarning(("%s TLV data file is missing!!!\n", __FUNCTION__));
 		AnscTraceInfo(("%s %s File is not available so unable to process by Tr069\n", __FUNCTION__, TR69_TLVDATA_FILE ));
-		creat("/tmp/.TLVmissedtoparsebytr069",S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		if ((fd = creat("/tmp/.TLVmissedtoparsebytr069",S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)) >= 0)
+        {
+            close(fd);
+        }
 
 		//Check whether PSM entry is there or not
                 rc = memset_s( recordName, sizeof( recordName ), 0, sizeof( recordName ) );

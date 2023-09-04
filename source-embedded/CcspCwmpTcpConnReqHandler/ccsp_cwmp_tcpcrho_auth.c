@@ -841,7 +841,7 @@ CcspCwmpTcpcrhoCalcDigestHA2
     {
        
         bAuthInt    = TRUE;
-        ulSize     += 1 + pEntityDigest?AnscSizeOfString((char*)pEntityDigest):0;
+        ulSize     += 1 + (pEntityDigest?AnscSizeOfString((char*)pEntityDigest):0);
     }
     }
 

@@ -328,7 +328,7 @@ static void ReadTr69TlvData (int ethwan_enable)
                     if ( rc != EOK || ind ){
                         AnscTraceInfo(("%s -#- ACS URL in TLV file different from ACS URL in PSM DB. \n", __FUNCTION__));
                         objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(object2->URL);
-                        _ansc_sprintf(recordName, "%s.%sURL.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);
+                        snprintf(recordName, sizeof(recordName), "%s.%sURL.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);
                         res = PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, recordName, ccsp_string, object2->URL);
                         if(res != CCSP_SUCCESS){
                             AnscTraceWarning(("%s -#- Failed to write object2->URL <%s> into PSM!\n", __FUNCTION__, object2->URL));
@@ -624,7 +624,7 @@ CcspManagementServer_Init
 				objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(g_Tr069PaAcsDefAddr);
 				rc = memset_s( recordName, sizeof( recordName ), 0, sizeof( recordName ) );                                                                                       
 				ERR_CHK(rc);                                                                                                                                                      
-				_ansc_sprintf(recordName, "%s.%sURL.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);
+				snprintf(recordName, sizeof(recordName), "%s.%sURL.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);
 				res = PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, recordName, ccsp_string, g_Tr069PaAcsDefAddr);
 				if(res != CCSP_SUCCESS){
 					AnscTraceWarning(("%s -#- Failed to write g_Tr069PaAcsDefAddr <%s> into PSM!\n", __FUNCTION__, g_Tr069PaAcsDefAddr));
@@ -1014,7 +1014,7 @@ CcspManagementServer_SetParameterKey
     objectInfo[ManagementServerID].parameters[ManagementServerParameterKeyID].value = 
         AnscCloneString(pParameterKey);
     
-    _ansc_sprintf(recordName, "%s.%sParameterKey.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);    
+    snprintf(recordName, sizeof(recordName), "%s.%sParameterKey.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);    
     
     CcspTraceInfo2("ms", ("Writing ParameterKey <%s> into PSM key <%s> ...\n", pParameterKey, recordName));
     

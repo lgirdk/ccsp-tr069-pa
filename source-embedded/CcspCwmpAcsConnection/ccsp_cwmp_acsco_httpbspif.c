@@ -221,7 +221,7 @@ CcspCwmpAcscoHttpBspPolish
         }
         else
         {
-            _ansc_sprintf(pBuffer, "\"%s\"", pHttpGetReq->MethodName);
+            snprintf(pBuffer,sizeof(pBuffer), "\"%s\"", pHttpGetReq->MethodName);
             pBmoReqObj->SetHeaderValueByName((ANSC_HANDLE)pBmoReqObj, "SOAPAction", pBuffer);
         }
 
@@ -361,7 +361,7 @@ CcspCwmpAcscoHttpBspBrowse
             pCookieHeader = AnscAllocateMemory(AnscSizeOfString(pCookie) + 16);
 
             if ( pCookieHeader )
-                _ansc_sprintf(pCookieHeader, "Set-Cookie2: %s", pCookie);
+                snprintf(pCookieHeader,AnscSizeOfString(pCookieHeader), "Set-Cookie2: %s", pCookie);
 
             pMyObject->AddCookie((ANSC_HANDLE)pMyObject, pCookieHeader);
             AnscFreeMemory(pCookieHeader);
@@ -389,7 +389,7 @@ CcspCwmpAcscoHttpBspBrowse
             pCookieHeader = AnscAllocateMemory(AnscSizeOfString(pCookie) + 16);
 
             if ( pCookieHeader )
-                _ansc_sprintf(pCookieHeader, "Set-Cookie: %s", pCookie);
+                snprintf(pCookieHeader,AnscSizeOfString(pCookieHeader), "Set-Cookie: %s", pCookie);
 
             pMyObject->AddCookie((ANSC_HANDLE)pMyObject, pCookieHeader);
             AnscFreeMemory(pCookieHeader);

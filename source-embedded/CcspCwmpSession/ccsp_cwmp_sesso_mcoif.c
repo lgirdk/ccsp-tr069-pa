@@ -997,9 +997,8 @@ CcspCwmpsoMcoSetParameterValues
     }
     else if( returnStatus == ANSC_STATUS_SUCCESS)
     {
-        _ansc_sprintf(paramName, "%s%s", pRootObjName, "ManagementServer.ParameterKey");
+        snprintf(paramName, sizeof(paramName), "%s%s", pRootObjName, "ManagementServer.ParameterKey");
 
-        
             pCcspCwmpCpeController->SetParameterKey
                 (
                     (ANSC_HANDLE)pCcspCwmpCpeController,
@@ -1922,7 +1921,7 @@ CcspCwmpsoMcoAddObject
     }
     else if( returnStatus == ANSC_STATUS_SUCCESS)
     {
-        _ansc_sprintf(paramName, "%s%s", pRootObjName, "ManagementServer.ParameterKey");
+        snprintf(paramName, sizeof(paramName), "%s%s", pRootObjName, "ManagementServer.ParameterKey");
 
         
             pCcspCwmpCpeController->SetParameterKey
@@ -2120,7 +2119,7 @@ CcspCwmpsoMcoDeleteObject
     }
     else if( returnStatus == ANSC_STATUS_SUCCESS)
     {
-        _ansc_sprintf(paramName, "%s%s", pRootObjName, "ManagementServer.ParameterKey");
+        snprintf(paramName, sizeof(paramName), "%s%s", pRootObjName, "ManagementServer.ParameterKey");
 
         
             pCcspCwmpCpeController->SetParameterKey
@@ -2598,9 +2597,9 @@ CcspCwmpsoMcoDownload
                         char*       pValue = NULL;
                         ULONG       ulCwmpError = CCSP_CWMP_CPE_CWMP_FaultCode_resources;
 
-                        _ansc_sprintf
+                        snprintf
                             (
-                                fuError,
+                                fuError, sizeof(fuError),
                                 "%s%s",
                                 CCSP_NS_DOWNLOAD,
                                 CCSP_NS_DOWNLOAD_ERROR
@@ -3042,9 +3041,9 @@ ANSC_STATUS CcspCwmpSetRebootReason(ANSC_HANDLE                 hThisObject)
 
 #define  CcspCwmpsoMcoConstructCdsArgName(arg)                                          \
     do {                                                                                \
-        _ansc_sprintf                                                                   \
+        snprintf                                                                   \
             (                                                                           \
-                buf,                                                                    \
+                buf, sizeof(buf),                                                                    \
                 "%s%u.%s",                                                              \
                 CCSP_NS_CHANGEDUSTATE,                                                  \
                 (unsigned int)pInsNumbers[k],                                           \
@@ -3377,7 +3376,7 @@ CcspCwmpsoMcoChangeDUState_SaveStateMonitors
         {
             if ( !pCcspCwmpCpeController->SubsysName )
             {
-                _ansc_sprintf(buf, "%s%u.", CCSP_NS_CHANGEDUSTATE, (unsigned int)pInsNumbers[i]);
+                snprintf(buf, sizeof(buf), "%s%u.", CCSP_NS_CHANGEDUSTATE, (unsigned int)pInsNumbers[i]);
             }
             else
             {

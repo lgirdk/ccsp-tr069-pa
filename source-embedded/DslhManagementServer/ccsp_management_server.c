@@ -1514,7 +1514,7 @@ CcspManagementServer_paramValueChanged
     int i = 0;
     for(; i < size; i++){
         if (strcmp((char *)(val[i].parameterName), pFirstUpstreamIpAddress) == 0){
-            CcspManagementServer_GenerateConnectionRequestURL(TRUE, (char *)(val[i].newValue));
+            CcspManagementServer_GenerateConnectionRequestURL(FALSE, (char *)(val[i].newValue));
             CcspTraceDebug(("CcspManagementServer_paramValueChanged %s %s\n", pFirstUpstreamIpAddress, val[i].newValue));
         }
         else if (strcmp((char *)(val[i].parameterName), FirstUpstreamIpInterfaceParameterName) == 0){

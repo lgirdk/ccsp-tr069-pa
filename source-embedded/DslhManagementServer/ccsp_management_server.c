@@ -1107,7 +1107,6 @@ CcspManagementServer_RegisterWanInterface()
         return ANSC_STATUS_FAILURE;
     }
 
-    CcspManagementServer_GenerateConnectionRequestURL(FALSE, NULL);
     RegisterWanInterfaceDone = TRUE;
 
     return ANSC_STATUS_SUCCESS;
@@ -1520,6 +1519,7 @@ CcspManagementServer_paramValueChanged
         else if (strcmp((char *)(val[i].parameterName), FirstUpstreamIpInterfaceParameterName) == 0){
             RegisterWanInterfaceDone = FALSE;
             CcspManagementServer_RegisterWanInterface();
+            CcspManagementServer_GenerateConnectionRequestURL(FALSE, NULL);
             CcspTraceDebug(("CcspManagementServer_paramValueChanged %s %s\n", FirstUpstreamIpInterfaceParameterName, val[i].newValue));
         }
     }

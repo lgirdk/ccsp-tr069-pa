@@ -422,7 +422,7 @@ CcspCwmpsoInform
      */
 if(bFirstInform)
 {
-    _ansc_sprintf(paramName, "%s%s", pRootObjName, "DeviceInfo.Manufacturer");
+    snprintf(paramName, sizeof(paramName), "%s%s", pRootObjName, "DeviceInfo.Manufacturer");
     pCcspCwmpCpeController->GetParamStringValue
         (
             (ANSC_HANDLE)pCcspCwmpCpeController,

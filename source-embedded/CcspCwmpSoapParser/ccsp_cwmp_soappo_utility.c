@@ -1128,9 +1128,10 @@ CcspCwmpSoappoUtilCreateSoapEnvelopeHandle
 
     if( bAddEncodingStyle)
     {
-		_ansc_sprintf
+		snprintf
 			(
 				pTempBuf,
+                		sizeof(pTempBuf),
 				"%s:%s",
 				SOAP_NAMESPACE_NAME,
 				NODE_SOAP_ENCODING
@@ -1254,9 +1255,10 @@ CcspCwmpSoappoUtilAddSoapHeader
         return ANSC_STATUS_RESOURCES;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_HEADER_NODE

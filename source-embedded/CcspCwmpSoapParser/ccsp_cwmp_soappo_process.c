@@ -163,9 +163,10 @@ CcspCwmpSoappoProcessSoapHeader
         /* check "mustUnderstand" attribute value */
         if( pNameSpace != NULL && AnscSizeOfString(pNameSpace) != 0)
         {
-            _ansc_sprintf
+            snprintf
                 (
                     pAttrName,
+                    sizeof(pAttrName),
                     "%s:%s",
                     pNameSpace,
                     SOAP_MUSTUNDERSTAND
@@ -3062,9 +3063,10 @@ CcspCwmpSoappoProcessRequest
     /*
      *  check the CWMP SOAP header if it's available
      */
-    _ansc_sprintf
+    snprintf
         (
             pXmlName,
+            sizeof(pXmlName),
             "%s:%s",
             pNameSpace,
             SOAP_HEADER_NODE
@@ -3804,9 +3806,10 @@ CcspCwmpSoappoProcessResponse
     /*
      *  check the CWMP SOAP header if it's available
      */
-    _ansc_sprintf
+    snprintf
         (
             pXmlName,
+            sizeof(pXmlName),
             "%s:%s",
             pNameSpace,
             SOAP_HEADER_NODE
@@ -4050,9 +4053,10 @@ CcspCwmpSoappoProcessFault
     /*
      *  check the CWMP SOAP header if it's available
      */
-    _ansc_sprintf
+    snprintf
         (
             pXmlName,
+            sizeof(pXmlName),
             "%s:%s",
             pNameSpace,
             SOAP_HEADER_NODE
@@ -4511,9 +4515,10 @@ CcspCwmpSoappoProcessSingleEnvelope
     }
 
     /* check the root node name */
-    _ansc_sprintf
+    snprintf
         (
             pNameBuf,
+            sizeof(pNameBuf),
             "%s:%s",
             pNameSpace,
             SOAP_ENVELOPE
@@ -4792,9 +4797,10 @@ CcspCwmpSoappoProcessSoapEnvelopes
     }
 
     /* check how many Envelopes in the message first */
-    _ansc_sprintf
+    snprintf
         (
             pEnveNode,
+            sizeof(pEnveNode),
             "<%s:%s",
             pNSpace,
             SOAP_ENVELOPE

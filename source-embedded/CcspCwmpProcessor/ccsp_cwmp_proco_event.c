@@ -435,7 +435,7 @@ CcspCwmppoCheckCdsResults
 
     if ( !pCcspCwmpCpeController->SubsysName )
     {
-        _ansc_sprintf(buf, "%s", CCSP_NS_CHANGEDUSTATE);
+        snprintf(buf, sizeof(buf), "%s", CCSP_NS_CHANGEDUSTATE);
     }
     else
     {
@@ -1367,16 +1367,16 @@ CcspCwmppoRetrieveFirmwareDownloadResults
         goto EXIT;
     }
 
-    _ansc_sprintf(buf, "%s%s", CCSP_NS_DOWNLOAD, CCSP_NS_DOWNLOAD_COMMAND_KEY);
+    snprintf(buf, sizeof(buf), "%s%s", CCSP_NS_DOWNLOAD, CCSP_NS_DOWNLOAD_COMMAND_KEY);
     pParamNames[order++] = AnscCloneString(buf);
 
-    _ansc_sprintf(buf, "%s%s", CCSP_NS_DOWNLOAD, CCSP_NS_DOWNLOAD_ERROR);
+    snprintf(buf, sizeof(buf), "%s%s", CCSP_NS_DOWNLOAD, CCSP_NS_DOWNLOAD_ERROR);
     pParamNames[order++] = AnscCloneString(buf);
 
-    _ansc_sprintf(buf, "%s%s", CCSP_NS_DOWNLOAD, CCSP_NS_DOWNLOAD_START_TIME);
+    snprintf(buf, sizeof(buf), "%s%s", CCSP_NS_DOWNLOAD, CCSP_NS_DOWNLOAD_START_TIME);
     pParamNames[order++] = AnscCloneString(buf);
 
-    _ansc_sprintf(buf, "%s%s", CCSP_NS_DOWNLOAD, CCSP_NS_DOWNLOAD_COMPLETE_TIME);
+    snprintf(buf, sizeof(buf), "%s%s", CCSP_NS_DOWNLOAD, CCSP_NS_DOWNLOAD_COMPLETE_TIME);
     pParamNames[order++] = AnscCloneString(buf);
 
     /* retreive result values */
@@ -1565,7 +1565,7 @@ CcspCwmppoDelayUdpConnReqAddrTask
 
             paramValue = CcspManagementServer_GetUDPConnectionRequestAddress(pCcspCwmpCpeController->PANameWithPrefix);
 
-            _ansc_sprintf(paramName, "%s.ManagementServer.UDPConnectionRequestAddress", pRootObjName);
+            snprintf(paramName, sizeof(paramName), "%s.ManagementServer.UDPConnectionRequestAddress", pRootObjName);
 
             /* notify value change */
             pCcspCwmpMsoIf->ValueChanged

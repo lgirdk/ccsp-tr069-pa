@@ -2017,7 +2017,7 @@ CcspTr069PA_GetPiFullName
 
         if ( pFnBuf[0] == 0 )
         {
-            AnscCopyString(pFnBuf, pPiNode->Name);
+            strncpy(pFnBuf, pPiNode->Name, nFnBufLen - 1);
         }
         else
         {

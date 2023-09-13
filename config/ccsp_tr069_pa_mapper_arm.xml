@@ -5306,9 +5306,6 @@
 		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Status</Name>
 	</Param>
 	<Param>
-		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.Alias</Name>
-	</Param>
-	<Param>
 		<Name>Device.X_COMCAST-COM_GRE.Tunnel.{i}.LastChange</Name>
 	</Param>
 	<Param>

@@ -640,7 +640,12 @@ CCSP_VOID CcspManagementServer_InitDBus()
 #ifdef DBUS_INIT_SYNC_MODE
         CCSP_Message_Bus_Init_Synced(CcspManagementServer_ComponentName, CCSP_MSG_BUS_CFG, &bus_handle, Ansc_AllocateMemory_Callback, Ansc_FreeMemory_Callback);
 #else
-        CCSP_Message_Bus_Init(CcspManagementServer_ComponentName, CCSP_MSG_BUS_CFG, &bus_handle, (CCSP_MESSAGE_BUS_MALLOC)Ansc_AllocateMemory_Callback, Ansc_FreeMemory_Callback);
+        ret = CCSP_Message_Bus_Init(CcspManagementServer_ComponentName, CCSP_MSG_BUS_CFG, &bus_handle, (CCSP_MESSAGE_BUS_MALLOC)Ansc_AllocateMemory_Callback, Ansc_FreeMemory_Callback);
+        if ( ret != 0 )
+        {
+            CcspTraceWarning(("Message bus init failed, error code = %d!\n", ret));
+            return;
+        }
 #endif
         CCSP_Msg_SleepInMilliSeconds(1000); 
     }

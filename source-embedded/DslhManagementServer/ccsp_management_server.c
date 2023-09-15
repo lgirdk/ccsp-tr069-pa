@@ -1072,6 +1072,7 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
     char ipAddr[200] = {0};
     char result[200] = "http://";
     errno_t rc = -1;
+    int res;
     if(!fromValueChangeSignal){
 #ifndef NO_PAM_COMP
         if(pPAMComponentName && pPAMComponentPath && pFirstUpstreamIpAddress) 
@@ -1082,14 +1083,22 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
 
             parameterValStruct_t **parameterval = NULL;
             int val_size = 0;
-            CcspBaseIf_getParameterValues(
-                bus_handle,
-                pPAMComponentName,
-                pPAMComponentPath,
-                parameterNames,
-                1,
-                &val_size,
-                &parameterval);
+            res =
+                CcspBaseIf_getParameterValues
+                    (
+                        bus_handle,
+                        pPAMComponentName,
+                        pPAMComponentPath,
+                        parameterNames,
+                        1,
+                        &val_size,
+                        &parameterval
+                    );
+            if (res != CCSP_SUCCESS)
+            {
+                CcspTraceWarning(("CcspManagementServer_GenerateConnectionRequestURL -- getParameterValues failed!\n"));
+                return ANSC_STATUS_FAILURE;
+            }
             if(parameterNames[0]) AnscFreeMemory(parameterNames[0]);
             if(val_size <= 0) return ANSC_STATUS_FAILURE;
             rc = strcpy_s(ipAddr, sizeof(ipAddr), parameterval[0]->parameterValue);

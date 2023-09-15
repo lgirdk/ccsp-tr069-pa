@@ -387,7 +387,10 @@ CcspCwmpAcscoRequest
     
 START:
     pRequestURL = pMyObject->AcsUrl;
-
+    if( pRequestURL == NULL )
+    {
+        return ANSC_STATUS_NOT_READY;
+    }
     pHttpReqInfo =
         (PHTTP_REQUEST_URI)pHttpHfpIf->ParseHttpUrl
             (

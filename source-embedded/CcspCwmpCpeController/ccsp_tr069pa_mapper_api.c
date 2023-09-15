@@ -1372,9 +1372,9 @@ CcspTr069PA_MapInstNumCwmpToDmInt
 
                     if ( pDmIntString )
                     {
-                        sprintf
+                        snprintf
                             (
-                                pDmIntString,
+                                pDmIntString, (tr069StringSize + 10),
                                 "%s.%d%s",
                                 CcspTr069CpeInstanceMaps[i].CcspDmlName,
                                 CcspTr069CpeInstanceMaps[i].InstanceMap[j].CcspInstanceNumber,
@@ -2025,7 +2025,7 @@ CcspTr069PA_GetPiFullName
             return  -1;     /* buffer is not big enough? This is VIOLATION of TR-069 specification which defines 256 as maximum length of parameter name */
         }
 
-            _ansc_sprintf(im, "%s.%s", pPiNode->Name, pFnBuf);
+            snprintf(im, sizeof(im), "%s.%s", pPiNode->Name, pFnBuf);
             AnscCopyString(pFnBuf, im);
         }
 

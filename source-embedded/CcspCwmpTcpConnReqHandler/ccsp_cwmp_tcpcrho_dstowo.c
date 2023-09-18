@@ -379,12 +379,6 @@ CcspCwmpTcpcrhoDstowoQuery
                 ulDstoPmode = ANSC_DSTOWO_PMODE_PROCESS_SYNC;
 
                 break;
-
-        default :
-
-                ulDstoPmode = ANSC_DSTOWO_PMODE_FINISH;
-
-                break;
     }
 
     *phQueryContext = (ANSC_HANDLE)ulSessQmode;

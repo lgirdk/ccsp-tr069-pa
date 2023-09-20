@@ -8237,6 +8237,14 @@
         <Param>
             <Name>Device.X_LGI-COM_TunneledStaticIPService.RadiusAccServerPort</Name>
         </Param>
+   <!--  "E2E static IP solution" -->
+        <Param>
+            <Name>Device.X_LGI-COM_StaticIPv4Address.AdministrativeStatus</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_StaticIPv4Address.OperationalStatus</Name>
+        </Param>
+
     </ParamList>
 	<RpcMapper>
 		<Download>

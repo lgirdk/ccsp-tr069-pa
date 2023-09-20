@@ -1359,7 +1359,7 @@ CcspTr069PA_MapInstNumCwmpToDmInt
             if (instNumStart[0] == '.') {
                 instNumStart++;
             }
-            sscanf(instNumStart,"%d%s",&instNum,restDmlString);
+            sscanf(instNumStart,"%d%127s",&instNum,restDmlString);
 
             // Find instance match and translate
             for(j=0; j < CcspTr069CpeInstanceMaps[i].numMaps; j++)

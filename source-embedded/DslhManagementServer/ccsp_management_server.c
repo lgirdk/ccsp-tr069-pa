@@ -119,9 +119,13 @@ char *pPAMComponentPath = NULL;
 #define CCSP_DBUS_PATH_MS "/com/cisco/spvtg/ccsp/MS"
 
 #define FirstUpstreamIpInterfaceParameterName "com.cisco.spvtg.ccsp.pam.Helper.FirstUpstreamIpInterface"
+#define FirstUpstreamIpAddressPrefix "Device.IP.Interface.1.IPv4Address."
+#define SecondUpstreamIpAddress "eRT.com.cisco.spvtg.ccsp.tr069pa.SecondUpstreamIpAddress.Value"
+#define RipEnableParam "Device.Routing.RIP.Enable"
 
 static char *pFirstUpstreamIpInterface = NULL;
 char *pFirstUpstreamIpAddress = NULL;
+static char *pSecondUpstreamIpAddress = NULL;
 
 static int g_ACSChangedURL = 0;
 
@@ -943,6 +947,87 @@ CcspManagementServer_UtilFreeParameterValStruct
     return  ANSC_STATUS_SUCCESS;
 }
 
+static CCSP_STRING CcspManagementServer_GetSecondUpstreamIpAddress
+  (
+      BOOL fromValueChangeSignal,
+      BOOL isRIPEnabled
+  )
+{
+    static bool isNotified = false;
+    int notification = 0;
+    if (fromValueChangeSignal && !isRIPEnabled)
+    {
+        isNotified = false;
+        notification = 0;
+        PSM_Del_Record(bus_handle,CcspManagementServer_SubsystemPrefix,SecondUpstreamIpAddress);
+    }
+    else
+    {
+        char *pValue = NULL;
+        int res = PSM_Get_Record_Value2(
+            bus_handle,
+            CcspManagementServer_SubsystemPrefix,
+            SecondUpstreamIpAddress,
+            NULL,
+            &pValue);
+        if (res != CCSP_SUCCESS || !pValue )
+        {
+             CcspTraceWarning2("ms", ("CcspManagementServer_GetSecondUpstreamIpAddress PSM_Get_Record_Value2 failed %d,name=<%s>, value=<%s>\n", res, SecondUpstreamIpAddress, pValue ? pValue : "NULL"));
+             if (pValue)
+             {
+                 AnscFreeMemory(pValue);
+                 pValue = NULL;
+             }
+             return NULL;
+        }
+        else
+        {
+             pSecondUpstreamIpAddress = pValue;
+             notification = 1;
+        }
+    }
+    if (!isNotified)
+    {
+        parameterAttributeStruct_t val[3] = {{0}};
+
+        val[0].parameterName = pSecondUpstreamIpAddress;
+        val[0].notificationChanged = 1;
+        val[0].notification = notification;
+        val[0].access = CCSP_RW;
+        val[0].accessControlChanged = 0;
+
+        val[1].parameterName = pFirstUpstreamIpAddress;
+        val[1].notificationChanged = 1;
+        val[1].notification = !notification;
+        val[1].access = CCSP_RW;
+        val[1].accessControlChanged = 0;
+
+        val[2].parameterName = RipEnableParam;
+        val[2].notificationChanged = 1;
+        val[2].notification = notification << 1;
+        val[2].access = CCSP_RW;
+        val[2].accessControlChanged = 0;
+
+        CcspBaseIf_setParameterAttributes(
+               bus_handle,
+               pPAMComponentName,
+               pPAMComponentPath,
+               0,
+               val,
+               3);
+        if (!notification)
+        {
+             AnscFreeMemory(pSecondUpstreamIpAddress);
+             pSecondUpstreamIpAddress = NULL;
+             CcspTraceWarning(("pSecondUpstreamIpAddress was set to NULL here \n"));
+        }
+        else
+        {
+             isNotified = true;
+        }
+    }
+    return pSecondUpstreamIpAddress;
+}
 
 ANSC_STATUS
 CcspManagementServer_RegisterWanInterface()
@@ -1077,34 +1162,63 @@ CcspManagementServer_RegisterWanInterface()
         sessionID = 0;
     }
 */
-    parameterAttributeStruct_t val[1] = {{0}};
-    val[0].parameterName = pFirstUpstreamIpAddress;
-    val[0].notificationChanged = 1; 
-    val[0].notification = 1;
-    val[0].accessControlChanged = 0;
-    /* CID 281922 Uninitialized scalar variable fix */
-    val[0].accessControlBitmask = 0;
-    val[0].access = CCSP_RW;
-    val[0].RequesterID = 0;
-    res = CcspBaseIf_setParameterAttributes(
-        bus_handle,
-        pPAMComponentName,
-        pPAMComponentPath,
-        0,
-        val,
-        1);
+    CcspManagementServer_GetSecondUpstreamIpAddress(FALSE,FALSE);
+
+    if (pSecondUpstreamIpAddress)
+    {
+        /* free SecondUpstreamIpAddress if RIP is detected as disabled*/
+        parameterNames[0] = RipEnableParam;
+        val_size = 0;
+        res = CcspBaseIf_getParameterValues(
+              bus_handle,
+              pPAMComponentName,
+              pPAMComponentPath,
+              parameterNames,
+              1,
+              &val_size,
+              &parameterval);
+        if (val_size > 0 && parameterval[0]->parameterValue) 
+        {
+              if (!strcmp(parameterval[0]->parameterValue,"false"))
+              {
+                  CcspManagementServer_GetSecondUpstreamIpAddress(TRUE,FALSE);
+              }
+              free_parameterValStruct_t (bus_handle, val_size, parameterval);
+        }
+    }
+    else
+    {
+        parameterAttributeStruct_t val[1] = {{0}};
+
+        val[0].parameterName = pFirstUpstreamIpAddress;
+        val[0].notificationChanged = 1;
+        val[0].notification = 1;
+        val[0].accessControlChanged = 0;
+        /* CID 281922 Uninitialized scalar variable fix */
+        val[0].accessControlBitmask = 0;
+        val[0].access = CCSP_RW;
+        val[0].RequesterID = 0;
+
+        res = CcspBaseIf_setParameterAttributes(
+            bus_handle,
+            pPAMComponentName,
+            pPAMComponentPath,
+            0,
+            val,
+            1);
 /*
-    CcspBaseIf_informEndOfSession(
-        bus_handle,
-        CrName,
-        sessionID
-        );
+        CcspBaseIf_informEndOfSession(
+            bus_handle,
+            CrName,
+            sessionID
+            );
 */
-    if(res != CCSP_Message_Bus_OK) {
-        CcspTraceWarning(("CcspManagementServer_RegisterWanInterface CcspBaseIf_setParameterAttributes returns %d, name=<%s>\n",
-            res,
-                          val[0].parameterName));
-        return ANSC_STATUS_FAILURE;
+        if(res != CCSP_Message_Bus_OK) {
+            CcspTraceWarning(("CcspManagementServer_RegisterWanInterface CcspBaseIf_setParameterAttributes returns %d, name=<%s>\n",
+                res,
+                              val[0].parameterName));
+            return ANSC_STATUS_FAILURE;
+        }
     }
 
     RegisterWanInterfaceDone = TRUE;
@@ -1266,12 +1380,18 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
     int res;
     if(!fromValueChangeSignal){
 #ifndef NO_PAM_COMP
-        if(pPAMComponentName && pPAMComponentPath && pFirstUpstreamIpAddress) 
+        if(pPAMComponentName && pPAMComponentPath && (pFirstUpstreamIpAddress||pSecondUpstreamIpAddress)) 
         {
-            // Get FirstUpstreamIpInterfaceParameterName parameter value 
             char * parameterNames[1];
-            parameterNames[0] = AnscCloneString(pFirstUpstreamIpAddress);
-
+            if (pSecondUpstreamIpAddress)
+            {
+                parameterNames[0] = AnscCloneString(pSecondUpstreamIpAddress);
+            }
+            else
+            {
+                // Get FirstUpstreamIpInterfaceParameterName parameter value
+                parameterNames[0] = AnscCloneString(pFirstUpstreamIpAddress);
+            }
             parameterValStruct_t **parameterval = NULL;
             int val_size = 0;
             res =
@@ -1297,7 +1417,6 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
             free_parameterValStruct_t (bus_handle, val_size, parameterval);
         }
 
-        //ARRIS ADD BEGIN
         {
             char ipAddrV6[200] = {0};
             FILE * fp = NULL;
@@ -1512,16 +1631,34 @@ CcspManagementServer_paramValueChanged
 {
     int i = 0;
     for(; i < size; i++){
-        if (strcmp((char *)(val[i].parameterName), pFirstUpstreamIpAddress) == 0){
-            CcspManagementServer_GenerateConnectionRequestURL(FALSE, (char *)(val[i].newValue));
-            CcspTraceDebug(("CcspManagementServer_paramValueChanged %s %s\n", pFirstUpstreamIpAddress, val[i].newValue));
+        if (strstr((char *)(val[i].parameterName), FirstUpstreamIpAddressPrefix)){
+            if (pSecondUpstreamIpAddress && !strcmp((char *)(val[i].parameterName), pSecondUpstreamIpAddress))
+            {
+                 CcspTraceDebug(("CcspManagementServer_paramValueChanged %s %s\n", pSecondUpstreamIpAddress, val[i].newValue));
+            }
+            else if (strcmp((char *)(val[i].parameterName), pFirstUpstreamIpAddress) == 0)
+            {
+                 CcspTraceDebug(("CcspManagementServer_paramValueChanged %s %s\n", pFirstUpstreamIpAddress, val[i].newValue));
+            }
+            else
+            {
+                 return TRUE;
+            }
         }
         else if (strcmp((char *)(val[i].parameterName), FirstUpstreamIpInterfaceParameterName) == 0){
             RegisterWanInterfaceDone = FALSE;
             CcspManagementServer_RegisterWanInterface();
-            CcspManagementServer_GenerateConnectionRequestURL(FALSE, NULL);
             CcspTraceDebug(("CcspManagementServer_paramValueChanged %s %s\n", FirstUpstreamIpInterfaceParameterName, val[i].newValue));
         }
+        else if (strcmp((char *)(val[i].parameterName),RipEnableParam) == 0){
+            CcspTraceWarning(("RIP Enabled value change received %s \n",(char *)val[i].newValue,val[i].newValue));
+            CcspManagementServer_GetSecondUpstreamIpAddress(TRUE,!strcmp((char *)val[i].newValue,"true")? TRUE : FALSE);
+        }
+        else
+        {
+            return TRUE;
+        }
+        CcspManagementServer_GenerateConnectionRequestURL(FALSE, NULL);
     }
     return TRUE;
 }

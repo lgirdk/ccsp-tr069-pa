@@ -587,7 +587,8 @@ CcspTr069PaIsGpnNsInQueue
 
         pParamInfo = &pNsList->Args.paramInfo;
 
-        if ( AnscEqualString(pParamName, pParamInfo->parameterName, TRUE) )
+        if ((pParamInfo->parameterName != NULL) &&
+            (strcmp(pParamName, pParamInfo->parameterName) == 0))
         {
             return TRUE;
         }

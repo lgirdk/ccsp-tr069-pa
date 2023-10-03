@@ -368,7 +368,6 @@ CcspCwmpsoInform
 
     BOOL                            bValChange           = FALSE;
     BOOL                            bBootStrap           = FALSE;
-    BOOL                            bBoot                = FALSE;
     BOOL                            bHasBoot             = FALSE;
     int                             fd;
     static int bFirstInform = 1;
@@ -379,8 +378,8 @@ CcspCwmpsoInform
     static char SerialNumber[100];
     static char HardwareVersion[100];
     static char SoftwareVersion[256];
-    errno_t     rc =  -1, rc1 = -1;
-    int         ind = -1, ind1 = -1;
+    errno_t     rc =  -1;
+    int         ind = -1;
     char*                           pIntAlias            = NULL;
     char*                           pExtAlias            = NULL;
 
@@ -645,7 +644,7 @@ else
 
     ulParamIndex = ulPresetParamCount;
 
-    // for "O BOOTSTRAP" and "1 BOOT" events all "4 VALUE CHANGE" should be suppressed. incase of "1 BOOT", undelivered event should be attempted for redelivery in next inform.
+    // for "O BOOTSTRAP", all parameters are treated as in their original values, thus all "4 VALUE CHANGE" should be suppressed.
     for( i = 0; i < pMyObject->EventCount; i ++)
     { 
         rc = strcmp_s(CCSP_CWMP_INFORM_EVENT_NAME_Bootstrap,strlen(CCSP_CWMP_INFORM_EVENT_NAME_Bootstrap),((PCCSP_CWMP_EVENT)pMyObject->EventArray[i])->EventCode,&ind);
@@ -655,17 +654,9 @@ else
             bBootStrap = TRUE;
             break;
         }
-
-        rc1 = strcmp_s(CCSP_CWMP_INFORM_EVENT_NAME_Boot,strlen(CCSP_CWMP_INFORM_EVENT_NAME_Boot),((PCCSP_CWMP_EVENT)pMyObject->EventArray[i])->EventCode,&ind1);
-        ERR_CHK(rc1);
-        if((!ind1) && (rc1 == EOK))
-        {
-            bBoot = TRUE;
-            break;
-        }
     }
 
-    if ( !bBootStrap || !bBoot )
+    if ( !bBootStrap )
     {
         /*
          * When the Inform call results from a change to one or more parameter values (due to cause
@@ -777,9 +768,7 @@ else
         }
     }
 
-    /* Suppress "4 VALUE CHANGE" cwmp event during "0 BOOTSTRAP", "1 BOOT" or when NO passive/active VALUE CHANGE to be reported.
-     * incase of "1 BOOT", undelivered events should be attempted for redelivery in the next inform */
-    if ( bBootStrap || bBoot || !bValChange )
+    if ( bBootStrap || !bValChange ) // "0 BOOTSTRAP" or NO passive/active VALUE CHANGE to be reported
     {
         pMyObject->DiscardCwmpEvent((ANSC_HANDLE)pMyObject, CCSP_CWMPSO_EVENTCODE_ValueChange);
 
@@ -1107,7 +1096,7 @@ bFirstInform = 0;
 		 }
 
 		
-		if (bAcsRequestURLChanged && !bBootStrap && !bBoot)
+		if (bAcsRequestURLChanged && !bBootStrap)
 		{
 			int m;
 			BOOL bEventPresent = FALSE;
@@ -1116,7 +1105,7 @@ bFirstInform = 0;
 
 			for (m = 0; m < pMyObject->EventCount; m++)
 			{
-				if (strcmp(((PCCSP_CWMP_EVENT)pMyObject->EventArray[m])->EventCode, CCSP_CWMP_INFORM_EVENT_NAME_ValueChange) == 0)
+				if (strcmp(((PCCSP_CWMP_EVENT)pMyObject->EventArray[m])->EventCode, CCSP_CWMP_INFORM_EVENT_NAME_ValueChange) == 0 || strcmp(((PCCSP_CWMP_EVENT)pMyObject->EventArray[m])->EventCode, CCSP_CWMP_INFORM_EVENT_NAME_Boot) == 0)
 				{
 					CcspTr069PaTraceDebug(("Skip. Not adding " CCSP_CWMP_INFORM_EVENT_NAME_ValueChange "\n"));
 					bEventPresent = TRUE;

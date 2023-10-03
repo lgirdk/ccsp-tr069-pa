@@ -837,6 +837,8 @@ CcspCwmppoGetUndeliveredEvents
 
     returnStatus = pMyObject->GetUndeliveredAdscEvents((ANSC_HANDLE)pMyObject, hWmpSession);
 
+    returnStatus = pMyObject->GetUndeliveredValueChangeEvents((ANSC_HANDLE)pMyObject, hWmpSession);
+
     return  returnStatus;
 }
 
@@ -1371,6 +1373,174 @@ CcspCwmppoGetUndeliveredAdscEvents
     return  returnStatus;
 }
 
+/**********************************************************************
+
+    caller:     owner of this object
+
+    prototype:
+
+        ANSC_STATUS
+        CcspCwmppoGetUndeliveredValueChangeEvents
+            (
+                ANSC_HANDLE                 hThisObject,
+                ANSC_HANDLE                 hWmpSession
+            );
+
+    description:
+
+        This function is called to add undelivered value change event codes
+        into specified session.
+
+    argument:   ANSC_HANDLE                 hThisObject
+                This handle is actually the pointer of this object
+                itself.
+
+                ANSC_HANDLE                 hWmpSession
+                Specifies the WMP session object to add undelivered
+                events in.
+
+    return:     status of operation.
+
+**********************************************************************/
+ANSC_STATUS
+CcspCwmppoGetUndeliveredValueChangeEvents
+    (
+        ANSC_HANDLE                 hThisObject,
+        ANSC_HANDLE                 hWmpSession
+    )
+{
+    ANSC_STATUS                     returnStatus       = ANSC_STATUS_SUCCESS;
+    PCCSP_CWMP_SESSION_OBJECT       pCcspCwmpSession    = (PCCSP_CWMP_SESSION_OBJECT)hWmpSession;
+    PCCSP_CWMP_PROCESSOR_OBJECT     pProcessorObject           = (PCCSP_CWMP_PROCESSOR_OBJECT)hThisObject;
+    PCCSP_CWMP_CPE_CONTROLLER_OBJECT pCcspCwmpCpeController = (PCCSP_CWMP_CPE_CONTROLLER_OBJECT)pProcessorObject->hCcspCwmpCpeController;
+    PCCSP_CWMP_EVENT                pCcspCwmpEvent      = NULL;
+    ULONG                           i                           = 0;
+    ULONG                           Notification                = 0;
+    char                            psmTcName[512];
+    int                             psmStatus;
+    int                             status;
+    int                             dataType                    = 0;
+    unsigned int                    numInstances                = 0;
+    unsigned int*                   pInsNumbers                 = NULL;
+    char*                           pValue                      = NULL;
+    char*                           pParameterName = NULL;
+    char*                           pParameterValue             = NULL;
+
+    CcspTr069PaTraceInfo(("Get Undelivered ValueChangeEvents\n"));
+    _ansc_snprintf
+        (
+            psmTcName,
+            512,
+            "%s.%s.",
+            pCcspCwmpCpeController->PANameWithPrefix,
+            CCSP_CWMPPO_FOLDER_NAME_ValueChanged
+        );
+
+    psmStatus =
+        PsmGetNextLevelInstances
+            (
+                pCcspCwmpCpeController->hMsgBusHandle,
+                pCcspCwmpCpeController->SubsysName,
+                psmTcName,
+                &numInstances,
+                &pInsNumbers
+            );
+    if ( numInstances == 0 )
+    {
+        CcspTr069PaTraceDebug(("CcspCwmppoGetUndeliveredValueChangeEvents - failed to get number of instances.\n"));
+        return FALSE;
+    }
+    if ( psmStatus != CCSP_SUCCESS )
+    {
+        CcspTr069PaTraceError(("CcspCwmppoGetUndeliveredValueChangeEvents - failed to get value \n"));
+        return ANSC_STATUS_INTERNAL_ERROR;
+    }
+
+    for ( i = 0; i < numInstances; i ++ )
+    {
+        _ansc_snprintf
+        (
+            psmTcName,
+            512,
+            "%s.%s.%u.%s",
+            pCcspCwmpCpeController->PANameWithPrefix,
+            CCSP_CWMPPO_FOLDER_NAME_ValueChanged,
+            pInsNumbers[i],
+            CCSP_CWMPPO_PARAM_NAME_ValueChanged
+        );
+
+        psmStatus =
+            PSM_Get_Record_Value2
+                (
+                    pCcspCwmpCpeController->hMsgBusHandle,
+                    pCcspCwmpCpeController->SubsysName,
+                    psmTcName,
+                    NULL,
+                    &pValue
+                );
+
+        if (pValue && psmStatus == CCSP_SUCCESS)
+        {
+            pParameterName = AnscCloneString(pValue);
+            CcspTr069PaMapToExternalAlias
+                (
+                    pCcspCwmpCpeController->hTr069PaMapper,
+                    &pValue
+                );
+            pCcspCwmpCpeController->GetParamStringValue
+                (
+                    (ANSC_HANDLE)pCcspCwmpCpeController,
+                    pValue,
+                    &pParameterValue
+                );
+
+            Notification = pProcessorObject->CheckParamAttrCache((ANSC_HANDLE)pProcessorObject, pParameterName);
+            dataType = pCcspCwmpCpeController->GetParamDataType
+                (
+                    (ANSC_HANDLE)pCcspCwmpCpeController,
+                    pParameterName
+                );
+            if(Notification != CCSP_CWMP_NOTIFICATION_off)
+            {
+                pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
+                if (pCcspCwmpSession && pCcspCwmpEvent )
+                {
+                    returnStatus =
+                    pCcspCwmpSession->AddModifiedParameter
+                        (
+                            (ANSC_HANDLE)pCcspCwmpSession,
+                            pParameterName,
+                            pParameterValue,
+                            dataType,
+                            FALSE
+                        );
+                }
+            }
+        }
+        if ( pValue != NULL )
+        {
+            AnscFreeMemory(pValue);
+            pValue = NULL;
+        }
+
+        if ( pParameterValue != NULL )
+        {
+            AnscFreeMemory(pParameterValue);
+            pParameterValue = NULL;
+        }
+
+        if ( pParameterName != NULL )
+        {
+            AnscFreeMemory(pParameterName);
+            pParameterName = NULL;
+        }
+    }
+    if ( pInsNumbers )
+    {
+        AnscFreeMemory(pInsNumbers);
+    }
+    return returnStatus;
+}
 
 /**********************************************************************
 

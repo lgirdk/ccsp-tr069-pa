@@ -560,6 +560,7 @@ typedef  ULONG
     PFN_CWMPPROCO_GET_UNDEL_EVT     GetUndeliveredAtcEvents;                                \
     PFN_CWMPPROCO_GET_UNDEL_EVT     GetUndeliveredDscEvents;                                \
     PFN_CWMPPROCO_GET_UNDEL_EVT     GetUndeliveredAdscEvents;                               \
+    PFN_CWMPPROCO_GET_UNDEL_EVT     GetUndeliveredValueChangeEvents;                        \
     PFN_CWMPPROCO_DSC_UNDEL_EVT     DiscardUndeliveredEvents;                               \
                                                                                             \
     PFN_CWMPPROCO_ACQ_WMPSO         AcqWmpSession;                                          \

@@ -1257,6 +1257,17 @@ bFirstInform = 0;
                             pCcspCwmpProcessor->DiscardValueChanged((ANSC_HANDLE)pCcspCwmpProcessor, pCwmpParamValueArray[x].Name);
                         }
                     }
+                    if (pMyObject->RetryCount == 0 && !bInitialContact)
+                    {
+                        // If any value change parameters with notification that remain undelivered,
+                        // will be delievered along with BOOT event
+                        // those events are discarded after sent as part of current INFORM.
+                        int i =0;
+                        for ( i = 0; i < pMyObject->ModifiedParamCount; i++ )
+                        {
+                            pCcspCwmpProcessor->DiscardValueChanged((ANSC_HANDLE)pCcspCwmpProcessor, pMyObject->ModifiedParamArray[i]);
+                        }
+                    }
                 }
 
                 pCcspCwmpCpeController->bBootInformSent = TRUE;

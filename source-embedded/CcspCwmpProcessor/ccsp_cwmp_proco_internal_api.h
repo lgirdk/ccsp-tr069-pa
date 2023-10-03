@@ -426,6 +426,13 @@ CcspCwmppoGetUndeliveredAdscEvents
     );
 
 ANSC_STATUS
+CcspCwmppoGetUndeliveredValueChangeEvents
+    (
+        ANSC_HANDLE                 hThisObject,
+        ANSC_HANDLE                 hWmpSession
+    );
+
+ANSC_STATUS
 CcspCwmppoDiscardUndeliveredEvents
     (
         ANSC_HANDLE                 hThisObject

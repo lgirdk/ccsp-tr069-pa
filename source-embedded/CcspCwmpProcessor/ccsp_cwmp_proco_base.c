@@ -603,6 +603,7 @@ CcspCwmppoInitialize
     pMyObject->GetUndeliveredAtcEvents   = CcspCwmppoGetUndeliveredAtcEvents;
     pMyObject->GetUndeliveredDscEvents   = CcspCwmppoGetUndeliveredDscEvents;
     pMyObject->GetUndeliveredAdscEvents  = CcspCwmppoGetUndeliveredAdscEvents;
+    pMyObject->GetUndeliveredValueChangeEvents  = CcspCwmppoGetUndeliveredValueChangeEvents;
     pMyObject->SaveTransferComplete      = CcspCwmppoSaveTransferComplete;
     pMyObject->LoadTransferComplete      = CcspCwmppoLoadTransferComplete;
     pMyObject->SaveAutonomousTransferComplete

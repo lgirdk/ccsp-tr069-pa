@@ -253,9 +253,10 @@ CcspCwmpSoappoBuildSoapReq_GetRpcMethods
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -438,9 +439,10 @@ CcspCwmpSoappoBuildSoapReq_Inform
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -1077,9 +1079,10 @@ CcspCwmpSoappoBuildSoapReq_TransferComplete
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -1404,9 +1407,10 @@ CcspCwmpSoappoBuildSoapReq_Kicked
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -1646,9 +1650,10 @@ CcspCwmpSoappoBuildSoapReq_RequestDownload
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -1926,9 +1931,10 @@ CcspCwmpSoappoBuildSoapReq_AutonomousTransferComplete
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -2520,9 +2526,10 @@ CcspCwmpSoappoBuildSoapReq_DUStateChangeComplete
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -2829,9 +2836,10 @@ CcspCwmpSoappoBuildSoapReq_AutonomousDUStateChangeComplete
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -3043,9 +3051,10 @@ CcspCwmpSoappoBuildSoapRep_GetRPCMethods
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -3265,9 +3274,10 @@ CcspCwmpSoappoBuildSoapRep_SetParameterValues
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -3446,9 +3456,10 @@ CcspCwmpSoappoBuildSoapRep_GetParameterValues
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -3735,9 +3746,10 @@ CcspCwmpSoappoBuildSoapRep_GetParameterNames
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -4001,9 +4013,10 @@ CcspCwmpSoappoBuildSoapRep_SetParameterAttributes
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -4161,9 +4174,10 @@ CcspCwmpSoappoBuildSoapRep_GetParameterAttributes
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -4540,9 +4554,10 @@ CcspCwmpSoappoBuildSoapRep_AddObject
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -4730,9 +4745,10 @@ CcspCwmpSoappoBuildSoapRep_DeleteObject
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -4911,9 +4927,10 @@ CcspCwmpSoappoBuildSoapRep_Download
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -5158,9 +5175,10 @@ CcspCwmpSoappoBuildSoapRep_Reboot
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -5299,9 +5317,10 @@ CcspCwmpSoappoBuildSoapRep_ChangeDUState
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -5454,9 +5473,10 @@ CcspCwmpSoappoBuildSoapRep_GetQueuedTransfers
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -5672,9 +5692,10 @@ CcspCwmpSoappoBuildSoapRep_ScheduleInform
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -5833,9 +5854,10 @@ CcspCwmpSoappoBuildSoapRep_SetVouchers
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:SetVouchers%s",
             CCSP_CWMP_NAMESPACE,
             PART_RESPONSE_NAME
@@ -5968,9 +5990,10 @@ CcspCwmpSoappoBuildSoapRep_GetOptions
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -6348,9 +6371,10 @@ CcspCwmpSoappoBuildSoapRep_Upload
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -6593,9 +6617,10 @@ CcspCwmpSoappoBuildSoapRep_FactoryReset
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -6727,9 +6752,10 @@ CcspCwmpSoappoBuildSoapRepFault
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE

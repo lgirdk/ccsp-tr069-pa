@@ -296,7 +296,6 @@ CcspCwmpAcscoHttpBspBrowse
     char*                           pHeaderLocation   = NULL;
     char*                           pCookie           = NULL;
     ULONG                           ulCode            = 0;
-    char*                           pCookieHeader     = NULL;
     ULONG                           ulCookieIndex     = 0;
 //    BOOL                            bCookiesRemoved   = FALSE;
 
@@ -356,17 +355,17 @@ CcspCwmpAcscoHttpBspBrowse
         bCookiesRemoved = TRUE;
         */
 
-        while ( pCookie != NULL && AnscSizeOfString(pCookie) > 0)
+        while ( pCookie && AnscSizeOfString(pCookie) > 0)
         {
-            pCookieHeader = AnscAllocateMemory(AnscSizeOfString(pCookie) + 16);
-
+            size_t len = AnscSizeOfString(pCookie) + 16;
+            char *pCookieHeader = AnscAllocateMemory(len);
             if ( pCookieHeader )
-                snprintf(pCookieHeader,AnscSizeOfString(pCookieHeader), "Set-Cookie2: %s", pCookie);
-
-            pMyObject->AddCookie((ANSC_HANDLE)pMyObject, pCookieHeader);
-            AnscFreeMemory(pCookieHeader);
-
-            pCookie = pHttpBmoRep->GetHeaderValueById2((ANSC_HANDLE)pHttpBmoRep, HTTP_HEADER_ID_SET_COOKIE2, ++ulCookieIndex);
+            {
+                snprintf(pCookieHeader, len, "Set-Cookie2: %s", pCookie);
+                pMyObject->AddCookie((ANSC_HANDLE)pMyObject, pCookieHeader);
+                AnscFreeMemory(pCookieHeader);
+                pCookie = pHttpBmoRep->GetHeaderValueById2((ANSC_HANDLE)pHttpBmoRep, HTTP_HEADER_ID_SET_COOKIE2, ++ulCookieIndex);
+            }
         }
     }
 
@@ -386,15 +385,15 @@ CcspCwmpAcscoHttpBspBrowse
 
         while ( pCookie && AnscSizeOfString(pCookie) )
         {
-            pCookieHeader = AnscAllocateMemory(AnscSizeOfString(pCookie) + 16);
-
+            size_t len = AnscSizeOfString(pCookie) + 16;
+            char *pCookieHeader = AnscAllocateMemory(len);
             if ( pCookieHeader )
-                snprintf(pCookieHeader,AnscSizeOfString(pCookieHeader), "Set-Cookie: %s", pCookie);
-
-            pMyObject->AddCookie((ANSC_HANDLE)pMyObject, pCookieHeader);
-            AnscFreeMemory(pCookieHeader);
-
-            pCookie = pHttpBmoRep->GetHeaderValueById2((ANSC_HANDLE)pHttpBmoRep, HTTP_HEADER_ID_SET_COOKIE, ++ulCookieIndex);
+            {
+                snprintf(pCookieHeader, len, "Set-Cookie: %s", pCookie);
+                pMyObject->AddCookie((ANSC_HANDLE)pMyObject, pCookieHeader);
+                AnscFreeMemory(pCookieHeader);
+                pCookie = pHttpBmoRep->GetHeaderValueById2((ANSC_HANDLE)pHttpBmoRep, HTTP_HEADER_ID_SET_COOKIE, ++ulCookieIndex);
+            }
         }
     }
 

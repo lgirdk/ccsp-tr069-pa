@@ -759,6 +759,7 @@ CcspCwmppoInitParamAttrCache
 /*
  * This function sets all the notifications to default value of 0, on ACS URL change.
  * "Device.ManagementServer.ConnectionRequestURL" parameter is set to default value of 2 (ACTIVE notification)
+ * "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadStatus" parameter is set to default value of 1
  */
 
 ANSC_STATUS
@@ -814,6 +815,7 @@ CcspCwmppoClearParamAttrCache
     
     /* When SPA is done on "Device.ManagementServer.* object, "Device.ManagementServer.ConnectionRequestURL" is stored as part of the object in PSM and is reset on ACS URL Change
       Hence "Device.ManagementServer.ConnectionRequestURL" has to be set explicitly with default value*/    
+    /*"Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadStatus" has to be set explicitly with default value on ACS URL Change*/
     BOOL isConnReqURLAttrSet = FALSE;
     CcspTr069PaTraceDebug(("%s %d ulNumRecords:%d\n",__FUNCTION__,__LINE__, ulNumRecords));
 
@@ -833,6 +835,10 @@ CcspCwmppoClearParamAttrCache
          pParamAttrs[i].Notification = 2;
          isConnReqURLAttrSet = TRUE;
       }
+      else if(strcmp(pParamName,"Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadStatus") == 0)
+      {
+          pParamAttrs[i].Notification = 1;
+      }	  
       else
       {
           pParamAttrs[i].Notification = 0;

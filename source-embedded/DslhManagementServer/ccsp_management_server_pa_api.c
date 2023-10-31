@@ -1257,9 +1257,6 @@ CcspManagementServer_Init
     CcspManagementServer_FillInObjectInfo(); 
     CcspManagementServer_RegisterNameSpace();
     CcspManagementServer_DiscoverComponent();
-    if(pPAMComponentName && pPAMComponentPath){
-        CcspManagementServer_RegisterWanInterface();
-    }
 
     s_MS_Init_Done = TRUE;
 

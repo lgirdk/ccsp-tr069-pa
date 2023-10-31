@@ -1148,6 +1148,29 @@ CcspManagementServer_RegisterWanInterface()
     }
 */
     CcspManagementServer_GetSecondUpstreamIpAddress(FALSE,FALSE);
+    if (pSecondUpstreamIpAddress)
+    {
+        /* free SecondUpstreamIpAddress if RIP is detected as disabled*/
+        parameterNames[0] = RipEnableParam;
+        val_size = 0;
+        res = CcspBaseIf_getParameterValues(
+              bus_handle,
+              pPAMComponentName,
+              pPAMComponentPath,
+              parameterNames,
+              1,
+              &val_size,
+              &parameterval);
+        if (val_size > 0 && parameterval[0]->parameterValue) 
+        {
+              if (!strcmp(parameterval[0]->parameterValue,"false"))
+              {
+                  CcspManagementServer_GetSecondUpstreamIpAddress(TRUE,FALSE);
+              }
+              free_parameterValStruct_t (bus_handle, val_size, parameterval);
+        }
+    }
+
     parameterAttributeStruct_t val[2];
     int iNext = 0;
     if (!pSecondUpstreamIpAddress)

@@ -1480,7 +1480,7 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
                 }
 
                 // set pDiagnosticsStateParamValues after all other parameters are set.
-                if (kDiag > 0)
+                if (kDiag > 0 && nResult == CCSP_SUCCESS )
                 {
                     nResult =
                         CcspBaseIf_setParameterValues

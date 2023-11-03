@@ -1406,7 +1406,6 @@ ANSC_STATUS CcspManagementServer_GenerateConnectionRequestURL(
             free_parameterValStruct_t (bus_handle, val_size, parameterval);
         }
 
-        if (!pSecondUpstreamIpAddress)
         {
             char ipAddrV6[200] = {0};
             FILE * fp = NULL;

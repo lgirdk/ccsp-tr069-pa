@@ -663,7 +663,8 @@ else
          * included in the ParameterList. However, we must make sure the same parameter is not included
          * twice by comparing the parameter name to all pre-defined parameters.
         */
-
+        // get the undelivered value change events if any, to send along with boot.
+        pCcspCwmpProcessor->GetUndeliveredValueChangeEvents((ANSC_HANDLE)pCcspCwmpProcessor, (ANSC_HANDLE)pMyObject);
         for ( i = 0; i < pMyObject->ModifiedParamCount; i++ )
         {
             if ( pMyObject->ModifiedParamArray[i] )

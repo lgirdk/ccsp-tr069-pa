@@ -837,8 +837,6 @@ CcspCwmppoGetUndeliveredEvents
 
     returnStatus = pMyObject->GetUndeliveredAdscEvents((ANSC_HANDLE)pMyObject, hWmpSession);
 
-    returnStatus = pMyObject->GetUndeliveredValueChangeEvents((ANSC_HANDLE)pMyObject, hWmpSession);
-
     return  returnStatus;
 }
 
@@ -1482,6 +1480,7 @@ CcspCwmppoGetUndeliveredValueChangeEvents
         if (pValue && psmStatus == CCSP_SUCCESS)
         {
             pParameterName = AnscCloneString(pValue);
+            CcspCwmppoMapParamInstNumDmIntToCwmp(pValue);
             CcspTr069PaMapToExternalAlias
                 (
                     pCcspCwmpCpeController->hTr069PaMapper,

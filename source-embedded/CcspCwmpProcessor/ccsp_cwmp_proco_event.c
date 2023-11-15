@@ -77,6 +77,7 @@
 #include "print_uptime.h"
 #include <sys/stat.h>
 #include <syscfg/syscfg.h>
+#include <ccsp_syslog.h>
 extern ANSC_HANDLE bus_handle;
 
 #define BUF_LENGTH 512
@@ -1616,6 +1617,9 @@ static void *FWDWLD_retry_thrd(void *data)
     {
         memset(sysbuf, 0, 100);
         CcspTr069PaTraceInfo(("%s - Firmware Download Retry count %d\n",__FUNCTION__, iRetrycount));
+#if defined(FEATURE_NETWORK_LOGS)
+        syslog_networklog("NETWORK",LOG_NOTICE,"%s %d","Firmware Download Retry count",iRetrycount);
+#endif
         if(60 == iRetrycount)
         {
             CcspTraceWarning(("%s - Reached 1hr of retry\n",__FUNCTION__));
@@ -1948,6 +1952,9 @@ CcspCwmppoProcessPvcSignal
                         pCwmpFault->FaultString = AnscCloneString(CCSP_CWMP_CPE_CWMP_FaultText_internalError);
                     }
 
+#if defined(FEATURE_NETWORK_LOGS)
+                    syslog_networklog("NETWORK",LOG_ERR,"%s %s","Firmware download is failed with status ",pCwmpFault->FaultString);
+#endif
                     status =
                     pCcspCwmpMsoIf->TransferComplete
                         (
@@ -1963,6 +1970,9 @@ CcspCwmppoProcessPvcSignal
                     if ( status != ANSC_STATUS_SUCCESS )
                     {
                         CcspTr069PaTraceWarning(("Failed to send out 'TransferComplete' whose command key is '%s'\n", pCommandKey));
+#if defined(FEATURE_NETWORK_LOGS)
+                        syslog_networklog("NETWORK",LOG_ERR,"%s %s","Failed to send out 'TransferComplete' whose command key is ",pCommandKey);
+#endif
                             
                         /* save un-delivered TC into PSM */
                         pMyObject->SaveTransferComplete

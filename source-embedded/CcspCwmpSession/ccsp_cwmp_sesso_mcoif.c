@@ -96,7 +96,7 @@
 **********************************************************************/
 
 #include <string.h>
-
+#include <ccsp_syslog.h>
 #include "ccsp_cwmp_sesso_global.h"
 #include "ccsp_cwmp_acsbo_interface.h"
 #include "ccsp_cwmp_acsbo_exported_api.h"
@@ -2427,6 +2427,14 @@ CcspCwmpsoMcoDownload
     {
         returnStatus = ANSC_STATUS_PENDING;
         CcspTr069PaTraceError(("%s %d Previous Download operation is pending\n",__func__,__LINE__));
+#if defined(FEATURE_NETWORK_LOGS)
+        char* pCommandKey = NULL;
+        pCommandKey = pCcspCwmpCpeController->LoadCfgFromPsm((ANSC_HANDLE)pCcspCwmpCpeController, "CommandKey");
+        if ( pCommandKey )
+        {
+            syslog_networklog("NETWORK",LOG_NOTICE,"%s %s","Firmware image download is ongoing with command key ",pCommandKey);
+        }
+#endif
         return returnStatus;
     }
 
@@ -2443,6 +2451,9 @@ CcspCwmpsoMcoDownload
     {
         CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_methodUnsupported);
         pCcspCwmpProcessor->bDownLoadInProgress = FALSE;
+#if defined(FEATURE_NETWORK_LOGS)
+        syslog_networklog("NETWORK",LOG_ERR,"%s","Firmware download is failed with status Download RPC method not supported");
+#endif
     }
 #else
     if ( pCcspCwmpCfgIf && pCcspCwmpCfgIf->NoRPCMethods )
@@ -2461,12 +2472,18 @@ CcspCwmpsoMcoDownload
         {
             returnStatus = ANSC_STATUS_RESOURCES;
 
+#if defined(FEATURE_NETWORK_LOGS)
+            syslog_networklog("NETWORK",LOG_ERR,"%s","Firmware download is failed with status Request contains invalid or non-supported fields");
+#endif
             goto  EXIT1;
         }
         else
         {
             CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_requestDenied);
             pCcspCwmpProcessor->bDownLoadInProgress = FALSE;
+#if defined(FEATURE_NETWORK_LOGS)
+            syslog_networklog("NETWORK",LOG_ERR,"%s","Firmware download is failed with status Request Denied");
+#endif
         }
     }
     else 
@@ -2512,6 +2529,9 @@ CcspCwmpsoMcoDownload
                 }
 
             }
+#if defined(FEATURE_NETWORK_LOGS)
+            syslog_networklog("NETWORK",LOG_ERR,"%s","Firmware download is failed with status Request contains invalid or non-supported fields");
+#endif
         }
         else
         {
@@ -2555,6 +2575,9 @@ CcspCwmpsoMcoDownload
                 CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_internalError);
                 returnStatus = ANSC_STATUS_INTERNAL_ERROR;
                 pCcspCwmpProcessor->bDownLoadInProgress = FALSE;
+#if defined(FEATURE_NETWORK_LOGS)
+                syslog_networklog("NETWORK",LOG_ERR,"%s","Firmware download is failed with status Internal error");
+#endif
                 goto EXIT4;
             }
 
@@ -2621,6 +2644,9 @@ CcspCwmpsoMcoDownload
                 pCcspCwmpProcessor->bDownLoadInProgress = FALSE;
                 CcspTr069PaTraceError(("Download - SPV failed, status = %d\n", (int)returnStatus));
                 CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_requestDenied);
+#if defined(FEATURE_NETWORK_LOGS)
+                syslog_networklog("NETWORK",LOG_ERR,"%s","Firmware download is failed with status Request Denied");
+#endif
                 if ( pCwmpSoapFault )
                 {
                     unsigned int             j;

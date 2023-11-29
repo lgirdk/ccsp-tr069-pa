@@ -647,10 +647,10 @@ CcspCwmpSoappoUtilGetParamValue
     PCCSP_CWMP_PARAM_VALUE          pCwmpParam   = (PCCSP_CWMP_PARAM_VALUE)hParamHandle;
     PSLAP_VARIABLE                  pSlapVariable= (PSLAP_VARIABLE)NULL;
     ANSC_STATUS                     returnStatus = ANSC_STATUS_SUCCESS;
-    CHAR                            pValue[1024] = { 0 };
-    ULONG                           length       = 1024;
-    CHAR                            pHugeValue[32000]
-                                                 = { 0 };  /* Config file value could be as big as 32K */
+    CHAR                            pValue[1024 + 1];
+    char                           *pHugeValue;
+    ULONG                           length;
+    ULONG                           length2;
 
     pCwmpParam->Value          = NULL;
 
@@ -678,35 +678,31 @@ CcspCwmpSoappoUtilGetParamValue
     /*
      * Get the name first;
      */
-    length = 256;
+    length = 256 + 1;
+    returnStatus = AnscXmlDomNodeGetDataString(pNameNode, NULL, pValue, &length);
 
-    returnStatus =
-    	AnscXmlDomNodeGetDataString
-            (
-                pNameNode,
-                NULL,
-                pValue,
-                &length
-            );
-
-    if( returnStatus != ANSC_STATUS_SUCCESS)
+    if (returnStatus != ANSC_STATUS_SUCCESS)
     {
         CcspTr069PaTraceError(("Failed to get the parameter name.\n"));
 
         return returnStatus;
     }
 
-	if( length == 0)
-	{
-		CcspTr069PaTraceError(("Empty parameter name in SetParameterValues.\n"));
+    if (length > 256)
+    {
+        CcspTr069PaTraceError(("Failed to get the parameter name.\n"));
 
-		return ANSC_STATUS_FAILURE;
-	}
+        return ANSC_STATUS_XML_INVALID_LENGTH;
+    }
+
+    if (length == 0)
+    {
+        CcspTr069PaTraceError(("Empty parameter name in SetParameterValues.\n"));
+
+        return ANSC_STATUS_FAILURE;
+    }
 
     pCwmpParam->Name = AnscCloneString(pValue);
-
-    length = 1024;
-    AnscZeroMemory(pValue, length);
 
     pSlapVariable = (PSLAP_VARIABLE)AnscAllocateMemory(sizeof(SLAP_VARIABLE));
 
@@ -723,32 +719,53 @@ CcspCwmpSoappoUtilGetParamValue
     pSlapVariable->ContentType = 0;
     pSlapVariable->UsageType   = 0;
 
-    /* check the value */
-    length = 32000;
+    /*
+       Config file value could be as big as 32K, so allocate the correct size
+       buffer before fetching the data to avoid unnecessary data copying etc.
 
-    returnStatus =
-        AnscXmlDomNodeGetDataString
-            (
-                pValueNode,
-                NULL,
-                pHugeValue,
-                &length
-            );
+       The first call to AnscXmlDomNodeGetDataString() will return an error
+       (since target buffer pointer is NULL) but we rely on it still returning
+       the length of the string.
+    */
+    length = 0;
+    AnscXmlDomNodeGetDataString(pValueNode, NULL, NULL, &length);
 
-    if( returnStatus != ANSC_STATUS_SUCCESS)
+    length2 = length + 1;
+
+    if ((pHugeValue = AnscAllocateMemoryNoInit(length2)) == NULL)
     {
-        CcspTr069PaTraceError(("Failed to get the string parameter value.\n"));
-
         AnscFreeMemory(pSlapVariable);
+        return ANSC_STATUS_RESOURCES;
+    }
 
-        pCwmpParam->Value = NULL;
+    if (length == 0)
+    {
+        *pHugeValue = 0; /* empty string */
+
+        pSlapVariable->ContentType = SLAP_CONTENT_TYPE_UNSPECIFIED;
+        pSlapVariable->UsageType = 0;
+        pSlapVariable->Syntax = SLAP_VAR_SYNTAX_string;
+        pSlapVariable->Variant.varString = pHugeValue;
     }
     else
     {
-        pSlapVariable->ContentType       = SLAP_CONTENT_TYPE_UNSPECIFIED;
-        pSlapVariable->UsageType         = 0;
-        pSlapVariable->Syntax            = SLAP_VAR_SYNTAX_string;
-        pSlapVariable->Variant.varString = AnscCloneString(pHugeValue);
+        length = length2;
+        returnStatus = AnscXmlDomNodeGetDataString(pValueNode, NULL, pHugeValue, &length);
+
+        if ((returnStatus != ANSC_STATUS_SUCCESS) || (length >= length2))
+        {
+            CcspTr069PaTraceError(("Failed to get the string parameter value.\n"));
+            AnscFreeMemory(pHugeValue);
+            AnscFreeMemory(pSlapVariable);
+            pCwmpParam->Value = NULL;
+        }
+        else
+        {
+            pSlapVariable->ContentType = SLAP_CONTENT_TYPE_UNSPECIFIED;
+            pSlapVariable->UsageType = 0;
+            pSlapVariable->Syntax = SLAP_VAR_SYNTAX_string;
+            pSlapVariable->Variant.varString = pHugeValue;
+        }
     }
 
     pCwmpParam->Tr069DataType = CCSP_CWMP_TR069_DATA_TYPE_Unspecified;
@@ -762,9 +779,16 @@ CcspCwmpSoappoUtilGetParamValue
         pAttribute = (PANSC_XML_ATTRIBUTE)AnscXmlDomNodeGetFirstAttr(pValueNode);
         if ( pAttribute )
         {
-            char*                   pDataType;
+            char *pDataType;
+
+            if (pAttribute->DataSize >= sizeof(pValue))
+            {
+                return ANSC_STATUS_XML_INVALID_LENGTH;
+            }
 
             AnscCopyMemory(pValue, pAttribute->StringData, pAttribute->DataSize);
+
+            pValue[pAttribute->DataSize] = 0;
 
             pDataType = _ansc_strstr(pValue, ":");
 
@@ -854,10 +878,10 @@ CcspCwmpSoappoUtilGetParamAttribute
     PANSC_XML_DOM_NODE_OBJECT       pChildNode   = (PANSC_XML_DOM_NODE_OBJECT)NULL;
     PCCSP_CWMP_SET_PARAM_ATTRIB     pParamAttr   = (PCCSP_CWMP_SET_PARAM_ATTRIB)hAttrHandle;
     ANSC_STATUS                     returnStatus = ANSC_STATUS_SUCCESS;
-    CHAR                            pValue[2048] = { 0 };
-    PCHAR                           pBegin       = NULL;
-    ULONG                           length       = 2048;
-    ULONG                           uLeft        = 2048;
+    CHAR                            pValue[2048];
+    PCHAR                           pBegin;
+    ULONG                           length;
+    ULONG                           uLeft;
 
     /***************************************************************************
     * Argument     | Type         | Description                               *
@@ -888,18 +912,15 @@ CcspCwmpSoappoUtilGetParamAttribute
         return ANSC_STATUS_FAILURE;
     }
 
-    length = 256;
+    length = 256 + 1;
+    returnStatus = AnscXmlDomNodeGetDataString(pChildNode, NULL, pValue, &length);
 
-    returnStatus =
-    	AnscXmlDomNodeGetDataString
-            (
-                pChildNode,
-                NULL,
-                pValue,
-                &length
-            );
+    if (length > 256)
+    {
+        returnStatus = ANSC_STATUS_FAILURE;
+    }
 
-    if( returnStatus != ANSC_STATUS_SUCCESS)
+    if (returnStatus != ANSC_STATUS_SUCCESS)
     {
         CcspTr069PaTraceError(("Failed to get the parameter name.\n"));
 
@@ -1005,44 +1026,45 @@ CcspCwmpSoappoUtilGetParamAttribute
         return ANSC_STATUS_SUCCESS;
     }
 
-    length                 = 2048;
-    AnscZeroMemory(pValue, length);
+    pBegin = pValue;
+    uLeft = sizeof(pValue);
 
-    pBegin                 = pValue;
+    *pBegin = 0;
 
     pChildNode = (PANSC_XML_DOM_NODE_OBJECT)
 		AnscXmlDomNodeGetHeadChild(pListNode);
 
-    while( pChildNode != NULL)
+    while (pChildNode != NULL)
     {
-        if( pBegin != pValue)
+        if (pBegin != pValue)
         {
-            AnscCopyMemory(pBegin, CCSP_CWMP_COMMA, AnscSizeOfString(CCSP_CWMP_COMMA));
-            pBegin += AnscSizeOfString(CCSP_CWMP_COMMA);
-            uLeft  -= AnscSizeOfString(CCSP_CWMP_COMMA);
-            length  = uLeft;
+            if (uLeft < 2)
+            {
+                CcspTr069PaTraceError(("AccessList value truncated\n"));
+                return ANSC_STATUS_FAILURE;
+            }
+
+            *pBegin++ = ',';
+            *pBegin = 0;
+            uLeft--;
         }
 
-        returnStatus =
-        	AnscXmlDomNodeGetDataString
-                (
-                    pChildNode,
-                    NULL,
-                    pBegin,
-                    &length
-                );
+        length = uLeft;
+        returnStatus = AnscXmlDomNodeGetDataString(pChildNode, NULL, pBegin, &length);
 
-        if( returnStatus != ANSC_STATUS_SUCCESS)
+        if (length >= uLeft)
+        {
+            returnStatus = ANSC_STATUS_FAILURE;
+        }
+
+        if (returnStatus != ANSC_STATUS_SUCCESS)
         {
             CcspTr069PaTraceError(("Failed to get the AccessList value.\n"));
-
             return returnStatus;
         }
 
         pBegin += length;
         uLeft  -= length;
-        length  = uLeft;
-
 
         pChildNode = (PANSC_XML_DOM_NODE_OBJECT)
 			AnscXmlDomNodeGetNextChild(pListNode, pChildNode);
@@ -1053,7 +1075,7 @@ CcspCwmpSoappoUtilGetParamAttribute
         pParamAttr->AccessList = AnscCloneString(pValue);
     }
 
-    return returnStatus;
+    return ANSC_STATUS_SUCCESS;
 }
 
 /**********************************************************************

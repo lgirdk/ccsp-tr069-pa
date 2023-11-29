@@ -142,7 +142,7 @@ CcspCwmpSoappoProcessSoapHeader
     PANSC_XML_DOM_NODE_OBJECT       pChildNode      = (PANSC_XML_DOM_NODE_OBJECT)hXmlHandle;
     PCCSP_CWMP_SOAP_HEADER          pCwmpHeader     = (PCCSP_CWMP_SOAP_HEADER)hCwmpSoapHeader;
     PCHAR                           pNodeName       = NULL;
-    CHAR                            AttrName[64]    = { 0 };
+    CHAR                            AttrName[64];
     ULONG                           uLongValue      = 0;
     CHAR                            ValueBuf[128]   = { 0 };
     ULONG                           ulValueSize     = 128;
@@ -3056,7 +3056,7 @@ CcspCwmpSoappoProcessRequest
     PCHAR                           pNodeName    = (PCHAR)NULL;
     CCSP_CWMP_SOAP_REQUEST     ccspCwmpSoapReq;
     PCCSP_CWMP_SOAP_REQUEST    pCcspCwmpSoapReq = &ccspCwmpSoapReq;
-    CHAR                            XmlName[64]  = { 0 };
+    CHAR                            XmlName[64];
     ANSC_STATUS                     returnStatus = ANSC_STATUS_SUCCESS;
 
     memset(&ccspCwmpSoapReq, 0, sizeof(CCSP_CWMP_SOAP_REQUEST));
@@ -3792,7 +3792,7 @@ CcspCwmpSoappoProcessResponse
     PANSC_XML_DOM_NODE_OBJECT       pXmlNode     = (PANSC_XML_DOM_NODE_OBJECT)hXmlHandle;
     PANSC_XML_DOM_NODE_OBJECT       pChildNode   = (PANSC_XML_DOM_NODE_OBJECT)NULL;
     PCHAR                           pNodeName    = (PCHAR)NULL;
-    CHAR                            XmlName[64]  = { 0 };
+    CHAR                            XmlName[64];
     PCCSP_CWMP_SOAP_RESPONSE        pCcspCwmpSoapRep = (PCCSP_CWMP_SOAP_RESPONSE)NULL;
     ANSC_STATUS                     returnStatus = ANSC_STATUS_SUCCESS;
 
@@ -4038,7 +4038,7 @@ CcspCwmpSoappoProcessFault
     PCCSP_CWMP_SOAP_FAULT           pCwmpFault      = (PCCSP_CWMP_SOAP_FAULT)NULL;
     PCCSP_CWMP_SET_PARAM_FAULT      pCwmpParamFault = (PCCSP_CWMP_SET_PARAM_FAULT)NULL;
     PCHAR                           pNodeName       = NULL;
-    CHAR                            XmlName[64]     = { 0 };
+    CHAR                            XmlName[64];
     PCCSP_CWMP_SOAP_RESPONSE        pCcspCwmpSoapRep    = (PCCSP_CWMP_SOAP_RESPONSE)NULL;
     CHAR                            ValueBuf[128]   = { 0 };
     ULONG                           ulValueSize     = sizeof(ValueBuf);
@@ -4504,7 +4504,7 @@ CcspCwmpSoappoProcessSingleEnvelope
     PCHAR                           pBackBuffer     = pEnvelopeMessage;
     PCHAR                           pNodeName       = (PCHAR)NULL;
     PCHAR                           pTempName       = (PCHAR)NULL;
-    CHAR                            NameBuf[32]     = { 0 };
+    CHAR                            NameBuf[32];
     CHAR                            ValueBuf[256]   = { 0 };
     ULONG                           ulValueSize     = sizeof(ValueBuf);
 
@@ -4747,7 +4747,7 @@ CcspCwmpSoappoProcessSoapEnvelopes
     UNREFERENCED_PARAMETER(hThisObject);
     ANSC_STATUS                     returnStatus = ANSC_STATUS_SUCCESS;
     PCHAR                           pMsgBegin    = NULL;
-    CHAR                            EnveNode[32] = { 0 };
+    CHAR                            EnveNode[32];
     CHAR                            NSpace[16]   = { 0 };
     ULONG                           pPosition[32]= { 0 };
     ULONG                           uCount       = 0;

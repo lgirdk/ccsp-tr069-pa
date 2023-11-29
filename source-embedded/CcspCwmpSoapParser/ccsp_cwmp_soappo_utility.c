@@ -1084,7 +1084,7 @@ CcspCwmpSoappoUtilCreateSoapEnvelopeHandle
     )
 {
     PANSC_XML_DOM_NODE_OBJECT       pRootNode       = (PANSC_XML_DOM_NODE_OBJECT)NULL;
-    CHAR                            pTempBuf[128]   = { 0 };
+    CHAR                            pTempBuf[128];
 
     /* create the root node */
     pRootNode = (PANSC_XML_DOM_NODE_OBJECT)AnscCreateXmlDomNode(NULL);
@@ -1238,7 +1238,7 @@ CcspCwmpSoappoUtilAddSoapHeader
     PANSC_XML_DOM_NODE_OBJECT       pRootNode      = (PANSC_XML_DOM_NODE_OBJECT)hSoapEnvelopeHandle;
     PANSC_XML_DOM_NODE_OBJECT       pHeaderNode    = (PANSC_XML_DOM_NODE_OBJECT)NULL;
     PANSC_XML_DOM_NODE_OBJECT       pChildNode     = (PANSC_XML_DOM_NODE_OBJECT)NULL;
-    CHAR                            pNodeName[64]  = "";
+    CHAR                            pNodeName[64];
 
     if( pRequestID == NULL || AnscSizeOfString(pRequestID) == 0 || hSoapEnvelopeHandle == NULL)
     {

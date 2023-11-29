@@ -648,7 +648,9 @@ CcspCwmpSoappoUtilGetParamValue
     PSLAP_VARIABLE                  pSlapVariable= (PSLAP_VARIABLE)NULL;
     ANSC_STATUS                     returnStatus = ANSC_STATUS_SUCCESS;
     CHAR                            pValue[1024 + 1];
+    char                           *pHugeValue;
     ULONG                           length;
+    ULONG                           length2;
 
     pCwmpParam->Value          = NULL;
 
@@ -728,23 +730,25 @@ CcspCwmpSoappoUtilGetParamValue
     length = 0;
     AnscXmlDomNodeGetDataString(pValueNode, NULL, NULL, &length);
 
+    length2 = length + 1;
+
+    if ((pHugeValue = AnscAllocateMemoryNoInit(length2)) == NULL)
+    {
+        AnscFreeMemory(pSlapVariable);
+        return ANSC_STATUS_RESOURCES;
+    }
+
     if (length == 0)
     {
-        CcspTr069PaTraceError(("Failed to get the string parameter value.\n"));
-        AnscFreeMemory(pSlapVariable);
-        pCwmpParam->Value = NULL;
+        *pHugeValue = 0; /* empty string */
+
+        pSlapVariable->ContentType = SLAP_CONTENT_TYPE_UNSPECIFIED;
+        pSlapVariable->UsageType = 0;
+        pSlapVariable->Syntax = SLAP_VAR_SYNTAX_string;
+        pSlapVariable->Variant.varString = pHugeValue;
     }
     else
     {
-        char *pHugeValue;
-        ULONG length2 = length + 1;
-
-        if ((pHugeValue = AnscAllocateMemoryNoInit(length2)) == NULL)
-        {
-            AnscFreeMemory(pSlapVariable);
-            return ANSC_STATUS_RESOURCES;
-        }
-
         length = length2;
         returnStatus = AnscXmlDomNodeGetDataString(pValueNode, NULL, pHugeValue, &length);
 
@@ -757,9 +761,9 @@ CcspCwmpSoappoUtilGetParamValue
         }
         else
         {
-            pSlapVariable->ContentType       = SLAP_CONTENT_TYPE_UNSPECIFIED;
-            pSlapVariable->UsageType         = 0;
-            pSlapVariable->Syntax            = SLAP_VAR_SYNTAX_string;
+            pSlapVariable->ContentType = SLAP_CONTENT_TYPE_UNSPECIFIED;
+            pSlapVariable->UsageType = 0;
+            pSlapVariable->Syntax = SLAP_VAR_SYNTAX_string;
             pSlapVariable->Variant.varString = pHugeValue;
         }
     }

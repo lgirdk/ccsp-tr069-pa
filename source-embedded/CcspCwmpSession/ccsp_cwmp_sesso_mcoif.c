@@ -2527,7 +2527,7 @@ CcspCwmpsoMcoDownload
                 {
                     CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_requestDenied);
                 }
-
+                pCcspCwmpProcessor->bDownLoadInProgress = FALSE;
             }
 #if defined(FEATURE_NETWORK_LOGS)
             syslog_networklog("NETWORK",LOG_ERR,"%s","Firmware download is failed with status Request contains invalid or non-supported fields");

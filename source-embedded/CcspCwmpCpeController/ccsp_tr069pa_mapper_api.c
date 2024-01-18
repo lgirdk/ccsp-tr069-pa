@@ -1068,7 +1068,6 @@ CcspTr069PA_LoadFromXMLFile(void*  pXMLHandle)
     return CCSP_TRUE;
 }
 
-
 /* CcspTr069PA_LoadMappingFile is called to load mapping file for TR-069 PA,
  * Return value - transparent handle to caller and will be used for all
  * other APIs.
@@ -1091,12 +1090,27 @@ CcspTr069PA_LoadMappingFile
     if( CcspTr069PA_CheckFileExists( MappingFile ) )
     {
         CCSP_INT fileHandle   = open(MappingFile,  O_RDONLY);
-        fstat(fileHandle,&statBuf);
+        /* CID 346186 346187 57740 54156 54026 */
+        if (fileHandle < 0)
+        {
+            CcspTr069PaTraceError(("Error opening file: %s\n", MappingFile));
+            return NULL;
+        }
+
+        if(fstat(fileHandle,&statBuf) < 0)
+        {
+            CcspTr069PaTraceError(("Error retrieving file information: %s\n",MappingFile));
+            close(fileHandle);
+            return NULL;
+        }
+
         CCSP_INT iContentSize = statBuf.st_size;
 
         if ( iContentSize > 500000)
         {
             CcspTr069PaTraceError(("Internal error: TR-069 PA mapper file is too big!\n"));
+            close(fileHandle);
+            return NULL;
         }
         else
         {
@@ -1130,7 +1144,6 @@ CcspTr069PA_LoadMappingFile
         }
 
         close(fileHandle);
-        
         CcspTr069PaTraceError(("TR-069 PA mapper file <%s> has been loaded!\n", MappingFile));
     }
     else

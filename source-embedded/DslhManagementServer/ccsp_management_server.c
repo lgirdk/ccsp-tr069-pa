@@ -1025,7 +1025,7 @@ CcspManagementServer_RegisterWanInterface()
         sessionID = 0;
     }
 */
-    parameterAttributeStruct_t val[1];
+    parameterAttributeStruct_t val[1] = {{0}};
     val[0].parameterName = pFirstUpstreamIpAddress;
     val[0].notificationChanged = 1;
     val[0].notification = 1;

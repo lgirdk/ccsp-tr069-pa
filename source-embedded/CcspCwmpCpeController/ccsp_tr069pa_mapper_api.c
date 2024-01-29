@@ -1079,7 +1079,7 @@ CcspTr069PA_LoadMappingFile
     )
 {
 //    CCSP_BOOL     bSucc         = CCSP_TRUE;
-    struct stat   statBuf;
+    struct stat   statBuf = {0};
 
     /* load from XML file */
     PANSC_XML_DOM_NODE_OBJECT       pRootNode   = NULL;
@@ -1115,6 +1115,7 @@ CcspTr069PA_LoadMappingFile
         else
         {
             char * pFileContent = AnscAllocateMemory(iContentSize + 1);
+            memset(pFileContent, 0, iContentSize + 1);
             if ( pFileContent )
             {
                 int read_bufsize = 0;

@@ -381,12 +381,12 @@ static void ReadTr69TlvData (int ethwan_enable)
 		//Below check is needed to make sure PSM has correct ACS URL. This is required for clients that continue to use ACS url from cmconfig.
 		if(objectInfo[ManagementServerID].parameters[ManagementServerURLID].value == NULL)
 		{
-			if(object2->URL != NULL )
+			if(object2->URL[0] != '\0' )
 			{
 				//We are here because, PSM DB doesnt have a valid ACS url but cmconfig has. In this case, setting value from cmconfig to PSM DB
 				AnscTraceWarning(("%s -#- PSM DB reported NULL ACS URL.... Setting URL from cmconfig and continue..\n", __FUNCTION__));
 				objectInfo[ManagementServerID].parameters[ManagementServerURLID].value = AnscCloneString(object2->URL);
-				_ansc_sprintf(recordName, "%s.%sURL.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);
+				snprintf(recordName, sizeof(recordName), "%s.%sURL.Value", CcspManagementServer_ComponentName, objectInfo[ManagementServerID].name);
 				res = PSM_Set_Record_Value2(bus_handle, CcspManagementServer_SubsystemPrefix, recordName, ccsp_string, object2->URL);
 
 				if(res != CCSP_SUCCESS){

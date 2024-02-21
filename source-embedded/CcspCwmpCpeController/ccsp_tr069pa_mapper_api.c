@@ -1091,53 +1091,12 @@ CcspTr069PA_LoadMappingFile
     if( CcspTr069PA_CheckFileExists( MappingFile ) )
     {
         CCSP_INT fileHandle   = open(MappingFile,  O_RDONLY);
+        fstat(fileHandle,&statBuf);
         CCSP_INT iContentSize = statBuf.st_size;
-        
-        if (fileHandle != -1)
+
+        if ( iContentSize > 500000)
         {
-            if (fstat(fileHandle, &statBuf) == 0)
-            {
-
-                if (iContentSize > 500000)
-                {
-                    CcspTr069PaTraceError(("Internal error: TR-069 PA mapper file is too big!\n"));
-                }
-                else
-                {
-                    char* pFileContent = AnscAllocateMemory(iContentSize + 1);
-
-                    if (pFileContent)
-                    {
-                        ssize_t bytesRead = read(fileHandle, pFileContent, iContentSize);
-                        
-                        if (bytesRead > 0)
-                        {
-                            /* Some Unicode file may have hidden content at the beginning. So search for the first '<' to begin the XML parse. */
-                            PCHAR pBack = pFileContent;
-                            while (pBack && *pBack != '<')
-                                pBack++;
-                            pRootNode = (PANSC_XML_DOM_NODE_OBJECT)AnscXmlDomParseString((ANSC_HANDLE)NULL, (PCHAR*)&pBack, iContentSize);
-                        }
-
-                        /* loca from the node */
-                        if (pRootNode != NULL)
-                        {
-                            // bSucc =
-                            CcspTr069PA_LoadFromXMLFile((void*)pRootNode);
-
-                            pRootNode->Remove(pRootNode);
-                        }
-
-                        AnscFreeMemory(pFileContent);
-                    }
-                }
-            }
-            else
-            {
-                CcspTr069PaTraceError(("Failed to retrieve file information for TR-069 PA mapper file <%s>!\n", MappingFile));
-            }
-
-            close(fileHandle);
+            CcspTr069PaTraceError(("Internal error: TR-069 PA mapper file is too big!\n"));
         }
         else
         {
@@ -1168,9 +1127,10 @@ CcspTr069PA_LoadMappingFile
 
                 AnscFreeMemory(pFileContent);
             }
-            CcspTr069PaTraceError(("Failed to open TR-069 PA mapper file <%s> for reading!\n", MappingFile));
         }
 
+        close(fileHandle);
+        
         CcspTr069PaTraceError(("TR-069 PA mapper file <%s> has been loaded!\n", MappingFile));
     }
     else

@@ -8200,6 +8200,21 @@
         <Param>
             <Name>Device.X_LGI-COM_ONT.MgmtService.IPProvisioningMode</Name>
         </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.GponLogNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.GponLog.{i}.Time</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.GponLog.{i}.EventID</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.GponLog.{i}.EventLevel</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_ONT.GponLog.{i}.Description</Name>
+        </Param>
   <!--  Parameters under "Device.X_LGI-COM_TunneledStaticIPService" -->
         <Param>
             <Name>Device.X_LGI-COM_TunneledStaticIPService.Enable</Name>

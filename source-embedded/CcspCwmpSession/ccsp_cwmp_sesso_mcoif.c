@@ -2323,6 +2323,7 @@ CcspCwmpsoMcoDownload_PrepareArgs
     p = strrchr(pDownloadReq->Url, '/');
     if ((p == NULL) || (p == pDownloadReq->Url) || (p[1] == 0))
     {
+        syslog_networklog("NETWORK",LOG_ERR,"%s","URL or FW name is missing, ignoring request");
         return ANSC_STATUS_BAD_PARAMETER;
     }
 

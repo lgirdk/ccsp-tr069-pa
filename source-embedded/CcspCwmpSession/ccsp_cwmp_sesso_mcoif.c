@@ -2413,6 +2413,8 @@ CcspCwmpsoMcoDownload
     PANSC_UNIVERSAL_TIME            pCompleteTime      = (PANSC_UNIVERSAL_TIME       )NULL;
     SLAP_STRING_ARRAY*              pSlapNameArray    = NULL;
     PCCSP_CWMP_PARAM_VALUE          pCwmpValArray     = NULL;
+    PCCSP_CWMP_PARAM_ATTRIB         pParamAttribArray  = (PCCSP_CWMP_PARAM_ATTRIB    )NULL;
+    ULONG                           ulAttribArraySize  = 0;
     ULONG                           ulCwmpValArraySize= 0;
     ULONG                           i;
     int                             iStatus            = 0;
@@ -2565,6 +2567,35 @@ CcspCwmpsoMcoDownload
 
             if ( returnStatus == ANSC_STATUS_SUCCESS )
             {
+                pCcspCwmpMpaIf->GetParameterAttributes
+                (
+                    pCcspCwmpMpaIf->hOwnerContext,
+                    pSlapNameArray,
+                    NumOfParams,
+                    (void**)&pParamAttribArray,
+                    &ulAttribArraySize,
+                    (ANSC_HANDLE*)&pCwmpSoapFault,
+                    TRUE
+                );
+                if ( pParamAttribArray )
+                {
+                    for ( i = 0; i < ulAttribArraySize; i++ )
+                    {
+                        if( pParamAttribArray[i].Notification == CCSP_CWMP_NOTIFICATION_off )
+                        {
+                            pCcspCwmpCpeController->MonitorOpState
+                            (
+                                (ANSC_HANDLE)pCcspCwmpCpeController,
+                                TRUE,
+                                CCSP_FW_DOWNLOAD,
+                                0,
+                                NULL,
+                                CCSP_FW_DOWNLOAD_STATUS,
+                                &pCwmpSoapFault
+                            );
+                        }
+                    }
+                }
                 if ( ulCwmpValArraySize != (ULONG)NumOfParams )
                 {
                     returnStatus = ANSC_STATUS_INTERNAL_ERROR;
@@ -2793,6 +2824,16 @@ EXIT2:
         AnscFreeMemory(pSlapNameArray);
     }
 
+    if ( pParamAttribArray )
+    {
+        for ( i = 0; i < ulAttribArraySize; i++ )
+        {
+            CcspCwmpCleanParamAttrib((&pParamAttribArray[i]));
+        }
+
+        AnscFreeMemory(pParamAttribArray);
+        pParamAttribArray = NULL;
+    }
 
 EXIT1:
 

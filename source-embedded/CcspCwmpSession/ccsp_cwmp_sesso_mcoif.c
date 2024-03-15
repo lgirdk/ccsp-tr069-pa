@@ -713,7 +713,7 @@ CcspCwmpsoMcoGetRpcMethods
     PCCSP_CWMPSO_ASYNC_RESPONSE      pWmpsoAsyncRep     = (PCCSP_CWMPSO_ASYNC_RESPONSE )NULL;
     SLAP_STRING_ARRAY*              pMethodStringArray = (SLAP_STRING_ARRAY*         )NULL;
     ULONG                           ulNoRPCMethodMask  = 0;
-    ULONG                           ulMethodCount      = 7;
+    ULONG                           ulMethodCount      = 17;
     ULONG                           ulIndex            = 0;
 
     if ( pCcspCwmpCfgIf && pCcspCwmpCfgIf->NoRPCMethods )

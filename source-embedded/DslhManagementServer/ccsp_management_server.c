@@ -1027,15 +1027,13 @@ CcspManagementServer_RegisterWanInterface()
 */
     parameterAttributeStruct_t val[1] = {{0}};
     val[0].parameterName = pFirstUpstreamIpAddress;
-    val[0].notificationChanged = 1;
+    val[0].notificationChanged = 1; 
     val[0].notification = 1;
     val[0].accessControlChanged = 0;
     /* CID 281922 Uninitialized scalar variable fix */
     val[0].accessControlBitmask = 0;
-   // val[1].parameterName = FirstUpstreamIpInterfaceParameterName;
-   // val[1].notificationChanged = 1;
-   // val[1].notification = 1;
-   // val[1].accessControlChanged = 0;
+    val[0].access = CCSP_RW;
+    val[0].RequesterID = 0;
     res = CcspBaseIf_setParameterAttributes(
         bus_handle,
         pPAMComponentName,

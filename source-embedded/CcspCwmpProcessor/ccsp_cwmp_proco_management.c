@@ -1100,13 +1100,16 @@ CcspCwmppoGetParentParamName
     char*                           pParentParamName = NULL;
     char*                           pLast            = NULL;
 
+
     if ( !pParamName ) return NULL;
+    int len = AnscSizeOfString(pParamName);
+    if (len <= 0) return NULL;
 
     pParentParamName = AnscCloneString(pParamName);
 
     if ( pParentParamName )
     {
-        pLast = pParentParamName + AnscSizeOfString(pParentParamName) - 1;
+        pLast = pParentParamName + len - 1;
 
         if ( *pLast == '.' ) pLast --;
 

@@ -275,9 +275,10 @@ CcspCwmpSoappoBuildSoapReq_GetRpcMethods
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:GetRPCMethods",
             CCSP_CWMP_NAMESPACE
         );
@@ -610,9 +611,10 @@ CcspCwmpSoappoBuildSoapReq_Inform
 			 *
 			 *	soap-enc:arrayType="cwmp:EventStruct[nCount]"
 			 */
-			_ansc_sprintf
+			snprintf
 				(
 					pAttrName,
+                    sizeof(pAttrName),
 					"%s:arrayType",
 					NODE_SOAP_ENCODING
 				);
@@ -1281,7 +1283,7 @@ CcspCwmpSoappoBuildSoapReq_TransferComplete
         }
         else
         {
-            _ansc_sprintf(pNodeName, "%s", "0001-01-01T00:00:00Z");
+            snprintf(pNodeName, sizeof(pNodeName), "%s", "0001-01-01T00:00:00Z");
         }
         
         AnscXmlDomNodeSetDataString
@@ -1429,9 +1431,10 @@ CcspCwmpSoappoBuildSoapReq_Kicked
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:Kicked",
             CCSP_CWMP_NAMESPACE
         );
@@ -1672,9 +1675,10 @@ CcspCwmpSoappoBuildSoapReq_RequestDownload
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:RequestDownload",
             CCSP_CWMP_NAMESPACE
         );
@@ -1953,9 +1957,10 @@ CcspCwmpSoappoBuildSoapReq_AutonomousTransferComplete
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:AutonomousTransferComplete",
             CCSP_CWMP_NAMESPACE
         );
@@ -2548,9 +2553,10 @@ CcspCwmpSoappoBuildSoapReq_DUStateChangeComplete
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:DUStateChangeComplete",
             CCSP_CWMP_NAMESPACE
         );
@@ -2858,9 +2864,10 @@ CcspCwmpSoappoBuildSoapReq_AutonomousDUStateChangeComplete
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:AutonomousDUStateChangeComplete",
             CCSP_CWMP_NAMESPACE
         );
@@ -3109,9 +3116,10 @@ CcspCwmpSoappoBuildSoapRep_GetRPCMethods
 			 *
 			 *	soap-enc:arrayType="xsd:string[nCount]"
 			 */
-			_ansc_sprintf
+			snprintf
 				(
 					pAttrName,
+                    sizeof(pAttrName),
 					"%s:arrayType",
 					NODE_SOAP_ENCODING
 				);
@@ -3296,9 +3304,10 @@ CcspCwmpSoappoBuildSoapRep_SetParameterValues
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:SetParameterValues%s",
             CCSP_CWMP_NAMESPACE,
             PART_RESPONSE_NAME
@@ -3478,9 +3487,10 @@ CcspCwmpSoappoBuildSoapRep_GetParameterValues
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:GetParameterValues%s",
             CCSP_CWMP_NAMESPACE,
             PART_RESPONSE_NAME
@@ -3768,9 +3778,10 @@ CcspCwmpSoappoBuildSoapRep_GetParameterNames
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:GetParameterNames%s",
             CCSP_CWMP_NAMESPACE,
             PART_RESPONSE_NAME
@@ -4035,9 +4046,10 @@ CcspCwmpSoappoBuildSoapRep_SetParameterAttributes
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:SetParameterAttributes%s",
             CCSP_CWMP_NAMESPACE,
             PART_RESPONSE_NAME
@@ -4237,9 +4249,10 @@ CcspCwmpSoappoBuildSoapRep_GetParameterAttributes
 				NODE_SOAP_ENCODING
 			);
 
-		_ansc_sprintf
+		snprintf
 			(
 				pAttrVal,
+                sizeof(pAttrVal),
 				"%s:ParameterAttributeStruct[%lu]",
 				CCSP_CWMP_NAMESPACE,
 				ulArraySize
@@ -4369,7 +4382,7 @@ CcspCwmpSoappoBuildSoapRep_GetParameterAttributes
 
                     pAccess = pNext ++;
 
-                    if( pAccess[0] == 0)
+                    if( pAccess != NULL && pAccess[0] == 0)
                     {
                         break;
                     }
@@ -4576,9 +4589,10 @@ CcspCwmpSoappoBuildSoapRep_AddObject
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:AddObject%s",
             CCSP_CWMP_NAMESPACE,
             PART_RESPONSE_NAME
@@ -4767,9 +4781,10 @@ CcspCwmpSoappoBuildSoapRep_DeleteObject
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:DeleteObject%s",
             CCSP_CWMP_NAMESPACE,
             PART_RESPONSE_NAME
@@ -5013,7 +5028,7 @@ CcspCwmpSoappoBuildSoapRep_Download
         }
         else
         {
-            _ansc_sprintf(pNodeName, "%s", "0001-01-01T00:00:00Z");
+            snprintf(pNodeName, sizeof(pNodeName), "%s", "0001-01-01T00:00:00Z");
         }
     
         AnscXmlDomNodeSetDataString
@@ -5197,9 +5212,10 @@ CcspCwmpSoappoBuildSoapRep_Reboot
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:Reboot%s",
             CCSP_CWMP_NAMESPACE,
             PART_RESPONSE_NAME
@@ -5339,9 +5355,10 @@ CcspCwmpSoappoBuildSoapRep_ChangeDUState
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:ChangeDUState%s",
             CCSP_CWMP_NAMESPACE,
             PART_RESPONSE_NAME
@@ -5495,9 +5512,10 @@ CcspCwmpSoappoBuildSoapRep_GetQueuedTransfers
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:GetQueuedTransfers%s",
             CCSP_CWMP_NAMESPACE,
             PART_RESPONSE_NAME
@@ -5714,9 +5732,10 @@ CcspCwmpSoappoBuildSoapRep_ScheduleInform
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:ScheduleInform%s",
             CCSP_CWMP_NAMESPACE,
             PART_RESPONSE_NAME
@@ -5833,9 +5852,10 @@ CcspCwmpSoappoBuildSoapRep_SetVouchers
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_BODY_NODE
@@ -6012,9 +6032,10 @@ CcspCwmpSoappoBuildSoapRep_GetOptions
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:GetOptions%s",
             CCSP_CWMP_NAMESPACE,
             PART_RESPONSE_NAME
@@ -6393,9 +6414,10 @@ CcspCwmpSoappoBuildSoapRep_Upload
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:Upload%s",
             CCSP_CWMP_NAMESPACE,
             PART_RESPONSE_NAME
@@ -6639,9 +6661,10 @@ CcspCwmpSoappoBuildSoapRep_FactoryReset
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:FactoryReset%s",
             CCSP_CWMP_NAMESPACE,
             PART_RESPONSE_NAME
@@ -6774,9 +6797,10 @@ CcspCwmpSoappoBuildSoapRepFault
         goto EXIT;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_FAULT

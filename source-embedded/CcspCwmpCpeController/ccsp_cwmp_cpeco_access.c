@@ -880,7 +880,7 @@ CcspCwmpCpecoDeleteObjects
             }
             else
             {
-                _ansc_sprintf(buf, "%s%u.", pObjectName, (unsigned int)pInsNumbers[i]);
+                snprintf(buf, sizeof(buf), "%s%u.", pObjectName, (unsigned int)pInsNumbers[i]);
             }
 
             returnStatus = 
@@ -1015,9 +1015,10 @@ CcspCwmpCpecoMonitorOpState
         }
         else
         {
-            _ansc_sprintf
+            snprintf
                 (
                     buf, 
+                    sizeof(buf), 
                     "%s%s", 
                     pObjectName,
                     pStateParamName
@@ -1388,9 +1389,10 @@ CcspCwmpCpecoSetSubsysName
 
     if ( pMyObject->SubsysName )
     {
-        _ansc_sprintf
+        snprintf
             (
                 pMyObject->CRNameWithPrefix, 
+                nLen,
                 "%s%s", 
                 pMyObject->SubsysName,
                 pMyObject->CRName

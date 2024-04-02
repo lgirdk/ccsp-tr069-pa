@@ -8244,6 +8244,19 @@
         <Param>
             <Name>Device.X_LGI-COM_StaticIPv4Address.OperationalStatus</Name>
         </Param>
+   <!--  "WAN failover parameters" -->
+        <Param>
+            <Name>Device.X_LGI-COM_WanManager.Interface.{i}.Selection.Enable</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_WanManager.Interface.{i}.Name</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_WanManager.Interface.{i}.VirtualInterface.{i}.Name</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_WanManager.RestorationDelay</Name>
+        </Param>
 
     </ParamList>
 	<RpcMapper>

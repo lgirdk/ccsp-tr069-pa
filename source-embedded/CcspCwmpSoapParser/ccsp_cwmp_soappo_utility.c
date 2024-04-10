@@ -1168,9 +1168,10 @@ CcspCwmpSoappoUtilCreateSoapEnvelopeHandle
             );
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pTempBuf,
+            sizeof(pTempBuf),
             "%s:%s",
             SOAP_NAMESPACE_NAME,
             SOAP_XSI_NAMESPACE_NAME
@@ -1184,9 +1185,10 @@ CcspCwmpSoappoUtilCreateSoapEnvelopeHandle
             AnscSizeOfString(SOAP_XSI_NAMESPACE_VALUE)
         );
 
-    _ansc_sprintf
+    snprintf
         (
             pTempBuf,
+            sizeof(pTempBuf),
             "%s:%s",
             SOAP_NAMESPACE_NAME,
             SOAP_XSD_NAMESPACE_NAME
@@ -1299,9 +1301,10 @@ CcspCwmpSoappoUtilAddSoapHeader
         return ANSC_STATUS_RESOURCES;
     }
 
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             CCSP_CWMP_NAMESPACE,
             CCSP_CWMP_ID
@@ -1321,9 +1324,10 @@ CcspCwmpSoappoUtilAddSoapHeader
     /*
      *  "mustUnderstand" attribute must be set to 1
      */
-    _ansc_sprintf
+    snprintf
         (
             pNodeName,
+            sizeof(pNodeName),
             "%s:%s",
             SOAP_NAMESPACE_VALUE,
             SOAP_MUSTUNDERSTAND

@@ -697,7 +697,7 @@ ANSC_STATUS CcspManagementServer_RegisterNameSpace()
     }
     else
     {
-        _ansc_sprintf(CrName, "%s", CCSP_DBUS_INTERFACE_CR);
+        snprintf(CrName, sizeof(CrName), "%s", CCSP_DBUS_INTERFACE_CR);
     }
 
     for(i=0; i<SupportedDataModelID; i++)  
@@ -763,7 +763,7 @@ CcspManagementServer_DiscoverComponent
     }
     else
     {
-        _ansc_sprintf(CrName, "%s", CCSP_DBUS_INTERFACE_CR);
+        snprintf(CrName, sizeof(CrName), "%s", CCSP_DBUS_INTERFACE_CR);
     }
 
 #ifndef NO_PAM_COMP
@@ -824,7 +824,7 @@ CcspManagementServer_UtilGetParameterValues
     }
     else
     {
-        _ansc_sprintf(CrName, "%s", CCSP_DBUS_INTERFACE_CR);
+        snprintf(CrName, sizeof(CrName), "%s", CCSP_DBUS_INTERFACE_CR);
     }
 
     if ( size > 0 )
@@ -922,7 +922,7 @@ CcspManagementServer_RegisterWanInterface()
     }
     else
     {
-        _ansc_sprintf(CrName, "%s", CCSP_DBUS_INTERFACE_CR);
+        snprintf(CrName, sizeof(CrName), "%s", CCSP_DBUS_INTERFACE_CR);
     }
 
     // Get FirstUpstreamIpInterfaceParameterName parameter value 

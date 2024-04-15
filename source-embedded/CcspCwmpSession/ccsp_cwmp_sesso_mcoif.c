@@ -2389,7 +2389,7 @@ CcspCwmpsoMcoDownload_PrepareArgs
     pParamValueArray[i].Tr069DataType   = CCSP_CWMP_TR069_DATA_TYPE_UnsignedInt;
     pParamValueArray[i].Value           = pSlapVar;
 
-    _ansc_sprintf(buf, "%u", (unsigned int)pDownloadReq->DelaySeconds);
+    snprintf(buf, sizeof(buf), "%u", (unsigned int)pDownloadReq->DelaySeconds);
 
     pSlapVar->Syntax            = SLAP_VAR_SYNTAX_string;
     pSlapVar->Variant.varString = AnscCloneString(buf);
@@ -3380,7 +3380,7 @@ CcspCwmpsoMcoChangeDUState_SaveStateMonitors
             }
             else
             {
-                _ansc_sprintf(buf, "%s%s%u.", pCcspCwmpCpeController->SubsysName, CCSP_NS_CHANGEDUSTATE, (unsigned int)pInsNumbers[i]);
+                snprintf(buf, sizeof(buf), "%s%s%u.", pCcspCwmpCpeController->SubsysName, CCSP_NS_CHANGEDUSTATE, (unsigned int)pInsNumbers[i]);
             }
 
             CcspTr069PaTraceDebug
@@ -3476,7 +3476,7 @@ CcspCwmpsoMcoChangeDUState_SaveStateMonitors
             }
             else
             {
-                _ansc_sprintf(buf, "%s%s%u.%s", pCcspCwmpCpeController->SubsysName, CCSP_NS_CHANGEDUSTATE, (unsigned int)pInsNumbers[i], CCSP_NS_CDS_PSM_NODE_ORDER);
+                snprintf(buf, sizeof(buf), "%s%s%u.%s", pCcspCwmpCpeController->SubsysName, CCSP_NS_CHANGEDUSTATE, (unsigned int)pInsNumbers[i], CCSP_NS_CDS_PSM_NODE_ORDER);
             }
 
             _ansc_sprintf(vbuf, "%u", i);

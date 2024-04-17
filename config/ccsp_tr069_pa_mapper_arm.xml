@@ -4414,9 +4414,6 @@
             <Name>Device.X_LGI-COM_SON.SONURL</Name>
         </Param>
         <Param>
-            <Name>Device.X_LGI-COM_SON.SONDFSEnable</Name>
-        </Param>
-        <Param>
             <Name>Device.X_LGI-COM_SON.SONLogpullEnable</Name>
         </Param>
         <Param>
@@ -8256,6 +8253,19 @@
         </Param>
         <Param>
             <Name>Device.X_LGI-COM_WanManager.RestorationDelay</Name>
+        </Param>
+        <!-- "VMB Health Check parameters" -->
+        <Param>
+            <Name>Device.X_LGI-COM_TunneledStaticIPService.HealthCheckEnable</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_TunneledStaticIPService.HealthCheckPingInterval</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_TunneledStaticIPService.HealthCheckPingCount</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_TunneledStaticIPService.HealthCheckTriggerInterval</Name>
         </Param>
 
     </ParamList>

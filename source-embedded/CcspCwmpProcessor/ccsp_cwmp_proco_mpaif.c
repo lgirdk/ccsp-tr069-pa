@@ -266,17 +266,14 @@ CcspCwmppoAddFunctionalComponents
         if ( ppSubsysArray )
 	{
 	    AnscFreeMemory(ppSubsysArray);
-	    ppSubsysArray = NULL;
 	}
         if ( ppFcNameArray )
 	{
 	    AnscFreeMemory(ppFcNameArray);
-	    ppFcNameArray = NULL;
 	}
         if ( ppDbusPathArray )
 	{
 	    AnscFreeMemory(ppDbusPathArray);
-	    ppDbusPathArray = NULL;
 	}
         ppSubsysArray = ppSsArray;
         ppFcNameArray = ppFnArray;
@@ -4625,6 +4622,14 @@ CcspCwmppoMpaDeleteObject
                         (ANSC_HANDLE)pCcspCwmpCpeController,
                         ulSessionID
                     );
+            }
+
+            if ( nRet != CCSP_SUCCESS )
+            {
+                returnStatus = ANSC_STATUS_BAD_PARAMETER;
+                nCcspError   = nRet;
+
+                goto  EXIT2;
             }
 
             nRet = CcspTr069PA_MapCcspErrCode(pCcspCwmpCpeController->hTr069PaMapper, nRet);

@@ -2558,16 +2558,6 @@ int CcspManagementServer_ValidateParameterValues(
                         if(CcspManagementServer_ValidateURL(val[i].parameterValue) != 0) returnStatus = TR69_INVALID_PARAMETER_VALUE;
                         else parameterSetting.msParameterValSettings[parameterSetting.currIndex].parameterValue = AnscCloneString(val[i].parameterValue);
                     }
-
-                    if (returnStatus == 0)
-                    {
-                        /*
-                         * Since ACS Discovery feature is supported for LAN side, the DUT have to update
-                         * config file dnsmasq.conf and restart dnsmasq after the related TR69 values
-                         * (ACS URL, CWMPRetryMinimumWaitInterval, CWMPRetryIntervalMultiplier) are changed.
-                         */
-                         system("sysevent set dhcp_server-restart");
-                    }
                 }
                     break;          
                 case ManagementServerConnectionRequestURLID:
@@ -3021,16 +3011,6 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
                         ccsp_string,
                         slapVar.Variant.varString
                     );
-
-                    if (res == CCSP_SUCCESS)
-                    {
-                        /*
-                        * Since ACS Discovery feature is supported for LAN side, the DUT have to update
-                        * config file dnsmasq.conf and restart dnsmasq after the related TR69 values
-                        * (ACS URL, CWMPRetryMinimumWaitInterval, CWMPRetryIntervalMultiplier) are changed.
-                        */
-                        system("sysevent set dhcp_server-restart");
-                    }
                     break;
 
                 case ManagementServerCWMPRetryIntervalMultiplierID:
@@ -3043,16 +3023,6 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
                         ccsp_string,
                         slapVar.Variant.varString
                     );
-
-                    if (res == CCSP_SUCCESS)
-                    {
-                        /*
-                        * Since ACS Discovery feature is supported for LAN side, the DUT have to update
-                        * config file dnsmasq.conf and restart dnsmasq after the related TR69 values
-                        * (ACS URL, CWMPRetryMinimumWaitInterval, CWMPRetryIntervalMultiplier) are changed.
-                        */
-                        system("sysevent set dhcp_server-restart");
-                    }
                     break;
 
                 case ManagementServerDefaultActiveNotificationThrottleID:

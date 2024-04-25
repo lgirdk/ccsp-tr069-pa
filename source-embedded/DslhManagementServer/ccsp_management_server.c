@@ -643,29 +643,6 @@ CcspManagementServer_FillInObjectInfo()
 
 }
 
-DBusHandlerResult
-CcspManagementServer_path_message_func (DBusConnection  *conn,
-                   DBusMessage     *message,
-                   void            *user_data)
-{
-    CCSP_MESSAGE_BUS_INFO *bus_info =(CCSP_MESSAGE_BUS_INFO *) user_data;
-    const char *interface = dbus_message_get_interface(message);
-    const char *method   = dbus_message_get_member(message);
-    DBusMessage *reply;
-    reply = dbus_message_new_method_return (message);
-    if (reply == NULL)
-    {
-        return DBUS_HANDLER_RESULT_HANDLED;
-    }
-
-    return CcspBaseIf_base_path_message_func (conn,
-            message,
-            reply,
-            interface,
-            method,
-            bus_info);
-
-}
 
 int getHealth()
 {
@@ -693,18 +670,6 @@ CCSP_VOID CcspManagementServer_InitDBus()
         }
 #endif
         CCSP_Msg_SleepInMilliSeconds(1000); 
-    }
-
-    while(times++ < DBUS_REGISTER_PATH_TIMES)
-    {
-        ret = CCSP_Message_Bus_Register_Path2(bus_handle, CCSP_DBUS_PATH_MS, CcspManagementServer_path_message_func, bus_handle);
-        if (ret != CCSP_Message_Bus_OK)
-            CCSP_Msg_SleepInMilliSeconds(1000);
-        else 
-        {
-            success = 1;
-            break;
-        }
     }
 
     if (!success)

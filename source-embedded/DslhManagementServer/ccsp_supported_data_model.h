@@ -71,7 +71,6 @@
 
 #include "ccsp_types.h"
 #include <pthread.h>
-#include <dbus/dbus.h>
 #include "ccsp_message_bus.h"
 #include "ccsp_base_api.h"
 #include "stdio.h"

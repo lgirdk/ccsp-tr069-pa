@@ -72,7 +72,6 @@
 #include "ccsp_types.h"
 #include "ccsp_custom.h"
 #include <pthread.h>
-#include <dbus/dbus.h>
 #include <ansc_wrapper_base.h>
 #include "ccsp_message_bus.h"
 #include "ccsp_base_api.h"

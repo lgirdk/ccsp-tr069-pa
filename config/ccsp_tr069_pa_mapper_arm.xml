@@ -8252,6 +8252,9 @@
             <Name>Device.X_LGI-COM_WanManager.Interface.{i}.VirtualInterface.{i}.Name</Name>
         </Param>
         <Param>
+            <Name>Device.X_LGI-COM_WanManager.Interface.{i}.Status</Name>
+        </Param>
+        <Param>
             <Name>Device.X_LGI-COM_WanManager.RestorationDelay</Name>
         </Param>
         <!-- "VMB Health Check parameters" -->

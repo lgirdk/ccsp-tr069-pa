@@ -567,7 +567,7 @@ CcspCwmpTcpcrhoCalcDigResponse
             _ansc_sprintf(pBuf + AnscSizeOfString(pBuf), "%s:%s:%s:", pNC,  pCNonce, pQop);
         }
 
-        _ansc_sprintf(pBuf + AnscSizeOfString(pBuf), "%s", pHA2);
+        snprintf(pBuf + AnscSizeOfString(pBuf), (ulSize + 16) - 1, "%s", pHA2);
 
         AnscCryptoMd5Digest((PVOID)pBuf, AnscSizeOfString(pBuf), &MD5Hash);
 
@@ -750,7 +750,7 @@ CcspCwmpTcpcrhoCalcDigestHA1
             ERR_CHK(rc);
             if ((!ind) && (rc == EOK))
             {
-               _ansc_sprintf(pBuf, "%s:%s:%s", pHA1, pNonce, pCNonce);
+               snprintf(pBuf, (ulSize + 16) - 1, "%s:%s:%s", pHA1, pNonce, pCNonce);
 
                AnscCryptoMd5Digest((PVOID)pBuf, AnscSizeOfString(pBuf), &MD5Hash);
                CcspCwmpTcpcrhoBinToHex(MD5Hash.Value, ANSC_MD5_OUTPUT_SIZE, pHA1);
@@ -856,9 +856,10 @@ CcspCwmpTcpcrhoCalcDigestHA2
 
         if ( bAuthInt )
         {
-            _ansc_sprintf
+            snprintf
                 (
                     pBuf + AnscSizeOfString(pBuf),
+                    (ulSize + 16) - 1,
                     ":%s",
                     pEntityDigest?(char*)pEntityDigest:""
                 );
@@ -1288,10 +1289,6 @@ CcspCwmpTcpcrhoGetDigestAuthInfo
         {
             pChal ++;
         }
-        if ( !pChal )
-        {
-            break;
-        }
         
         pNext       = _ansc_strchr(pChal, ',');
         ulLen       = pNext ? (ULONG)(pNext - pChal) : AnscSizeOfString(pChal);
@@ -1302,7 +1299,7 @@ CcspCwmpTcpcrhoGetDigestAuthInfo
             pChal   = pNext ? pNext + 1 : NULL;
             continue;
         }
-        ulNameLen   = pValue ? (ULONG)(pValue - pChal) : AnscSizeOfString(pChal);
+        ulNameLen   = (ULONG)(pValue - pChal);
         pValue ++;
         pValueLast  = pNext ? pNext - 1 : pChal + AnscSizeOfString(pChal) - 1;
 
@@ -1626,9 +1623,10 @@ CcspCwmpTcpcrhoGenDigestChallenge
         );
 
     /* algorithm */
-    _ansc_sprintf
+    snprintf
         (
             pDigChal + AnscSizeOfString(pDigChal),
+            ulSize-1,
             ", %s=\"%s\"",
             HTTP_AUTH_NAME_algorithm,
             pAlgorithm

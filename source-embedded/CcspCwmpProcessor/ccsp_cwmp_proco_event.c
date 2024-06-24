@@ -676,7 +676,8 @@ CcspCwmppoCheckCdsResults
                         (ANSC_HANDLE)pCcspCwmpCpeController,
                         pParamNames,
                         total * CCSP_NS_CDS_RESULT_ARG_COUNT,
-                        pParamValues
+                        pParamValues,
+                        NULL
                     );
 
             if ( returnStatus != ANSC_STATUS_SUCCESS )
@@ -1082,7 +1083,8 @@ CcspCwmppoCheckAutonomousCdsResults
                 (ANSC_HANDLE)pCcspCwmpCpeController,
                 pParamNames,
                 CCSP_NS_ACDS_RESULT_ARG_COUNT,
-                pParamValues
+                pParamValues,
+                NULL
             );
 
     if ( returnStatus != ANSC_STATUS_SUCCESS )
@@ -1392,7 +1394,8 @@ CcspCwmppoRetrieveFirmwareDownloadResults
                 (ANSC_HANDLE)pCcspCwmpCpeController,
                 pParamNames,
                 CCSP_NS_DOWNLOAD_RESULT_ARG_COUNT,
-                pParamValues
+                pParamValues,
+                NULL
             );
 
     if ( returnStatus != ANSC_STATUS_SUCCESS )

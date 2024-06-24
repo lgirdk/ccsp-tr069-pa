@@ -774,8 +774,7 @@ CcspCwmpSoappoUtilGetParamValue
     if ( TRUE )
     {
         PANSC_XML_ATTRIBUTE         pAttribute;
-        
-        pCwmpParam->Tr069DataType  = pCcspCwmpMcoIf->GetParamDataType(pCcspCwmpMcoIf->hOwnerContext, pCwmpParam->Name);
+       
         pAttribute = (PANSC_XML_ATTRIBUTE)AnscXmlDomNodeGetFirstAttr(pValueNode);
         if ( pAttribute )
         {

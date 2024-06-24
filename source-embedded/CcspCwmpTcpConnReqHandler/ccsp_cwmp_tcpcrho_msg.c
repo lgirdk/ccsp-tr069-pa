@@ -537,7 +537,8 @@ CcspCwmpTcpcrhoIsValidConnRequest
             (
                 (ANSC_HANDLE)pCcspCwmpCpeController,
                 DM_ROOTNAME"ManagementServer.ConnectionRequestURL",
-                (char**)&pUrlPathOrg
+                (char**)&pUrlPathOrg,
+                NULL
             );
 
     /*RDKB-7328, CID-32947, perform null check before use*/

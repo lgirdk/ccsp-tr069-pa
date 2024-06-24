@@ -272,7 +272,8 @@ typedef  ANSC_STATUS
         ANSC_HANDLE                 hThisObject,
         char**                      ppParamNames,
         int                         NumOfParams,
-        char**                      pParamValues
+        char**                      pParamValues,
+        int*                        dataType
     );
 
 typedef  ANSC_STATUS
@@ -280,7 +281,8 @@ typedef  ANSC_STATUS
     (
         ANSC_HANDLE                 hThisObject,
         char*                       pParamName,
-        char**                      pParamValue
+        char**                      pParamValue,
+        int*                        dataType
     );
 
 typedef  ANSC_STATUS

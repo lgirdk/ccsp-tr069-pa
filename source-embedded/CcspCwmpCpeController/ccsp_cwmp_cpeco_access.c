@@ -308,7 +308,8 @@ CcspCwmpCpecoGetParamValues
                 ANSC_HANDLE                 hThisObject,
                 char**                      ppParamNames,
                 int                         NumOfParams,
-                char**                      pParamValues
+                char**                      pParamValues,
+                int*                        dataType
             );
 
     description:
@@ -331,6 +332,10 @@ CcspCwmpCpecoGetParamValues
                 On successful return, it contains the values of
                 the specified parameters.
 
+                int*                        dataType
+                Pointer to array or integer depending upon number of arguments.
+                On successful return it contains the data types of parameters
+
     return:     operation state.
 
 **********************************************************************/
@@ -341,7 +346,8 @@ CcspCwmpCpecoGetParamStringValues
         ANSC_HANDLE                 hThisObject,
         char**                      ppParamNames,
         int                         NumOfParams,
-        char**                      pParamValues
+        char**                      pParamValues,
+        int*                        dataType
     )
 {
     ANSC_STATUS                     returnStatus      = ANSC_STATUS_SUCCESS;
@@ -393,6 +399,10 @@ CcspCwmpCpecoGetParamStringValues
             for ( i = 0; i < (ULONG)NumOfParams; i ++ )
             {
                 SLAP_VARIABLE*      pSlapVar = pCwmpValArray[i].Value;
+                if ( dataType )
+                {
+                    *(dataType+i) =  pCwmpValArray[i].Tr069DataType;
+                }
 
                 if ( pSlapVar->Syntax == SLAP_VAR_SYNTAX_string )
                 {
@@ -444,7 +454,8 @@ CcspCwmpCpecoGetParamStringValues
                 ANSC_HANDLE                 hThisObject,
                 char*                       pParamNames,
                 int                         NumOfParams,
-                char**                      pParamValues
+                char**                      pParamValues,
+                int*                        dataType
             );
 
     description:
@@ -461,6 +472,9 @@ CcspCwmpCpecoGetParamStringValues
                 char**                      pParamValue
                 On successful return, it contains the values of
                 the specified parameters.
+                int*                        dataType
+                Pointer to integer , On successful return, it contains the 
+                datatype of parameter
 
     return:     operation state.
 
@@ -471,7 +485,8 @@ CcspCwmpCpecoGetParamStringValue
     (
         ANSC_HANDLE                 hThisObject,
         char*                       pParamNames,
-        char**                      pParamValues
+        char**                      pParamValues,
+        int*                        dataType
     )
 {
     ANSC_STATUS                     returnStatus   = ANSC_STATUS_SUCCESS;
@@ -483,7 +498,8 @@ CcspCwmpCpecoGetParamStringValue
                 (ANSC_HANDLE)pMyObject,
                 &pParamNames,
                 1,
-                pParamValues
+                pParamValues,
+                dataType
             );
 
     return  returnStatus;
@@ -2070,7 +2086,7 @@ CcspCwmpCpecoSetParamNotification
     return:     data type - one simple data type TR-069 defines.
 
 **********************************************************************/
-
+extern  ANSC_HANDLE bus_handle;
 int
 CcspCwmpCpecoGetParamDataType
     (
@@ -2137,7 +2153,24 @@ CcspCwmpCpecoGetParamDataType
 
         if ( nRet == CCSP_SUCCESS || NumComp == 1 )
         {
-            dataType = CcspTr069PA_Ccsp2CwmpType(ppComp[0]->type);
+            parameterValStruct_t **parameterval = NULL;
+            int val_size = 0;
+            nRet = CcspBaseIf_getParameterValues(
+            bus_handle,
+            ppComp[0]->componentName,
+            ppComp[0]->dbusPath,
+            &pParamName,
+            1,
+            &val_size,
+            &parameterval);
+            if(nRet == CCSP_SUCCESS && parameterval && val_size > 0) {
+                 dataType = CcspTr069PA_Ccsp2CwmpType(parameterval[0]->type);
+                 CcspTraceWarning((" Data type received is %d \n",(int)parameterval[0]->type));
+            }
+            if ( parameterval )
+            {
+                free_parameterValStruct_t (bus_handle, val_size, parameterval);
+            }
         }
     }
 

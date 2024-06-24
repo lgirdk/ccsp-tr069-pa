@@ -1490,15 +1490,11 @@ CcspCwmppoGetUndeliveredValueChangeEvents
                 (
                     (ANSC_HANDLE)pCcspCwmpCpeController,
                     pValue,
-                    &pParameterValue
+                    &pParameterValue,
+                    &dataType
                 );
 
             Notification = pProcessorObject->CheckParamAttrCache((ANSC_HANDLE)pProcessorObject, pParameterName);
-            dataType = pCcspCwmpCpeController->GetParamDataType
-                (
-                    (ANSC_HANDLE)pCcspCwmpCpeController,
-                    pParameterName
-                );
             if(Notification != CCSP_CWMP_NOTIFICATION_off)
             {
                 pCcspCwmpEvent = (PCCSP_CWMP_EVENT)AnscAllocateMemory(sizeof(CCSP_CWMP_EVENT));
@@ -5619,14 +5615,10 @@ CcspCwmppoLoadValueChangedTask
                 (
                     (ANSC_HANDLE)pCcspCwmpCpeController,
                     pValue,
-                    &pParameterValue
+                    &pParameterValue,
+                    &dataType
                 );
             Notification = pMyObject->CheckParamAttrCache((ANSC_HANDLE)pMyObject, pParameterName);
-            dataType = pCcspCwmpCpeController->GetParamDataType
-                (
-                    (ANSC_HANDLE)pCcspCwmpCpeController,
-                    pParameterName
-                );
             if ( (pParameterValue != NULL) && (pParameterName != NULL) )
             {
                 CcspTr069PaTraceInfo(("CcspCwmppoLoadValueChanged - ParameterName:%s, ParameterValue:%s, Notification:%lu, datatype:%d\n", pParameterName, pParameterValue, Notification, dataType));

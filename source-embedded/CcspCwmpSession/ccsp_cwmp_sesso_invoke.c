@@ -433,7 +433,8 @@ if(bFirstInform)
         (
             (ANSC_HANDLE)pCcspCwmpCpeController,
             paramName,
-            &pCwmpDeviceId->Manufacturer
+            &pCwmpDeviceId->Manufacturer,
+            NULL
         );
         if(pCwmpDeviceId->Manufacturer != NULL)
         {
@@ -447,7 +448,8 @@ if(bFirstInform)
         (
             (ANSC_HANDLE)pCcspCwmpCpeController,
             paramName,
-            &pCwmpDeviceId->OUI
+            &pCwmpDeviceId->OUI,
+            NULL
         );
         if(pCwmpDeviceId->OUI != NULL)
         {
@@ -461,7 +463,8 @@ if(bFirstInform)
         (
             (ANSC_HANDLE)pCcspCwmpCpeController,
             paramName,
-            &pCwmpDeviceId->ProductClass
+            &pCwmpDeviceId->ProductClass,
+            NULL
         );
         if(pCwmpDeviceId->ProductClass != NULL)
         {
@@ -474,7 +477,8 @@ if(bFirstInform)
         (
             (ANSC_HANDLE)pCcspCwmpCpeController,
             paramName,
-            &pCwmpDeviceId->SerialNumber
+            &pCwmpDeviceId->SerialNumber,
+            NULL
         );
 
         if(pCwmpDeviceId->SerialNumber != NULL) 
@@ -489,7 +493,8 @@ if(bFirstInform)
         (
             (ANSC_HANDLE)pCcspCwmpCpeController,
             paramName,
-            &pCwmpDeviceId->ProvisioningCode
+            &pCwmpDeviceId->ProvisioningCode,
+            NULL
         );
         if(pCwmpDeviceId->ProvisioningCode != NULL)
         {
@@ -719,7 +724,6 @@ else
 
                 if ( j >= ulPresetParamCount )
                 {
-                    int                 dataType;
 
                     /* give the namespace last check to make sure the notification has been turned off */
                     if ( CCSP_CWMP_NOTIFICATION_off == 
@@ -734,14 +738,7 @@ else
                         continue;
                     }
 
-                    pCwmpParamValueArray[ulParamIndex].Name = AnscCloneString(pMyObject->ModifiedParamArray[i]);
-                
-                    dataType = 
-                        pCcspCwmpCpeController->GetParamDataType
-                            (
-                                (ANSC_HANDLE)pCcspCwmpCpeController,
-                                pMyObject->ModifiedParamArray[i]
-                            );
+                    pCwmpParamValueArray[ulParamIndex].Name = AnscCloneString(pMyObject->ModifiedParamArray[i]); 
                     //Assigning the value of External Parameter Name to param array
                     pMyObject->ModifiedParamArray[i] = pExtAlias;
                     if ( pIntAlias )
@@ -750,7 +747,7 @@ else
                     }
                     pCwmpParamValueArray[ulParamIndex].Name = AnscCloneString(pMyObject->ModifiedParamArray[i]);
 
-                    pCwmpParamValueArray[ulParamIndex].Tr069DataType = dataType;
+                    pCwmpParamValueArray[ulParamIndex].Tr069DataType = pMyObject->ModifiedParamTypeArray[i];
 
                     SlapAllocVariable(pCwmpParamValueArray[ulParamIndex].Value);
                     pCwmpParamValueArray[ulParamIndex].Value->Syntax = SLAP_VAR_SYNTAX_TYPE_string;
@@ -799,6 +796,7 @@ else
         else
         {
             char*                   pValue = NULL;
+            int                     dataType;
 
             CcspTr069PaTraceDebug(("CcspCwmpsoInform -- Start to get parameter value #%lu: %s.\n", i, pCwmpParamValueArray[i].Name));
 
@@ -813,7 +811,8 @@ else
                      (
                         (ANSC_HANDLE)pCcspCwmpCpeController,
                         pCwmpParamValueArray[i].Name,
-                        &pValue
+                        &pValue,
+                        &dataType
                      );
 			if(bFirstInform == 1)
 			{
@@ -840,14 +839,16 @@ else
 		if(!strcmp("Device.DeviceInfo.HardwareVersion",pCwmpParamValueArray[i].Name))
 		{
 			pValue = (char *)AnscCloneString(HardwareVersion);
+			dataType = CCSP_CWMP_TR069_DATA_TYPE_String;
 		}
 		else if(!strcmp("Device.DeviceInfo.SoftwareVersion",pCwmpParamValueArray[i].Name))
 		{
 			pValue = (char *)AnscCloneString(SoftwareVersion);
+			dataType = CCSP_CWMP_TR069_DATA_TYPE_String;
 		}
                 else if(!strcmp("Device.DeviceInfo.ProvisioningCode",pCwmpParamValueArray[i].Name))
                 {
-                        pCcspCwmpCpeController->GetParamStringValue((ANSC_HANDLE)pCcspCwmpCpeController,pCwmpParamValueArray[i].Name, &pValue);
+                        pCcspCwmpCpeController->GetParamStringValue((ANSC_HANDLE)pCcspCwmpCpeController,pCwmpParamValueArray[i].Name, &pValue,&dataType);
                 }
 				
 
@@ -862,12 +863,7 @@ else
             	        pSlapValue->Syntax = SLAP_VAR_SYNTAX_string;
                         pSlapValue->Variant.varString = pValue;
     	                pCwmpParamValueArray[i].Value = pSlapValue;
-                        pCwmpParamValueArray[i].Tr069DataType = 
-                            pCcspCwmpCpeController->GetParamDataType
-                            (
-                                (ANSC_HANDLE)pCcspCwmpCpeController, 
-                                pCwmpParamValueArray[i].Name
-                             );
+                        pCwmpParamValueArray[i].Tr069DataType = dataType;
                         pValue = NULL;
                     }
                 }
@@ -925,7 +921,8 @@ bFirstInform = 0;
     	       (
         	    (ANSC_HANDLE)pCcspCwmpCpeController,
             	pCwmpParamValueArray[ulParamIndex].Name,
-	            &pValue
+	            &pValue,
+	            NULL
     	       );
 
 		    if ( pValue )

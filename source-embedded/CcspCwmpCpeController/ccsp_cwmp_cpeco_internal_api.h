@@ -196,7 +196,8 @@ CcspCwmpCpecoGetParamStringValues
         ANSC_HANDLE                 hThisObject,
         char**                      ppParamNames,
         int                         NumOfParams,
-        char**                      pParamValues
+        char**                      pParamValues,
+        int*                        dataType
     );
 
 ANSC_STATUS
@@ -204,7 +205,8 @@ CcspCwmpCpecoGetParamStringValue
     (
         ANSC_HANDLE                 hThisObject,
         char*                       pParamName,
-        char**                      pParamValue
+        char**                      pParamValue,
+        int*                        dataType
     );
 
 ANSC_STATUS

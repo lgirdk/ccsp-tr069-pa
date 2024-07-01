@@ -354,7 +354,7 @@ CcspCwmpsoInform
     ULONG                           j                    = 0;
     char                            request_id[16];
     char*                           pRootObjName         = pCcspCwmpCpeController->GetRootObject((ANSC_HANDLE)pCcspCwmpCpeController);
-    static char                     paramName[512]       = {0};
+    char                            paramName[512];
     int                             notifAttr;
     PCCSP_CWMP_CFG_INTERFACE        pCcspCwmpCfgIf  = (PCCSP_CWMP_CFG_INTERFACE)pCcspCwmpCpeController->hCcspCwmpCfgIf;
     ULONG                           ulRpcCallTimeout= CCSP_CWMPSO_RPCCALL_TIMEOUT;
@@ -374,8 +374,6 @@ CcspCwmpsoInform
     static char SoftwareVersion[256];
     errno_t     rc =  -1;
     int         ind = -1;
-
-    memset(paramName, 0, sizeof(paramName));
 
     if (pCcspCwmpCfgIf == NULL)
     {

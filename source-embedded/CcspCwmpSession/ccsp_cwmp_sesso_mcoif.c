@@ -101,6 +101,7 @@
 #include "ccsp_cwmp_acsbo_interface.h"
 #include "ccsp_cwmp_acsbo_exported_api.h"
 #include "secure_wrapper.h"
+#include <syscfg/syscfg.h>
 #define  CWMP_MAXI_UPLOAD_DOWNLOAD_DELAY_SECONDS    3600 * 36       /* 36 hours */
 
 //PSM_RELOAD_CONFIG_PARAMETER_NAME need sync with NamespacePsm in ssp_dbus.c
@@ -2316,6 +2317,8 @@ CcspCwmpsoMcoDownload_PrepareArgs
 
     *ppParamValueArray  = NULL;
     *pulArraySize       = 0;
+    char buf[256 + 1];
+    char formatted[256 + 10];
 
     /*
        Split pDownloadReq->Url at the last '/' to find base URL and filename.
@@ -2324,6 +2327,16 @@ CcspCwmpsoMcoDownload_PrepareArgs
     if ((p == NULL) || (p == pDownloadReq->Url) || (p[1] == 0))
     {
         syslog_networklog("NETWORK",LOG_ERR,"%s","URL or FW name is missing, ignoring request");
+        return ANSC_STATUS_BAD_PARAMETER;
+    }
+
+    syscfg_get(NULL, "firmwarename", buf, sizeof(buf));
+    snprintf(formatted, sizeof(formatted), "/%s.pkgtb", buf);
+    if (strcmp(p, formatted) == 0)
+    {
+#if defined(FEATURE_NETWORK_LOGS)
+        syslog_networklog("NETWORK",LOG_ERR,"%s","Current FW is same, Ignoring request");
+#endif
         return ANSC_STATUS_BAD_PARAMETER;
     }
 
@@ -2342,6 +2355,9 @@ CcspCwmpsoMcoDownload_PrepareArgs
 
     if ( !pParamValueArray )
     {
+#if defined(FEATURE_NETWORK_LOGS)
+        syslog_networklog("NETWORK",LOG_ERR,"%s","Firmware download is failed with status Request contains invalid or non-supported fields");
+#endif
         return  ANSC_STATUS_RESOURCES;
     }
 
@@ -2532,9 +2548,6 @@ CcspCwmpsoMcoDownload
                 }
                 pCcspCwmpProcessor->bDownLoadInProgress = FALSE;
             }
-#if defined(FEATURE_NETWORK_LOGS)
-            syslog_networklog("NETWORK",LOG_ERR,"%s","Firmware download is failed with status Request contains invalid or non-supported fields");
-#endif
         }
         else
         {

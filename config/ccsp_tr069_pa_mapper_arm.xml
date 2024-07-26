@@ -8154,6 +8154,22 @@
         <Param>
             <Name>Device.X_LGI-COM_EventLogging.EventLog.{i}.Message</Name>
         </Param>
+    <!-- "Device.X_LGI-COM_NetworkLogs.Logs." -->
+        <Param>
+            <Name>Device.X_LGI-COM_NetworkLogs.LogsNumberOfEntries</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_NetworkLogs.Logs.{i}.Time</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_NetworkLogs.Logs.{i}.EventID</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_NetworkLogs.Logs.{i}.EventLevel</Name>
+        </Param>
+        <Param>
+            <Name>Device.X_LGI-COM_NetworkLogs.Logs.{i}.Description</Name>
+        </Param>
    <!--  Parameters under "Device.X_LGI-COM_ONT" -->
         <Param>
             <Name>Device.X_LGI-COM_ONT.ConnectionMode</Name>

@@ -682,7 +682,7 @@ CcspCwmppoInitParamAttrCache
                 continue;
             }
 
-            _ansc_sprintf(key, "%s%s", keyPrefix, pParamName);
+            snprintf(key, sizeof(key), "%s%s", keyPrefix, pParamName);
 
             nCcspError = 
                 PSM_Get_Record_Value2
@@ -1403,7 +1403,6 @@ CcspCwmppoSyncNamespacesWithCR
             ((pSubsystem != NULL) && (pCcspCwmpCpeController->SubsysName != NULL) &&
              (strcmp(pSubsystem, pCcspCwmpCpeController->SubsysName) == 0)))
         {
-            BOOL                    bNoSubsys         = !pCcspCwmpCpeController->SubsysName;
             char*                   pCrNameWithPrefix = (char*)pCrName;
  
             if ( bRemoteOnly ) 
@@ -1411,7 +1410,7 @@ CcspCwmppoSyncNamespacesWithCR
                 continue;
             }
 
-            if ( !bNoSubsys )
+            if ( pCcspCwmpCpeController->SubsysName )
             {
                 int                 nLen = AnscSizeOfString(pCcspCwmpCpeController->SubsysName) + AnscSizeOfString(pCrName) + 1;
 
@@ -1494,7 +1493,7 @@ CcspCwmppoSyncNamespacesWithCR
                     }
                 }
 
-                if ( !bNoSubsys && pCrNameWithPrefix )
+                if ( pCcspCwmpCpeController->SubsysName && pCrNameWithPrefix )
                 {
                     AnscFreeMemory(pCrNameWithPrefix);
                 }

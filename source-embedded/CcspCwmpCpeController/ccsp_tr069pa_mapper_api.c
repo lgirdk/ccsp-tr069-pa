@@ -994,7 +994,13 @@ CcspTr069PA_LoadFromXMLFile(void*  pXMLHandle)
         if (strcmp(pChildNode->Name, "ErrorMapper") == 0)
         {
             NumOfErrMaps = pChildNode->ChildNodeQueue.Depth;
+            if(CcspTr069CpeErrMaps != NULL){
+                AnscFreeMemory(CcspTr069CpeErrMaps);
+            }
             CcspTr069CpeErrMaps = (PCCSP_TR069_CPEERR_MAP) AnscAllocateMemory(NumOfErrMaps * sizeof(CCSP_TR069_CPEERR_MAP));
+            if(CcspTr069CpeErrMaps == NULL){
+                return CCSP_FALSE;
+            }
             i = 0;
             pListNode = (PANSC_XML_DOM_NODE_OBJECT)pChildNode->GetHeadChild(pChildNode);
             while (pListNode != NULL)
@@ -1010,7 +1016,13 @@ CcspTr069PA_LoadFromXMLFile(void*  pXMLHandle)
         {
             CcspTr069PaTraceDebug(("InstanceMapper loading...\n"));
             NumOfInstanceMaps = pChildNode->ChildNodeQueue.Depth;
+            if(CcspTr069CpeInstanceMaps != NULL){
+                AnscFreeMemory(CcspTr069CpeInstanceMaps);
+            }
             CcspTr069CpeInstanceMaps = (PCCSP_TR069_CPEINSTANCE_MAP) AnscAllocateMemory(NumOfInstanceMaps * sizeof(CCSP_TR069_CPEINSTANCE_MAP));
+            if(CcspTr069CpeInstanceMaps == NULL){
+                return CCSP_FALSE;
+            }
             i = 0;
             pListNode = (PANSC_XML_DOM_NODE_OBJECT)pChildNode->GetHeadChild(pChildNode);
             while (pListNode != NULL)
@@ -1024,7 +1036,13 @@ CcspTr069PA_LoadFromXMLFile(void*  pXMLHandle)
         else if (strcmp(pChildNode->Name, "RpcMapper") == 0)
         {
             NumOfRpcMaps = pChildNode->ChildNodeQueue.Depth;
+            if(CcspTr069RpcMaps != NULL){
+                AnscFreeMemory(CcspTr069RpcMaps);
+            }
             CcspTr069RpcMaps = (PCCSP_TR069_RPC_MAP) AnscAllocateMemory(NumOfRpcMaps * sizeof(CCSP_TR069_RPC_MAP));
+            if(CcspTr069RpcMaps == NULL){
+                return CCSP_FALSE;
+            }
             i = 0;
             pListNode = (PANSC_XML_DOM_NODE_OBJECT)pChildNode->GetHeadChild(pChildNode);
             while (pListNode != NULL)
@@ -1435,7 +1453,7 @@ CcspTr069PA_MapInstNumDmIntToCwmp
             if (instNumStart[0] == '.') {
                 instNumStart++;
             }
-            sscanf(instNumStart,"%d%s",&instNum,restDmlString);
+            sscanf(instNumStart,"%d%127s",&instNum,restDmlString);
 
             // Find instance match and translate
             for(j=0; j < CcspTr069CpeInstanceMaps[i].numMaps; j++)

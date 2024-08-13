@@ -940,8 +940,15 @@ CcspManagementServer_RegisterWanInterface()
         &val_size,
         &parameterval);
     if( parameterNames[0]) AnscFreeMemory(parameterNames[0]);
+
+    errno_t rc = -1;
     if(val_size > 0) {
         pFirstUpstreamIpInterface = AnscCloneString(parameterval[0]->parameterValue);
+
+        if(!pFirstUpstreamIpInterface) {
+	       rc = strcpy_s(pFirstUpstreamIpInterface, sizeof(pFirstUpstreamIpInterface), "Device.IP.Interface.1.");
+	       ERR_CHK(rc);
+        }
         free_parameterValStruct_t (bus_handle, val_size, parameterval);
     }
     if(!pFirstUpstreamIpInterface) {
@@ -953,12 +960,13 @@ CcspManagementServer_RegisterWanInterface()
     // Get parameter name to obtain the smallest table entry 
     val_size = 0;
     char pFirstUpstreamIpInterfaceIpv4AddrTbl[200] = {0};
-    errno_t rc = -1;
+
     rc = strcpy_s(pFirstUpstreamIpInterfaceIpv4AddrTbl, sizeof(pFirstUpstreamIpInterfaceIpv4AddrTbl), pFirstUpstreamIpInterface);
-    ERR_CHK(rc);
     if(strlen(pFirstUpstreamIpInterfaceIpv4AddrTbl) == 0){
     	rc = strcpy_s(pFirstUpstreamIpInterfaceIpv4AddrTbl, sizeof(pFirstUpstreamIpInterfaceIpv4AddrTbl), "Device.IP.Interface.1.");
     }
+    ERR_CHK(rc);
+
     rc = strcat_s(pFirstUpstreamIpInterfaceIpv4AddrTbl, sizeof(pFirstUpstreamIpInterfaceIpv4AddrTbl),  "IPv4Address.");
     ERR_CHK(rc);
     parameterInfoStruct_t **parameterInfo = NULL;

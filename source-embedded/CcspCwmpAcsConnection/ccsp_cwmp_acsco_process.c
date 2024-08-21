@@ -434,7 +434,7 @@ START:
 #ifdef DHCP_PROV_ENABLE
             // max_retry count is kept as 3 to make sure ACS connectivity retry with both IPV4 and IPV6 connection request URL.
             retry_count ++;
-            if (retry_count > 3){
+            if (retry_count > 5){
                   if (fd > 0)
                   {
                       write(fd, "CONNECTION_STATUS failed",25);

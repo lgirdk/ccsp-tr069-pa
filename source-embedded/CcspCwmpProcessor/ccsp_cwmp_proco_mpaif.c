@@ -2403,6 +2403,26 @@ CcspCwmppoMpaGetParameterValues
 
         if ( returnStatus != ANSC_STATUS_SUCCESS )
         {
+            PSINGLE_LINK_ENTRY      pSLinkEntry;
+            PCCSP_TR069PA_NSLIST    pNsList;
+
+            pSLinkEntry = AnscQueueGetFirstEntry(&pFcGpvResNsList->NsList);
+            while ( pSLinkEntry )
+            {
+                pNsList = ACCESS_CCSP_TR069PA_NSLIST(pSLinkEntry);
+                pSLinkEntry = AnscQueueGetNextEntry(pSLinkEntry);
+
+                if (pNsList->Args.paramValueInfo.parameterName)
+                {
+                    AnscFreeMemory(pNsList->Args.paramValueInfo.parameterName);
+                    pNsList->Args.paramValueInfo.parameterName = NULL;
+                }
+                if (pNsList->Args.paramValueInfo.parameterValue)
+                {
+                    AnscFreeMemory(pNsList->Args.paramValueInfo.parameterValue);
+                    pNsList->Args.paramValueInfo.parameterValue = NULL;
+                }
+            }
             goto EXIT2;
         }
         else 

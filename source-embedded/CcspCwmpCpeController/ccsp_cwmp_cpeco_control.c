@@ -699,7 +699,7 @@ if ( bInformAcs )
                         (
                             (ANSC_HANDLE)pMyObject,
                             psmKeyPrefixed,
-                            NULL
+                            ""
                         );
 
                 CcspCwmpPrefixPsmKey(psmKeyPrefixed, pMyObject->SubsysName, CCSP_TR069PA_PSM_KEY_TriggerCommandKey);
@@ -708,7 +708,7 @@ if ( bInformAcs )
                         (
                             (ANSC_HANDLE)pMyObject,
                             psmKeyPrefixed,
-                            NULL
+                            ""
                         );
             }
         }
@@ -753,7 +753,7 @@ if ( bInformAcs )
                         (
                             (ANSC_HANDLE)pMyObject,
                             psmKeyPrefixed,
-                            NULL
+                            ""
                         );
             }
 

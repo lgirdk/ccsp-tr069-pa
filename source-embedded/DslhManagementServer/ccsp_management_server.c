@@ -83,12 +83,15 @@
 #include "dslh_definitions_database.h"
 #include "secure_wrapper.h"
 #include "slap_vco_internal_api.h"
+#include "ccsp_cwmp_cpeco_interface.h"
+#include "ccsp_cwmp_proco_interface.h"
 
 // TELEMETRY 2.0 //RDKB-25996
 #include <telemetry_busmessage_sender.h>
 
 #define TEMP_SIZE 23
 #define MAX_SIZE_TMPPWD_VALUE 512
+extern PCCSP_CWMP_CPE_CONTROLLER_OBJECT g_pCcspCwmpCpeController;
 
 char *CcspManagementServer_ComponentName = NULL;
 char *CcspManagementServer_SubsystemPrefix = NULL;
@@ -117,6 +120,7 @@ char *pFirstUpstreamIpInterface = NULL;
 char *pFirstUpstreamIpAddress = NULL;
 
 int g_ACSChangedURL = 0;
+void CcspCwmppoParamValueChangedCB(parameterSigStruct_t* val, int size, void* user_data);
 
 
 char * pDTXml = "<?xml version=\"1.0\"  encoding=\"UTF-8\" ?>\
@@ -1236,6 +1240,7 @@ int SendValueChangeSignal(
     int parameterID,
     const char * oldValue)
 {
+    PCCSP_CWMP_PROCESSOR_OBJECT user_data = g_pCcspCwmpCpeController->hCcspCwmpProcessor;
     parameterSigStruct_t val;
     val.parameterName = CcspManagementServer_MergeString(objectInfo[objectID].name, objectInfo[objectID].parameters[parameterID].name);
     val.newValue = AnscCloneString(objectInfo[objectID].parameters[parameterID].value);
@@ -1244,16 +1249,25 @@ int SendValueChangeSignal(
     val.subsystem_prefix = AnscCloneString(CcspManagementServer_SubsystemPrefix);
     /* CID 281892 Uninitialized scalar variable  */
     val.writeID = 0;
+    /*
     int res = CcspBaseIf_SendparameterValueChangeSignal (
         bus_handle,
         &val,
         1);
     CcspTraceDebug(("send value change signal %s %s \n", val.parameterName, val.newValue));
+    */
+    CcspCwmppoParamValueChangedCB
+    (
+        &val,
+        1,
+        (void*)user_data
+    );
+    CcspTraceDebug(("Inform value changed: param[%s] new[%s]\n", val.parameterName, val.newValue));
     if(val.parameterName) AnscFreeMemory((void*)val.parameterName);
     if(val.oldValue) AnscFreeMemory((void*)val.oldValue);
     if(val.newValue) AnscFreeMemory((void*)val.newValue);
     if(val.subsystem_prefix) AnscFreeMemory((void*)val.subsystem_prefix);
-    return res;
+    return 0;
 }
 
 // Recevie value change signal from pPAMComponentName
@@ -2762,6 +2776,7 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
     }
 
     if(valueChangeSize > 0){
+/*
         res = CcspBaseIf_SendparameterValueChangeSignal (
             bus_handle,
             val,
@@ -2769,6 +2784,15 @@ int CcspManagementServer_CommitParameterValues(unsigned int writeID)
         if(res != CCSP_SUCCESS){
             CcspTraceWarning2("ms", ( "CcspManagementServer_CommitParameterValues send value change signal failure %d.\n", res)); 
         }
+*/
+        PCCSP_CWMP_PROCESSOR_OBJECT user_data = g_pCcspCwmpCpeController->hCcspCwmpProcessor;
+        CcspCwmppoParamValueChangedCB
+        (
+            val,
+            valueChangeSize,
+            (void*)user_data
+        );
+        CcspTraceInfo(("Value Changed, calling CcspCwmppoParamValueChangedCB, size[%d]\n", valueChangeSize));
     }
 
 EXIT1:

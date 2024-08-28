@@ -259,6 +259,7 @@ CcspCwmpSoappoProcessSoapHeader
 			 * According to WT151, "NoMoreRequests" field is deprecated, it will be
 			 * ignored.
 			 */
+            returnStatus = ANSC_STATUS_SUCCESS;
 #if 0
             /*
              * The "mustUnderstand" attribute MUST be either absent or set to "0"

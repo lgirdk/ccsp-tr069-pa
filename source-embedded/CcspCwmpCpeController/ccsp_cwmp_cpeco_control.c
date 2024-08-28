@@ -184,7 +184,7 @@ CcspCwmpCpecoLoadEvents
                 {
                     pString2 += 1;
 
-                    AnscCopyMemory(pEventKey, pString2, length - 1 - (ULONG)(pString2 - pString));
+                    AnscCopyMemory(pEventKey, pString2, length - (ULONG)(pString2 - pString));
 
                     pCcspCwmpMsoIf->Inform
                         (

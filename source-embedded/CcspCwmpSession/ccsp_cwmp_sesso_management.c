@@ -740,7 +740,7 @@ CcspCwmpsoSaveCwmpEvent
                         break;
                     }
 
-                    AnscCopyMemory(pCurBuf, pCcspCwmpEvent->EventCode, uLength);
+                    AnscCopyMemory(pCurBuf, pCcspCwmpEvent->CommandKey, uLength);
                     pCurBuf   += uLength;
                 }
             }

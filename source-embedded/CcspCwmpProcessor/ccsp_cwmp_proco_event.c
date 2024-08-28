@@ -1678,6 +1678,15 @@ CcspCwmppoProcessPvcSignal
                 break;
             }
         }
+        //sercomm add:free Subsystems
+        for (int j = 0; j < NumSubsystems; j ++ )
+        {
+            if(Subsystems[j] != NULL)
+            {
+                AnscFreeMemory(Subsystems[j]);
+                Subsystems[j] = NULL;
+            }
+        }
 
         if ( i >= NumSubsystems )
         {

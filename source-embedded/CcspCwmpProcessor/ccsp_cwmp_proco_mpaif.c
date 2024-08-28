@@ -2301,6 +2301,16 @@ CcspCwmppoMpaGetParameterValues
                                              ERR_CHK(rc);
                                              if((rc == EOK) && (!ind))
 					     {
+						 if ( pParamValues[k]->parameterName )
+						 {
+						      AnscFreeMemory(pParamValues[k]->parameterName);
+						      pParamValues[k]->parameterName = NULL;
+						 }
+						 if(pParamValues[k]->parameterValue)
+						 {
+						     AnscFreeMemory(pParamValues[k]->parameterValue);
+						     pParamValues[k]->parameterValue = NULL;
+						 }
 						 pParamValues[k]->parameterName = AnscCloneString("Device.RootDataModelVersion");
 					         pParamValues[k]->parameterValue = AnscCloneString(COSA_CURRENT_SUPPORT_VERSION);
 					     }

@@ -471,6 +471,11 @@ CcspCwmpsoAsyncProcessTask
 
                 if ( pMyObject->AcsMaxEnvelopes <= 1 )
                 {
+                    if ( pSoapMessage )
+                    {
+                        AnscFreeMemory(pSoapMessage);
+                        pSoapMessage = NULL;
+                     }
                     /* We have to keep "SoapEnvelope" in order to resend if requires */
                     pSoapMessage = AnscCloneString(pWmpsoAsyncReq->SoapEnvelope);
 

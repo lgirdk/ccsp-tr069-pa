@@ -822,6 +822,11 @@ EXIT:
     {
         AnscFreeMemory(pTriggerCommandKey);
     }
+    if (pSavedEvents)
+    {
+        AnscFreeMemory(pSavedEvents);
+        pSavedEvents = NULL;
+    }
 
     return  returnStatus;
 }

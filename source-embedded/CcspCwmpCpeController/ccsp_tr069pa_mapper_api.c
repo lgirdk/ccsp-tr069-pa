@@ -1192,9 +1192,10 @@ CcspTr069PA_UnloadMappingFile
     UNREFERENCED_PARAMETER(MapperHandle);
     CCSP_INT    i,j;
 
-    AnscFreeMemory(CcspTr069CpeErrMaps);
-    CcspTr069CpeErrMaps = NULL;
-
+    if(CcspTr069CpeErrMaps != NULL){
+        AnscFreeMemory(CcspTr069CpeErrMaps);
+        CcspTr069CpeErrMaps = NULL;
+    }
     for (i=0; i< NumOfInstanceMaps; i++) {
         if (CcspTr069CpeInstanceMaps[i].CcspDmlName) {
             AnscFreeMemory(CcspTr069CpeInstanceMaps[i].CcspDmlName);

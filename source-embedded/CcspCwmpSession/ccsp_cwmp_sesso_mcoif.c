@@ -2335,7 +2335,7 @@ CcspCwmpsoMcoDownload_PrepareArgs
     if (strcmp(p, formatted) == 0)
     {
 #if defined(FEATURE_NETWORK_LOGS)
-        syslog_networklog("NETWORK",LOG_ERR,"%s","Current FW is same, Ignoring request");
+        syslog_networklog("NETWORK",LOG_NOTICE,"%s","Current FW is same, Ignoring request");
 #endif
         return ANSC_STATUS_BAD_PARAMETER;
     }

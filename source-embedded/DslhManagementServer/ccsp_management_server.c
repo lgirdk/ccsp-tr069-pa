@@ -502,7 +502,7 @@ CcspManagementServer_FillInObjectInfo()
             = AnscCloneString(LGI_CWMP_CONNREQ_IFACE_STR);
 
         objectInfo[ManagementServerID].parameters[ManagementServerScheduleRebootID].value
-            = AnscCloneString("");
+            = AnscCloneString("9999-12-31T23:59:59Z");
 
         /* Whenever the CPE reboots, this value MUST be reset by the CPE to -1. */
         objectInfo[ManagementServerID].parameters[ManagementServerDelayRebootID].value

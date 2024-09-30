@@ -83,6 +83,10 @@
 #include <string.h>
 #include "custom_alias_utils.h"
 
+// Added support for the changes to the rbus APIs from RDKB in the rnl22 release.
+// Currently it is applicable for GPV, SPV and GPN
+#define SKIP_COMPONENT_DISCOVERY
+
 /**********************************************************************
                                   MACROS
 **********************************************************************/
@@ -1219,7 +1223,11 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
         parameterValStruct_t*       pParamValues    = NULL;
         parameterValStruct_t*       pDiagnosticsStateParamValues = NULL;
         int                         kDiag = 0;
+#ifdef SKIP_COMPONENT_DISCOVERY
+        int                         nNumFCs = 1;
+#else
         int                         nNumFCs         = AnscQueueQueryDepth(&FcNsListQueue);
+#endif
         PSINGLE_LINK_ENTRY          pSLinkEntry     = NULL;
         PSINGLE_LINK_ENTRY          pSLinkEntryNs   = NULL;
         int                         k;
@@ -2211,7 +2219,11 @@ CcspCwmppoMpaGetParameterValues
         char**                      pParamNames     = NULL;
         parameterValStruct_t**      pParamValues    = NULL;
         int                         nParamCount     = 0;
+#ifdef SKIP_COMPONENT_DISCOVERY
+        int                         nNumFCs         = 1;
+#else
         int                         nNumFCs         = AnscQueueQueryDepth(&FcNsListQueue);
+#endif
         PSINGLE_LINK_ENTRY          pSLinkEntry     = NULL;
         PSINGLE_LINK_ENTRY          pSLinkEntryNs   = NULL;
         PCCSP_TR069PA_FC_NSLIST     pFcGpvResNsList = NULL;
@@ -2946,7 +2958,12 @@ CcspCwmppoMpaGetParameterNames
 
     CcspTr069PaAddFcIntoFcNsList(&FcGpnResultListQueue, NULL, NULL, NULL, pFcNsList);
 
-    for ( i = 0; i < ulFcArraySize; i ++ )
+    int FcLoopCount = ulFcArraySize;
+#ifdef SKIP_COMPONENT_DISCOVERY
+    FcLoopCount = 1;
+#endif
+
+    for ( i = 0; i < FcLoopCount; i ++ )
     {
         nRet = 
             CcspBaseIf_getParameterNames

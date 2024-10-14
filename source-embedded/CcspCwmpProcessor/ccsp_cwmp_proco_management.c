@@ -1578,12 +1578,7 @@ CcspCwmppoSyncNamespacesWithCR
 
     pCrName = pCcspCwmpCpeController->GetCRName((ANSC_HANDLE)pCcspCwmpCpeController);
 
-    if ( pCcspNsMgr )
-    {
-        pCcspNsMgr->CleanAll((ANSC_HANDLE)pCcspNsMgr);
-    }
-    else
-    {
+    if ( !pCcspNsMgr ) {
         pCcspNsMgr = 
             (PCCSP_NAMESPACE_MGR_OBJECT)CcspCreateNamespaceMgr
                 (

@@ -368,7 +368,7 @@ CcspCwmppoDiscoverFunctionalComponent
             {                                                                                           \
                 ULONG               ulLastSyncTime = pMyObject->LastRemoteCrSyncTime;                   \
                 CcspTr069PaTraceDebug(("PA sync again with remote sub-system(s).\n"));                  \
-                pMyObject->SyncNamespacesWithCR((ANSC_HANDLE)pMyObject, TRUE);                          \
+                pMyObject->SyncNamespacesWithCR((ANSC_HANDLE)pMyObject, FALSE);                         \
                 CcspTr069PaTraceDebug                                                                   \
                     ((                                                                                  \
                         "PA re-sync, time now = %u, last time = %u.\n",                                 \
@@ -391,6 +391,10 @@ CcspCwmppoDiscoverFunctionalComponent
                     &ppDbusPathArray,                                                                   \
                     &ulFcArraySize                                                                      \
                 );                                                                                      \
+        if (nRet != CCSP_SUCCESS || ulFcArraySize == 0) {                                               \
+            pMyObject->bRemoteCRsSyncDone = FALSE;                                                      \
+            CcspTr069PaTraceError(("setting bRemoteCRsSyncDone to False\n"));                           \
+        }                                                                                               \
     } while (0)
 
 

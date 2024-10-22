@@ -785,6 +785,95 @@ CcspCwmppoMpaUnlockWriteAccess
 }
 
 
+/**********************************************************************/
+int CheckIfParamWritable(void *bus_handle, char *pCrNameWithPrefix, char *ParamName)
+{
+    int ret = CCSP_FAILURE;
+    unsigned char bTmp = 0;
+    int size2 = 0;
+    int size = 0;
+    int is_writable = 0;
+
+    char *dst_componentid         =  NULL;
+    char *dst_pathname            =  NULL;
+    componentStruct_t ** ppComponents = NULL;
+    parameterInfoStruct_t **parameter = NULL;
+    CCSP_MESSAGE_BUS_INFO *bus_info = (CCSP_MESSAGE_BUS_INFO *)bus_handle;
+    ret = CcspBaseIf_discComponentSupportingNamespace
+        (
+         bus_info,
+         pCrNameWithPrefix,
+         ParamName,
+         "",
+         &ppComponents,
+         &size2
+        );
+
+
+    if(ret == CCSP_SUCCESS)
+    {
+        if(size2 == 1){
+            dst_componentid = ppComponents[0]->componentName;
+            dst_pathname    = ppComponents[0]->dbusPath;
+        }
+    }
+    ret = CcspBaseIf_getParameterNames(
+            bus_info,
+            dst_componentid,
+            dst_pathname,
+            ParamName,
+            bTmp,
+            &size ,
+            &parameter
+            );
+    if ( ret == CCSP_SUCCESS )
+    {
+        if(size == 1)
+        {
+            if(parameter[0]->writable){
+                is_writable = 1;
+            }
+        }
+    }
+
+    while(size && parameter)
+    {
+        if(parameter[size-1]->parameterName){
+            AnscFreeMemory(parameter[size-1]->parameterName);
+        }
+        AnscFreeMemory(parameter[size-1]);
+        size--;
+        // AnscFreeMemory(parameter);
+        // parameter = NULL;
+    }
+
+    while( size2 && ppComponents)
+    {
+        if (ppComponents[size2-1]->remoteCR_dbus_path)
+          AnscFreeMemory(ppComponents[size2-1]->remoteCR_dbus_path);
+
+        if (ppComponents[size2-1]->remoteCR_name)
+          AnscFreeMemory(ppComponents[size2-1]->remoteCR_name);
+
+        if ( ppComponents[size2-1]->componentName )
+          AnscFreeMemory( ppComponents[size2-1]->componentName );
+
+        if ( ppComponents[size2-1]->dbusPath )
+          AnscFreeMemory( ppComponents[size2-1]->dbusPath );
+
+        AnscFreeMemory(ppComponents[size2-1]);
+
+        size2--;
+    }
+
+    if(is_writable){
+        return CCSP_SUCCESS;
+    }
+
+    return CCSP_FAILURE;
+}
+
+
 /**********************************************************************
 
     caller:     owner of this object
@@ -959,6 +1048,9 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
     BOOL                            bAcsCredChanged      = FALSE;
 #endif
     BOOL                            bIncludeInvQuery     = !bExcludeInvNs;
+    const char*                     pCrName              = pCcspCwmpCpeController->GetCRName((ANSC_HANDLE)pCcspCwmpCpeController);
+    char*                           pCrNameWithPrefix    = NULL;
+    int                             nLen = (pCcspCwmpCpeController->SubsysName?AnscSizeOfString(pCcspCwmpCpeController->SubsysName):0) + AnscSizeOfString(pCrName) + 1;
 
     *piStatus    = 0;
     *phSoapFault = (ANSC_HANDLE)NULL;
@@ -1056,6 +1148,31 @@ CcspCwmppoMpaSetParameterValuesWithWriteID
         {
             pParameterValueArray[i].Tr069DataType = pCcspCwmpCpeController->GetParamDataType((ANSC_HANDLE)pCcspCwmpCpeController, pParameterValueArray[i].Name);
         }
+        else
+        {
+            pCrNameWithPrefix = (char*)AnscAllocateMemory(nLen);
+
+            if ( !pCrNameWithPrefix )
+            {
+                CcspTr069PaTraceError(("Out of resource while SetParameterValues!\n"));
+                goto  EXIT1;
+            }
+
+            _ansc_sprintf(pCrNameWithPrefix, "%s%s", pCcspCwmpCpeController->SubsysName ? pCcspCwmpCpeController->SubsysName:"", pCrName);
+
+            if(CheckIfParamWritable(pCcspCwmpCpeController->hMsgBusHandle, pCrNameWithPrefix,pParameterValueArray[i].Name) != CCSP_SUCCESS){
+                bFaultEncountered = TRUE;
+                CCSP_CWMP_SET_SOAP_FAULT(pCwmpSoapFault, CCSP_CWMP_CPE_CWMP_FaultCode_notWritable);
+                pCwmpSoapFault->SetParamValuesFaultArray[pCwmpSoapFault->SetParamValuesFaultCount].ParameterName = AnscCloneString(pParameterValueArray[i].Name);
+                pCwmpSoapFault->SetParamValuesFaultArray[pCwmpSoapFault->SetParamValuesFaultCount].FaultCode     = CCSP_CWMP_CPE_CWMP_FaultCode_notWritable;
+                pCwmpSoapFault->SetParamValuesFaultArray[pCwmpSoapFault->SetParamValuesFaultCount].FaultString   = AnscCloneString(CCSP_CWMP_CPE_CWMP_FaultText_notWritable);
+                pCwmpSoapFault->SetParamValuesFaultCount++;
+                AnscFreeMemory(pCrNameWithPrefix);
+                continue;
+            }
+            AnscFreeMemory(pCrNameWithPrefix);
+        }
+
         bIncludeInvQuery |= bIncludeInvParam;
     }
 
